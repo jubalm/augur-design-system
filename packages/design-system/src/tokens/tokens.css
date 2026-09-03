@@ -1,0 +1,29 @@
+/**
+ * GENERATED FILE — do not edit. Regenerate: `bun run tokens:generate` in packages/design-system. Verify: `bun run tokens:check`. Policy and schema boundaries: packages/design-system/docs/token-generation.md.
+ *
+ * Source:  DESIGN.md (repository root), sha256 fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5
+ * Tool:    @google/design.md@0.4.0 (exact pin in packages/design-system/package.json (0.4.0))
+ * Command: design.md export DESIGN.md --format css-vars --prefix augur
+ * Lint:    0 errors / 0 warnings / 3 infos at generation time
+ *
+ * Everything below this header is the pinned CLI's verbatim stdout.
+ */
+
+:root {
+  --augur-color-primary: #0e0e21;
+  --augur-color-accent: #2ae7a8;
+  --augur-color-neutral: #f5f5f8;
+  --augur-color-secondary: #4a4b61;
+  --augur-color-secondary-dark: #a1a1b8;
+  --augur-color-surface-light: #f5f5f8;
+  --augur-color-surface-light-raised: #ffffff;
+  --augur-color-surface-light-muted: #ececf2;
+  --augur-color-border-light: #e0e0e7;
+  --augur-color-accent-deep: #095e42;
+  --augur-color-accent-wash: #c9ffe5;
+  --augur-color-surface-dark-1: #161629;
+  --augur-color-surface-dark-2: #1d1d30;
+  --augur-color-surface-dark-3: #242438;
+  --augur-color-surface-dark-mist: #71728a;
+}
+
