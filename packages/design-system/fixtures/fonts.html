@@ -1,0 +1,121 @@
+<!doctype html>
+<!--
+  Font delivery verification fixture for @augur/design-system (issue #5).
+
+  Renders every DESIGN.md typography role with the delivered fonts and
+  shows live evidence (font faces, document.fonts.check() results,
+  computed styles) inline on the page. The strict assertions live in
+  verify-fonts.mjs next to this file; this inline panel is honest evidence
+  for a human opening the page through any static file server rooted at
+  the repository root:
+
+      cd <repo root> && bun packages/design-system/fixtures/verify-fonts.mjs
+
+  The stylesheet links below point directly at the pinned @fontsource
+  packages and at the package's own font/typography styles, so the page
+  needs no bundler. (Consumers use "@augur/design-system/styles.css",
+  whose bare-specifier @imports are resolved by Vite/Astro at build time.)
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Augur design system — font delivery fixture</title>
+    <!--
+      Bun's isolated linker installs the fontsource packages under this
+      package's own node_modules; these paths resolve when the repository
+      root is served statically.
+    -->
+    <link rel="stylesheet" href="/packages/design-system/node_modules/@fontsource/sora/400.css" />
+    <link rel="stylesheet" href="/packages/design-system/node_modules/@fontsource/sora/600.css" />
+    <link rel="stylesheet" href="/packages/design-system/node_modules/@fontsource/schibsted-grotesk/400.css" />
+    <link rel="stylesheet" href="../src/styles/fonts.css" />
+    <link rel="stylesheet" href="../src/styles/typography.css" />
+    <style>
+      body { margin: 0 auto; max-width: 44rem; padding: 2rem; color: #161629; background: #ffffff; }
+      section { margin-block: 1.5rem; }
+      hr { border: 0; border-top: 1px solid #e0e0e7; margin-block: 2rem; }
+      pre { background: #ececf2; padding: 1rem; overflow: auto; font-size: 12px; line-height: 16px; }
+      .spec { color: #4a4b61; font-family: monospace; }
+    </style>
+  </head>
+  <body>
+    <h1 class="augur-type-display">Augur font fixture</h1>
+    <p class="augur-type-metadata">
+      Every DESIGN.md typography role is rendered below with delivered font files.
+    </p>
+
+    <section>
+      <div class="augur-type-display" data-role="display">Display — Sora 600, 40/44, −0.01em</div>
+      <div class="spec">typography.display</div>
+    </section>
+    <section>
+      <div class="augur-type-heading-1" data-role="heading-1">Heading 1 — Sora 600, 28/34, −0.005em</div>
+      <div class="spec">typography.heading-1</div>
+    </section>
+    <section>
+      <div class="augur-type-heading-2" data-role="heading-2">Heading 2 — Sora 600, 20/26</div>
+      <div class="spec">typography.heading-2</div>
+    </section>
+    <section>
+      <p class="augur-type-body" data-role="body">
+        Body — Schibsted Grotesk 400, 16/24. Collective decisions deserve an
+        interface that makes what matters clear: lead with the point, keep
+        secondary detail available, and name every state plainly.
+      </p>
+      <div class="spec">typography.body</div>
+    </section>
+    <section>
+      <div class="augur-type-control" data-role="control">Control — Sora 600, 14/20</div>
+      <div class="spec">typography.control</div>
+    </section>
+    <section>
+      <div class="augur-type-ui" data-role="ui">UI — Sora 400, 14/20</div>
+      <div class="spec">typography.ui</div>
+    </section>
+    <section>
+      <div class="augur-type-metadata" data-role="metadata">Metadata — Schibsted Grotesk 400, 12/16</div>
+      <div class="spec">typography.metadata</div>
+    </section>
+
+    <hr />
+
+    <h2 class="augur-type-heading-2">Live evidence</h2>
+    <pre id="evidence">collecting…</pre>
+
+    <script>
+      // Visible evidence panel. The strict pass/fail assertions live in
+      // verify-fonts.mjs; this panel shows what the browser actually did.
+      (async () => {
+        const out = [];
+        out.push(`document.fonts.status: ${document.fonts.status}`);
+        await document.fonts.ready;
+        out.push(`document.fonts.status after ready: ${document.fonts.status}`);
+        out.push("");
+        out.push("document.fonts.check():");
+        const checks = [
+          ["400 16px Sora", "16px Sora"],
+          ["600 40px Sora", "600 40px Sora"],
+          ["400 16px Schibsted Grotesk", "16px 'Schibsted Grotesk'"],
+        ];
+        for (const [label, spec] of checks) {
+          out.push(`  check(${label}) -> ${document.fonts.check(spec)}`);
+        }
+        out.push("");
+        out.push("loaded FontFace entries:");
+        for (const face of document.fonts) {
+          if (face.status === "loaded") out.push(`  ${face.family} ${face.weight} ${face.style} [${face.status}]`);
+        }
+        out.push("");
+        out.push("computed styles per role:");
+        for (const el of document.querySelectorAll("[data-role]")) {
+          const s = getComputedStyle(el);
+          out.push(
+            `  ${el.dataset.role}: ${s.fontFamily.split(",")[0]} | ${s.fontWeight} | ${s.fontSize}/${s.lineHeight} | ${s.letterSpacing}`,
+          );
+        }
+        document.getElementById("evidence").textContent = out.join("\n");
+      })();
+    </script>
+  </body>
+</html>
