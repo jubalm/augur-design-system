@@ -1,0 +1,25 @@
+---
+/**
+ * Stable route for component pages (issue #8).
+ *
+ * /components/<slug> ← src/content/components/<slug>.md(x)
+ * Component pages enforce the required section contract (When to use,
+ * When not to use, Variants, Sizes, States, Accessibility, API,
+ * Design rationale) in the renderer. Metadata: src/content/README.md.
+ */
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import DocPage from "../../components/DocPage.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("components", ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"components">;
+}
+
+const { entry } = Astro.props;
+---
+<DocPage entry={entry} />

@@ -1,0 +1,21 @@
+---
+# Deliberate INVALID fixture (issue #8) — do not fix, do not import.
+#
+# Component entry with VALID metadata but a body missing the required
+# component-page sections (see src/lib/component-sections.ts). Used by
+# `fixtures/verify-content-failures.mjs` to prove the section contract
+# fails the build clearly. Staged temporarily into
+# src/content/components/ and removed again.
+title: Dialog
+description: Deliberate invalid fixture — valid metadata, body missing required sections.
+component: Dialog
+status: planned
+---
+
+## When to use
+
+Dialogs focus attention on a single task. (This section is present on
+purpose; everything below is missing.)
+
+The body deliberately omits: When not to use, Variants, Sizes, States,
+Accessibility, API, and Design rationale.

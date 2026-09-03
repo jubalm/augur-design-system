@@ -1,11 +1,14 @@
-# Docs shell browser verification fixture (issue #7)
+# Docs fixtures (issues #7 and #8)
 
-A rendered-surface verification driver for the Astro docs shell, following
-the fixture pattern established by issue #5
-(`packages/design-system/fixtures/`). It stages the **built** `apps/docs`
-output under the configured base path and drives it in headless Chromium.
+Two verification drivers for the Astro docs app, following the fixture
+pattern established by issue #5 (`packages/design-system/fixtures/`).
 
-## What it proves
+## Browser verification (`verify-docs.mjs`)
+
+Stages the **built** `apps/docs` output under the configured base path
+and drives it in headless Chromium.
+
+### What it proves
 
 - Every page loads with no console errors/warnings, no failed responses,
   and no third-party requests (fonts are fully self-hosted).
@@ -21,10 +24,11 @@ output under the configured base path and drives it in headless Chromium.
 - Mobile layout at 375×812: the nav collapses into a native
   `<details>` disclosure, opens via keyboard, links navigate, and the
   page has no horizontal overflow.
-- Content: MDX-evaluated package data and the scoped `[data-theme]`
+- Content: MDX-evaluated package data, the code-synchronized live
+  examples (`DocExample` blocks), and the scoped `[data-theme]`
   demonstration render as built.
 
-## Run
+### Run
 
 Playwright is deliberately not a workspace dependency (browser CI wiring
 lands with issue #15). Provide it once via a gitignored link
@@ -51,3 +55,31 @@ DOCS_BASE_PATH=/augur-design-system bun apps/docs/fixtures/verify-docs.mjs
 Exit code 0 and a `docs shell verification passed` line mean every
 assertion passed. Screenshots are written to `/tmp/augur-docs-verify/`
 as visual evidence and are not committed.
+
+## Controlled content-failure verification (issue #8)
+
+`verify-content-failures.mjs` proves the acceptance requirement that
+invalid required metadata fails the build **clearly**, plus the
+component-page section contract:
+
+1. A foundations entry without the required `title`
+   (`content/invalid/broken-metadata.md`) is staged into
+   `src/content/foundations/`; the build must fail with
+   `InvalidContentEntryDataError` naming the entry and the missing
+   field.
+2. A component page with valid metadata but a body missing the required
+   sections (`content/invalid/missing-sections.mdx`) is staged into
+   `src/content/components/`; the build must fail naming the entry and
+   the missing headings.
+
+Both fixtures are removed again in all cases. Run from the repository
+root:
+
+```sh
+bun apps/docs/fixtures/verify-content-failures.mjs
+```
+
+Exit code 0 and a `content failure verification passed` line mean both
+invalid fixtures failed the build exactly as required. This is the
+docs-side analogue of `tokens:verify-failures` (#3) and the registry
+invalid fixtures (#16); wiring it into CI is #15's scope.
