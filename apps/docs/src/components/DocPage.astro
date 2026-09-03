@@ -1,0 +1,54 @@
+---
+/**
+ * Shared page renderer for collection-sourced documentation (issue #8).
+ *
+ * One renderer for the foundations, components, patterns, and reference
+ * collections: it applies the shell layout, synthesizes the page H1
+ * from the entry metadata (bodies must not repeat the title as an H1 —
+ * the future Markdown endpoint, #9, synthesizes the same H1 for the
+ * clean `.md` representation), renders the description as the page
+ * lede, and enforces the component-page section contract at build time.
+ *
+ * The H1/lede/status markup is the single place where page chrome is
+ * decided, so every documented page renders identically and future
+ * pages (#9, #10, component pages) are shared-source by default.
+ */
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { assertComponentSections } from "../lib/component-sections";
+
+type DocEntry = CollectionEntry<"foundations" | "components" | "patterns" | "reference">;
+
+interface Props {
+  entry: DocEntry;
+}
+
+const { entry } = Astro.props;
+const { title, description } = entry.data;
+
+// Build-time section enforcement for component pages (issue #8):
+// missing "When to use", "Variants", etc. fail the build with a clear,
+// actionable error (proven by fixtures/verify-content-failures.mjs).
+if (entry.collection === "components") {
+  assertComponentSections(entry.body ?? "", entry.id);
+}
+
+const { Content } = await render(entry);
+---
+<BaseLayout title={title} description={description}>
+  <article class="prose doc-page">
+    <h1 class="augur-type-heading-1 page-title">{title}</h1>
+    <p class="doc-page-lede augur-type-body">{description}</p>
+    {
+      entry.collection === "components" && (
+        <p class="doc-component-status augur-type-metadata">
+          Component export <code>{entry.data.component}</code> from{" "}
+          <code>@augur/design-system</code>
+          <span class={`doc-status-badge doc-status-${entry.data.status}`}>{entry.data.status}</span>
+        </p>
+      )
+    }
+    <Content />
+  </article>
+</BaseLayout>
