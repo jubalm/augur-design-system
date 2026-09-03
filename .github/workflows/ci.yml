@@ -62,7 +62,7 @@ jobs:
           bun-version: ${{ env.BUN_VERSION }}
       - name: Frozen install
         run: bun install --frozen-lockfile
-      - name: Code lint (oxlint: typescript, react-hooks, jsx-a11y)
+      - name: "Code lint (oxlint: typescript, react-hooks, jsx-a11y)"
         run: bun run lint:code
 
   typecheck:
