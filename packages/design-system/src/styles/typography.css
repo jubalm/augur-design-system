@@ -1,0 +1,78 @@
+/*
+ * Typography role classes for @augur/design-system.
+ *
+ * Each class mirrors one `DESIGN.md` front-matter `typography` role,
+ * keyed by the role name. Values are hand-authored to match `DESIGN.md`
+ * exactly (verified against PDF page 04.1 in the foundation decision
+ * audit) and must be replaced by generated token output when the token
+ * pipeline exists (issue #3). Do not add roles or values that are not in
+ * `DESIGN.md`.
+ *
+ * Families come from `./fonts.css` custom properties; font files are
+ * delivered via `styles.css`. Weights rely on faces loaded by the pinned
+ * `@fontsource` packages (Sora 400/600, Schibsted Grotesk 400).
+ */
+
+/* Base: body copy uses the secondary voice unless a role overrides it. */
+body {
+  font-family: var(--augur-font-secondary);
+  font-weight: 400;
+}
+
+/* DESIGN.md `typography.display` — Sora 600, 40/44, -0.01em. */
+.augur-type-display {
+  font-family: var(--augur-font-primary);
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 44px;
+  letter-spacing: -0.01em;
+}
+
+/* DESIGN.md `typography.heading-1` — Sora 600, 28/34, -0.005em. */
+.augur-type-heading-1 {
+  font-family: var(--augur-font-primary);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.005em;
+}
+
+/* DESIGN.md `typography.heading-2` — Sora 600, 20/26. */
+.augur-type-heading-2 {
+  font-family: var(--augur-font-primary);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 26px;
+}
+
+/* DESIGN.md `typography.body` — Schibsted Grotesk 400, 16/24. */
+.augur-type-body {
+  font-family: var(--augur-font-secondary);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* DESIGN.md `typography.control` — Sora 600, 14/20. */
+.augur-type-control {
+  font-family: var(--augur-font-primary);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* DESIGN.md `typography.ui` — Sora 400, 14/20. */
+.augur-type-ui {
+  font-family: var(--augur-font-primary);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* DESIGN.md `typography.metadata` — Schibsted Grotesk 400, 12/16. */
+.augur-type-metadata {
+  font-family: var(--augur-font-secondary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+}
