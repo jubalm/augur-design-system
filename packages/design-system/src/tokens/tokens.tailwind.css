@@ -1,0 +1,58 @@
+/**
+ * GENERATED FILE — do not edit. Regenerate: `bun run tokens:generate` in packages/design-system. Verify: `bun run tokens:check`. Policy and schema boundaries: packages/design-system/docs/token-generation.md.
+ *
+ * Source:  DESIGN.md (repository root), sha256 fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5
+ * Tool:    @google/design.md@0.4.0 (exact pin in packages/design-system/package.json (0.4.0))
+ * Command: design.md export DESIGN.md --format css-tailwind
+ * Lint:    0 errors / 0 warnings / 3 infos at generation time
+ *
+ * Everything below this header is the pinned CLI's verbatim stdout.
+ */
+
+@theme {
+  --color-primary: #0e0e21;
+  --color-accent: #2ae7a8;
+  --color-neutral: #f5f5f8;
+  --color-secondary: #4a4b61;
+  --color-secondary-dark: #a1a1b8;
+  --color-surface-light: #f5f5f8;
+  --color-surface-light-raised: #ffffff;
+  --color-surface-light-muted: #ececf2;
+  --color-border-light: #e0e0e7;
+  --color-accent-deep: #095e42;
+  --color-accent-wash: #c9ffe5;
+  --color-surface-dark-1: #161629;
+  --color-surface-dark-2: #1d1d30;
+  --color-surface-dark-3: #242438;
+  --color-surface-dark-mist: #71728a;
+  --font-display: "Sora";
+  --font-heading-1: "Sora";
+  --font-heading-2: "Sora";
+  --font-body: "Schibsted Grotesk";
+  --font-control: "Sora";
+  --font-ui: "Sora";
+  --font-metadata: "Schibsted Grotesk";
+  --text-display: 40px;
+  --text-heading-1: 28px;
+  --text-heading-2: 20px;
+  --text-body: 16px;
+  --text-control: 14px;
+  --text-ui: 14px;
+  --text-metadata: 12px;
+  --leading-display: 44px;
+  --leading-heading-1: 34px;
+  --leading-heading-2: 26px;
+  --leading-body: 24px;
+  --leading-control: 20px;
+  --leading-ui: 20px;
+  --leading-metadata: 16px;
+  --tracking-display: -0.01em;
+  --tracking-heading-1: -0.005em;
+  --font-weight-display: 600;
+  --font-weight-heading-1: 600;
+  --font-weight-heading-2: 600;
+  --font-weight-body: 400;
+  --font-weight-control: 600;
+  --font-weight-ui: 400;
+  --font-weight-metadata: 400;
+}
