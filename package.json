@@ -11,13 +11,24 @@
   },
   "scripts": {
     "lint": "designmd lint DESIGN.md",
+    "lint:code": "oxlint .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "check:workspace": "bun scripts/workspace-smoke.ts"
+    "check:workspace": "bun scripts/workspace-smoke.ts",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@augur/design-system": "workspace:*",
     "@google/design.md": "0.4.0",
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.0",
     "@types/node": "^22.0.0",
-    "typescript": "7.0.2"
+    "@types/react": "^19.2.18",
+    "axe-core": "^4.10.0",
+    "jsdom": "^26.0.0",
+    "oxlint": "^1.81.0",
+    "react": "^19.2.8",
+    "typescript": "7.0.2",
+    "vitest": "^3.2.0"
   }
 }
