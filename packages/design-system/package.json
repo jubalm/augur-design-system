@@ -16,6 +16,7 @@
     "@fontsource/sora": "5.3.0"
   },
   "scripts": {
+    "test": "bun test",
     "tokens:lint": "design.md lint ../../DESIGN.md",
     "tokens:generate": "bun src/tools/generate-tokens.ts",
     "tokens:check": "bun src/tools/generate-tokens.ts --check",

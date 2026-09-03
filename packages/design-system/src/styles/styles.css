@@ -3,24 +3,34 @@
  *
  * Consumers: import "@augur/design-system/styles.css";
  *
- * Aggregates:
+ * Aggregates, in dependency order:
  *   1. Self-hosted font faces from the pinned OFL `@fontsource` packages
  *      (see `src/fonts.ts` and `resources/brand/PROVENANCE.md` for exact
  *      provenance). The bare-specifier `@import`s below are resolved at
  *      bundle time by Vite/Astro (the documented consumer, issue #7); they
  *      are not resolved by the browser.
- *   2. Font-family custom properties with fallback stacks (`./fonts.css`).
- *   3. Typography role classes mirroring the `DESIGN.md` front-matter
+ *   2. Generated base tokens (issue #3): `--augur-color-*` custom
+ *      properties derived from `DESIGN.md` by the pinned toolchain
+ *      (`../tokens/tokens.css` — generated output, never hand-edited).
+ *   3. Font-family custom properties with fallback stacks (`./fonts.css`).
+ *   4. Typography role classes mirroring the `DESIGN.md` front-matter
  *      `typography` block one-to-one (`./typography.css`).
+ *   5. Semantic light/dark theme mapping (issue #4): shadcn-compatible
+ *      role custom properties referencing the generated tokens only
+ *      (`./theme.css`), plus the shared focus and reduced-motion behavior.
  *
- * Role values below the family level (sizes, line heights, weights,
- * letter spacing) are hand-authored to match `DESIGN.md` until token
- * generation exists (issue #3), after which they must be replaced by
- * generated output. Do not add values here that are not in `DESIGN.md`.
+ * Color roles must reference generated variables — raw `DESIGN.md` color
+ * values live only in generated token output (issue #3 policy). The token
+ * generator currently emits colors only, so typography values in
+ * `./typography.css` remain hand-authored to match `DESIGN.md` until a
+ * plain-CSS typography token export exists. See docs/semantic-themes.md
+ * for the theme mapping record and contrast evidence.
  */
 @import "@fontsource/sora/400.css";
 @import "@fontsource/sora/600.css";
 @import "@fontsource/schibsted-grotesk/400.css";
 
+@import "../tokens/tokens.css";
 @import "./fonts.css";
 @import "./typography.css";
+@import "./theme.css";
