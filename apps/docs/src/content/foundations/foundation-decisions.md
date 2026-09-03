@@ -1,4 +1,16 @@
-# Foundation decisions — audit, naming fidelity, and pending proposals
+---
+# Foundation decisions record (issue #2; rendered through the issue #8
+# docs content conventions — src/content/foundations/, route
+# /foundations/decisions). The title/description metadata below is the
+# single H1 source: the page renderer and the future Markdown endpoint
+# (#9) synthesize the H1 from it, so the body starts at H2 level.
+title: "Foundation decisions"
+description: >-
+  Audit, naming fidelity, and pending foundation proposals (FD-01 through
+  FD-06) for the Augur Design System — the review record referenced by
+  DESIGN.md.
+order: 3
+---
 
 > **Review status: OPEN.** This record separates three kinds of content: inherited brand
 > facts verified against the upstream reference, corrections applied to `DESIGN.md`, and

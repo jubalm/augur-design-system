@@ -1,11 +1,15 @@
 ---
-# Fonts and typography (issue #7). The live samples below render through
-# FontRoles.tsx, a real consumer of the package entry module and the
-# package's typography role classes — no local copies of any values.
+# Fonts and typography (issue #7 content, migrated to the shared content
+# pipeline in #8 — src/content/foundations/, route /foundations/fonts).
+# The live samples render through real package consumers; code samples
+# are derived from the same example modules that render (see
+# src/content/README.md, "Live examples").
 title: Fonts and typography
 description: The two voice families and seven typography roles of the Augur system, self-hosted and rendered live from @augur/design-system.
-layout: ../../layouts/BaseLayout.astro
+order: 1
 ---
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
 import { FontRoles } from "../../components/FontRoles";
 
 Augur uses two contemporary sans-serif families with distinct roles.
@@ -24,6 +28,14 @@ not from this page.
 
 <FontRoles />
 
+## Using the voices in code
+
+The example below is rendered live from a real module that imports the
+package entry; the code sample is that same module's source, derived
+from the same file — they cannot drift.
+
+<DocExample example={examples.fonts.stacks} />
+
 ## Loading behavior
 
 `import "@augur/design-system/styles.css"` pulls the pinned
@@ -40,5 +52,6 @@ lives in the package font fixture.
 Exact versions, licenses (OFL-1.1), and copyright notices for both
 families are recorded in the package's provenance export and in
 [resources/brand/PROVENANCE.md](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md).
-Redistribution obligations are tracked with the asset decisions in
-issue #20.
+The machine-readable export is demonstrated on
+[Package entries](/reference/package-entries). Redistribution
+obligations are tracked with the asset decisions in issue #20.

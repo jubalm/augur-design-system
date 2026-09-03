@@ -1,0 +1,150 @@
+# Documentation content conventions (issue #8)
+
+This directory is the **single content location** for Augur design
+system documentation. Every substantive page of the four documented
+kinds is authored here — as shared Markdown/MDX — and rendered by one
+shared renderer, so the rendered site and any derived representation
+(e.g. the clean `.md` endpoints, issue #9) come from the same source
+and cannot drift. This file is the normative convention; future pages
+(#9, #10, component pages) follow it.
+
+## Content location: `apps/docs/src/content/` (decided)
+
+ARCHITECTURE.md shows two trees. Section 12 ("Documentation Website",
+the "preferred direction") puts content under `apps/docs/src/content/`;
+the earlier repository sketch in section 5 shows `content/` as a
+sibling of `src/` under `apps/docs/`. **The canonical location is
+`apps/docs/src/content/<kind>/`** — the section 12 preferred direction —
+reconciled as follows:
+
+- Astro's own content-collection convention is `src/content/`, with the
+  schema in `src/content.config.ts`. Keeping it there means standard
+  Astro tooling works unmodified.
+- The section 5 sketch predates #7's implementation and its `content/`
+  entry is the same concept one level up; treat it as satisfied by the
+  `src/content/` location, not as a second, parallel home for content.
+- Precedent inside this repo: the foundation decisions record already
+  lived at `src/content/foundations/` (referenced by `DESIGN.md` by that
+  exact path). Moving it would have broken a canonical reference for no
+  gain.
+
+Nothing outside `apps/docs/src/content/` is documentation content.
+Docs-only code (renderer, example modules, styles) stays inside this
+app and never becomes part of the design-system package.
+
+## Kinds, routes, and metadata
+
+Each kind is one collection, defined with typed metadata in
+`src/content.config.ts`. The file name (minus extension) is the route
+slug: flat, lowercase, kebab-case.
+
+| Kind | Directory | Route | Extra metadata |
+| --- | --- | --- | --- |
+| Foundations | `foundations/` | `/foundations/<slug>` | — |
+| Components | `components/` | `/components/<slug>` | `component`, `status`, `registry` |
+| Patterns | `patterns/` | `/patterns/<slug>` | `components` (composed slugs) |
+| Reference | `reference/` | `/reference/<slug>` | — |
+
+Shared required metadata (zod-validated at build time; a missing or
+blank field fails the build with a clear message):
+
+- `title` — page title. **The H1 is synthesized from it** by the page
+  renderer (`src/components/DocPage.astro`) and, later, by the Markdown
+  endpoint (#9). **Bodies must not repeat the title as an H1**; start
+  body headings at `##`.
+- `description` — one sentence; rendered as the page lede and used as
+  the HTML meta description.
+- `order` — optional integer sort key for future nav/index generation.
+- `draft: true` — validated but excluded from routes.
+
+Component pages additionally require `component` (the PascalCase public
+export name from `@augur/design-system`) and accept `status`
+(`planned | draft | stable | deprecated`, default `planned`) and
+`registry` (shadcn registry item id, #16/#17).
+
+One deliberate exception to "filename = slug": `foundations/foundation-decisions.md`
+keeps its filename (DESIGN.md references that exact path) and maps to
+route `/foundations/decisions` via `generateId` in `content.config.ts`.
+
+## Component-page sections
+
+Every `components/` page must cover these H2 sections, in this
+recommended order (presence is enforced by the renderer at build time;
+extra H2s such as "Examples" are fine):
+
+1. `When to use`
+2. `When not to use`
+3. `Variants`
+4. `Sizes`
+5. `States`
+6. `Accessibility`
+7. `API`
+8. `Design rationale`
+
+A page missing any of them fails the build with an error naming the
+entry and the missing headings. The contract lives in
+`src/lib/component-sections.ts` and is proven by the deliberate
+invalid-content fixture (`fixtures/verify-content-failures.mjs`).
+
+Until a component exists in `@augur/design-system`, do not author its
+page: no mockups, no private copies, no speculative API tables. Pages
+document real exports (a `status: planned` page may describe the
+intended contract once a component is claimed by an issue, but its
+Examples must not fake rendered behavior).
+
+## Live examples
+
+Examples render what consumers actually receive, from real workspace
+exports — never hand-duplicated values:
+
+1. **Write the example as a real module** under `src/examples/<area>/<name>.tsx`.
+   It imports from `@augur/design-system` (entry constants today;
+   components as they land in #11–#14) and renders statically.
+2. **Register it** in `src/examples/registry.ts`, importing the module
+   once as a component and once with `?raw` for its own source:
+
+   ```ts
+   import { FontStacksExample } from "./fonts/font-stacks";
+   import fontStacksCode from "./fonts/font-stacks.tsx?raw";
+   ```
+
+3. **Use it in content** through the shared block:
+
+   ```mdx
+   import { DocExample } from "../../components/DocExample";
+   import { examples } from "../../examples/registry";
+
+   <DocExample example={examples.fonts.stacks} />
+   ```
+
+Because the displayed code sample is a `?raw` import of the exact file
+rendered as the preview, **code samples are synchronized with rendered
+examples by construction** — the same source, two representations.
+Standalone fenced code blocks in prose are for stable usage snippets
+(e.g. an import line), not for anything that mirrors a live example.
+
+Example modules must only import exports that exist. `defineExample`
+(`src/lib/examples.ts`) validates ids, captions, and that `code` is
+real imported source, failing the build otherwise.
+
+## Rendering pipeline
+
+- `src/pages/<kind>/[slug].astro` — one thin route per kind; resolves
+  entries and delegates to the renderer. Routes are stable; slugs are
+  part of the public URL contract.
+- `src/components/DocPage.astro` — the single page renderer: layout,
+  synthesized H1, description lede, component status line, section
+  enforcement, body prose.
+- Shell pages (`/`, `/getting-started`) remain app pages by convention;
+  as substantive pages they are candidates to migrate into a collection
+  when touched. `/foundations/*` pages are fully collection-sourced.
+
+## Markdown parity and `llms.txt` (issue #9, not this slice)
+
+Every substantive page will get a clean `.md` representation derived
+from the same entry (`title`/`description` metadata + body + example
+sources), per ARCHITECTURE.md "Documentation Delivery for Humans and
+LLMs". The conventions above (metadata-owned H1, example-source
+derivation) exist so #9 can generate that representation without a
+second authoring path. `Copy page` / `View as Markdown` actions and
+`/llms.txt` are also #9.

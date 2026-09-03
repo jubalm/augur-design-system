@@ -1,0 +1,23 @@
+---
+/**
+ * Stable route for pattern pages (issue #8).
+ *
+ * /patterns/<slug> ← src/content/patterns/<slug>.md(x)
+ * Metadata and body conventions: src/content/README.md.
+ */
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import DocPage from "../../components/DocPage.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("patterns", ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"patterns">;
+}
+
+const { entry } = Astro.props;
+---
+<DocPage entry={entry} />

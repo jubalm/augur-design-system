@@ -1,0 +1,23 @@
+---
+/**
+ * Stable route for reference pages (issue #8).
+ *
+ * /reference/<slug> ← src/content/reference/<slug>.md(x)
+ * Metadata and body conventions: src/content/README.md.
+ */
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import DocPage from "../../components/DocPage.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("reference", ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"reference">;
+}
+
+const { entry } = Astro.props;
+---
+<DocPage entry={entry} />

@@ -1,11 +1,15 @@
 ---
-# Theming (issue #7). The demo panels are plain elements styled only with
-# semantic role custom properties, so they re-resolve live with the theme;
-# the scoped panel demonstrates the contract's container-level data-theme.
+# Theming (issue #7 content, migrated to the shared content pipeline in
+# #8 — src/content/foundations/, route /foundations/theming). The demo
+# panels are plain elements styled only with semantic role custom
+# properties; the code-synchronized example shows the minimal scoped
+# contract in consumer markup (src/content/README.md, "Live examples").
 title: Theming
 description: One system, two equal everyday themes — the semantic light/dark contract of @augur/design-system, with a live demonstration.
-layout: ../../layouts/BaseLayout.astro
+order: 2
 ---
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
 import { ThemingDemo } from "../../components/ThemingDemo";
 
 The design system ships one semantic role layer with two equal
@@ -38,6 +42,13 @@ the shadcn-compatible set — which reference generated tokens and never
 raw color values. The primary action role resolves to Deep on light
 surfaces and Green on dark surfaces, so light-theme intent stays within
 contrast rules while dark surfaces carry the brighter brand signal.
+
+## Scoping in your own markup
+
+The minimal scoped-subtree pattern, rendered live; the code sample is
+the example module's own source.
+
+<DocExample example={examples.theme.scope} />
 
 ## Live demonstration
 
