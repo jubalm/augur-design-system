@@ -1,0 +1,10 @@
+/*
+ * Public stylesheet entry point for @augur/design-system.
+ *
+ * Consumers: import "@augur/design-system/styles.css";
+ *
+ * Intentionally contains no design values yet. Generated tokens, semantic
+ * light/dark theme mappings, and base styles arrive with the foundation
+ * work tracked in issues #3, #4, and #5, and must be generated from
+ * DESIGN.md rather than hand-duplicating raw values here.
+ */
