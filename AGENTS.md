@@ -36,7 +36,7 @@ GitHub issues/PRs own execution details and evidence. The [Project](https://gith
 
 ## Verify and review
 
-Run relevant repository checks once they exist: frozen install, types, lint, pinned design lint/export, deterministic generation, builds, Vitest/Testing Library/axe, and Playwright where browser behavior matters. The planning bootstrap itself has no application test suite. Never claim missing commands passed.
+Run relevant repository checks once they exist: frozen install, types, lint, pinned design lint/export, deterministic generation, builds, Vitest/Testing Library/axe, and Playwright where browser behavior matters. Deterministic CI (`.github/workflows/ci.yml`) currently runs: frozen install, `designmd` design lint, oxlint code lint, typecheck, token drift + controlled-failure checks (`tokens:check`, `tokens:verify-failures`), the workspace smoke check, and the unit/accessibility suite. Browser coverage lands with #15. Never claim missing commands passed.
 
 For visual changes, inspect real rendered examples in both themes and relevant viewport sizes. Verify font loading with computed styles, `document.fonts.check()`, and console/network evidence. Check keyboard/focus behavior and actual contrast pairings; automated accessibility is not a substitute for interaction review.
 

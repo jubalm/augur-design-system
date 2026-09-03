@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  // Code linter for the Augur design system (issue #6).
+  //
+  // `bun run lint` remains the DESIGN.md (designmd) validation from #1;
+  // this config is the code-level lint (typescript, react, jsx-a11y rule
+  // families, correctness category). oxlint is used instead of
+  // typescript-eslint because the repo pins typescript@7.0.2 (issue #1),
+  // which typescript-eslint does not support yet (typescript-eslint
+  // upstream issue #10940) — oxlint has no dependency on the TypeScript
+  // compiler API.
+  "plugins": ["typescript", "react", "jsx-a11y"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    // Hook correctness is the highest-value static check for a React
+    // component library; not in oxlint's default correctness category.
+    "react/rules-of-hooks": "error"
+  },
+  "overrides": [
+    {
+      // packages/design-system/src is owned by the component/foundation
+      // workers (#3/#4/#5), not the CI worker (#6). The trailing
+      // `export {}` in the public entry point is a deliberate module
+      // marker from that side; disable this one rule for that tree until
+      // the owners drop it. Tighten back when #4 lands.
+      "files": ["packages/design-system/src/**/*.ts"],
+      "rules": { "typescript/no-useless-empty-export": "off" }
+    }
+  ],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    // The #5 font fixture ships its own local Playwright link and driver;
+    // browser-level code is #15 scope, not this linter's.
+    "packages/design-system/fixtures/**"
+  ]
+}

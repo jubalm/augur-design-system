@@ -1,0 +1,128 @@
+# Deterministic CI for the Augur design system (issue #6).
+#
+# Job names below are stable check names: they are the recommended
+# required status checks for branch protection (recorded with exact
+# recommendations in the PR that established this workflow).
+#
+# Every job installs from the committed bun.lock with
+# `--frozen-lockfile`, so CI cannot pass while package.json and the
+# lockfile disagree.
+#
+# Deliberately absent from this workflow — do not add silent placeholders:
+# - Browser coverage: Playwright-level checks land with #15. Browser
+#   behavior is currently verified by the manual font fixture (#5).
+# - Package build: no build command exists yet; bundled package output is
+#   deferred until actual requirements exist (issue #1 decision).
+# - AI design review: advisory only, never a blocking gate
+#   (ARCHITECTURE.md, Validation and Review).
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep in sync with `packageManager` in package.json.
+  BUN_VERSION: "1.4.0"
+
+jobs:
+  design-lint:
+    name: design-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up pinned Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Frozen install
+        run: bun install --frozen-lockfile
+      - name: designmd lint (DESIGN.md validity)
+        run: bun run lint
+
+  code-lint:
+    name: code-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up pinned Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Frozen install
+        run: bun install --frozen-lockfile
+      - name: Code lint (oxlint: typescript, react-hooks, jsx-a11y)
+        run: bun run lint:code
+
+  typecheck:
+    name: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up pinned Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Frozen install
+        run: bun install --frozen-lockfile
+      - name: tsc --noEmit (sources, scripts, tests)
+        run: bun run typecheck
+
+  tokens:
+    name: tokens
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up pinned Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Frozen install
+        run: bun install --frozen-lockfile
+      - name: Token drift check (tokens:check)
+        run: bun run --cwd packages/design-system tokens:check
+      - name: Controlled token failure paths (tokens:verify-failures)
+        run: bun run --cwd packages/design-system tokens:verify-failures
+
+  workspace-smoke:
+    name: workspace-smoke
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up pinned Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Frozen install
+        run: bun install --frozen-lockfile
+      - name: Workspace boundary smoke check (check:workspace)
+        run: bun run check:workspace
+
+  unit-tests:
+    name: unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up pinned Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Frozen install
+        run: bun install --frozen-lockfile
+      - name: Unit and accessibility tests (Vitest, Testing Library, axe)
+        run: bun run test
