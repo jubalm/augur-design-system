@@ -1,0 +1,61 @@
+---
+/**
+ * Docs home (issue #7). Landing chrome for the shell; substantive
+ * documentation pages live under shared Markdown/MDX sources.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/base";
+---
+<BaseLayout
+  title="Home"
+  description="Documentation for the Augur Design System: shared design guidance, generated tokens, semantic themes, and reusable React components."
+>
+  <div class="hero">
+    <h1 class="augur-type-display">Augur Design System</h1>
+    <p>
+      A shared interface language for Augur: maintained design guidance,
+      generated tokens, semantic light/dark themes, and reusable React
+      components — one canonical source for products, the public site, and
+      the agents that build them.
+    </p>
+    <div class="status-note augur-type-ui">
+      Early development. The foundation is real and consumable today:
+      generated tokens, semantic themes, and self-hosted fonts ship from
+      the <code>@augur/design-system</code> workspace package. Components
+      have not landed yet — nothing on this site fakes them.
+    </div>
+    <p>
+      The rendered pages and their clean Markdown sources come from the
+      same files; every value the system adopts is recorded in
+      <a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a>
+      and the foundation decision record.
+    </p>
+  </div>
+
+  <ul class="card-grid">
+    <li>
+      <a class="card" href={withBase("/getting-started")}>
+        <h2>Getting started</h2>
+        <p>Consume the package from a workspace app: stylesheet entry, fonts, and today's public exports.</p>
+      </a>
+    </li>
+    <li>
+      <a class="card" href={withBase("/foundations/decisions")}>
+        <h2>Foundation decisions</h2>
+        <p>The audit and review record behind the foundation — what is adopted and what is still a proposal.</p>
+      </a>
+    </li>
+    <li>
+      <a class="card" href={withBase("/foundations/fonts")}>
+        <h2>Fonts and typography</h2>
+        <p>Two voice families, seven typography roles, self-hosted delivery — rendered live from the package.</p>
+      </a>
+    </li>
+    <li>
+      <a class="card" href={withBase("/foundations/theming")}>
+        <h2>Theming</h2>
+        <p>One system, two equal everyday themes. Semantic roles, system preference, and scoped subtrees.</p>
+      </a>
+    </li>
+  </ul>
+</BaseLayout>
