@@ -1,0 +1,38 @@
+name: Bounded work item
+description: Define a slice another contributor or agent can execute and verify.
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome and context
+      description: State the intended result and link relevant architecture, design, and current implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and decisions
+      description: Link prerequisites and identify unresolved choices. Add native blocked-by relations when applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Writable scope and exclusions
+      description: Identify affected paths, shared surfaces, and what is outside this issue.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Use concrete checkboxes that demonstrate the intended outcome.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification and handoff
+      description: Describe checks, artifacts, rendered evidence, and information the next contributor needs.
+    validations:
+      required: true
