@@ -1,10 +1,12 @@
 /**
- * Primary navigation model for the docs shell (issue #7).
+ * Primary navigation model for the docs.
  *
- * A single flat list is deliberate for this bounded shell slice: the
- * content schema, section taxonomy, and sidebar conventions are owned by
- * issue #8 and will extend or reshape this model. Paths are site-absolute
- * and must go through `withBase()` at render time (see `src/lib/base.ts`).
+ * Issue #8 introduced the shared content pipeline
+ * (`src/content/<kind>/`, routes `/foundations|components|patterns|reference/<slug>`,
+ * see `src/content/README.md`); nav entries for collection pages link
+ * their stable routes. Shell pages (`/`, `/getting-started`) remain app
+ * pages by convention. Paths are site-absolute and must go through
+ * `withBase()` at render time (see `src/lib/base.ts`).
  */
 export interface NavItem {
   label: string;
@@ -17,4 +19,5 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { label: "Foundation decisions", href: "/foundations/decisions" },
   { label: "Fonts and typography", href: "/foundations/fonts" },
   { label: "Theming", href: "/foundations/theming" },
+  { label: "Package entries", href: "/reference/package-entries" },
 ] as const;

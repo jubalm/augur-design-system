@@ -1,0 +1,60 @@
+---
+# Package entries reference (issue #8 representative reference content).
+# Route /reference/package-entries. Everything documented here exists in
+# the package today; the example renders live package data and its code
+# sample is derived from the same module (src/content/README.md).
+title: Package entries
+description: The three public entry points of @augur/design-system — the module constants and the aggregated and fonts-only stylesheets.
+order: 1
+---
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
+
+`@augur/design-system` is source-based: workspace apps consume it
+directly, and the future external path is a GitHub-hosted,
+shadcn-compatible source registry (see the
+[registry contract](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/registry-contract.md)),
+not an npm install. The package exposes exactly three public entries:
+
+| Entry | What it delivers |
+| --- | --- |
+| `@augur/design-system` | Entry module: constants and types (`AUGUR_FONT_FAMILIES`, `AUGUR_FONTS`, `AugurFontProvenance`). |
+| `@augur/design-system/styles.css` | Aggregated stylesheet: font faces, generated tokens, semantic light/dark roles, typography role classes. |
+| `@augur/design-system/fonts.css` | Fonts only: the voice-named font-family custom properties. |
+
+Internal file organization is not public API; import only these entries.
+
+## Entry module
+
+The module's exports are machine-readable data, so consumers can render
+correct values without copying them. The example below renders the
+`AUGUR_FONTS` provenance export live; the code sample is that example
+module's actual source.
+
+<DocExample example={examples.fonts.provenance} />
+
+## Stylesheet entry
+
+One import delivers everything — self-hosted font faces, the generated
+`--augur-color-*` primitives, the shadcn-compatible semantic role layer,
+and the seven typography role classes. No consumer boilerplate is
+required; see [Getting started](/getting-started) and
+[Theming](/foundations/theming).
+
+```css
+import "@augur/design-system/styles.css";
+```
+
+## Fonts-only entry
+
+Consumers that only need the family stacks (for example, to map them in
+their own stylesheet) import the fonts entry instead:
+
+```css
+import "@augur/design-system/fonts.css";
+```
+
+It defines `--augur-font-primary` (Sora) and `--augur-font-secondary`
+(Schibsted Grotesk) with fallback stacks; the provenance behind those
+families is demonstrated above and recorded in
+[resources/brand/PROVENANCE.md](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md).

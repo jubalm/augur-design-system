@@ -176,7 +176,7 @@ async function auditPage(url, { expectTitleFragment } = {}) {
     ok(`${url} title`, evidence.title.includes(expectTitleFragment), evidence.title);
   }
   ok(`${url} skip link present`, evidence.hasSkipLink);
-  ok(`${url} exactly one visible primary nav with 5 links`, evidence.navLinks.length === 5, evidence.navLinks.join(", "));
+  ok(`${url} exactly one visible primary nav with 6 links`, evidence.navLinks.length === 6, evidence.navLinks.join(", "));
   ok(`${url} fonts registered (>=6 faces)`, evidence.faceCount >= 6, `size ${evidence.faceCount}`);
   ok(`${url} fonts.load Sora 400 resolves a face`, loadedFaces.sora400 >= 1, String(loadedFaces.sora400));
   ok(`${url} fonts.load Sora 600 resolves a face`, loadedFaces.sora600 >= 1, String(loadedFaces.sora600));
@@ -197,6 +197,7 @@ await auditPage(origin + site("/getting-started"), { expectTitleFragment: "Getti
 await auditPage(origin + site("/foundations/decisions"), { expectTitleFragment: "Foundation decisions" });
 await auditPage(origin + site("/foundations/fonts"), { expectTitleFragment: "Fonts and typography" });
 const theming = await auditPage(origin + site("/foundations/theming"), { expectTitleFragment: "Theming" });
+await auditPage(origin + site("/reference/package-entries"), { expectTitleFragment: "Package entries" });
 
 ok(
   "getting-started renders MDX-evaluated package data",
@@ -294,7 +295,7 @@ console.log("\n== Mobile layout (375x812) ==");
     visibleLinks: [...document.querySelectorAll(".mobile-nav nav a")].filter((a) => a.offsetParent !== null).length,
   }));
   ok("disclosure opens via keyboard", opened.open === true);
-  ok("all 5 links visible when open", opened.visibleLinks === 5, String(opened.visibleLinks));
+  ok("all 6 links visible when open", opened.visibleLinks === 6, String(opened.visibleLinks));
   await page.screenshot({ path: "/tmp/augur-docs-verify/home-mobile-menu-open.png" });
 
   // Navigate through the disclosure to the decisions page.
