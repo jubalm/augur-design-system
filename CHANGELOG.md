@@ -8,6 +8,9 @@
 
 ### Added
 
+- Added deterministic CI (`.github/workflows/ci.yml`): frozen install (`bun install --frozen-lockfile`), `designmd` design lint, oxlint code lint, `tsc --noEmit` typecheck, token drift + controlled-failure checks (`tokens:check`, `tokens:verify-failures`), the workspace smoke check, and the unit/accessibility suite — run on pull requests and pushes to `main` with `contents: read` permissions and superseded-run cancellation; stable check names and branch-protection recommendations are recorded in the establishing PR. (#6)
+- Added the repository test harness: Vitest + Testing Library + axe-core in jsdom under `tests/`, with a consumer-style fixture proving rendered behavior, accessible interaction (`aria-pressed` toggle), axe-clean output, and a stylesheet contract asserting every `var()` reference in the delivered package CSS (and every fixture-consumed token) resolves — plus a demonstrated failure path (missing accessible name, undeclared token). (#6)
+- Added root commands `bun run test` (Vitest) and `bun run lint:code` (oxlint with typescript, react incl. `rules-of-hooks`, and jsx-a11y rule families; chosen because typescript-eslint does not support the pinned TypeScript 7.0.2 yet). (#6)
 - Bootstrapped the Bun workspace with the `@augur/design-system` package (`exports` entry point plus `styles.css`), root `packageManager`/`engines` pins, exact `@google/design.md` 0.4.0 pin, frozen-installable `bun.lock`, TypeScript project references, and a workspace smoke check. (#1)
 - Audited DESIGN.md against the architecture and brand foundation; corrected the light quiet-region color name to Muted (#ECECF2) and documented Mist (#71728A) as the dark edges/rules companion. (#2)
 - Added the foundation decision record with proposals FD-01 through FD-06 (spacing, sizing, radius, focus, motion, state semantics), all explicitly `Proposed — pending review`; no proposed values entered DESIGN.md front matter. (#2)
