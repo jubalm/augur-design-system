@@ -2,6 +2,8 @@
 node_modules/
 # Local playwright link for the font fixture driver (see fixtures/README.md)
 packages/design-system/fixtures/node_modules
+# Local ajv link for the registry contract fixture validator (see fixtures/registry/README.md)
+packages/design-system/fixtures/registry/node_modules
 dist/
 .astro/
 coverage/
