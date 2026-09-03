@@ -4,9 +4,9 @@ name: Augur
 description: A clear-eyed, credible, neutral, and human visual system for asking questions and recording collective decisions.
 omitted:
   - section: spacing
-    reason: The brand foundation does not define a global spacing scale; product implementation tokens remain the source of truth.
+    reason: The brand foundation defines no spacing scale and none is adopted yet; the minimal shared proposal is tracked with explicit review status in apps/docs/src/content/foundations/foundation-decisions.md and stays visibly unresolved until maintainer review.
   - section: rounded
-    reason: The brand foundation does not define a global corner-radius scale; product implementation tokens remain the source of truth.
+    reason: The brand foundation defines no corner-radius scale and none is adopted yet; the minimal shared proposal is tracked with explicit review status in apps/docs/src/content/foundations/foundation-decisions.md and stays visibly unresolved until maintainer review.
 colors:
   primary: "#0E0E21"
   accent: "#2AE7A8"
@@ -120,6 +120,10 @@ The core idea is **make what matters clear**. Lead with the page purpose, primar
 
 This is a focused brand translation for coding agents, not a replacement for supplied artwork or product tokens. Preserve the production logo, glyph, REP token icon, and implementation token libraries. When the source does not define a value, extend the underlying logic and keep the decision visible rather than creating an arbitrary one-off.
 
+## Foundation authority and status
+
+DESIGN.md is canonical for adopted design values the pinned `@google/design.md` schema can represent; the front matter above is that record. Concepts the schema cannot represent — shared spacing, control sizing, corner radius, focus treatment, motion, and state semantics — are owned by the design system's foundation documentation and component implementation, per `ARCHITECTURE.md`. The brand foundation defines none of these scales. The smallest shared proposals the starter components need are recorded with explicit review status in [foundation decision notes](apps/docs/src/content/foundations/foundation-decisions.md) and remain unresolved until a maintainer adopts them; until then, components must not present proposed values as settled or replace them with one-offs, and no product's local tokens hold foundation authority.
+
 ## Colors
 
 The palette is built around Augur Navy, Augur Green, and a restrained set of paper, graphite, and pewter companions. Navy anchors dark UI and is the primary brand color; it is not pure black. Green is a signal of intent, not a decorative wash: reserve it for the primary action, active state, focus, or a short orienting rule.
@@ -131,12 +135,13 @@ The palette is built around Augur Navy, Augur Green, and a restrained set of pap
 - **Augur Pewter / `secondary-dark` (#A1A1B8):** Secondary text on dark surfaces.
 - **Deep (#095E42):** The accessible green action and signal companion for light surfaces.
 - **Wash (#C9FFE5):** Light green fill companion; it does not replace Deep for readable green text or actions.
+- **Mist (#71728A):** Dark-theme companion for edges, rules, and quiet marks only, never for readable copy. It is not the light quiet-region color, which is Muted.
 
-Light surfaces use Paper as the canvas, White for raised panels, Mist (#ECECF2) for quiet regions, and Border (#E0E0E7) for hairlines. Dark surfaces use Navy as the canvas, then Surface 1 (#161629), Surface 2 (#1D1D30), and Surface 3 / Raised (#242438) as stepped layers. Graphite and Pewter support the system; they do not replace primary copy.
+Light surfaces use Paper as the canvas, White for raised panels, Muted (#ECECF2) for quiet regions, and Border (#E0E0E7) for hairlines. Dark surfaces use Navy as the canvas, then Surface 1 (#161629), Surface 2 (#1D1D30), and Surface 3 / Raised (#242438) as stepped layers. Graphite and Pewter support the system; they do not replace primary copy.
 
 The light and dark themes are equal everyday expressions of one system. Keep content, order, spacing, alignment, and geometry the same in both themes. Use the words open, closed, pending, and final to name state; color only reinforces those words.
 
-Keep text and controls at WCAG AA or better. The foundation records these reference pairings: Navy on Paper 17.49:1, Graphite on Paper 7.81:1, Deep on Paper 7.17:1, Paper on Navy 17.49:1, Pewter on Navy 7.53:1, and Green on Navy 11.87:1. Recheck every new color-on-background pairing before shipping.
+Keep text and controls at WCAG AA or better. The foundation records these reference pairings: Navy on Paper 17.49:1, Graphite on Paper 7.81:1, Deep on Paper 7.17:1, Paper on Navy 17.49:1, Pewter on Navy 7.53:1, Pewter on Surface 3 6.00:1, and Green on Navy 11.87:1. Recheck every new color-on-background pairing before shipping.
 
 ## Typography
 
@@ -150,7 +155,7 @@ Align numeric columns right, use one precision per view, and put units in a head
 
 The layout rule is information order: page purpose or task first, then status, choices, and the primary action. Give each section one visible priority. Use scale and space to separate primary content from supporting detail, and move optional detail out of the main path.
 
-Light and dark layouts should have the same content order, alignment, and geometry. Surfaces organize content, but they do not imply product priority; lifting a panel is not a claim that it matters more. The brand foundation does not prescribe a global spacing scale, so use the consuming product's implementation tokens for spacing while preserving this hierarchy.
+Light and dark layouts should have the same content order, alignment, and geometry. Surfaces organize content, but they do not imply product priority; lifting a panel is not a claim that it matters more. The brand foundation prescribes no global spacing scale and none is adopted yet: the minimal shared proposal in the foundation decision notes is pending maintainer review. Until it is adopted, keep this hierarchy through the proposal's steps under review rather than one-off values, and never treat a product's local spacing as design-system authority.
 
 For identity assets, use the horizontal lockup by default. Use the vertical lockup only when the width is genuinely constrained, and use the glyph alone only when the surrounding context already names Augur.
 
@@ -170,7 +175,7 @@ The glyph minimum is 50px high on screen, measured from arrow tip to pyramid bas
 
 The horizontal lockup is preferred wherever width allows. The vertical lockup is a fallback for narrow columns, square placements, badges, avatars, centered layouts, event backdrops, and slide covers. Two-tint Color is the default on light surfaces; two-tint Reversed is the default on dark surfaces. Single-tint Augur Navy or White is reserved for low-contrast or production-constrained cases and supporting placements.
 
-The foundation does not define a global corner-radius scale. Keep any corner treatment consistent with the consuming product's implementation tokens and do not introduce shape language that competes with the fixed identity geometry.
+The foundation defines no global corner-radius scale and the design system adopts none yet; the minimal shared proposal in the foundation decision notes is pending maintainer review. Keep any corner treatment within that proposal under review, and do not introduce shape language that competes with the fixed identity geometry.
 
 ## Components
 
