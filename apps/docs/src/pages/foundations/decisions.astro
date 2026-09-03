@@ -1,0 +1,22 @@
+---
+/**
+ * Foundation decisions page (issue #7).
+ *
+ * Thin renderer for the shared Markdown record at
+ * `src/content/foundations/foundation-decisions.md`. That path is
+ * canonical: DESIGN.md references it as the home of the pending
+ * foundation proposals, so the file stays where it is and the docs app
+ * renders it from source — one shared source, rendered page and raw
+ * Markdown never drift. (Predictable `/x.md` URL endpoints are issue #9.)
+ */
+import { Content as FoundationDecisions } from "../../content/foundations/foundation-decisions.md";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+<BaseLayout
+  title="Foundation decisions"
+  description="Audit, naming fidelity, and pending foundation proposals (FD-01 through FD-06) for the Augur Design System — the review record referenced by DESIGN.md."
+>
+  <article class="prose">
+    <FoundationDecisions />
+  </article>
+</BaseLayout>

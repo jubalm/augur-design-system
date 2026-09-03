@@ -1,0 +1,126 @@
+---
+/**
+ * Base layout for the docs shell (issue #7).
+ *
+ * Consumes the real workspace package stylesheet
+ * (`@augur/design-system/styles.css`) as the only style source for
+ * colors and font voices; `../styles/docs.css` adds shell chrome only.
+ *
+ * Theme contract: the inline script below re-applies a persisted choice
+ * before first paint. It sets `data-theme` on `<html>` only for explicit
+ * light/dark; "system" removes the attribute so the package's
+ * `prefers-color-scheme` fallback scope governs. No other theme logic
+ * exists at the app level (see `src/components/ThemeToggle.tsx`).
+ */
+import "@augur/design-system/styles.css";
+import "../styles/docs.css";
+import ThemeToggle from "../components/ThemeToggle";
+import { isActivePath, withBase } from "../lib/base";
+import { NAV_ITEMS } from "../lib/navigation";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+// MDX pages pass metadata through `frontmatter`; .astro pages pass props.
+// MDX pages get their page title rendered as an accessible h1 and their
+// content wrapped in the prose container; .astro pages control their own
+// markup (the home page and the Markdown-rendered decisions page).
+const props = Astro.props as { frontmatter?: Props };
+const fromMdx = props.frontmatter !== undefined;
+const { title, description } = props.frontmatter ?? (Astro.props as Props);
+const fullTitle = `${title} · Augur Design System`;
+const currentPath = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    {description ? <meta name="description" content={description} /> : null}
+    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <script is:inline>
+      // Apply the persisted theme before first paint (see ThemeToggle.tsx
+      // for the contract). No attribute = system preference governs.
+      (() => {
+        try {
+          const stored = localStorage.getItem("augur-theme");
+          if (stored === "light" || stored === "dark") {
+            document.documentElement.dataset.theme = stored;
+          } else {
+            delete document.documentElement.dataset.theme;
+          }
+        } catch {
+          /* storage unavailable: system preference governs */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href={withBase("/")}>
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="augur-type-control">Augur Design System</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <ul>
+            {NAV_ITEMS.map((item) => (
+              <li>
+                <a
+                  class="augur-type-control"
+                  href={withBase(item.href)}
+                  aria-current={isActivePath(currentPath, item.href) ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div class="header-spacer"></div>
+        <ThemeToggle client:load />
+        <details class="mobile-nav">
+          <summary>Menu</summary>
+          <nav aria-label="Primary">
+            <ul>
+              {NAV_ITEMS.map((item) => (
+                <li>
+                  <a
+                    class="augur-type-control"
+                    href={withBase(item.href)}
+                    aria-current={isActivePath(currentPath, item.href) ? "page" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main id="main-content" class="site-main">
+      {fromMdx ? <h1 class="augur-type-heading-1 page-title">{title}</h1> : null}
+      {fromMdx ? <article class="prose"><slot /></article> : <slot />}
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p class="augur-type-metadata" style="margin: 0;">
+          Early development. Components have not landed yet; this site documents foundations only.
+        </p>
+        <nav aria-label="Repository">
+          <ul class="augur-type-metadata">
+            <li><a href="https://github.com/jubalm/augur-design-system">Repository</a></li>
+            <li><a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a></li>
+            <li><a href="https://github.com/jubalm/augur-design-system/issues">Issues</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

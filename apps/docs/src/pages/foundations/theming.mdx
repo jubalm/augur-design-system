@@ -1,0 +1,54 @@
+---
+# Theming (issue #7). The demo panels are plain elements styled only with
+# semantic role custom properties, so they re-resolve live with the theme;
+# the scoped panel demonstrates the contract's container-level data-theme.
+title: Theming
+description: One system, two equal everyday themes — the semantic light/dark contract of @augur/design-system, with a live demonstration.
+layout: ../../layouts/BaseLayout.astro
+---
+import { ThemingDemo } from "../../components/ThemingDemo";
+
+The design system ships one semantic role layer with two equal
+everyday expressions: light (default) and dark. Themes swap color roles
+only — content order, spacing, alignment, and geometry are identical by
+construction, because both themes set the same custom properties through
+the same selectors.
+
+## Selection model
+
+The full contract is implemented in the package's theme layer and is
+the single source of truth. In short:
+
+| Situation | Result |
+| --- | --- |
+| No explicit choice, light system preference | Light |
+| No explicit choice, `prefers-color-scheme: dark` | Dark |
+| `[data-theme="light"]` on `<html>` or any container | Light, pinned |
+| `[data-theme="dark"]` on `<html>` or any container | Dark, for that subtree |
+
+This site's header toggle follows that contract exactly: **System**
+removes the attribute so the system preference governs; **Light** and
+**Dark** pin the choice on `<html>` and persist it across page loads.
+
+## Roles, not raw values
+
+Components and pages consume semantic roles — `--background`,
+`--card`, `--primary`, `--muted`, `--border`, `--ring`, and the rest of
+the shadcn-compatible set — which reference generated tokens and never
+raw color values. The primary action role resolves to Deep on light
+surfaces and Green on dark surfaces, so light-theme intent stays within
+contrast rules while dark surfaces carry the brighter brand signal.
+
+## Live demonstration
+
+<ThemingDemo />
+
+## Contrast and focus
+
+Both themes ship WCAG AA-or-better canvas and copy pairings, and the
+focus ring color is verified against every surface it paints on.
+Keyboard focus is painted as a 2px offset ring via the package's shared
+`:focus-visible` rule — tab through this page to see it in both themes.
+The maintained mapping record, decisions, and contrast evidence live in
+the package's
+[semantic themes documentation](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/semantic-themes.md).

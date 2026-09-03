@@ -1,0 +1,69 @@
+---
+# Getting started (issue #7). MDX on purpose: this page proves the
+# MDX pipeline and a real import from the workspace package inside
+# shared documentation content (evaluated in the prose below).
+title: Getting started
+description: How applications consume @augur/design-system today — the stylesheet entry, self-hosted fonts, and the current public exports.
+layout: ../layouts/BaseLayout.astro
+---
+import { AUGUR_FONTS } from "@augur/design-system";
+
+The design system ships as the workspace package
+`@augur/design-system`. It is source-based on purpose: applications in
+this repository consume it directly, and the future external path is a
+GitHub-hosted, shadcn-compatible source registry — not an npm install.
+The package currently provides three public entries:
+
+```text
+@augur/design-system            → public entry module (constants and types)
+@augur/design-system/styles.css → aggregated stylesheet (fonts, tokens, themes, roles)
+@augur/design-system/fonts.css  → font-family custom properties only
+```
+
+## Stylesheet entry
+
+One import delivers everything: self-hosted font faces, the generated
+base tokens, the semantic light/dark role mapping, and the typography
+role classes.
+
+```css
+import "@augur/design-system/styles.css";
+```
+
+No consumer boilerplate is required: the canvas pairing applies to
+`body` automatically, keyboard focus rings and the reduced-motion gate
+are included, and the theme follows the system preference until you
+select one explicitly.
+
+## What exists today
+
+The package entry module exports machine-readable constants for the
+delivered fonts. This page imports them directly, so the number below
+is computed from the real package, not copied:
+
+This site renders **{AUGUR_FONTS.length} font families** from the real
+`AUGUR_FONTS` export — see [Fonts and typography](/foundations/fonts)
+for the live role samples and the provenance table they produce.
+
+Tokens and semantic roles are CSS-first: generated `--augur-color-*`
+primitives feed a shadcn-compatible role layer
+(`--background`, `--card`, `--primary`, `--ring`, …). See
+[Theming](/foundations/theming) for the contract and a live demo.
+
+## What does not exist yet
+
+React components (Button, Input, Dialog, Card, and the rest of the
+starter set) are milestones away; when they land they will be exported
+from the same entry point and documented here through real rendered
+examples. This site deliberately contains no private copies or mockups
+of components that do not exist.
+
+## Where the source of truth lives
+
+- [DESIGN.md](https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md) —
+  canonical adopted design values.
+- [Foundation decisions](/foundations/decisions) — the audit and review
+  record; proposals stay visibly unresolved until a maintainer adopts them.
+- The
+  [repository README](https://github.com/jubalm/augur-design-system/blob/main/README.md)
+  documents verified workspace commands.

@@ -1,0 +1,44 @@
+---
+# Fonts and typography (issue #7). The live samples below render through
+# FontRoles.tsx, a real consumer of the package entry module and the
+# package's typography role classes — no local copies of any values.
+title: Fonts and typography
+description: The two voice families and seven typography roles of the Augur system, self-hosted and rendered live from @augur/design-system.
+layout: ../../layouts/BaseLayout.astro
+---
+import { FontRoles } from "../../components/FontRoles";
+
+Augur uses two contemporary sans-serif families with distinct roles.
+**Sora** is the primary voice: display, headings, controls, key actions,
+and primary navigation. **Schibsted Grotesk** is the supporting voice:
+paragraphs, helper text, metadata, tables, and dense UI text. Families
+are never alternated for decoration; each text element has one clear
+role. Both are delivered self-hosted through the package stylesheet
+entry — no font CDN, no third-party request.
+
+## The seven roles, rendered live
+
+Every sample below is a package typography role class applied to real
+markup by the docs app; the values come from the package stylesheet,
+not from this page.
+
+<FontRoles />
+
+## Loading behavior
+
+`import "@augur/design-system/styles.css"` pulls the pinned
+`@fontsource` packages (Sora 400/600, Schibsted Grotesk 400) into the
+consumer's bundle, so font files are served from the same origin as the
+site. The `--augur-font-primary` / `--augur-font-secondary` custom
+properties carry fallback stacks, so text remains readable while faces
+load. The executable evidence for delivery — `document.fonts.check()`,
+computed role values, and the absence of console or network failures —
+lives in the package font fixture.
+
+## Provenance
+
+Exact versions, licenses (OFL-1.1), and copyright notices for both
+families are recorded in the package's provenance export and in
+[resources/brand/PROVENANCE.md](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md).
+Redistribution obligations are tracked with the asset decisions in
+issue #20.
