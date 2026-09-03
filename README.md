@@ -22,7 +22,7 @@ The initial external distribution path is a GitHub-hosted shadcn-compatible sour
 
 ## Development
 
-Requires [Bun](https://bun.com) **1.4.0**, pinned through `packageManager` in the root `package.json`. The workspace contains the `@augur/design-system` package under `packages/design-system` and the docs app manifest under `apps/docs` (the Astro app itself is [#7](https://github.com/jubalm/augur-design-system/issues/7)), which consumes the package via `workspace:*`.
+Requires [Bun](https://bun.com) **1.4.0**, pinned through `packageManager` in the root `package.json`. The workspace contains the `@augur/design-system` package under `packages/design-system` and the plain Astro docs app under `apps/docs` (built by [#7](https://github.com/jubalm/augur-design-system/issues/7); see `apps/docs/README.md`), which consumes the package via `workspace:*`.
 
 Verified commands:
 
