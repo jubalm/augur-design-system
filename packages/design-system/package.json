@@ -5,11 +5,16 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./styles.css": "./src/styles/styles.css"
+    "./styles.css": "./src/styles/styles.css",
+    "./fonts.css": "./src/styles/fonts.css"
   },
   "sideEffects": [
     "**/*.css"
   ],
+  "dependencies": {
+    "@fontsource/schibsted-grotesk": "5.3.0",
+    "@fontsource/sora": "5.3.0"
+  },
   "scripts": {
     "tokens:lint": "design.md lint ../../DESIGN.md",
     "tokens:generate": "bun src/tools/generate-tokens.ts",
