@@ -1,0 +1,290 @@
+{
+  "$provenance": {
+    "generator": "packages/design-system/src/tools/generate-tokens.ts",
+    "policy": "GENERATED FILE — do not edit. Regenerate: `bun run tokens:generate` in packages/design-system. Verify: `bun run tokens:check`. Policy and schema boundaries: packages/design-system/docs/token-generation.md.",
+    "source": {
+      "file": "DESIGN.md",
+      "location": "repository root",
+      "sha256": "fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5"
+    },
+    "tool": {
+      "name": "@google/design.md",
+      "version": "0.4.0",
+      "bin": "design.md",
+      "pin": "exact pin in packages/design-system/package.json (0.4.0)"
+    },
+    "command": "design.md export DESIGN.md --format <format> [--prefix augur]",
+    "lint": {
+      "errors": 0,
+      "warnings": 0,
+      "infos": 3
+    },
+    "determinism": "Deterministic output: no timestamps or volatile metadata. Identical source content + identical tool version produce byte-identical artifacts."
+  },
+  "tokens": {
+    "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+    "$description": "A clear-eyed, credible, neutral, and human visual system for asking questions and recording collective decisions.",
+    "color": {
+      "$type": "color",
+      "primary": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.055,
+            0.055,
+            0.129
+          ],
+          "hex": "#0e0e21"
+        }
+      },
+      "accent": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.165,
+            0.906,
+            0.659
+          ],
+          "hex": "#2ae7a8"
+        }
+      },
+      "neutral": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.961,
+            0.961,
+            0.973
+          ],
+          "hex": "#f5f5f8"
+        }
+      },
+      "secondary": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.29,
+            0.294,
+            0.38
+          ],
+          "hex": "#4a4b61"
+        }
+      },
+      "secondary-dark": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.631,
+            0.631,
+            0.722
+          ],
+          "hex": "#a1a1b8"
+        }
+      },
+      "surface-light": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.961,
+            0.961,
+            0.973
+          ],
+          "hex": "#f5f5f8"
+        }
+      },
+      "surface-light-raised": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "hex": "#ffffff"
+        }
+      },
+      "surface-light-muted": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.925,
+            0.925,
+            0.949
+          ],
+          "hex": "#ececf2"
+        }
+      },
+      "border-light": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.878,
+            0.878,
+            0.906
+          ],
+          "hex": "#e0e0e7"
+        }
+      },
+      "accent-deep": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.035,
+            0.369,
+            0.259
+          ],
+          "hex": "#095e42"
+        }
+      },
+      "accent-wash": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.788,
+            1,
+            0.898
+          ],
+          "hex": "#c9ffe5"
+        }
+      },
+      "surface-dark-1": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.086,
+            0.086,
+            0.161
+          ],
+          "hex": "#161629"
+        }
+      },
+      "surface-dark-2": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.114,
+            0.114,
+            0.188
+          ],
+          "hex": "#1d1d30"
+        }
+      },
+      "surface-dark-3": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.141,
+            0.141,
+            0.22
+          ],
+          "hex": "#242438"
+        }
+      },
+      "surface-dark-mist": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.443,
+            0.447,
+            0.541
+          ],
+          "hex": "#71728a"
+        }
+      }
+    },
+    "typography": {
+      "display": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Sora",
+          "fontSize": {
+            "value": 40,
+            "unit": "px"
+          },
+          "fontWeight": 600,
+          "letterSpacing": {
+            "value": -0.01,
+            "unit": "em"
+          },
+          "lineHeight": 44
+        }
+      },
+      "heading-1": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Sora",
+          "fontSize": {
+            "value": 28,
+            "unit": "px"
+          },
+          "fontWeight": 600,
+          "letterSpacing": {
+            "value": -0.005,
+            "unit": "em"
+          },
+          "lineHeight": 34
+        }
+      },
+      "heading-2": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Sora",
+          "fontSize": {
+            "value": 20,
+            "unit": "px"
+          },
+          "fontWeight": 600,
+          "lineHeight": 26
+        }
+      },
+      "body": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Schibsted Grotesk",
+          "fontSize": {
+            "value": 16,
+            "unit": "px"
+          },
+          "fontWeight": 400,
+          "lineHeight": 24
+        }
+      },
+      "control": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Sora",
+          "fontSize": {
+            "value": 14,
+            "unit": "px"
+          },
+          "fontWeight": 600,
+          "lineHeight": 20
+        }
+      },
+      "ui": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Sora",
+          "fontSize": {
+            "value": 14,
+            "unit": "px"
+          },
+          "fontWeight": 400,
+          "lineHeight": 20
+        }
+      },
+      "metadata": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Schibsted Grotesk",
+          "fontSize": {
+            "value": 12,
+            "unit": "px"
+          },
+          "fontWeight": 400,
+          "lineHeight": 16
+        }
+      }
+    }
+  }
+}
