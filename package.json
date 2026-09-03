@@ -1,0 +1,23 @@
+{
+  "name": "augur-design-system",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "bun@1.4.0",
+  "engines": {
+    "bun": ">=1.4.0 <1.5"
+  },
+  "scripts": {
+    "lint": "designmd lint DESIGN.md",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "check:workspace": "bun scripts/workspace-smoke.ts"
+  },
+  "devDependencies": {
+    "@augur/design-system": "workspace:*",
+    "@google/design.md": "0.4.0",
+    "@types/node": "^22.0.0",
+    "typescript": "7.0.2"
+  }
+}
