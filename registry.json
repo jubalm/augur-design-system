@@ -1,0 +1,363 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "augur",
+  "homepage": "https://github.com/jubalm/augur-design-system",
+  "items": [
+    {
+      "name": "augur-theme",
+      "type": "registry:theme",
+      "title": "Augur Theme",
+      "author": "jubalm",
+      "description": "Augur semantic light/dark theme: generated base tokens, shadcn-compatible role mappings, focus and reduced-motion behavior, and self-hosted Sora + Schibsted Grotesk fonts.",
+      "dependencies": [
+        "@fontsource/sora@5.3.0",
+        "@fontsource/schibsted-grotesk@5.3.0"
+      ],
+      "cssVars": {
+        "theme": {
+          "--font-sans": "var(--augur-font-primary)",
+          "--color-accent": "var(--accent)",
+          "--color-accent-foreground": "var(--accent-foreground)",
+          "--color-background": "var(--background)",
+          "--color-border": "var(--border)",
+          "--color-card": "var(--card)",
+          "--color-card-foreground": "var(--card-foreground)",
+          "--color-destructive": "var(--destructive)",
+          "--color-destructive-foreground": "var(--destructive-foreground)",
+          "--color-foreground": "var(--foreground)",
+          "--color-input": "var(--input)",
+          "--color-muted": "var(--muted)",
+          "--color-muted-foreground": "var(--muted-foreground)",
+          "--color-popover": "var(--popover)",
+          "--color-popover-foreground": "var(--popover-foreground)",
+          "--color-primary": "var(--primary)",
+          "--color-primary-foreground": "var(--primary-foreground)",
+          "--color-ring": "var(--ring)",
+          "--color-secondary": "var(--secondary)",
+          "--color-secondary-foreground": "var(--secondary-foreground)"
+        },
+        "light": {
+          "--background": "var(--augur-color-surface-light)",
+          "--foreground": "var(--augur-color-primary)",
+          "--card": "var(--augur-color-surface-light-raised)",
+          "--card-foreground": "var(--augur-color-primary)",
+          "--popover": "var(--augur-color-surface-light-raised)",
+          "--popover-foreground": "var(--augur-color-primary)",
+          "--primary": "var(--augur-color-accent-deep)",
+          "--primary-foreground": "var(--augur-color-surface-light-raised)",
+          "--secondary": "var(--augur-color-surface-light-muted)",
+          "--secondary-foreground": "var(--augur-color-primary)",
+          "--muted": "var(--augur-color-surface-light-muted)",
+          "--muted-foreground": "var(--augur-color-secondary)",
+          "--accent": "var(--augur-color-surface-light-muted)",
+          "--accent-foreground": "var(--augur-color-primary)",
+          "--destructive": "var(--augur-color-primary)",
+          "--destructive-foreground": "var(--augur-color-surface-light-raised)",
+          "--border": "var(--augur-color-border-light)",
+          "--input": "var(--augur-color-border-light)",
+          "--ring": "var(--augur-color-accent-deep)"
+        },
+        "dark": {
+          "--background": "var(--augur-color-primary)",
+          "--foreground": "var(--augur-color-surface-light)",
+          "--card": "var(--augur-color-surface-dark-1)",
+          "--card-foreground": "var(--augur-color-surface-light)",
+          "--popover": "var(--augur-color-surface-dark-2)",
+          "--popover-foreground": "var(--augur-color-surface-light)",
+          "--primary": "var(--augur-color-accent)",
+          "--primary-foreground": "var(--augur-color-primary)",
+          "--secondary": "var(--augur-color-surface-dark-2)",
+          "--secondary-foreground": "var(--augur-color-surface-light)",
+          "--muted": "var(--augur-color-surface-dark-1)",
+          "--muted-foreground": "var(--augur-color-secondary-dark)",
+          "--accent": "var(--augur-color-surface-dark-2)",
+          "--accent-foreground": "var(--augur-color-surface-light)",
+          "--destructive": "var(--augur-color-secondary-dark)",
+          "--destructive-foreground": "var(--augur-color-primary)",
+          "--border": "var(--augur-color-surface-dark-mist)",
+          "--input": "var(--augur-color-surface-dark-mist)",
+          "--ring": "var(--augur-color-accent)"
+        }
+      },
+      "css": {
+        "@import \"@fontsource/sora/400.css\"": "",
+        "@import \"@fontsource/sora/600.css\"": "",
+        "@import \"@fontsource/schibsted-grotesk/400.css\"": "",
+        ":root": {
+          "color-scheme": "light",
+          "--augur-color-primary": "#0E0E21",
+          "--augur-color-accent": "#2AE7A8",
+          "--augur-color-accent-deep": "#095E42",
+          "--augur-color-surface-light": "#F5F5F8",
+          "--augur-color-surface-light-raised": "#FFFFFF",
+          "--augur-color-surface-light-muted": "#ECECF2",
+          "--augur-color-border-light": "#E0E0E7",
+          "--augur-color-secondary": "#4A4B61",
+          "--augur-color-secondary-dark": "#A1A1B8",
+          "--augur-color-surface-dark-1": "#161629",
+          "--augur-color-surface-dark-2": "#1D1D30",
+          "--augur-color-surface-dark-mist": "#71728A",
+          "--augur-font-primary": "\"Sora\", ui-sans-serif, system-ui, sans-serif",
+          "--augur-font-secondary": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif"
+        },
+        ".dark": {
+          "color-scheme": "dark"
+        },
+        "[data-theme=\"dark\"]": {
+          "color-scheme": "dark",
+          "--background": "var(--augur-color-primary)",
+          "--foreground": "var(--augur-color-surface-light)",
+          "--card": "var(--augur-color-surface-dark-1)",
+          "--card-foreground": "var(--augur-color-surface-light)",
+          "--popover": "var(--augur-color-surface-dark-2)",
+          "--popover-foreground": "var(--augur-color-surface-light)",
+          "--primary": "var(--augur-color-accent)",
+          "--primary-foreground": "var(--augur-color-primary)",
+          "--secondary": "var(--augur-color-surface-dark-2)",
+          "--secondary-foreground": "var(--augur-color-surface-light)",
+          "--muted": "var(--augur-color-surface-dark-1)",
+          "--muted-foreground": "var(--augur-color-secondary-dark)",
+          "--accent": "var(--augur-color-surface-dark-2)",
+          "--accent-foreground": "var(--augur-color-surface-light)",
+          "--destructive": "var(--augur-color-secondary-dark)",
+          "--destructive-foreground": "var(--augur-color-primary)",
+          "--border": "var(--augur-color-surface-dark-mist)",
+          "--input": "var(--augur-color-surface-dark-mist)",
+          "--ring": "var(--augur-color-accent)"
+        },
+        "@media (prefers-color-scheme: dark)": {
+          ":root:not([data-theme=\"light\"])": {
+            "color-scheme": "dark",
+            "--background": "var(--augur-color-primary)",
+            "--foreground": "var(--augur-color-surface-light)",
+            "--card": "var(--augur-color-surface-dark-1)",
+            "--card-foreground": "var(--augur-color-surface-light)",
+            "--popover": "var(--augur-color-surface-dark-2)",
+            "--popover-foreground": "var(--augur-color-surface-light)",
+            "--primary": "var(--augur-color-accent)",
+            "--primary-foreground": "var(--augur-color-primary)",
+            "--secondary": "var(--augur-color-surface-dark-2)",
+            "--secondary-foreground": "var(--augur-color-surface-light)",
+            "--muted": "var(--augur-color-surface-dark-1)",
+            "--muted-foreground": "var(--augur-color-secondary-dark)",
+            "--accent": "var(--augur-color-surface-dark-2)",
+            "--accent-foreground": "var(--augur-color-surface-light)",
+            "--destructive": "var(--augur-color-secondary-dark)",
+            "--destructive-foreground": "var(--augur-color-primary)",
+            "--border": "var(--augur-color-surface-dark-mist)",
+            "--input": "var(--augur-color-surface-dark-mist)",
+            "--ring": "var(--augur-color-accent)"
+          }
+        },
+        "body": {
+          "background-color": "var(--background)",
+          "color": "var(--foreground)"
+        },
+        ":focus-visible": {
+          "outline": "2px solid var(--ring)",
+          "outline-offset": "2px"
+        },
+        "@media (prefers-reduced-motion: reduce)": {
+          "*, *::before, *::after": {
+            "animation-duration": "0.01ms !important",
+            "animation-iteration-count": "1 !important",
+            "transition-duration": "0.01ms !important",
+            "scroll-behavior": "auto !important"
+          }
+        },
+        "@custom-variant dark (&:is([data-theme=\"dark\"], [data-theme=\"dark\"] *, :root:not([data-theme=\"light\"]) *))": ""
+      },
+      "docs": "Apply the theme by setting `data-theme=\"light|dark\"` on `<html>` or any container; without an attribute the system preference decides. Do not import @augur/design-system from registry-installed source; this item is self-contained.",
+      "files": []
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "Utils",
+      "author": "jubalm",
+      "description": "Augur class-name utilities: upstream-compatible cn() plus the cx() alias used by Augur component source.",
+      "dependencies": [
+        "clsx@2.1.1",
+        "tailwind-merge@3.3.1"
+      ],
+      "files": [
+        {
+          "path": "packages/design-system/registry-src/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "author": "jubalm",
+      "description": "Augur button (registry source distribution; contract docs/registry-contract.md).",
+      "registryDependencies": [
+        "jubalm/augur-design-system/augur-theme",
+        "jubalm/augur-design-system/utils"
+      ],
+      "files": [
+        {
+          "path": "packages/design-system/src/components/button/button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/button.tsx"
+        },
+        {
+          "path": "packages/design-system/src/components/button/button-variants.ts",
+          "type": "registry:ui",
+          "target": "@ui/button-variants.ts"
+        },
+        {
+          "path": "packages/design-system/src/components/button/button.css",
+          "type": "registry:file",
+          "target": "@ui/button.css"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "author": "jubalm",
+      "description": "Augur card (registry source distribution; contract docs/registry-contract.md).",
+      "registryDependencies": [
+        "jubalm/augur-design-system/augur-theme",
+        "jubalm/augur-design-system/utils"
+      ],
+      "files": [
+        {
+          "path": "packages/design-system/src/components/card/card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/card.tsx"
+        },
+        {
+          "path": "packages/design-system/src/components/card/card.css",
+          "type": "registry:file",
+          "target": "@ui/card.css"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "author": "jubalm",
+      "description": "Augur input (registry source distribution; contract docs/registry-contract.md).",
+      "registryDependencies": [
+        "jubalm/augur-design-system/augur-theme",
+        "jubalm/augur-design-system/utils"
+      ],
+      "files": [
+        {
+          "path": "packages/design-system/src/components/input/input.tsx",
+          "type": "registry:ui",
+          "target": "@ui/input.tsx"
+        },
+        {
+          "path": "packages/design-system/src/components/input/input.css",
+          "type": "registry:file",
+          "target": "@ui/input.css"
+        }
+      ]
+    },
+    {
+      "name": "form-field",
+      "type": "registry:ui",
+      "title": "Form Field",
+      "author": "jubalm",
+      "description": "Augur form field (registry source distribution; contract docs/registry-contract.md).",
+      "registryDependencies": [
+        "jubalm/augur-design-system/augur-theme",
+        "jubalm/augur-design-system/utils"
+      ],
+      "files": [
+        {
+          "path": "packages/design-system/src/components/form-field/form-field.tsx",
+          "type": "registry:ui",
+          "target": "@ui/form-field.tsx"
+        },
+        {
+          "path": "packages/design-system/src/components/form-field/form-field.css",
+          "type": "registry:file",
+          "target": "@ui/form-field.css"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "author": "jubalm",
+      "description": "Augur dialog (registry source distribution; contract docs/registry-contract.md).",
+      "registryDependencies": [
+        "jubalm/augur-design-system/augur-theme",
+        "jubalm/augur-design-system/utils"
+      ],
+      "files": [
+        {
+          "path": "packages/design-system/src/components/dialog/dialog.tsx",
+          "type": "registry:ui",
+          "target": "@ui/dialog.tsx"
+        },
+        {
+          "path": "packages/design-system/src/components/dialog/dialog.css",
+          "type": "registry:file",
+          "target": "@ui/dialog.css"
+        }
+      ],
+      "dependencies": [
+        "radix-ui@1.6.7"
+      ]
+    },
+    {
+      "name": "page-header",
+      "type": "registry:block",
+      "title": "Page Header",
+      "author": "jubalm",
+      "description": "Augur page header (registry source distribution; contract docs/registry-contract.md).",
+      "registryDependencies": [
+        "jubalm/augur-design-system/augur-theme",
+        "jubalm/augur-design-system/utils"
+      ],
+      "files": [
+        {
+          "path": "packages/design-system/src/patterns/page-header/page-header.tsx",
+          "type": "registry:block",
+          "target": "@components/page-header.tsx"
+        },
+        {
+          "path": "packages/design-system/src/patterns/page-header/page-header.css",
+          "type": "registry:file",
+          "target": "@components/page-header.css"
+        }
+      ]
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:block",
+      "title": "Empty State",
+      "author": "jubalm",
+      "description": "Augur empty state (registry source distribution; contract docs/registry-contract.md).",
+      "registryDependencies": [
+        "jubalm/augur-design-system/augur-theme",
+        "jubalm/augur-design-system/utils",
+        "jubalm/augur-design-system/button",
+        "jubalm/augur-design-system/page-header"
+      ],
+      "files": [
+        {
+          "path": "packages/design-system/src/patterns/empty-state/empty-state.tsx",
+          "type": "registry:block",
+          "target": "@components/empty-state.tsx"
+        },
+        {
+          "path": "packages/design-system/src/patterns/empty-state/empty-state.css",
+          "type": "registry:file",
+          "target": "@components/empty-state.css"
+        }
+      ]
+    }
+  ]
+}
