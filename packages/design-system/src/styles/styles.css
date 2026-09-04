@@ -19,8 +19,8 @@
  *      role custom properties referencing the generated tokens only
  *      (`./theme.css`), plus the shared focus and reduced-motion behavior.
  *   6. Starter component styles (issue #11 onward): Button and Card,
- *      styled through the semantic roles only (no raw values, no new
- *      tokens).
+ *      then Input and the FormField pattern (issue #12), styled
+ *      through the semantic roles only (no raw values, no new tokens).
  *
  * Color roles must reference generated variables — raw `DESIGN.md` color
  * values live only in generated token output (issue #3 policy). The token
@@ -44,3 +44,5 @@
    semantic roles only (no raw values, no new tokens). */
 @import "../patterns/page-header/page-header.css";
 @import "../patterns/empty-state/empty-state.css";
+@import "../components/input/input.css";
+@import "../components/form-field/form-field.css";

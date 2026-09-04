@@ -75,3 +75,20 @@ export type {
   EmptyStateDescriptionProps,
   EmptyStateActionsProps,
 } from "./patterns/empty-state/empty-state";
+export { Input } from "./components/input/input";
+export type { InputProps } from "./components/input/input";
+
+export {
+  FormField,
+  FormFieldControl,
+  FormFieldLabel,
+  FormFieldDescription,
+  FormFieldError,
+} from "./components/form-field/form-field";
+export type {
+  FormFieldProps,
+  FormFieldControlProps,
+  FormFieldLabelProps,
+  FormFieldDescriptionProps,
+  FormFieldErrorProps,
+} from "./components/form-field/form-field";
