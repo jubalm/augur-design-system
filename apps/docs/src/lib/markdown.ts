@@ -107,6 +107,8 @@ const LIVE_DEMO_DESCRIPTIONS: Readonly<Record<string, string>> = {
     "*Live on the rendered page: the seven package typography role classes applied to real markup — sizes, weights, and families come from the package stylesheet, not this document.*",
   ThemingDemo:
     '*Live on the rendered page: side-by-side light and dark panels with semantic role swatches, including a scoped `[data-theme="dark"]` subtree.*',
+  DialogPlayground:
+    '*Live on the rendered page (client island): three working dialogs — a default modal, a long-content scrolling panel, and a dialog portaled into a scoped `[data-theme="dark"]` subtree — demonstrating open, focus containment, Escape and overlay dismissal, and portal theme inheritance.*',
 };
 
 const FENCE = /^(\s*)(`{3,}|~{3,})/;
