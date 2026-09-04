@@ -47,7 +47,7 @@
  * is embedded (resolves to the default branch); release flow (#19) pins.
  */
 
-import { relative, join } from "node:path";
+import { join } from "node:path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const pkgRoot = new URL("../..", import.meta.url).pathname; // packages/design-system
@@ -233,12 +233,6 @@ export function cn(...inputs: ClassValue[]) {
 /** Augur alias: class joiner used by component sources. */
 export const cx = cn;
 `;
-
-interface FileSpec {
-  src: string; // canonical source path relative to packages/design-system
-  target: string; // consumer target
-  type: string;
-}
 
 const ALIAS_REWRITES: Array<[RegExp, string]> = [
   [/from "\.\.\/\.\.\/internal\/cx"/g, 'from "@/lib/utils"'],
