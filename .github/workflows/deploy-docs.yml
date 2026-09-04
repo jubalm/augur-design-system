@@ -1,0 +1,120 @@
+# GitHub Pages deployment preparation (issue #19).
+#
+# GATED: this workflow runs ONLY on explicit maintainer action
+# (`workflow_dispatch`). It is never triggered by push or pull_request, and
+# no Pages site is configured by its presence. Activation steps live in
+# DEPLOYMENT.md and require maintainer direction (issue #20).
+#
+# Builds the static docs site AND the registry built-JSON channel
+# (`public/r/` → `<base>/r/`), verifies navigation, assets, `.md` routes,
+# `llms.txt`, and registry URLs under the chosen base path with the
+# established fixture checks plus `scripts/verify-pages-deploy.mjs`, then
+# uploads a reviewable artifact and (only because a maintainer dispatched
+# it) deploys to the controlled `github-pages` environment.
+#
+# Minimal permissions: the workflow default is `contents: read`; only the
+# deploy job receives `pages: write` and `id-token: write` (required by
+# actions/deploy-pages).
+
+name: Deploy docs (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_path:
+        description: "Deployment base path (GitHub Pages project site: /augur-design-system; custom-domain root: /)"
+        required: true
+        default: "/augur-design-system"
+        type: string
+      registry_sha:
+        description: "Optional full 40-char commit SHA stamped as #<sha> onto registryDependencies (contract §14). Defaults to the dispatched commit."
+        required: false
+        default: ""
+        type: string
+
+# Workflow-level default stays minimal; the deploy job widens below.
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-docs
+  cancel-in-progress: false
+
+env:
+  # Keep in sync with `packageManager` in package.json.
+  BUN_VERSION: "1.4.0"
+
+jobs:
+  build:
+    name: Build and verify Pages artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up pinned Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Frozen install
+        run: bun install --frozen-lockfile
+
+      - name: Resolve registry pin SHA
+        id: pins
+        run: |
+          sha="${{ inputs.registry_sha }}"
+          if [ -z "$sha" ]; then sha="${GITHUB_SHA}"; fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      # Release-time pin stamping (packages/design-system/docs/registry-generation.md):
+      # regenerate `public/r/` with AUGUR_REGISTRY_SHA so the deployed
+      # built-JSON channel carries `#<sha>` pins on registryDependencies.
+      - name: Regenerate registry with pinned SHAs
+        env:
+          AUGUR_REGISTRY_SHA: ${{ steps.pins.outputs.sha }}
+        run: bun run --cwd packages/design-system registry:generate
+
+      - name: Build docs (base ${{ inputs.base_path }})
+        env:
+          DOCS_BASE_PATH: ${{ inputs.base_path }}
+        run: bun run --cwd apps/docs build
+
+      # Registry built-JSON channel (contract §14): served at
+      # `<base>/r/<item>.json` next to the docs site. Astro's publicDir is
+      # apps/docs/public, so the repository-root public/r/ output is copied
+      # into dist explicitly.
+      - name: Stage registry channel into dist
+        run: cp -R public/r "apps/docs/dist/r"
+
+      - name: Clean-Markdown and llms.txt verification (subpath base)
+        env:
+          DOCS_BASE_PATH: ${{ inputs.base_path }}
+        run: bun apps/docs/fixtures/verify-markdown.mjs
+
+      - name: Static Pages artifact verification (links, routes, registry)
+        env:
+          DOCS_BASE_PATH: ${{ inputs.base_path }}
+        run: bun scripts/verify-pages-deploy.mjs
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/docs/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    # Runs only after a verified build; a maintainer dispatched this run.
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
