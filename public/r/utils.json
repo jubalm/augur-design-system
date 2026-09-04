@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "type": "registry:lib",
+  "title": "Utils",
+  "author": "jubalm",
+  "description": "Augur class-name utilities: upstream-compatible cn() plus the cx() alias used by Augur component source.",
+  "dependencies": [
+    "clsx@2.1.1",
+    "tailwind-merge@3.3.1"
+  ],
+  "files": [
+    {
+      "path": "packages/design-system/registry-src/utils.ts",
+      "type": "registry:lib",
+      "target": "@lib/utils.ts",
+      "content": "/**\n * GENERATED FILE — do not edit. Regenerate: `bun run registry:generate` in packages/design-system.\n * Verify: `bun run registry:check`. Policy: packages/design-system/docs/registry-generation.md.\n *\n * The `utils` registry item payload (contract: docs/registry-contract.md §7).\n * Upstream-compatible `cn()` signature plus the package's `cx()` alias used\n * by every Augur component source.\n */\nimport { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\n/** Augur alias: class joiner used by component sources. */\nexport const cx = cn;\n"
+    }
+  ]
+}

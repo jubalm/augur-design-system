@@ -21,7 +21,10 @@
     "tokens:lint": "design.md lint ../../DESIGN.md",
     "tokens:generate": "bun src/tools/generate-tokens.ts",
     "tokens:check": "bun src/tools/generate-tokens.ts --check",
-    "tokens:verify-failures": "bun src/tools/generate-tokens.ts --prove-failure"
+    "tokens:verify-failures": "bun src/tools/generate-tokens.ts --prove-failure",
+    "registry:generate": "bun src/tools/generate-registry.ts",
+    "registry:check": "bun src/tools/generate-registry.ts --check",
+    "registry:validate": "cd ../.. && bunx shadcn@4.20.1 registry validate registry.json"
   },
   "peerDependencies": {
     "react": "^19.0.0"
