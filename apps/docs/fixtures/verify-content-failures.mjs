@@ -32,16 +32,29 @@ const ok = (label, pass, detail = "") => {
 };
 
 /**
+ * Remove both content-layer caches (`apps/docs/.astro` and
+ * `apps/docs/node_modules/.astro`, the data store). Astro caches
+ * deferred content modules and store entries there; stale entries for
+ * a removed fixture would leak into the NEXT build, so the caches are
+ * cleared both before AND after each scenario build (a crashed previous
+ * run, a regular build run just before this script, or a prior
+ * scenario could otherwise leave store state that makes CI outcomes
+ * depend on execution order). Clearing forces a fresh sync (~0.5s).
+ */
+function clearCaches() {
+  return Promise.all([
+    rm(join(docsRoot, ".astro"), { recursive: true, force: true }),
+    rm(join(docsRoot, "node_modules", ".astro"), { recursive: true, force: true }),
+  ]);
+}
+
+/**
  * Build apps/docs with a staged invalid fixture in place; return output.
- * Cleanup removes the fixture AND both content-layer caches
- * (`apps/docs/.astro` and `apps/docs/node_modules/.astro`, the data
- * store): Astro caches deferred content modules and store entries
- * there, and stale entries for the removed fixture would break the
- * next regular build. Clearing them forces a fresh sync (~0.5s) and
- * leaves the tree buildable in all cases.
+ * The fixture AND both caches are removed again afterwards in all cases.
  */
 function buildWith(contentPath, fixtureFile) {
-  return copyFile(join(fixturesDir, fixtureFile), join(docsRoot, contentPath))
+  return clearCaches()
+    .then(() => copyFile(join(fixturesDir, fixtureFile), join(docsRoot, contentPath)))
     .then(() => {
       const result = spawnSync("bun", ["run", "--cwd", "apps/docs", "build"], {
         cwd: repoRoot,
@@ -51,11 +64,7 @@ function buildWith(contentPath, fixtureFile) {
       return { status: result.status, output: `${result.stdout ?? ""}\n${result.stderr ?? ""}` };
     })
     .finally(() =>
-      Promise.all([
-        rm(join(docsRoot, contentPath), { force: true }),
-        rm(join(docsRoot, ".astro"), { recursive: true, force: true }),
-        rm(join(docsRoot, "node_modules", ".astro"), { recursive: true, force: true }),
-      ]),
+      Promise.all([rm(join(docsRoot, contentPath), { force: true }), clearCaches()]),
     );
 }
 
@@ -94,6 +103,9 @@ console.log("\n== Scenario 2: component page missing required section headings =
 }
 
 console.log("");
+// The failing builds may have partially overwritten `dist` — remove it so
+// no consumer mistakes a post-verification tree for a successful build.
+await rm(join(docsRoot, "dist"), { recursive: true, force: true });
 if (failures.length > 0) {
   console.error(`${failures.length} content-failure check(s) did not behave as required`);
   process.exit(1);
