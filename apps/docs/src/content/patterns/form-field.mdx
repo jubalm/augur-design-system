@@ -1,0 +1,102 @@
+---
+# FormField (issue #12) — the first entry in the patterns collection
+# (src/content/patterns/, route /patterns/form-field). Patterns
+# compose component pages (frontmatter `components`) and are not bound
+# by the component-page section contract.
+title: FormField
+description: The composition pattern that wires an Input with its label, helper text, and error message — correct htmlFor, aria-describedby, invalid, and required relationships without a form framework.
+components:
+  - input
+order: 1
+---
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
+
+A field is more than a control: the label, the helper text, and the
+error message each carry information the control cannot carry alone,
+and the wiring between them is easy to get wrong by hand. `FormField`
+is the Augur pattern that owns that wiring. It composes
+[`Input`](/components/input) — the dependency points one way, from
+the pattern to the component — and adds no validation rules, no
+state, and no form framework. The consumer owns validation;
+FormField expresses its result accessibly.
+
+<DocExample example={examples.formField.composition} />
+
+## What the pattern wires
+
+| Relationship | How FormField owns it |
+| --- | --- |
+| Label → control | The label renders as a `<label>` whose `htmlFor` targets the control's generated `id` — a real label association, not `aria-label` |
+| Helper text → control | The description id is referenced in the control's `aria-describedby` whenever a description exists |
+| Error → control | While an `error` is present, the error id joins `aria-describedby` and the control gets `aria-invalid="true"`; no error means no reference, so no dangling idrefs (they fail axe) |
+| Error announcement | The message renders with `role="alert"`, so its appearance is announced; the text — not color alone — names the problem (the brand defines no danger hue) |
+| Required | The native `required` attribute reaches the control (announced, browser-enforced); the label's visible marker is `aria-hidden` so it is not read as "star" |
+
+## Composition
+
+```tsx
+import { FormField, FormFieldControl } from "@augur/design-system";
+
+<FormField
+  label="Review deadline"
+  description="When this query must close."
+  error={errors.deadline}   // undefined when valid — validation is yours
+  required
+>
+  <FormFieldControl type="text" defaultValue={draft.deadline} />
+</FormField>
+```
+
+The wrapper declares `label`, `description`, `error`, and
+`required`; the control slot takes Input's own props (`type`,
+`value`/`onChange` or `defaultValue`, `disabled`, `readOnly`, …).
+Controlled and uncontrolled usage are plain React — the pattern adds
+no state. When the field is valid, leave `error` unset (pass it as
+undefined): the message disappears and the control's `aria-invalid`
+and describedby reference go with it.
+
+The wiring parts (`FormFieldLabel`, `FormFieldDescription`,
+`FormFieldError`) are exported for custom compositions, but the
+prop-driven form above is the supported path: rendering the parts by
+hand means owning their id wiring yourself.
+
+## When to reach for a bare Input instead
+
+FormField is for fields that need description, error, or required
+wiring. For a one-off control with a plain label, hand wiring is
+small and honest:
+
+```tsx
+<label htmlFor="queryName">Query name</label>
+<Input id="queryName" />
+```
+
+Use the pattern the moment a field grows a description, an error
+message, or required semantics — or when a form repeats the same
+wiring across many fields.
+
+## Validation ownership
+
+FormField is not a form framework. It ships no validators, no
+submission handling, and no product form state; it never requires
+one. The consumer computes validity however the product wants —
+inline, a validation library, server feedback — and passes the
+result down as props. The pattern's job is the accessibility
+contract, not the rules.
+
+## Accessibility notes
+
+- The accessible name comes from the visible label; the description
+  supplements it and is read by name/description queries.
+- Error appearance is announced once (`role="alert"`); because the
+  control also carries `aria-invalid` and the error id, screen-reader
+  users revisiting the field get the full context, not just the
+  announcement.
+- Disabled and read-only keep their distinct contracts from Input:
+  disabled removes the field from interaction; read-only keeps it
+  focusable and copyable. See the [Input page](/components/input)
+  for the state-by-state contract.
+- The repository harness runs keyboard, wiring, and axe checks over
+  these compositions in both theme scopes; the docs example renders
+  the pattern in light and dark with explicit error text.

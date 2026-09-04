@@ -1,0 +1,189 @@
+---
+# Input (issue #12) — rendered through the #8 content pipeline
+# (src/content/components/, route /components/input). Frontmatter is
+# the single H1 source; the body starts at H2 level and covers every
+# enforced section (src/lib/component-sections.ts). Live examples are
+# real workspace imports (src/examples/input/), synchronized with
+# their code samples by construction.
+title: Input
+description: Text entry over the semantic roles — a native input with default, focus, disabled, invalid, and read-only contracts, independent of any form framework.
+component: Input
+status: draft
+order: 3
+---
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
+
+`Input` renders a native `<input>` styled only with the semantic role
+custom properties delivered by `@augur/design-system/styles.css`. It
+is deliberately small: no validation rules, no state management, no
+form framework — controlled and uncontrolled usage are plain React,
+and validation ownership stays with the consumer. When the wiring
+around a field (label, description, error) is more than a one-off,
+compose it with the [FormField pattern](/patterns/form-field); Input
+itself never depends on FormField.
+
+## When to use
+
+- For short, single-line text entry: names, identifiers, dates,
+  free-text notes — any value a person types rather than chooses.
+- With consumer-owned labeling for one-off cases: a `<label htmlFor>`
+  next to a bare `Input` is a complete, accessible field.
+- Inside the FormField pattern when a field needs helper text, error
+  messages, or required semantics wired correctly (see
+  [FormField](/patterns/form-field)).
+- With `type` set to the value's shape (`email`, `url`, `date`, …) —
+  the styling is type-agnostic and the browser gains the right
+  keyboard and semantics.
+
+## When not to use
+
+- Not for choosing from known options: a control that records a
+  choice among alternatives needs selection semantics (a dedicated
+  select/combobox slice), not free text.
+- Not for multi-line prose: this is a one-line control; a textarea
+  slice is a separate future component, not a prop on this one.
+- Not as a styled read-only display: `readOnly` exists for
+  "displayed, not edited" values inside a form flow; for static
+  content outside a form, render text, not a control.
+- Not with validation logic inside the component: Input carries no
+  rules and no state; a product form framework is never required.
+
+## Variants
+
+Input ships exactly one treatment — by design.
+Differentiation comes from state (default, invalid, disabled,
+read-only) and from composition with FormField, not from a variant
+matrix; no speculative variants are provided ahead of concrete
+requirements.
+
+<DocExample example={examples.input.states} />
+
+## Sizes
+
+Input is one structural size, aligned with the system's `md` control
+band: 36px tall (the FD-02 Proposed `control.height.md`), 12px
+horizontal padding (FD-01), 6px corner radius (FD-03
+`radius.control`, which names inputs explicitly). It is full-width by
+default (`width: 100%`) because fields are laid out by their
+container — constrain it from the composition, not the component. No
+size matrix exists ahead of concrete requirements; the 36px height
+satisfies the WCAG 2.5.8 minimum target size.
+
+## States
+
+- **Default.** A transparent field on a 1px `--input` hairline:
+  the control works on any surface (canvas or card). Placeholder text
+  renders in `--muted-foreground` — the secondary voice, never
+  required information.
+- **Focus.** Keyboard focus only, painted by the shared
+  `:focus-visible` rule from the theme contract: a 2px ring with a
+  2px offset in `--ring` (Deep on light, Green on dark — the FD-04
+  Proposed spec). Focus is never suppressed and needs no
+  per-component CSS.
+- **Disabled.** Native `disabled`: non-interactive, value reduced to
+  half opacity but present and readable in the DOM, `cursor:
+  not-allowed` — the same FD-06 Proposed contract as Button.
+- **Invalid.** Set `invalid`: the control gets `aria-invalid="true"`
+  and the border moves to `--destructive`. The brand defines no
+  danger hue (theme decision D1), so the visible error MESSAGE — not
+  the border color — carries the meaning; pair the control with error
+  text (FormField does this wiring; standalone usage wires
+  `aria-describedby` by hand).
+- **Read-only.** Native `readOnly`: the value stays focusable,
+  selectable, and copyable — deliberately NOT the disabled treatment.
+  A quiet `--muted` surface signals "displayed, not edited".
+
+## Accessibility
+
+- Native `<input>` semantics with a REAL label association: wire
+  `htmlFor`/`id` (FormField does it automatically). Placeholder text
+  is a hint, never a substitute for a label.
+- Descriptions and errors travel through `aria-describedby`; the
+  error id is referenced only while an error exists, so no dangling
+  idrefs are produced (dangling references fail axe).
+- Errors are announced: the FormField error message renders with
+  `role="alert"`, and the control carries `aria-invalid="true"` while
+  the message is present. State is named by text, never color alone.
+- `required` is the native attribute (announced by assistive
+  technology, enforced by the browser on submission); FormField adds
+  a visible marker that is `aria-hidden` so it is not read as
+  "star".
+- Read-only and disabled are distinct contracts: read-only fields
+  stay in the tab order and their values remain copyable; disabled
+  fields are removed from interaction entirely.
+- Keyboard focus is guaranteed by the theme contract's
+  `:focus-visible` rule; reduced motion and the focus ring need no
+  per-component CSS.
+- The repository test harness covers keyboard input, name and
+  description wiring, the invalid/disabled/read-only contracts, and
+  axe findings in light and dark scopes.
+
+## API
+
+```tsx
+import { Input } from "@augur/design-system";
+```
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `invalid` | `boolean` | `false` | Invalid state: `aria-invalid="true"` plus the `--destructive` border; pair with visible error text |
+| `disabled` | `boolean` | `false` | Native disabled attribute (FD-06 Proposed contract) |
+| `readOnly` | `boolean` | `false` | Native read-only attribute: focusable and copyable, not editable |
+| `required` | `boolean` | `false` | Native required attribute |
+| `type` | native input types | `"text"` | The value's shape; styling is type-agnostic |
+| `className` | `string` | — | Extra classes, appended after the component classes |
+| `ref` | `React.Ref` | — | React 19 ref prop for the underlying input element (no forwardRef) |
+| …props | native input attributes | — | Everything else spreads through to the `<input>` |
+
+### Controlled and uncontrolled usage
+
+Both are plain React — Input adds no state and no event contract of
+its own:
+
+```tsx
+// Uncontrolled: the DOM owns the value; read it on submit.
+<Input name="queryName" defaultValue="Q3 records review" />
+
+// Controlled: the consumer owns validation and the value.
+const [value, setValue] = useState("");
+<Input
+  value={value}
+  onChange={(event) => setValue(event.currentTarget.value)}
+  invalid={value.length === 0}
+/>;
+```
+
+### Validation ownership
+
+Input carries no validation rules, and no product form framework is
+required: the consumer decides when a field is invalid and expresses
+the result as props (`invalid`, and the error text via FormField's
+`error` or hand-wired `aria-describedby`). Validation logic lives in
+the product layer, close to the data it protects.
+
+## Design rationale
+
+- **Augur-owned, shadcn-shaped.** A styled native input without
+  upstream's dependency set: no Radix, no form library (ARCHITECTURE.md
+  §11 compatibility without dependency drift).
+- **Independent of FormField.** The dependency points one way: the
+  pattern composes the component. Input works with any labeling a
+  consumer provides, which keeps the component usable in future
+  patterns without coupling either side.
+- **Semantic references only.** Every color is a role custom
+  property; geometry is structural CSS aligned with FD-01, FD-02, and
+  FD-03, which stay Proposed until a maintainer adopts them. No
+  tokens were emitted and no values outside the proposal set were
+  invented (the decision record lives at
+  [packages/design-system/docs/components.md](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/components.md)
+  in the repository).
+- **Invalid without a danger hue.** The border takes the theme's
+  `--destructive` role, but the message text carries the meaning
+  (theme decision D1) — the same rule as the destructive Button.
+- **Read-only is not disabled.** Two native states, two contracts:
+  display-and-copy versus remove-from-interaction. Collapsing them
+  would hide selectable values behind a disabled look.
+- **Status: draft.** The API graduates to stable after maintainer
+  acceptance of this slice and of the pending foundation proposals it
+  structurally aligns with.
