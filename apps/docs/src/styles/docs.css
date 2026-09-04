@@ -591,6 +591,52 @@ body {
   color: var(--primary);
 }
 
+/* Copy page / View as Markdown actions (issue #9). Neutral hover only:
+   green stays an intent signal (primary action, focus, active). The
+   status span is always rendered (empty when idle) so the polite live
+   region exists before text is inserted; min-height avoids layout
+   shift without display toggling. */
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: -0.5rem 0 1.75rem;
+}
+
+.page-action {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  background-color: var(--muted);
+  color: var(--foreground);
+  font-family: var(--augur-font-primary);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  padding: 0.375rem 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.page-action:hover {
+  background-color: var(--card);
+  border-color: var(--muted-foreground);
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+/* Action links are button-shaped (border + surface); keep them
+   consistent both inside and outside .prose, which underlines links. */
+.prose a.page-action {
+  text-decoration: none;
+}
+
+.page-action-status:not(:empty) {
+  min-height: 1em;
+  color: var(--muted-foreground);
+}
+
 /* Example block (DocExample.tsx): live preview + synchronized source. */
 .doc-example {
   margin: 1.5rem 0;

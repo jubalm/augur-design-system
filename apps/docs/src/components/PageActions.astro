@@ -1,0 +1,68 @@
+---
+/**
+ * Copy page / View as Markdown actions (issue #9).
+ *
+ * Required by ARCHITECTURE.md ("Documentation Delivery for Humans and
+ * LLMs"): `Copy page` copies the clean Markdown representation — not the
+ * rendered HTML or navigation chrome — and `View as Markdown` opens the
+ * direct `.md` representation.
+ *
+ * Single-source discipline: `Copy page` FETCHES the page's `.md`
+ * endpoint and copies exactly those bytes, so the clipboard can never
+ * drift from what `View as Markdown` (and an LLM fetching the URL)
+ * receives. The endpoints are statically generated from the same
+ * authored sources as the rendered pages (src/lib/markdown.ts).
+ *
+ * Progressive enhancement: both controls work without client script
+ * (the link navigates natively); the copy button is a real `<button>`
+ * operated by keyboard, reporting through a polite live region. Chrome
+ * only — colors/fonts come from package semantic roles (see docs.css).
+ */
+interface Props {
+  /** Base-aware URL of this page's clean `.md` representation. */
+  mdHref: string;
+}
+
+const { mdHref } = Astro.props;
+---
+<div class="page-actions">
+  <button type="button" class="page-action" data-copy-markdown={mdHref}>Copy page</button>
+  <a class="page-action" href={mdHref}>View as Markdown</a>
+  <span class="page-action-status augur-type-metadata" role="status" data-copy-status></span>
+</div>
+<script>
+  // One delegated listener per page: static markup stays server-rendered.
+  const statusTimers = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>();
+
+  function showStatus(status: HTMLElement | null, message: string): void {
+    if (!status) return;
+    status.textContent = message;
+    const previous = statusTimers.get(status);
+    if (previous) clearTimeout(previous);
+    statusTimers.set(
+      status,
+      setTimeout(() => {
+        status.textContent = "";
+      }, 4_000),
+    );
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target.closest("[data-copy-markdown]") : null;
+    if (!(target instanceof HTMLElement)) return;
+    const href = target.dataset.copyMarkdown;
+    if (!href) return;
+    const status = target.closest(".page-actions")?.querySelector<HTMLElement>("[data-copy-status]") ?? null;
+    event.preventDefault();
+    void (async () => {
+      try {
+        const response = await fetch(href);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        await navigator.clipboard.writeText(await response.text());
+        showStatus(status, "Copied");
+      } catch {
+        showStatus(status, "Copy failed — open “View as Markdown” to copy the Markdown directly.");
+      }
+    })();
+  });
+</script>
