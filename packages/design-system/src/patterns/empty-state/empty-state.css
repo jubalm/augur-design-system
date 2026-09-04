@@ -1,0 +1,59 @@
+/*
+ * EmptyState styles (issue #14 — first pattern slice).
+ *
+ * Color: ONLY semantic role custom properties from ../../styles/theme.css
+ * (which references generated tokens). No raw color values, no new
+ * custom properties — the same contract the Button/Card component CSS
+ * follows, enforced by the stylesheet contract test in the repository
+ * harness. The container is deliberately neutral (one-green-signal
+ * rule): muted tile, muted description, inherited foreground title; the
+ * only action color comes from the consumer's primary Button.
+ *
+ * Geometry: intentional structural constants aligned with the FD-01
+ * spacing, FD-02 icon, and FD-03 radius proposals (Proposed — pending
+ * maintainer review); no tokens are emitted. Steps used: 8/16/24/32px
+ * gaps/padding, 40px icon tile, 8px tile radius.
+ */
+.aug-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px; /* FD-01 space.sm (Proposed) */
+  padding: 32px 24px; /* FD-01 space.2xl / space.lg (Proposed) */
+  min-width: 0;
+}
+
+/* Icon/glyph slot: a fixed, muted tile so differently sized svgs land
+   on the same visual beat; the glyph inherits the muted pairing. */
+.aug-empty-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* FD-02 icon lg (Proposed) */
+  height: 40px;
+  border-radius: 8px; /* FD-03 radius.surface (Proposed) */
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.aug-empty-state-title {
+  margin: 0;
+}
+
+/* Width-capped so long copy stays readable instead of stretching wide. */
+.aug-empty-state-description {
+  margin: 0;
+  max-width: 480px;
+  color: var(--muted-foreground);
+}
+
+/* Actions row: centered to match the column; primary Button first. */
+.aug-empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* FD-01 space.sm (Proposed) */
+  margin-top: 8px; /* FD-01 space.sm (Proposed): one extra beat before actions */
+}
