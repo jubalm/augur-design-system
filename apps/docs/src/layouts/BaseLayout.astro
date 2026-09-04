@@ -15,12 +15,15 @@
 import "@augur/design-system/styles.css";
 import "../styles/docs.css";
 import ThemeToggle from "../components/ThemeToggle";
-import { isActivePath, withBase } from "../lib/base";
+import PageActions from "../components/PageActions.astro";
+import { isActivePath, normalizePath, withBase } from "../lib/base";
 import { NAV_ITEMS } from "../lib/navigation";
 
 interface Props {
   title: string;
   description?: string;
+  /** Opt the page into Copy page / View as Markdown actions (#9): set when a clean `.md` endpoint exists. */
+  markdown?: boolean;
 }
 
 // MDX pages pass metadata through `frontmatter`; .astro pages pass props.
@@ -106,6 +109,13 @@ const currentPath = Astro.url.pathname;
     </header>
     <main id="main-content" class="site-main">
       {fromMdx ? <h1 class="augur-type-heading-1 page-title">{title}</h1> : null}
+      {
+        fromMdx && props.frontmatter?.markdown ? (
+          // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
+          // already includes the deployment base, so append `.md` directly.
+          <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+        ) : null
+      }
       {fromMdx ? <article class="prose"><slot /></article> : <slot />}
     </main>
     <footer class="site-footer">

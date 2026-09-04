@@ -139,12 +139,47 @@ real imported source, failing the build otherwise.
   as substantive pages they are candidates to migrate into a collection
   when touched. `/foundations/*` pages are fully collection-sourced.
 
-## Markdown parity and `llms.txt` (issue #9, not this slice)
+## Markdown parity and `llms.txt` (issue #9)
 
-Every substantive page will get a clean `.md` representation derived
-from the same entry (`title`/`description` metadata + body + example
-sources), per ARCHITECTURE.md "Documentation Delivery for Humans and
-LLMs". The conventions above (metadata-owned H1, example-source
-derivation) exist so #9 can generate that representation without a
-second authoring path. `Copy page` / `View as Markdown` actions and
-`/llms.txt` are also #9.
+Every substantive page has a clean `.md` representation derived from the
+same entry as the rendered page — metadata (`title`/`description`),
+body, and example sources. There is no second authoring path; the two
+representations cannot drift.
+
+- **Endpoints** (`src/pages/[...markdown].ts`): `/<kind>/<slug>.md` for
+  every non-draft collection entry, plus `/getting-started.md` derived
+  from the shell page's own MDX file (`?raw` import, parsed by
+  `mdxPageSource`). Drafts are excluded exactly as the page routes
+  exclude them. The home page is landing chrome, not documentation, and
+  deliberately has no `.md` form; it also renders no copy actions.
+- **Derivation** (`src/lib/markdown.ts`): synthesizes the H1 from
+  `title` and the lede from `description` (component pages add the
+  status line), then transforms the body code-fence-aware: MDX imports
+  and single-line flow comments are stripped; expressions come from
+  `EXPRESSION_VALUES` (computed from the real package);
+  `<DocExample example={examples.a.b} />` becomes the example caption
+  plus the example module's own `?raw` source in a fenced block;
+  UI-only demos (`FontRoles`, `ThemingDemo`) become one-line
+  descriptions of what renders live; site-absolute links are rewritten
+  through `withBase()` so they resolve under both deployment bases.
+  Authoring constraints that keep this derivable: representable
+  components appear as single-line self-closing elements, imports stay
+  on one line, and frontmatter `title`/`description` stay single-line
+  on shell MDX pages. Unrepresentable content — an unknown component,
+  an unknown expression, an unbalanced fence, leftover JSX — fails the
+  build naming the entry.
+- **New demo components must register a Markdown representation** in
+  `src/lib/markdown.ts` in the same change that uses them in content.
+- **Copy page / View as Markdown** (`src/components/PageActions.astro`,
+  rendered by the page renderer): `Copy page` fetches the page's `.md`
+  endpoint and copies exactly those bytes; `View as Markdown` opens the
+  direct `.md` representation. Shell MDX pages opt in with
+  `markdown: true` in frontmatter.
+- **`/llms.txt`** (`src/pages/llms.txt.ts` + `src/lib/llms.ts`): a
+  concise navigational index generated from these same collections, so
+  it lists exactly the pages that exist. It links each page's `.md`
+  form, states where `DESIGN.md`, `ARCHITECTURE.md`, and
+  `CHANGELOG.md` live (repository canonical locations), and says so
+  explicitly when a kind has no pages yet. It guides retrieval; it does
+  not restate design rules. A canonical docs origin (for absolute URLs)
+  is a deployment decision (#19/#20).
