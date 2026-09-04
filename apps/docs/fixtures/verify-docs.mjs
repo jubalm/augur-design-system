@@ -1,16 +1,11 @@
 /**
  * Browser verification driver for the docs shell (issue #7).
  *
- * Follows the fixture pattern established by issue #5
+ * pattern established by issue #5
  * (`packages/design-system/fixtures/verify-fonts.mjs`): serve the built
  * site statically, drive it in headless Chromium, and assert. Playwright
- * is deliberately NOT a workspace dependency (browser CI lands with
- * issue #15); provide it via a gitignored link:
- *
- *     mkdir -p /tmp/augur-docs-verify && cd /tmp/augur-docs-verify
- *     bun init -y >/dev/null && bun add playwright@1.61.1
- *     ln -s /tmp/augur-docs-verify/node_modules \
- *           <repo>/apps/docs/fixtures/node_modules
+ * is a pinned root devDependency (1.61.1, issue #15); the gitignored
+ * `apps/docs/fixtures/node_modules` link from issue #7 also still works.
  *
  * Usage (from the repository root, after building apps/docs):
  *
@@ -39,6 +34,16 @@
  *      (compared byte-for-byte), reports "Copied" through its live
  *      region, works via keyboard, and `View as Markdown` links the
  *      direct `.md` representation — which serves the same content.
+ *   8. Starter component browser coverage (issue #15): the Dialog
+ *      island driven in a real browser — keyboard open, focus moves
+ *      into the panel and stays contained under Tab/Shift+Tab, Escape
+ *      and overlay dismissal close it, body scroll locks while open and
+ *      unlocks after, focus is restored to the trigger, and the dark
+ *      scoped-portal panel inherits its subtree theme — plus Input
+ *      keyboard focus and ARIA wiring, Button focus-visible activation,
+ *      pattern-page examples rendering, both themes on the same nodes,
+ *      mobile (375px) dialog sizing/scroll, and reduced-motion
+ *      transitions collapsing.
  *
  * Exit code 0 = all assertions passed; 1 = at least one failed.
  * Screenshots are written to /tmp/augur-docs-verify/ as visual evidence.
@@ -122,6 +127,26 @@ async function waitForIsland(page) {
     null,
     { timeout: 10_000 },
   );
+}
+
+/**
+ * Keyboard-open a dialog from a trigger and wait for the panel. Island
+ * hydration is asynchronous — `waitForIsland` only proves the hydrate
+ * entry point exists, not that React has attached listeners yet — so
+ * press Enter again on a short interval until the panel appears.
+ */
+async function openDialog(page, trigger, timeoutMs = 15_000) {
+  await trigger.focus();
+  const deadline = Date.now() + timeoutMs;
+  for (;;) {
+    await page.keyboard.press("Enter");
+    try {
+      await page.waitForSelector(".aug-dialog-content", { timeout: 500, state: "visible" });
+      return;
+    } catch {
+      if (Date.now() > deadline) throw new Error("dialog panel did not appear within timeout");
+    }
+  }
 }
 
 async function auditPage(url, { expectTitleFragment } = {}) {
@@ -209,6 +234,11 @@ await auditPage(origin + site("/reference/contributing"), { expectTitleFragment:
 await auditPage(origin + site("/reference/component-conventions"), { expectTitleFragment: "Component conventions" });
 await auditPage(origin + site("/components/button"), { expectTitleFragment: "Button" });
 await auditPage(origin + site("/components/card"), { expectTitleFragment: "Card" });
+await auditPage(origin + site("/components/dialog"), { expectTitleFragment: "Dialog" });
+await auditPage(origin + site("/components/input"), { expectTitleFragment: "Input" });
+await auditPage(origin + site("/patterns/empty-state"), { expectTitleFragment: "EmptyState" });
+await auditPage(origin + site("/patterns/form-field"), { expectTitleFragment: "FormField" });
+await auditPage(origin + site("/patterns/page-header"), { expectTitleFragment: "PageHeader" });
 
 ok(
   "getting-started renders MDX-evaluated package data",
@@ -485,6 +515,232 @@ console.log("\n== Component slice (Button/Card computed styles, both themes) =="
   ok("card title renders h3", cardLight.titleTag === "H3", String(cardLight.titleTag));
   await cardPage.screenshot({ path: "/tmp/augur-docs-verify/card-page-light.png", fullPage: true });
   await cardPage.close();
+}
+
+// --- 7. Starter component browser coverage (issue #15). -------------------
+console.log("\n== Starter components in real browsers (issue #15) ==");
+{
+  // --- Dialog: keyboard open, focus containment, dismissal, scroll lock,
+  // focus restoration, and the dark scoped portal.
+  const page = await browser.newPage();
+  const consoleIssues = [];
+  page.on("console", (msg) => {
+    if (msg.type() === "error" || msg.type() === "warning") consoleIssues.push(`${msg.type()}: ${msg.text()}`);
+  });
+  await page.goto(origin + site("/components/dialog"), { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+  await waitForIsland(page);
+
+  const panelState = () =>
+    page.evaluate(() => {
+      const panel = document.querySelector(".aug-dialog-content");
+      if (!panel) return { open: false };
+      return {
+        open: true,
+        inBody: document.body.contains(panel),
+        overflow: getComputedStyle(document.body).overflow,
+        focusInPanel: panel.contains(document.activeElement),
+        role: panel.getAttribute("role"),
+        labelledby:
+          !!panel.getAttribute("aria-labelledby") &&
+          !!document.getElementById(panel.getAttribute("aria-labelledby")),
+        describedby:
+          !!panel.getAttribute("aria-describedby") &&
+          !!document.getElementById(panel.getAttribute("aria-describedby")),
+        popover: getComputedStyle(panel).getPropertyValue("--popover").trim(),
+      };
+    });
+
+  // Keyboard: focus the first trigger and press Enter.
+  const trigger = page.getByRole("button", { name: "Open dialog", exact: true });
+  await openDialog(page, trigger);
+  let open = await panelState();
+  ok("dialog opens via keyboard Enter", open.open === true);
+  ok("open dialog exposes the dialog role", open.role === "dialog", String(open.role));
+  ok("dialog is named (aria-labelledby resolves)", open.labelledby === true);
+  ok("dialog is described (aria-describedby resolves)", open.describedby === true);
+  ok("focus moved into the panel on open", open.focusInPanel === true);
+  ok("body scroll is locked while open", open.overflow === "hidden", String(open.overflow));
+  await page.screenshot({ path: "/tmp/augur-docs-verify/dialog-open-light.png" });
+
+  // Focus containment: Tab and Shift+Tab cycle inside the panel.
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  open = await panelState();
+  ok("focus stays contained under Tab/Shift+Tab", open.focusInPanel === true);
+
+  // Escape closes; focus returns to the trigger; scroll unlocks.
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".aug-dialog-content", { state: "detached" });
+  const closed = await page.evaluate(() => ({
+    focus: document.activeElement?.textContent?.trim() ?? null,
+    overflow: getComputedStyle(document.body).overflow,
+  }));
+  ok("Escape closes the dialog", !String(closed.focus).includes("Review query"));
+  ok("focus is restored to the trigger after Escape", /Open dialog/.test(String(closed.focus)), String(closed.focus));
+  ok("body scroll unlocks after close", closed.overflow !== "hidden", String(closed.overflow));
+
+  // Overlay (scrim) dismissal via pointer; focus restored again.
+  await openDialog(page, trigger);
+  await page.waitForTimeout(400);
+  await page.locator(".aug-dialog-overlay").click({ position: { x: 8, y: 8 }, force: true });
+  await page.waitForSelector(".aug-dialog-content", { state: "detached" });
+  const afterOverlay = await page.evaluate(() => document.activeElement?.textContent?.trim() ?? null);
+  ok("overlay click dismisses the dialog", !String(afterOverlay).includes("Review query"));
+  ok("focus restored after overlay dismissal", /Open dialog/.test(String(afterOverlay)), String(afterOverlay));
+
+  // Dark scoped portal: the panel inherits the dark subtree's roles.
+  const lightPopover = open.popover;
+  const darkTrigger = page.getByRole("button", { name: "Open dialog (dark scope)" });
+  await openDialog(page, darkTrigger);
+  const darkPanel = await page.evaluate(() => {
+    const panel = document.querySelector(".aug-dialog-content");
+    const scope = panel?.closest('[data-theme="dark"]');
+    return {
+      inDarkScope: !!scope,
+      popover: getComputedStyle(panel).getPropertyValue("--popover").trim(),
+    };
+  });
+  ok("dark scoped dialog portals into the dark subtree", darkPanel.inDarkScope === true);
+  ok(
+    "dark scoped panel inherits the dark --popover role",
+    darkPanel.popover !== lightPopover,
+    `${lightPopover} -> ${darkPanel.popover}`,
+  );
+  await page.screenshot({ path: "/tmp/augur-docs-verify/dialog-open-dark-scope.png" });
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".aug-dialog-content", { state: "detached" });
+  ok("dialog island produces no console errors/warnings", consoleIssues.length === 0, consoleIssues.join("; ") || "clean");
+  await page.close();
+
+  // Reduced motion: the open transition collapses under the media query.
+  const rmContext = await browser.newContext({ reducedMotion: "reduce" });
+  const rmPage = await rmContext.newPage();
+  await rmPage.goto(origin + site("/components/dialog"), { waitUntil: "networkidle" });
+  await waitForIsland(rmPage);
+  await openDialog(rmPage, rmPage.getByRole("button", { name: "Open dialog", exact: true }));
+  const rmDurations = await rmPage.evaluate(() =>
+    [...document.querySelectorAll(".aug-dialog-content, .aug-dialog-overlay")].flatMap((el) =>
+      getComputedStyle(el).transitionDuration.split(",").map((v) => parseFloat(v)),
+    ),
+  );
+  ok(
+    "reduced motion collapses open/close transitions",
+    rmDurations.length > 0 && rmDurations.every((v) => v < 0.01), // collapses to ~0 (observed 0.00001s)
+    rmDurations.join(" | "),
+  );
+  await rmContext.close();
+
+  // Mobile (375px): the long-content panel fits the viewport and scrolls
+  // internally; no horizontal overflow.
+  const mobile = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  await mobile.goto(origin + site("/components/dialog"), { waitUntil: "networkidle" });
+  await waitForIsland(mobile);
+  await openDialog(mobile, mobile.getByRole("button", { name: "Open long-content dialog" }));
+  const mobilePanel = await mobile.evaluate(() => {
+    const rect = document.querySelector(".aug-dialog-content").getBoundingClientRect();
+    return {
+      width: rect.width,
+      height: rect.height,
+      viewport: window.innerWidth,
+      overflowX: document.documentElement.scrollWidth > window.innerWidth,
+    };
+  });
+  ok(
+    "mobile dialog panel respects the 100vw-16px cap",
+    mobilePanel.width <= mobilePanel.viewport - 16,
+    `${mobilePanel.width}px @ ${mobilePanel.viewport}px`,
+  );
+  ok("mobile dialog panel fits the viewport height", mobilePanel.height <= 812, `${mobilePanel.height}px`);
+  ok("mobile dialog causes no horizontal overflow", mobilePanel.overflowX === false);
+  await mobile.screenshot({ path: "/tmp/augur-docs-verify/dialog-mobile-long-content.png" });
+  await mobile.close();
+
+  // --- Input/FormField: keyboard focus, typing, ARIA wiring, both themes.
+  const inputPage = await browser.newPage();
+  await inputPage.goto(origin + site("/components/input"), { waitUntil: "networkidle" });
+  await inputPage.evaluate(() => document.fonts.ready);
+  const firstInput = inputPage.locator("input, textarea").first();
+  const inputLight = await firstInput.evaluate((el) => ({
+    border: getComputedStyle(el).borderTopColor,
+    background: getComputedStyle(el).backgroundColor,
+    labelled: !!el.labels?.length,
+    describedby: el.getAttribute("aria-describedby"),
+  }));
+  ok("input is programmatically labelled", inputLight.labelled === true);
+  ok(
+    "input aria-describedby points at a real element",
+    !inputLight.describedby || (await inputPage.locator(`#${CSS.escape(inputLight.describedby)}`).count()) > 0,
+    String(inputLight.describedby),
+  );
+  await firstInput.focus();
+  const focusVisible = await firstInput.evaluate((el) => el.matches(":focus-visible"));
+  await firstInput.fill("typed in a real browser");
+  ok("input receives keyboard focus (focus-visible)", focusVisible === true);
+  ok("input accepts typed text", (await firstInput.inputValue()) === "typed in a real browser");
+  // Pin dark and re-read the same input node.
+  await inputPage.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const inputDark = await firstInput.evaluate((el) => ({
+    border: getComputedStyle(el).borderTopColor,
+    background: getComputedStyle(el).backgroundColor,
+  }));
+  ok(
+    "input paints differently in pinned dark (same node)",
+    inputLight.background !== inputDark.background || inputLight.border !== inputDark.border,
+    `bg ${inputLight.background} -> ${inputDark.background}; border ${inputLight.border} -> ${inputDark.border}`,
+  );
+  await inputPage.screenshot({ path: "/tmp/augur-docs-verify/input-page-dark.png", fullPage: true });
+  await inputPage.close();
+
+  // --- FormField page: label/control wiring in the composition example.
+  const formPage = await browser.newPage();
+  await formPage.goto(origin + site("/patterns/form-field"), { waitUntil: "networkidle" });
+  const formWiring = await formPage.evaluate(() => {
+    const field = document.querySelector(".example-form-field-grid");
+    const control = field?.querySelector("input, textarea, select");
+    const label = field?.querySelector("label");
+    return {
+      rendered: !!field,
+      htmlForMatches: !!control && !!label && label.htmlFor === control.id,
+    };
+  });
+  ok("form-field composition example renders", formWiring.rendered === true);
+  ok("form-field label htmlFor matches the control", formWiring.htmlForMatches === true);
+  await formPage.close();
+
+  // --- Pattern pages: PageHeader / EmptyState examples render as built.
+  for (const route of [site("/patterns/page-header"), site("/patterns/empty-state")]) {
+    const p = await browser.newPage();
+    await p.goto(origin + route, { waitUntil: "networkidle" });
+    const count = await p.locator(".example-card-grid").count();
+    ok(`${route} examples render as built`, count >= 1, `${count} example block(s)`);
+    await p.close();
+  }
+
+  // --- Button keyboard activation: focus-visible and Enter/Space firing.
+  const btnPage = await browser.newPage();
+  await btnPage.goto(origin + site("/components/button"), { waitUntil: "networkidle" });
+  const btn = btnPage.locator(".aug-button:not([disabled])").first();
+  await btn.focus();
+  const btnFocusVisible = await btn.evaluate((el) => el.matches(":focus-visible"));
+  ok("button shows focus-visible on keyboard focus", btnFocusVisible === true);
+  let clicks = 0;
+  btnPage.on("console", (msg) => {
+    if (msg.text() === "[augur-click]") clicks += 1;
+  });
+  await btn.evaluate((el) =>
+    el.addEventListener("click", () => console.log("[augur-click]")),
+  );
+  await btnPage.keyboard.press("Enter");
+  await btnPage.keyboard.press(" ");
+  await btnPage.waitForTimeout(300);
+  ok("button activates via Enter and Space", clicks === 2, String(clicks));
+  await btnPage.close();
 }
 
 await browser.close();

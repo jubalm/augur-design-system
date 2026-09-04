@@ -9,12 +9,18 @@
 # lockfile disagree.
 #
 # Deliberately absent from this workflow — do not add silent placeholders:
-# - Browser coverage: Playwright-level checks land with #15. Browser
-#   behavior is currently verified by the manual font fixture (#5).
 # - Package build: no build command exists yet; bundled package output is
 #   deferred until actual requirements exist (issue #1 decision).
 # - AI design review: advisory only, never a blocking gate
 #   (ARCHITECTURE.md, Validation and Review).
+#
+# `docs-verification` (issue #15) covers the docs app: clean Markdown,
+# real-browser behavior (fonts, theme contract, keyboard, mobile, the
+# full starter-component set including Dialog focus/dismissal/scroll
+# behavior in both themes and at 375px), and controlled content-failure
+# paths. Not covered there and still manual: cross-browser runs beyond
+# Chromium, visual-regression baselines, and interaction review beyond
+# the scripted assertions.
 
 name: CI
 
@@ -126,3 +132,33 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Unit and accessibility tests (Vitest, Testing Library, axe)
         run: bun run test
+
+  docs-verification:
+    name: docs-verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up pinned Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Frozen install
+        run: bun install --frozen-lockfile
+      # Pin the Chromium build: playwright is pinned to 1.61.1 in
+      # package.json, whose registry resolves to this fixed browser build.
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+      - name: Build docs (base /)
+        run: bun run --cwd apps/docs build
+      - name: Clean-Markdown and llms.txt verification (verify-markdown)
+        run: bun apps/docs/fixtures/verify-markdown.mjs
+      - name: Browser verification (verify-docs)
+        run: bun apps/docs/fixtures/verify-docs.mjs
+      # Runs last on purpose: it stages invalid content, so it must not
+      # affect the two assertions above. It clears both Astro content
+      # caches before and after each scenario and removes dist at the
+      # end (see the script header), so the outcome cannot depend on the
+      # preceding steps' cache state.
+      - name: Controlled content-failure verification (verify-content-failures)
+        run: bun apps/docs/fixtures/verify-content-failures.mjs
