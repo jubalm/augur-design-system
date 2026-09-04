@@ -36,6 +36,20 @@ from the same file — they cannot drift.
 
 <DocExample example={examples.fonts.stacks} />
 
+## Order, numerals, and technical strings
+
+Size creates order and weight confirms it. Use sentence case for
+headings, controls, and labels, and reserve capitals for short metadata
+and standard abbreviations. Do not stack size, weight, color, and
+capitals to manufacture hierarchy — one strong distinction and one
+secondary distinction are enough. (Where color is one of those
+distinctions, the [color system](/foundations/color) rules apply.)
+
+In tables and records: align numeric columns right, use one precision
+per view, and put units in a column header or beside the value. For
+long technical strings such as addresses, truncate in the middle while
+preserving a recognizable prefix and suffix.
+
 ## Loading behavior
 
 `import "@augur/design-system/styles.css"` pulls the pinned
@@ -55,3 +69,9 @@ families are recorded in the package's provenance export and in
 The machine-readable export is demonstrated on
 [Package entries](/reference/package-entries). Redistribution
 obligations are tracked with the asset decisions in issue #20.
+
+The foundation proposals that sit alongside typography — spacing,
+sizing, radius, focus, and motion — are in
+[Foundation proposals](/foundations/proposals), pending maintainer
+review; the seven roles on this page, by contrast, are adopted values
+recorded in `DESIGN.md`.

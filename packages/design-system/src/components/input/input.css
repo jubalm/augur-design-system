@@ -1,0 +1,71 @@
+/*
+ * Input styles (issue #12).
+ *
+ * Color: ONLY semantic role custom properties from ../../styles/theme.css
+ * (which references generated tokens). No raw color values, no new
+ * custom properties.
+ *
+ * Geometry: intentional structural constants — FD-01 (spacing), FD-02
+ * (control heights), and FD-03 (radius) are Proposed and pending
+ * maintainer review, so no spacing/radius/sizing tokens are emitted;
+ * the same pattern Button and Card use. FD-03 names `radius.control`
+ * explicitly for inputs. The decision record for this slice lives in
+ * ../../docs/components.md.
+ */
+
+.aug-input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 36px; /* FD-02 control.height.md (Proposed) */
+  padding: 0 12px; /* FD-01 control padding (Proposed); text fields read
+                     better a step tighter than the md button's 16px */
+  margin: 0;
+  border: 1px solid var(--input);
+  border-radius: 6px; /* FD-03 radius.control (Proposed) */
+  background-color: transparent; /* sits on any surface: canvas or card */
+  color: var(--foreground);
+  vertical-align: middle;
+}
+
+.aug-input::placeholder {
+  color: var(--muted-foreground);
+  opacity: 1; /* the UA default dimming would stack with the role color;
+                  a hint in the secondary voice, never required information */
+}
+
+/*
+ * Invalid: the danger-role border (aria-invalid is set by the
+ * component's `invalid` prop). The theme defines no danger hue
+ * (theme decision D1) — the visible error message text carries the
+ * meaning; the border is reinforcement, never the sole signal.
+ */
+.aug-input[aria-invalid="true"] {
+  border-color: var(--destructive);
+}
+
+/*
+ * Read-only: still focusable, value selectable and copyable —
+ * deliberately NOT the disabled treatment. The quiet surface signals
+ * "displayed, not edited" while the text stays in the secondary-text
+ * contrast pairing.
+ */
+.aug-input[readonly] {
+  background-color: var(--muted);
+  cursor: default;
+}
+
+/*
+ * Disabled (FD-06 Proposed treatment, same contract as Button
+ * decision D5): non-interactive via the native attribute,
+ * reduced-contrast value that remains present in the DOM.
+ * WCAG 1.4.3 exempts disabled controls from contrast minimums.
+ */
+.aug-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Keyboard focus: painted by the theme contract's shared
+   :focus-visible rule (2px ring, 2px offset, --ring); no per-component
+   focus CSS, exactly like Button. */

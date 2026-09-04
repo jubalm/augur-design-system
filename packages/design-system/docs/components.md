@@ -183,3 +183,88 @@ continuing the numbering).
   owned by #15 (Playwright); the docs page is the review surface.
 - Registry item for `dialog` — #17 publishes it; the source path and
   the `radix-ui` dependency already match the registry contract.
+---
+
+# Component record — Input and FormField (issue #12)
+
+Status: implemented by issue #12 (the second component slice). This
+section extends the record above with the decisions behind
+`src/components/input/` and `src/components/form-field/`; the Button
+and Card decisions (D1–D8) are unchanged. Consumer-facing guidance
+lives in the docs app (`components/input` page and the first
+`patterns/form-field` entry).
+
+## Rules enforced by this slice (verified by tests)
+
+- Same authority chain as the first slice: semantic role custom
+  properties only, structural geometry from the FD-01/FD-02/FD-03
+  proposal set, no new tokens, no raw color values (the stylesheet
+  contract fails the build on any undeclared `var()` reference).
+- **Input is independent of FormField.** `input.tsx` imports nothing
+  from the form-field tree; `FormFieldControl` composes `Input`. The
+  harness proves a bare Input works with consumer-owned labeling.
+- No product form framework: no validation rules, no form state, no
+  submission handling in either module.
+
+## Decisions (D9–D12, this slice)
+
+- **D9 — One input treatment, structural geometry from the proposal
+  set.** 36px height (FD-02 `control.height.md`), 12px horizontal
+  padding (FD-01; a step tighter than the md button's 16px — text
+  fields read better tighter, and the value is from the proposal
+  set), 6px radius (FD-03 `radius.control`, which names inputs
+  explicitly), transparent background on the `--input` hairline so
+  the control sits on any surface, full width by default because the
+  container lays fields out. Placeholder in `--muted-foreground`
+  (the recorded AA secondary-text pairings, semantic-themes decision
+  D4), `opacity: 1` so the UA default dimming does not stack with
+  the role color. No variant or size matrix ahead of concrete
+  requirements.
+- **D10 — Invalid, read-only, and disabled are three distinct
+  contracts.** Invalid (`invalid` prop → `aria-invalid="true"`):
+  border takes `--destructive`; the visible error MESSAGE carries the
+  meaning because the theme defines no danger hue (first-slice D1/D4
+  rule) — never color alone. Read-only (native `readOnly`): still
+  focusable, value selectable and copyable; a quiet `--muted` surface
+  signals "displayed, not edited" — deliberately NOT the disabled
+  treatment, so display-and-copy never hides behind a disabled look.
+  Disabled: the first slice's D5 contract unchanged (opacity 0.5,
+  `not-allowed`). Keyboard focus needs no per-component CSS: the
+  theme contract's shared `:focus-visible` ring applies.
+- **D11 — FormField wiring contract.** The pattern owns exactly the
+  relationships that are easy to get wrong: label `htmlFor` → control
+  `id` (a real label association, React `useId`-generated);
+  `aria-describedby` lists the description id always and the error id
+  exactly when an error is present (no dangling idrefs — they fail
+  axe); error presence derives `aria-invalid` and renders the message
+  with `role="alert"`; `required` reaches the control as the native
+  attribute plus an `aria-hidden` visible marker. The API is
+  prop-driven (`label`/`description`/`error`/`required` + a
+  `FormFieldControl` slot) so the correct wiring is the default path;
+  the parts are exported for custom compositions that take their own
+  wiring in hand. Validation stays consumer-side: pass
+  `error={undefined}` when valid.
+- **D12 — Typography voices.** The control uses the `ui` voice (Sora
+  400 14/20) — entered text is content, not the 600-weight control
+  label voice Button uses for its own label. FormField labels carry
+  the `control` voice (Sora 600 14/20); description and error
+  messages carry the `metadata` voice (Schibsted Grotesk 12/16), the
+  system's supporting-text register; the error renders in
+  `--destructive`, which equals the foreground in light (the text
+  carries the meaning there) and Pewter in dark.
+
+## Verification (this slice)
+
+- `bun test` in this package: the public-entry exports
+  (`test/input-form-field.test.ts`), plus the stylesheet-consumption
+  walk, which now covers the input and form-field aggregates.
+- `bun run test` at the repository root: keyboard input (uncontrolled
+  and controlled), label `htmlFor`/`id` and `aria-describedby` wiring
+  including the no-error case, invalid/disabled/read-only contracts,
+  required semantics, Input's independence from FormField, and axe
+  findings over compositions with explicit error text in light and
+  dark scopes (`tests/input-form-field.test.tsx`).
+- Rendered review: the docs component page (`/components/input`) and
+  pattern page (`/patterns/form-field`) render live examples in both
+  themes with explicit error text; computed-style review of the built
+  pages in both themes accompanies the slice's PR.

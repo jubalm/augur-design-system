@@ -1,0 +1,125 @@
+---
+title: PageHeader
+description: A reusable page-title composition — wayfinding, title, supporting description, and an actions slot — assembled from the real components, with no product meaning of its own.
+components: [button]
+order: 1
+---
+
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
+
+`PageHeader` is the first pattern in the patterns layer: it composes the
+existing [Button](/components/button) component with layout and
+typography roles into the top of a page. It owns structure only — the
+copy, links, and actions come entirely from the consumer, so the same
+pattern serves every product surface without product assumptions.
+
+## When to use
+
+- At the top of a page (or a full-page panel) that needs a title, an
+  optional supporting line, and the page's primary operations.
+- When wayfinding belongs with the title: breadcrumbs in the named nav
+  slot, or a quiet back Button as the first child for a single-step
+  return.
+- When exactly one primary action should be visible at the top of the
+  page — the first Button in the default variant is the view's one green
+  signal, and `PageHeaderActions` positions it at the right edge.
+
+<DocExample example={examples.patterns.composition} />
+
+## When not to use
+
+- Inside cards or compact panels: that is what
+  [Card](/components/card) and its footer are for.
+- For grouping content mid-page; a header titles a page, it does not
+  group records.
+- When the actions belong to a form's data flow — use real form
+  controls and submit semantics instead of a header action row.
+- With more than one primary action. If two filled Buttons compete, the
+  page has no clear priority; demote all but one to quiet variants.
+
+## Examples
+
+The default composition pairs the breadcrumb slot with a title,
+description, and one primary action:
+
+<DocExample example={examples.patterns.composition} />
+
+Long titles and descriptions wrap inside the title column while the
+actions hold the right edge — the pattern stays usable when copy is
+outside anyone's control:
+
+<DocExample example={examples.patterns.longContent} />
+
+Without actions, the title area stands alone; a back affordance is a
+quiet Button, not a nav landmark:
+
+<DocExample example={examples.patterns.noActions} />
+
+## Accessibility
+
+- Real elements, no invented ARIA: a `header` container, a real
+  heading, a `p` description, a named `nav` for breadcrumbs, and a
+  `div` action row.
+- **Heading-level discipline:** `PageHeaderTitle` renders an `h1` by
+  default because a page header titles the page. When the pattern sits
+  below the page level, pass `headingLevel` (1–6) to emit the element
+  the document outline needs; the heading-1 typography voice is kept by
+  default so the visual hierarchy stays stable. Never skip levels
+  between the page's `h1` and the sections beneath it.
+- `PageHeaderBreadcrumb` requires an `aria-label` (typically
+  "Breadcrumb") — a nav landmark without a name is an accessibility
+  finding. A single back Button needs no nav landmark; place it
+  directly inside `PageHeader` with its own clear label.
+- Actions are real Buttons with keyboard behavior from the
+  [Button](/components/button) contract; DOM order equals priority
+  order, so narrow viewports that wrap the actions below the titles
+  still meet the primary action first.
+- The compositions pass axe in both theme scopes in the repository test
+  harness (`tests/page-header-empty-state.test.tsx`).
+
+## API
+
+```tsx
+import {
+  PageHeader,
+  PageHeaderBreadcrumb,
+  PageHeaderContent,
+  PageHeaderTitle,
+  PageHeaderDescription,
+  PageHeaderActions,
+} from "@augur/design-system";
+```
+
+| Part | Element | Voice and surface | Purpose |
+| --- | --- | --- | --- |
+| `PageHeader` | `header` | layout only | Page-title area |
+| `PageHeaderBreadcrumb` | `nav` (named) | ui voice | Wayfinding slot; render the `ol`/links yourself |
+| `PageHeaderContent` | `div` | layout only | Title area row: titles left, actions right |
+| `PageHeaderTitle` | `h1` (default) | heading-1 typography role | Page title; `headingLevel` moves the outline |
+| `PageHeaderDescription` | `p` | body voice, `--muted-foreground` | Supporting line under the title |
+| `PageHeaderActions` | `div` | layout only | Actions slot; Buttons composed by the consumer |
+
+Every part accepts the native attributes of its element, `className`
+(merged after the component classes), and a React 19 `ref` prop. Layout
+is responsive by structure: below 640px the content row collapses to
+one column and actions wrap under the titles.
+
+## Design rationale
+
+- **Pure composition, no product meaning.** The pattern owns order,
+  hierarchy, and placement; consumers own every word, link, and
+  action. Nothing in the part names or styles assumes a domain.
+- **Patterns compose components.** The actions slot takes real Buttons
+  (ARCHITECTURE.md §4); the pattern adds no control of its own.
+- **Theme pairing only.** Copy inherits the foreground; the
+  description and breadcrumb links use `--muted-foreground`; nothing
+  invents a color. The one green signal on a page header is the
+  consumer's primary Button — never the container.
+- **Structural geometry.** Gaps and the breakpoint use FD-01 spacing
+  steps (4/8/12/24px, Proposed — pending maintainer review); no tokens
+  are emitted and no raw values appear.
+- **Title as a real heading** with an explicit, documented level
+  contract, because heading navigation is one of the primary ways
+  assistive technology users move through a page.
+- **Status: draft**, graduating on maintainer acceptance.

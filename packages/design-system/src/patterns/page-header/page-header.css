@@ -1,0 +1,118 @@
+/*
+ * PageHeader styles (issue #14 — first pattern slice).
+ *
+ * Color: ONLY semantic role custom properties from ../../styles/theme.css
+ * (which references generated tokens). No raw color values, no new
+ * custom properties — the same contract the Button/Card component CSS
+ * follows, enforced by the stylesheet contract test in the repository
+ * harness.
+ *
+ * Geometry: intentional structural constants aligned with the FD-01
+ * spacing and FD-03 radius proposals (Proposed — pending maintainer
+ * review); no spacing/radius tokens are emitted. Steps used: 4/8/12/24px.
+ *
+ * Layout model:
+ *   header (flex column, 12px between rows)
+ *     ├── breadcrumb / back row (any first child; nav slot part below)
+ *     └── content row (two-column grid)
+ *           ├── col 1: title, description (grow, wrap)
+ *           └── col 2: actions (right edge, wrap; below 640px it drops
+ *               under the titles — responsive by structure, no consumer CSS)
+ */
+.aug-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* FD-01 space.md (Proposed) */
+  margin: 0;
+  min-width: 0;
+  text-align: start;
+}
+
+/*
+ * Wayfinding slot. The consumer renders the list markup (`ol` > `li`
+ * > `a`, current page via `aria-current="page"`); the pattern lays it
+ * out on one wrapping row and pairs quiet links with the current page
+ * in the foreground role. Crumbs are secondary: no green signal here.
+ */
+.aug-page-header-breadcrumb {
+  margin: 0;
+}
+
+.aug-page-header-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px; /* FD-01 space.xs / space.sm (Proposed) */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aug-page-header-breadcrumb a {
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+
+.aug-page-header-breadcrumb a:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+}
+
+.aug-page-header-breadcrumb [aria-current="page"] {
+  color: var(--foreground);
+}
+
+/*
+ * Title area. `minmax(0, 1fr)` keeps long titles wrapping inside the
+ * column instead of pushing the actions out; actions span the title +
+ * description rows so they align with the top of the area.
+ */
+.aug-page-header-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 24px; /* FD-01 space.lg (Proposed) */
+  row-gap: 4px; /* FD-01 space.xs (Proposed) */
+  align-items: start;
+}
+
+.aug-page-header-title {
+  grid-column: 1;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.aug-page-header-description {
+  grid-column: 1;
+  margin: 0;
+  max-width: 60ch;
+  overflow-wrap: break-word;
+  color: var(--muted-foreground);
+}
+
+/*
+ * Actions slot. The consumer's first default Button is the view's one
+ * green signal; this slot only positions it. Wraps as a group.
+ */
+.aug-page-header-actions {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: flex-end;
+  gap: 8px; /* FD-01 space.sm (Proposed) */
+}
+
+/* Narrow viewports: one column; actions wrap under the titles, still a
+   single action priority (primary first in DOM order). */
+@media (max-width: 640px) {
+  .aug-page-header-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aug-page-header-actions {
+    grid-column: 1;
+    grid-row: auto;
+    justify-content: flex-start;
+  }
+}

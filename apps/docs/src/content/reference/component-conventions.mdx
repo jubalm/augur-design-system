@@ -1,0 +1,130 @@
+---
+# Component conventions reference (issue #10). Route
+# /reference/component-conventions. Distills the maintained component
+# record (packages/design-system/docs/components.md) and the Button/Card
+# precedent into contributor guidance; those sources remain canonical.
+title: Component conventions
+description: How components are designed, built, documented, tested, and distributed — the conventions established by the Button and Card precedent, plus the registry contract in brief.
+order: 3
+---
+
+Every component in `@augur/design-system` follows the same conventions,
+established by the first component slice (Button and Card) and recorded
+in the package's
+[component record](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/components.md).
+This page is the contributor-facing summary; the record and the
+component pages remain canonical.
+
+## shadcn-compatible, Augur-owned
+
+Stay close to shadcn conventions so the system is familiar and
+compatible with shadcn-oriented tooling — and own the result. Augur
+owns the resulting APIs, styling, tokens, documentation, and
+conventions even when an implementation pattern originates upstream.
+Deviation is allowed when a records UI argues for it (Button defaults
+to `type="button"` where upstream leaves the browser's `submit`
+default) and must be recorded with rationale. Radix or equivalent
+primitives may back behavior where native elements are not enough;
+Button needed none, Dialog will.
+
+## Theming and geometry
+
+- **Semantic roles only.** Every color in component CSS is a reference
+  to a role custom property (`--primary`, `--muted-foreground`, …);
+  a raw hex, rgb, or hsl value fails the test suite. Components never
+  reference generated `--augur-color-*` primitives directly — the
+  semantic layer is the interface.
+- **No new tokens while proposals are pending.** FD-01 through FD-06
+  are Proposed (see [Foundation proposals](/foundations/proposals)):
+  components emit no spacing, sizing, radius, or motion custom
+  properties. Geometry appears as structural constants aligned with the
+  recorded proposal values — Button heights 32/36/40px, padding
+  12/16/24px, radius 6px controls / 8px surfaces, Card padding 24px.
+- **Focus and motion come from the package, not the component.** The
+  shared `:focus-visible` rule paints the ring from `--ring`; the
+  package-wide reduced-motion gate collapses animation. Components add
+  no per-instance focus CSS and no duration tokens.
+
+## State contracts
+
+The FD-06 interaction treatment (Proposed, structurally implemented):
+
+- **Hover / pressed** — quiet: filled variants tint their own action
+  color toward transparency; surface variants step onto the neutral
+  `--accent` surface; nothing new becomes green.
+- **One green signal** — only the primary variant consumes the action
+  pairing (Deep on light, Green on dark). Text links stay neutral so
+  they never multiply green marks.
+- **Destructive without a danger hue** — the palette defines none, so
+  the destructive slot uses the strongest neutral pairing and the label
+  must carry the consequence.
+- **Disabled** — native `disabled`: non-interactive, reduced-contrast
+  label still present and readable in the DOM, `cursor: not-allowed`,
+  hover styles never apply.
+- **Loading** — `aria-busy="true"`, non-interactive, label keeps its
+  width (visually hidden), reduced-motion-safe spinner, visually hidden
+  status keeps the accessible name intact, action color unchanged —
+  loading is not a change of intent.
+
+## API conventions
+
+- Public exports are PascalCase re-exported from the package entry
+  (`Button`, `Card`, `CardHeader`, …); internal file organization never
+  becomes public API.
+- Variants and sizes are string-union props with a table in the docs
+  page; a `xVariants` helper (e.g. `buttonVariants`) returns the full
+  class string for class-only and registry-path consumers.
+- Composition parts follow the shadcn part set (Card's six parts, no
+  variant matrix, no product meaning at the container). Real semantics
+  win: `CardTitle` renders an `h3`.
+- React 19 ref prop directly (no `forwardRef`); `className` is appended
+  last; `cn()` joins conditional classes.
+- The stylesheet contract fails the build on any undeclared `var()`
+  reference in delivered CSS.
+
+## Documentation contract
+
+Each component gets a page at `src/content/components/<slug>.mdx`
+(`apps/docs`), rendered by the shared pipeline with enforced sections:
+When to use, When not to use, Variants, Sizes, States, Accessibility,
+API, Design rationale — a missing section fails the build. Frontmatter
+declares `component` (the PascalCase export), `status`
+(`planned | draft | stable | deprecated`), and later `registry` (the
+shadcn registry item id). Pages document real exports only: live
+examples import the actual package through the docs example registry,
+and each example's displayed code sample is a `?raw` import of the same
+file, so preview and sample cannot drift. Button and Card shipped with
+`status: draft`, graduating on maintainer acceptance.
+
+## Testing expectations
+
+- **Package suite** (`bun test` in `packages/design-system`): class
+  contracts such as the variant matrix, entry exports.
+- **Repository harness** (`bun run test`): keyboard activation, disabled
+  and loading behavior, HTML semantics, axe findings for the full
+  variant matrix in light and dark scopes, and the stylesheet delivery
+  contract through `./styles.css`.
+- **Docs fixture** (`verify-docs.mjs`): computed-style review of
+  rendered geometry, theme-following colors, and control typography in
+  both themes.
+
+## Registry distribution, in brief
+
+The external path is a GitHub-hosted, shadcn-compatible **source
+registry** — not an npm package (none is published; tsup stays
+deferred). The contract (specified in #16, implementation pending #17 —
+see the
+[registry contract](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/registry-contract.md)
+for the full text):
+
+- One mandatory base item, `augur-theme`, carries tokens, semantic
+  roles, self-hosted fonts, and structural behavior in a single
+  install; component items are unprefixed kebab-case (`button`, `card`).
+- Item `path`s point at canonical repository sources — the registry is
+  generated, never a hand-maintained copy, and never imports
+  `@augur/design-system` or `apps/docs`.
+- npm dependencies are exact-pinned in items; registry dependencies use
+  full GitHub item addresses; consumers pin full commit SHAs, and
+  `main` is never documented as stable.
+- A ref may be published for consumer pinning only after the contract's
+  end-to-end verification gate passes on that exact tree.
