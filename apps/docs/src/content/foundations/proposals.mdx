@@ -1,0 +1,127 @@
+---
+# Foundation proposals (issue #10 — foundation reference). Route
+# /foundations/proposals. This page presents the FD-01..FD-06 proposals
+# as guidance; the canonical statement is the decision record at
+# /foundations/decisions (referenced by DESIGN.md by its file path),
+# which this page links throughout. Nothing here is adopted.
+title: Foundation proposals
+description: Spacing, control sizing, radius, focus, motion, and state treatments proposed for shared adoption — explicitly Proposed and pending maintainer review, with no settled system definition.
+order: 5
+---
+
+> **Review status: every proposal below is Proposed — pending maintainer
+> review.** None is adopted. Until a maintainer records review (in
+> [Foundation decisions](/foundations/decisions) or
+> [jubalm/augur-design-system#2](https://github.com/jubalm/augur-design-system/issues/2)),
+> the values described here have **no settled system definition**: no
+> proposal may move into `DESIGN.md` or generated tokens before review,
+> and no product's local tokens hold foundation authority. The
+> [decision record](/foundations/decisions) is the canonical statement
+> of these proposals; this page presents the same set as working
+> guidance and stays subordinate to it.
+
+The pinned `DESIGN.md` schema cannot represent shared spacing, control
+sizing, corner radius, focus treatment, motion, or interaction-state
+semantics. The brand foundation defines none of these scales either.
+Rather than leave every component to invent one-offs, the starter set's
+smallest shared needs were written down as six proposals — FD-01 through
+FD-06 — in the foundation decision record. Components may **structurally
+align** with them (the Button and Card implementation does), but the
+package deliberately emits no tokens for any proposed value, so nothing
+can present a proposal as settled.
+
+## The proposal set at a glance
+
+| ID | Concept | Proposed content | Status |
+| --- | --- | --- | --- |
+| FD-01 | Shared spacing scale | Six steps on a 4px base: `space.xs` 4px, `space.sm` 8px, `space.md` 12px, `space.lg` 16px, `space.xl` 24px, `space.2xl` 32px | **Proposed — pending review** |
+| FD-02 | Control sizing | Control heights 32px (`sm`), 36px (`md`), 40px (`lg`); icons 16px inline, 20px standalone | **Proposed — pending review** |
+| FD-03 | Corner radius | `radius.surface` 8px (panels), `radius.control` 6px (controls), control = surface − 2px | **Proposed — pending review** |
+| FD-04 | Focus treatment | 2px `focus-visible` ring with 2px offset; Deep on light, Green on dark; never suppressed | **Proposed — pending review** |
+| FD-05 | Motion and reduced motion | 150ms fast and 250ms base durations; ease-out entrances, ease-in exits; reduced-motion collapse | **Proposed — pending review** |
+| FD-06 | State semantics | Labels Open / Closed / Pending / Final are **adopted (inherited)**; the hover/press/focus/disabled/loading treatment is **Proposed** | Split — see below |
+
+## FD-01 — Shared spacing scale — Proposed
+
+Six steps on a 4px base, named after the illustrative token style in
+`ARCHITECTURE.md`: 4px (`space.xs`), 8px (`space.sm`), 12px
+(`space.md`), 16px (`space.lg`), 24px (`space.xl`), and 32px
+(`space.2xl`), with rem equivalents at 0.25rem per 4px. The base aligns
+with the adopted 16px body and 20px control line-heights, and six steps
+cover every padding and gap need found in the starter component set.
+While the proposal is pending, keep layout hierarchy through these
+steps under review rather than introducing one-off values.
+
+## FD-02 — Control sizing — Proposed
+
+Control heights of 32px (`sm`), 36px (`md`), and 40px (`lg`) — matching
+the shadcn size conventions the architecture adopts for familiarity —
+plus 16px inline and 20px standalone icon sizes. The 36px default fits
+the 20px control line-height with 8px vertical padding from the FD-01
+scale and satisfies the WCAG 2.5.8 minimum target size. Open
+sub-question: 36px is below the 44px mobile touch guidance; the system
+currently targets a dense desktop records UI, and the touch-target
+policy is an explicit maintainer decision.
+
+## FD-03 — Corner radius — Proposed
+
+Two values: `radius.surface` 8px for panels (Card, Dialog) and
+`radius.control` 6px for controls (inputs, buttons, triggers), with the
+derivation rule control = surface − 2px, mirroring the shadcn radius
+convention. The tonal-depth model uses no shadows, so radius carries
+grouping without competing with the fixed identity geometry of the
+logo and glyph, which remains untouched. No radius tokens are emitted
+while the proposal is pending.
+
+## FD-04 — Focus treatment — Proposed spec, required behavior
+
+A 2px `focus-visible` ring with a 2px offset, colored Deep on light
+surfaces and Green on dark surfaces — one voice for intent and focus.
+Pointer-triggered focus is never painted; keyboard focus is never
+suppressed; focus is always a second cue alongside an existing state
+change. The behavior is already **implemented structurally** in the
+package theme contract (it was required by the theme work), and the
+ring colors clear the 3:1 non-text minimum on every surface they paint
+on — Deep on Paper 7.17:1, Green on Navy 11.87:1 — but the 2px/2px
+geometry and colors remain the Proposed spec, intentionally not emitted
+as tokens.
+
+## FD-05 — Motion and reduced motion — Proposed
+
+Two durations: 150ms for state feedback (hover, press, focus) and 250ms
+for overlay enter/exit such as Dialog and collapsible regions, with
+ease-out entrances and ease-in exits and no springs or decorative
+loops. The brand foundation defines no motion values, so any duration
+is a new system decision — none is adopted or emitted. The
+**reduced-motion collapse is implemented structurally**: under
+`prefers-reduced-motion: reduce`, the package gate collapses
+transition and animation durations to 0.01ms, stops looping animations,
+and disables smooth scrolling, in both themes, including for
+consumer-authored motion.
+
+## FD-06 — State semantics — labels adopted, treatment Proposed
+
+The **adopted (inherited) part**: record states are named Open, Closed,
+Pending, and Final; state is carried by a text label with color as
+reinforcement only; usually one green signal per view; never hide
+meaning in color alone. The **Proposed part** is the interaction
+contract for controls: hover as an adjacent surface step or subtle
+action-color tint; pressed one step beyond hover; focus as the FD-04
+ring; disabled as non-interactive with a reduced-contrast label that
+remains present in the DOM and `cursor: not-allowed`; loading as a
+width-preserving affordance with `aria-busy` and an unchanged action
+color. Button and Card implement this treatment structurally, pending
+review.
+
+## What adoption would change
+
+Adoption happens through maintainer review of the decision record. Once
+a proposal is adopted, spacing and radius values migrate into the
+`DESIGN.md` front matter via the pinned toolchain as a deliberate
+migration, tokens regenerate through the standard pipeline, and the
+semantic theme mapping and components re-derive from the generated
+output. The open questions a reviewer needs — including the
+touch-target policy and the exact spacing step names — are listed in
+the [decision record](/foundations/decisions). Until then, treat every
+value on this page as under review: real, written down, and not
+settled.

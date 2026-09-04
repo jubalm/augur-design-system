@@ -14,6 +14,8 @@
  * unique; see `src/content/README.md`.
  */
 import { defineExample } from "../lib/examples";
+import { PaletteSwatchesExample } from "./color/palette-swatches";
+import paletteSwatchesCode from "./color/palette-swatches.tsx?raw";
 import { ButtonStatesExample } from "./button/button-states";
 import buttonStatesCode from "./button/button-states.tsx?raw";
 import { ButtonVariantsExample } from "./button/button-variants";
@@ -32,6 +34,15 @@ import { ThemeScopeExample } from "./theme/theme-scope";
 import themeScopeCode from "./theme/theme-scope.tsx?raw";
 
 export const examples = {
+  color: {
+    palette: defineExample({
+      id: "palette-swatches",
+      title: "The palette, painted from generated tokens",
+      description: "Chips and recorded contrast pairings render from --augur-color-* variables; no hex value is restated on this page.",
+      Component: PaletteSwatchesExample,
+      code: paletteSwatchesCode,
+    }),
+  },
   button: {
     variants: defineExample({
       id: "button-variants",
