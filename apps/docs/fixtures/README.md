@@ -67,8 +67,9 @@ Serves the **built** `apps/docs` output under the configured base path
 and asserts the deterministic Markdown surface (no browser needed):
 
 - Endpoint inventory: exactly the predictable `.md` files exist — one
-  per substantive page (foundations decisions/fonts/theming,
-  `getting-started`, reference package-entries) plus `/llms.txt`. The
+  per substantive page (foundations decisions/fonts/theming/color/
+  proposals, `getting-started`, reference package-entries/contributing/
+  component-conventions, components button/card) plus `/llms.txt`. The
   home page is landing chrome and has none.
 - Response handling: `.md` served as `text/markdown`, `llms.txt` as
   `text/plain`.
