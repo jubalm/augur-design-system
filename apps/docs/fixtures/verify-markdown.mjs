@@ -156,7 +156,11 @@ function normalizeHeading(text) {
 
 /** h1/h2 outline and meta description of a built page. */
 function htmlOutline(html) {
-  const main = /<main[\s\S]*?<\/main>/.exec(html)?.[0] ?? html;
+  let main = /<main[\s\S]*?<\/main>/.exec(html)?.[0] ?? html;
+  // Live examples render inside <figure class="doc-example"> islands whose demo
+  // headings are demo content, not page outline; the Markdown represents them by
+  // source, so strip the islands before extracting the rendered outline.
+  main = main.replace(/<figure[^>]*class="doc-example"[\s\S]*?<\/figure>/g, "");
   const h1 = [...main.matchAll(/<h1(?:\s[^>]*)?>([\s\S]*?)<\/h1>/g)].map((m) => normalizeHeading(stripTags(m[1])));
   const h2 = [...main.matchAll(/<h2(?:\s[^>]*)?>([\s\S]*?)<\/h2>/g)].map((m) => normalizeHeading(stripTags(m[1])));
   const metaDescription = decodeEntities(/<meta name="description" content="([^"]*)"/.exec(html)?.[1] ?? "");
@@ -186,17 +190,22 @@ const mdFiles = allFiles
   .map((f) => f.slice(distDir.length + 1))
   .sort();
 const expectedMd = [
+  "foundations/color.md",
   "foundations/decisions.md",
   "foundations/fonts.md",
-  "foundations/theming.md",
-  "foundations/color.md",
   "foundations/proposals.md",
+  "foundations/theming.md",
   "getting-started.md",
-  "reference/package-entries.md",
-  "reference/contributing.md",
   "reference/component-conventions.md",
+  "reference/contributing.md",
+  "reference/package-entries.md",
   "components/button.md",
   "components/card.md",
+  "components/dialog.md",
+  "components/input.md",
+  "patterns/empty-state.md",
+  "patterns/form-field.md",
+  "patterns/page-header.md",
 ];
 ok("endpoint inventory matches the substantive pages exactly", JSON.stringify(mdFiles) === JSON.stringify([...expectedMd].sort()), mdFiles.join(", "));
 ok("llms.txt exists at the site root", allFiles.some((f) => f === join(distDir, "llms.txt")));

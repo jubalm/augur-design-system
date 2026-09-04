@@ -113,6 +113,76 @@ referenced here are tracked with their review status in
 - Component pages ship with `status: draft`, graduating on maintainer
   acceptance of this slice.
 
+## Component record — Dialog (issue #13)
+
+Status: implemented by issue #13 (the first primitive-backed
+component slice). Same authority chain and rules as the #11 record
+above; this section records the dialog-specific decisions (D9–D12,
+continuing the numbering).
+
+### Decisions (D9–D12, issue #13)
+
+- **D9 — Primitive through the single `radix-ui` package.** The dialog
+  consumes `import { Dialog as DialogPrimitive } from "radix-ui"`
+  (exact pin `1.6.7`, which resolves to the pinned
+  `@radix-ui/react-dialog@1.1.23` internally), not a per-primitive
+  `@radix-ui/*` specifier: the registry contract (issue #16, §6) names
+  the single `radix-ui` package as the verified upstream scaffold's
+  runtime dependency, and future primitives (dropdown, tooltip) then
+  add no new runtime dependency. All modal behavior — focus trap and
+  loop, focus restoration, Escape/outside-press dismissal, scroll
+  lock — is the primitive's; no custom focus-trap engine (issue
+  exclusion).
+- **D10 — The scrim mixes the theme's own `--foreground`.** No role in
+  the dark theme is darker than its Navy canvas, so a single structural
+  rule (`color-mix(in srgb, var(--foreground) 40%, transparent)`) is
+  the only formulation that behaves identically across explicit light,
+  explicit dark, AND the system-preference fallback without a
+  theme-keyed selector (which would drift from theme.css's fallback
+  scope). Light: a standard dark Navy veil. Dark: a light Paper mist —
+  the scrim separates the floating layer by lifting instead, since a
+  darker-than-canvas scrim is not expressible from adopted roles. Zero
+  raw values; revisit if a scrim role is ever adopted as a token.
+- **D11 — Naming enforced against the rendered panel.** Radix wires
+  `aria-labelledby`/`aria-describedby` from its own title/description
+  presence tracking, but its production build compiles out the dev
+  warning. Augur therefore checks the RENDERED panel's attributes after
+  the portal settles (a macrotask after mount — the portal mounts its
+  children one commit late, and the primitive settles ARIA one render
+  after that) and logs a console error for a missing name (no
+  `DialogTitle`, no `aria-label`/`aria-labelledby`) and a console
+  warning for a missing `DialogDescription`. Reading the rendered
+  attributes — rather than tracking children in a parallel registry —
+  means the check cannot disagree with the primitive.
+- **D12 — `size` on `DialogContent`; `container` for portal theme
+  inheritance.** Two Augur-owned additions to the shadcn shape, both
+  compositional: `size` (sm 24rem / md 32rem / lg 40rem, capped at
+  `100vw − 16px`) is the width axis the docs page contract requires and
+  long-content/mobile behavior needs; `container` forwards to the
+  internal `DialogPortal` so a dialog inside a scoped `[data-theme]`
+  subtree inherits that subtree's theme (the acceptance criterion the
+  default `document.body` portal cannot satisfy on its own).
+
+### Verification (issue #13)
+
+- `tests/dialog.test.tsx` (repository harness): open/close via click,
+  Enter, and `DialogClose`; Escape and scrim dismissal; focus moves in
+  and is trapped; focus restored to the trigger; controlled and
+  uncontrolled usage; `aria-labelledby`/`aria-describedby` wiring; the
+  D11 warnings (positive and negative); portal rendering and the
+  `container` dark-scoped portal; axe-clean open dialogs (light, dark
+  scope, attribute-named); stylesheet delivery of the dialog sheet.
+- `test/components.test.ts` (in-package): public-entry export surface.
+- Docs: `/components/dialog` renders the full section-contract page
+  with the static composition example and the interactive playground
+  island (default, long-content, and dark-scoped portal dialogs).
+
+### Pending (issue #13)
+
+- Real-browser focus/scroll/computed-style review in both themes —
+  owned by #15 (Playwright); the docs page is the review surface.
+- Registry item for `dialog` — #17 publishes it; the source path and
+  the `radix-ui` dependency already match the registry contract.
 ---
 
 # Component record — Input and FormField (issue #12)

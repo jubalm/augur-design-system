@@ -1,0 +1,190 @@
+---
+# Dialog (issue #13) — rendered through the #8 content pipeline
+# (src/content/components/, route /components/dialog). Frontmatter is
+# the single H1 source; the body starts at H2 level and covers every
+# enforced section (src/lib/component-sections.ts). The static example
+# follows the registry convention; the interactive playground is a
+# client island because a dialog's behavior needs hydration.
+title: Dialog
+description: A primitive-backed modal panel — focus containment and restoration, Escape and overlay dismissal, and screen-reader naming from the Radix dialog, styled entirely with Augur's semantic roles.
+component: Dialog
+status: draft
+order: 3
+---
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
+import { DialogPlayground } from "../../components/DialogPlayground";
+
+`Dialog` is Augur's first primitive-backed component: the modal
+behavior — focus containment and restoration, Tab looping, Escape and
+outside-press dismissal, scroll locking — comes from the Radix dialog
+primitive (consumed through the single `radix-ui` package the registry
+contract pins), while every visual decision is Augur's: the panel
+consumes the theme's floating-layer pairing (`--popover`), and the
+scrim mixes the theme's own `--foreground`, so both themes render from
+roles with no local color choices.
+
+## When to use
+
+- When a decision needs the user's full attention before the flow can
+  continue: a confirmation, a focused review, a short form. The modal
+  contract (no interaction behind the panel) is the point — do not use
+  it for content people need alongside the page.
+- When the content is transient and self-contained: open, decide,
+  close. Anything that accumulates state over a long session belongs
+  on the page, not in a dialog.
+- With one clear primary action in the footer: the `default` Button is
+  the panel's one green signal, exactly as in a Card footer.
+- Named with a `DialogTitle` — a dialog without a name is a screen
+  reader dead end, and the component enforces this in development.
+
+## When not to use
+
+- Not for passive supplementary content: a popover-style reveal with no
+  decision is a lighter pattern; the modal contract would be overhead.
+- Not for destructive confirmation alone: the brand defines no danger
+  hue (theme decision D1), so a dialog that confirms a destructive
+  action must still name the consequence in its title, description,
+  and action labels.
+- Not stacked: a dialog opening another dialog means the underlying
+  flow needs restructuring.
+- Not for choice that should live on the page: if the user needs the
+  page context while deciding, the modal contract works against them.
+
+## Variants
+
+Dialog has no visual variant matrix — it has one composition with two
+behavioral modes from the primitive:
+
+| Mode | Prop | Behavior |
+| --- | --- | --- |
+| Modal (default) | `modal` omitted or `true` | Scrim rendered, page scroll locked, focus trapped, outside press dismisses |
+| Non-modal | `modal` set to `false` | No scroll lock or focus trap; page interaction stays available |
+
+Non-modal dialogs are advanced composition (compose the portal, and
+omit the overlay, yourself); the starter set documents the modal form.
+
+The parts: `Dialog` (state root), `DialogTrigger`, `DialogContent`
+(panel + scrim + close), `DialogHeader`, `DialogTitle`,
+`DialogDescription`, `DialogFooter`, `DialogClose`, plus `DialogPortal`
+and `DialogOverlay` for advanced composition — the shadcn part set,
+Augur-owned.
+
+<DocExample example={examples.dialog.composition} />
+
+## Sizes
+
+The `size` prop on `DialogContent` sets the panel's width step:
+
+| Size | Width | Use |
+| --- | --- | --- |
+| `sm` | 24rem | Confirmations, single decisions |
+| `md` (default) | 32rem | Short forms, standard reviews |
+| `lg` | 40rem | Longer content panels |
+
+Every step is capped at `100vw - 16px`, so mobile gets a full-width
+panel with a 16px gutter automatically. The panel's height is capped at
+the viewport minus a 32px gutter and scrolls internally when content is
+long — a dialog never grows past the screen.
+
+## States
+
+- **Open.** The panel fades and rises in (150ms), the scrim fades in;
+  both are structural FD-05-aligned durations collapsed by the
+  package-wide reduced-motion gate.
+- **Focus.** On open, focus moves into the panel and is trapped there —
+  Tab and Shift+Tab cycle inside; on close, focus is restored to the
+  trigger. Every focusable inside the panel paints the shared 2px
+  `:focus-visible` ring in `--ring`.
+- **Dismissal.** Escape, the scrim, and the close button all close the
+  dialog; the footer's `DialogClose` actions close it as part of doing
+  the action.
+- **Hover.** The close button is the theme's neutral highlight surface
+  (`--accent`); footer Buttons carry their own documented hover
+  treatments.
+
+## Accessibility
+
+- **Naming is required.** The primitive wires `aria-labelledby` /
+  `aria-describedby` when `DialogTitle` / `DialogDescription` render.
+  A `DialogContent` with no `DialogTitle` and no `aria-label` /
+  `aria-labelledby` logs a development console error naming the fix;
+  a missing `DialogDescription` logs a warning (recommended, not
+  required). The primitive's own warning is compiled out of its
+  production build, so Augur carries the contract explicitly.
+- **Title is real heading semantics** — an `h2` in the primary voice,
+  like `CardTitle`'s `h3` convention; consumers own the document
+  outline.
+- **Focus containment and restoration are the primitive's job** —
+  trapped and looping while open, restored to the trigger on close.
+  No custom focus-trap engine.
+- **The scrim is presentational** — not focusable, not interactive,
+  hidden from assistive technology; dismissal is keyboard-equivalent
+  through Escape.
+- **Portal theme inheritance.** The panel portals to `document.body`
+  and inherits the `<html>` theme. For a dialog inside a scoped
+  `[data-theme]` subtree, pass the subtree element as `container` so
+  the portaled panel keeps the subtree's theme.
+- **Reduced motion** collapses the open/close transitions via the
+  package-wide gate; mobile gets the full-width panel with a 16px
+  gutter, and long content scrolls inside the panel.
+
+<DialogPlayground client:visible />
+
+## API
+
+```tsx
+import {
+  Dialog, DialogTrigger, DialogPortal, DialogOverlay, DialogContent,
+  DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose,
+} from "@augur/design-system";
+```
+
+Controlled and uncontrolled: pass `open` + `onOpenChange` to own the
+state, or compose `DialogTrigger` for uncontrolled usage
+(`defaultOpen` opens it initially). `onOpenChange` reports every
+dismissal path (Escape, scrim, close, `DialogClose`).
+
+| Part | Renders | Notes |
+| --- | --- | --- |
+| `Dialog` | context root | `open`, `defaultOpen`, `onOpenChange`, `modal` pass through to the primitive |
+| `DialogTrigger` | `button` | Compose with `asChild` for `Button` |
+| `DialogContent` | `div[role="dialog"]` | Portals panel + scrim + close; `size` (`sm`/`md`/`lg`, default `md`); `container` (portal target) |
+| `DialogHeader` / `DialogFooter` | `div` | Composition blocks; the footer end-aligns actions |
+| `DialogTitle` | `h2` | Required (or name the content with `aria-label`); wires `aria-labelledby` |
+| `DialogDescription` | `p` | Recommended; wires `aria-describedby`; metadata voice in `--muted-foreground` |
+| `DialogClose` | `button` | Closes on activation; compose with `asChild` for `Button` |
+| `DialogPortal` / `DialogOverlay` | — | Advanced composition: `container`, `forceMount` |
+
+All parts spread native props through, including `ref` (React 19 style,
+no `forwardRef`). Every visual property is a semantic role; there are
+no variant or color props to misuse.
+
+## Design rationale
+
+- **Primitive-backed, Augur-owned.** ARCHITECTURE.md defines a
+  primitive as a low-level building block ("Radix or equivalent where
+  appropriate"); the dialog consumes the single `radix-ui` package —
+  the dependency the registry contract (#16, §6) pins from the verified
+  upstream scaffold — and owns the API shape, styling, and contract on
+  top. Focus trapping is explicitly the primitive's job; the issue
+  rules out a custom focus-trap engine.
+- **Floating-layer surface.** The panel consumes `--popover` /
+  `--popover-foreground`: White on light, the stepped Surface 2 on
+  dark — one step above cards, because the dialog floats over
+  everything (theme decision D3). Dark mode therefore uses the stepped
+  surfaces with zero raw hex, like every component.
+- **The scrim lifts, and dims.** No role is darker than the dark
+  theme's canvas, so a single structural rule mixes the theme's own
+  `--foreground` toward transparency: a Navy veil in light, a light
+  Paper mist in dark — one rule, valid in every theme scope (explicit
+  light, explicit dark, and the system fallback) with no theme-keyed
+  selector to drift (decision D10 below).
+- **Naming enforced, not assumed.** The component verifies the
+  rendered panel's ARIA attributes after mount and reports a missing
+  name in development — reading what the primitive actually wired
+  rather than tracking children in a parallel registry, so the two
+  cannot disagree.
+- **Status: draft.** The API graduates to stable after maintainer
+  acceptance of this slice; real-browser focus and scroll review runs
+  on this page's examples through #15 (Playwright).
