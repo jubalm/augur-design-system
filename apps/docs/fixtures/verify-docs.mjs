@@ -33,7 +33,12 @@
  *   5. mobile layout (375px): nav collapses into the details disclosure,
  *      opens via keyboard, links navigate, no horizontal overflow;
  *   6. real content: MDX-evaluated package data and the scoped
- *      `[data-theme]` demonstration render as built.
+ *      `[data-theme]` demonstration render as built;
+ *   7. Markdown actions (issue #9): `Copy page` fetches the page's clean
+ *      `.md` endpoint and puts EXACTLY those bytes on the clipboard
+ *      (compared byte-for-byte), reports "Copied" through its live
+ *      region, works via keyboard, and `View as Markdown` links the
+ *      direct `.md` representation — which serves the same content.
  *
  * Exit code 0 = all assertions passed; 1 = at least one failed.
  * Screenshots are written to /tmp/augur-docs-verify/ as visual evidence.
@@ -328,6 +333,51 @@ console.log("\n== Theming page demo ==");
   ok("12 role swatches render", demo.swatches === 12, String(demo.swatches));
   await page.screenshot({ path: "/tmp/augur-docs-verify/theming-light.png", fullPage: true });
   await page.close();
+}
+
+// --- 5. Copy page / View as Markdown (issue #9). ---------------------------
+console.log("\n== Copy page / View as Markdown (issue #9) ==");
+{
+  const context = await browser.newContext();
+  await context.grantPermissions(["clipboard-read", "clipboard-write"], { origin });
+  const page = await context.newPage();
+  const consoleIssues = [];
+  page.on("console", (msg) => {
+    if (msg.type() === "error" || msg.type() === "warning") consoleIssues.push(`${msg.type()}: ${msg.text()}`);
+  });
+
+  for (const route of [site("/foundations/fonts"), site("/getting-started")]) {
+    await page.goto(origin + route, { waitUntil: "networkidle" });
+
+    // View as Markdown links the direct .md representation; fetching it
+    // yields the same document the copy action will put on the clipboard.
+    const viewHref = await page.getAttribute("a.page-action", "href");
+    ok(`${route} View as Markdown links the .md representation`, typeof viewHref === "string" && viewHref.endsWith(".md"), String(viewHref));
+    const response = await fetch(origin + viewHref);
+    const expected = await response.text();
+    ok(`${route} .md representation is served and starts with the H1`, response.status === 200 && expected.startsWith("# "), `${response.status}, ${expected.length} chars`);
+
+    // Copy page via keyboard, then compare the clipboard byte-for-byte.
+    const copyButton = page.getByRole("button", { name: "Copy page" });
+    await copyButton.focus();
+    await page.keyboard.press("Enter");
+    let copied = true;
+    try {
+      await page.waitForFunction(
+        () => document.querySelector("[data-copy-status]")?.textContent === "Copied",
+        null,
+        { timeout: 5_000 },
+      );
+    } catch {
+      copied = false;
+    }
+    ok(`${route} Copy page reports Copied (keyboard-operated)`, copied);
+    const clipboard = await page.evaluate(() => navigator.clipboard.readText());
+    ok(`${route} clipboard equals the clean Markdown byte-for-byte`, clipboard === expected, `${clipboard.length} vs ${expected.length} chars`);
+  }
+
+  ok("copy/view pages produce no console errors/warnings", consoleIssues.length === 0, consoleIssues.join("; ") || "clean");
+  await context.close();
 }
 
 await browser.close();
