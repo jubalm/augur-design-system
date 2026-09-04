@@ -18,6 +18,7 @@
  * Hosting activation itself is out of scope (#19/#20).
  */
 import mdx from "@astrojs/mdx";
+import { satteri } from "@astrojs/markdown-satteri";
 import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
 
@@ -30,8 +31,27 @@ if (rawBase !== undefined && rawBase !== "" && !/^\/[\w.-]+(\/[\w.-]+)*$/.test(r
 
 const base = rawBase === undefined || rawBase === "" ? "/" : rawBase.replace(/\/+$/, "");
 
+function baseLinkMdastPlugin(prefix) {
+  return {
+    name: "augur-base-links",
+    link(node) {
+      if (typeof node.url === "string" && node.url.startsWith("/") && !node.url.startsWith("//")) {
+        return { ...node, url: `${prefix}${node.url}` };
+      }
+    },
+  };
+}
+
 export default defineConfig({
   base,
   trailingSlash: "never",
+  // Sätteri (Astro 7's Markdown/MDX processor) drives both content
+  // collections and MDX pages, so rendered HTML body links are base-prefixed
+  // under a repository subpath. The .md representations intentionally keep
+  // site-absolute links (llms.txt convention, issue #9) and are synthesized
+  // from source, not through this processor.
+  markdown: {
+    processor: satteri({ mdastPlugins: [baseLinkMdastPlugin(base === "/" ? "" : base)] }),
+  },
   integrations: [react(), mdx()],
 });
