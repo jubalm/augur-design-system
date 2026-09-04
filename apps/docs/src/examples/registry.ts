@@ -14,6 +14,12 @@
  * unique; see `src/content/README.md`.
  */
 import { defineExample } from "../lib/examples";
+import { ButtonStatesExample } from "./button/button-states";
+import buttonStatesCode from "./button/button-states.tsx?raw";
+import { ButtonVariantsExample } from "./button/button-variants";
+import buttonVariantsCode from "./button/button-variants.tsx?raw";
+import { CardCompositionExample } from "./card/card-composition";
+import cardCompositionCode from "./card/card-composition.tsx?raw";
 import { FontProvenanceExample } from "./fonts/font-provenance";
 import fontProvenanceCode from "./fonts/font-provenance.tsx?raw";
 import { FontStacksExample } from "./fonts/font-stacks";
@@ -22,6 +28,31 @@ import { ThemeScopeExample } from "./theme/theme-scope";
 import themeScopeCode from "./theme/theme-scope.tsx?raw";
 
 export const examples = {
+  button: {
+    variants: defineExample({
+      id: "button-variants",
+      title: "Button variants, light and dark",
+      description: "The variant set renders from real package imports; the second row pins data-theme=dark.",
+      Component: ButtonVariantsExample,
+      code: buttonVariantsCode,
+    }),
+    states: defineExample({
+      id: "button-states",
+      title: "Sizes, disabled, and loading",
+      description: "Structural sizes and the width-preserving loading contract, rendered from real component props.",
+      Component: ButtonStatesExample,
+      code: buttonStatesCode,
+    }),
+  },
+  card: {
+    composition: defineExample({
+      id: "card-composition",
+      title: "Card composition",
+      description: "The part set groups a record with its actions; the second card pins data-theme=dark.",
+      Component: CardCompositionExample,
+      code: cardCompositionCode,
+    }),
+  },
   fonts: {
     stacks: defineExample({
       id: "font-stacks",

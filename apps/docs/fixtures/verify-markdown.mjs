@@ -8,7 +8,8 @@
  * by verify-docs.mjs — this driver covers the deterministic surface:
  *
  *   1. Endpoint inventory: exactly the predictable `.md` files exist
- *      (one per substantive page; no components/patterns pages yet; the
+ *      (one per substantive page, including the component pages from
+ *      #11; patterns has none yet; the
  *      home page is landing chrome and has none) plus `/llms.txt`.
  *   2. Response handling: `.md` served as text/markdown, llms.txt as
  *      text/plain (compare with the astro preview evidence in the PR).
@@ -190,6 +191,8 @@ const expectedMd = [
   "foundations/theming.md",
   "getting-started.md",
   "reference/package-entries.md",
+  "components/button.md",
+  "components/card.md",
 ];
 ok("endpoint inventory matches the substantive pages exactly", JSON.stringify(mdFiles) === JSON.stringify([...expectedMd].sort()), mdFiles.join(", "));
 ok("llms.txt exists at the site root", allFiles.some((f) => f === join(distDir, "llms.txt")));
@@ -295,7 +298,10 @@ console.log("\n== llms.txt ==");
   for (const heading of ["## Documentation", "## Foundations", "## Components", "## Patterns", "## Package and API reference", "## Design authority and changes"]) {
     ok(`llms.txt has section ${heading.slice(3)}`, text.includes(`\n${heading}\n`));
   }
-  ok("llms.txt states honestly that no component pages exist", text.includes("No component pages are published yet"));
+  ok(
+    "llms.txt lists the published component pages (#11)",
+    text.includes("/components/button.md") && text.includes("/components/card.md"),
+  );
   ok("llms.txt points at DESIGN.md", text.includes("https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md"));
   ok("llms.txt points at ARCHITECTURE.md", text.includes("https://github.com/jubalm/augur-design-system/blob/main/ARCHITECTURE.md"));
   ok("llms.txt points at CHANGELOG.md for change/migration guidance", text.includes("https://github.com/jubalm/augur-design-system/blob/main/CHANGELOG.md"));

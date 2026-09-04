@@ -3,15 +3,40 @@
  *
  * Consumers use this module and the stylesheet entry point:
  *
- *   import { Button } from "@augur/design-system";
+ *   import { Button, Card } from "@augur/design-system";
  *   import "@augur/design-system/styles.css";
  *
- * Generated tokens and theme output land with the
- * foundation work (#3, #4); font delivery (#5) adds the machine-readable
- * font provenance export; starter components (#11-#14) are exported
- * from here as they are implemented. Internal file organization must not
- * become public API through this module.
+ * Generated tokens and theme output landed with the foundation work
+ * (#3–#5); font delivery (#5) adds the machine-readable font
+ * provenance export. Starter components (#11–#14) are exported from
+ * here as they are implemented — Button and Card arrived with #11.
+ * Internal file organization must not become public API through this
+ * module.
  */
 export { AUGUR_FONTS, AUGUR_FONT_FAMILIES } from "./fonts";
 export type { AugurFontProvenance } from "./fonts";
-export {};
+
+export { Button, buttonVariants } from "./components/button/button";
+export type { ButtonProps } from "./components/button/button";
+export type {
+  ButtonVariant,
+  ButtonSize,
+  ButtonVariantsProps,
+} from "./components/button/button-variants";
+
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "./components/card/card";
+export type {
+  CardProps,
+  CardHeaderProps,
+  CardTitleProps,
+  CardDescriptionProps,
+  CardContentProps,
+  CardFooterProps,
+} from "./components/card/card";
