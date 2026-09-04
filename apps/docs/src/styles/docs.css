@@ -787,6 +787,24 @@ body {
   margin: 0;
 }
 
+/* Pattern examples (#14): the PageHeader breadcrumb pairing must not be
+   repainted by the host content-link rule above — crumbs are secondary
+   in the docs site like anywhere else (one-green-signal rule). The
+   package stylesheet carries the same contract for non-prose hosts;
+   this scoped mirror only restores it where `.prose a` would win the
+   cascade tie. */
+.prose .aug-page-header-breadcrumb a {
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+
+.prose .aug-page-header-breadcrumb a:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+}
+
+.prose .aug-page-header-breadcrumb [aria-current="page"] {
+  color: var(--foreground);
 /* Example modules: input-states and form-field-composition (issue #12).
    Scaffolding only — the controls themselves are the real package
    components; rows/canvas mirror the button-example pattern. */
