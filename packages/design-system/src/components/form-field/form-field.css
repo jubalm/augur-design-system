@@ -1,0 +1,46 @@
+/*
+ * FormField styles (issue #12) — layout for the wiring pattern.
+ *
+ * Color: ONLY semantic role custom properties from ../../styles/theme.css
+ * (which references generated tokens). No raw color values, no new
+ * custom properties.
+ *
+ * Geometry: intentional structural constants from the FD-01 proposal
+ * (Proposed — pending maintainer review): 8px gaps between the stacked
+ * parts, a 4px step between the label and its required marker. The
+ * control's own visuals (height, radius, states) come from Input; this
+ * sheet only lays the composition out. The decision record for this
+ * slice lives in ../../docs/components.md.
+ */
+
+.aug-form-field {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px; /* FD-01 space.sm (Proposed) */
+  margin: 0;
+  min-width: 0; /* let the full-width control shrink inside grids */
+}
+
+.aug-form-field-description {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+/*
+ * The error message is text in the theme's danger slot. Where that
+ * slot equals the foreground (light), the explicit message text carries
+ * the meaning; the aria-invalid border and role="alert" reinforce it.
+ * Never color alone (theme decision D1).
+ */
+.aug-form-field-error {
+  margin: 0;
+  color: var(--destructive);
+}
+
+/* Visible required marker next to the label text; aria-hidden — the
+   native required attribute carries the semantics. */
+.aug-form-field-required {
+  margin-left: 4px; /* FD-01 space.xs (Proposed) */
+  color: inherit;
+}

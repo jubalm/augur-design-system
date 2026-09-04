@@ -40,3 +40,21 @@ export type {
   CardContentProps,
   CardFooterProps,
 } from "./components/card/card";
+
+export { Input } from "./components/input/input";
+export type { InputProps } from "./components/input/input";
+
+export {
+  FormField,
+  FormFieldControl,
+  FormFieldLabel,
+  FormFieldDescription,
+  FormFieldError,
+} from "./components/form-field/form-field";
+export type {
+  FormFieldProps,
+  FormFieldControlProps,
+  FormFieldLabelProps,
+  FormFieldDescriptionProps,
+  FormFieldErrorProps,
+} from "./components/form-field/form-field";
