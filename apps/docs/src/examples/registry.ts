@@ -20,6 +20,8 @@ import { ButtonVariantsExample } from "./button/button-variants";
 import buttonVariantsCode from "./button/button-variants.tsx?raw";
 import { CardCompositionExample } from "./card/card-composition";
 import cardCompositionCode from "./card/card-composition.tsx?raw";
+import { DialogCompositionExample } from "./dialog/dialog-composition";
+import dialogCompositionCode from "./dialog/dialog-composition.tsx?raw";
 import { FontProvenanceExample } from "./fonts/font-provenance";
 import fontProvenanceCode from "./fonts/font-provenance.tsx?raw";
 import { FontStacksExample } from "./fonts/font-stacks";
@@ -51,6 +53,15 @@ export const examples = {
       description: "The part set groups a record with its actions; the second card pins data-theme=dark.",
       Component: CardCompositionExample,
       code: cardCompositionCode,
+    }),
+  },
+  dialog: {
+    composition: defineExample({
+      id: "dialog-composition",
+      title: "Dialog composition",
+      description: "The composition's trigger in both themes; the panel, scrim, and focus behavior run in the interactive example on the page.",
+      Component: DialogCompositionExample,
+      code: dialogCompositionCode,
     }),
   },
   fonts: {

@@ -59,6 +59,16 @@ describe("public entry point", () => {
       "CardDescription",
       "CardContent",
       "CardFooter",
+      "Dialog",
+      "DialogTrigger",
+      "DialogPortal",
+      "DialogOverlay",
+      "DialogContent",
+      "DialogHeader",
+      "DialogFooter",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogClose",
     ]) {
       expect(typeof entryExports[name]).toBe("function");
     }
