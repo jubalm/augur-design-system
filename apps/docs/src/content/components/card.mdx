@@ -1,0 +1,127 @@
+---
+# Card (issue #11) — rendered through the #8 content pipeline
+# (src/content/components/, route /components/card). Frontmatter is
+# the single H1 source; the body starts at H2 level and covers every
+# enforced section (src/lib/component-sections.ts).
+title: Card
+description: A pure composition surface for grouping related content — header, title, description, body, and footer parts over the theme's card pairing, with no product meaning of its own.
+component: Card
+status: draft
+order: 2
+---
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
+
+`Card` is quiet structure: a raised surface in the theme's card pairing
+(White on light, Surface 1 on dark) with a hairline border. It carries
+no record states, actions, or product semantics — grouping is all it
+does, and the content inside speaks (DESIGN.md: state is named by
+labels, never implied by a container).
+
+## When to use
+
+- To group related content and the actions that operate on it — a
+  query with its status and controls, a record with its metadata.
+- When the surface should read as one panel in both themes without
+  local color choices: the parts consume `--card`, `--border`, and the
+  typography roles only.
+- Composed with real components: a `Button` in `CardFooter` is the
+  intended shape for panel actions — one primary action per card, that
+  button being the panel's one green signal.
+
+<DocExample example={examples.card.composition} />
+
+## When not to use
+
+- Not for overlays: floating layers belong to the popover and dialog
+  surfaces (the `--popover` role, future components), not to a card.
+- Not to carry state: do not use a Card to mean Open, Closed, Pending,
+  or Final — say it with a label; color never carries the meaning.
+- Not nested inside cards: composition inside composition erases the
+  surface steps the themes define.
+- Not as a click target: the card itself is non-interactive; make the
+  contained controls interactive so keyboard and screen-reader users
+  get real semantics.
+
+## Variants
+
+Card ships exactly one surface treatment — by design.
+Differentiation comes from composition (with or without a header,
+description, or footer), not from a variant matrix; no speculative
+variants are provided ahead of concrete requirements.
+
+## Sizes
+
+Cards are fluid: width comes from the consumer's layout, height from
+the content. The composition padding is a structural 24px with 8px
+between title and description and inside the footer row — values
+aligned with the FD-01 and FD-03 proposals, which remain Proposed —
+pending maintainer review; no spacing or radius tokens are emitted.
+
+## States
+
+None at the container level. Card renders a plain `div`: no hover,
+focus, pressed, disabled, or loading treatment exists for the surface
+itself. Interactive children (buttons, links, inputs) carry their own
+states, and the shared `:focus-visible` ring from the theme contract
+applies to them inside the card exactly as everywhere else.
+
+## Accessibility
+
+- Pure composition: a `div` (no landmark role), an `h3` title, and a
+  `p` description — real elements, no ARIA invented.
+- `CardTitle` renders an `<h3>` (shadcn convention). Consumers own the
+  document outline: keep cards at a consistent section depth, or
+  override the element while keeping a typography role class if a
+  different level is required.
+- `CardDescription` renders a `p` in the metadata voice; it stays
+  secondary text and never carries required information alone.
+- The composition passes axe in both theme scopes in the repository
+  test harness; its contrast pairings are the theme's recorded panel
+  pairings (panel-light, panel-dark-1).
+
+## API
+
+```tsx
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@augur/design-system";
+```
+
+| Part | Element | Voice and surface | Purpose |
+| --- | --- | --- | --- |
+| `Card` | `div` | `--card` on `--card-foreground` | Grouping surface |
+| `CardHeader` | `div` | layout only | Stacks title and description |
+| `CardTitle` | `h3` | heading-2 typography role | Panel title |
+| `CardDescription` | `p` | metadata voice, `--muted-foreground` | Supporting line under the title |
+| `CardContent` | `div` | body voice | Main content block |
+| `CardFooter` | `div` | layout only | Inline action row |
+
+Every part accepts the native attributes of its element, `className`
+(merged after the component classes), and a React 19 `ref` prop.
+
+## Design rationale
+
+- **Pure composition, no product meaning.** The part set is
+  shadcn-compatible (familiar import shape), but Augur owns the
+  surfaces: no record states, no product headers, no actions baked in.
+- **Theme pairing only.** The surface is the theme's recorded card
+  pairing (panel-light, panel-dark-1); hairlines come from `--border`;
+  the description from `--muted-foreground`. No raw values anywhere.
+- **Structural geometry.** The 24px composition padding and the 8px
+  corner radius follow the FD-01 and FD-03 proposals (Proposed —
+  pending review); no tokens are emitted, and the values are recorded
+  in the package decision record at
+  [packages/design-system/docs/components.md](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/components.md).
+- **First-block rule.** A headerless card still opens with padding
+  (`.aug-card > :first-child`), so composition cannot produce a flush,
+  broken-looking panel.
+- **Title as `h3`.** Matches shadcn muscle memory; real heading
+  semantics beat styled `div`s for heading navigation.
+- **Status: draft**, graduating with the Button slice on maintainer
+  acceptance.

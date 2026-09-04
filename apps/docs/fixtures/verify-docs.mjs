@@ -181,7 +181,7 @@ async function auditPage(url, { expectTitleFragment } = {}) {
     ok(`${url} title`, evidence.title.includes(expectTitleFragment), evidence.title);
   }
   ok(`${url} skip link present`, evidence.hasSkipLink);
-  ok(`${url} exactly one visible primary nav with 6 links`, evidence.navLinks.length === 6, evidence.navLinks.join(", "));
+  ok(`${url} exactly one visible primary nav with 8 links`, evidence.navLinks.length === 8, evidence.navLinks.join(", "));
   ok(`${url} fonts registered (>=6 faces)`, evidence.faceCount >= 6, `size ${evidence.faceCount}`);
   ok(`${url} fonts.load Sora 400 resolves a face`, loadedFaces.sora400 >= 1, String(loadedFaces.sora400));
   ok(`${url} fonts.load Sora 600 resolves a face`, loadedFaces.sora600 >= 1, String(loadedFaces.sora600));
@@ -203,6 +203,8 @@ await auditPage(origin + site("/foundations/decisions"), { expectTitleFragment: 
 await auditPage(origin + site("/foundations/fonts"), { expectTitleFragment: "Fonts and typography" });
 const theming = await auditPage(origin + site("/foundations/theming"), { expectTitleFragment: "Theming" });
 await auditPage(origin + site("/reference/package-entries"), { expectTitleFragment: "Package entries" });
+await auditPage(origin + site("/components/button"), { expectTitleFragment: "Button" });
+await auditPage(origin + site("/components/card"), { expectTitleFragment: "Card" });
 
 ok(
   "getting-started renders MDX-evaluated package data",
@@ -300,7 +302,7 @@ console.log("\n== Mobile layout (375x812) ==");
     visibleLinks: [...document.querySelectorAll(".mobile-nav nav a")].filter((a) => a.offsetParent !== null).length,
   }));
   ok("disclosure opens via keyboard", opened.open === true);
-  ok("all 6 links visible when open", opened.visibleLinks === 6, String(opened.visibleLinks));
+  ok("all 8 links visible when open", opened.visibleLinks === 8, String(opened.visibleLinks));
   await page.screenshot({ path: "/tmp/augur-docs-verify/home-mobile-menu-open.png" });
 
   // Navigate through the disclosure to the decisions page.
@@ -378,6 +380,107 @@ console.log("\n== Copy page / View as Markdown (issue #9) ==");
 
   ok("copy/view pages produce no console errors/warnings", consoleIssues.length === 0, consoleIssues.join("; ") || "clean");
   await context.close();
+}
+
+// --- 6. Component slice rendered review (issue #11). ----------------------
+console.log("\n== Component slice (Button/Card computed styles, both themes) ==");
+{
+  const page = await browser.newPage();
+  await page.goto(origin + site("/components/button"), { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+
+  const readButtonEvidence = () =>
+    page.evaluate(() => {
+      const row = (theme) =>
+        document.querySelector(theme === "dark" ? ".example-button-row[data-theme='dark']" : ".example-button-row:not([data-theme='dark'])");
+      const primary = row("light").querySelector(".aug-button--default");
+      const darkPrimary = row("dark").querySelector(".aug-button--default");
+      const disabled = document.querySelector(".aug-button:disabled:not([aria-busy])");
+      const loading = document.querySelector(".aug-button[aria-busy='true']");
+      const cs = getComputedStyle(primary);
+      return {
+        height: cs.height,
+        radius: cs.borderRadius,
+        background: cs.backgroundColor,
+        darkBackground: getComputedStyle(darkPrimary).backgroundColor,
+        primaryToken: cs.getPropertyValue("--primary").trim(),
+        font: cs.fontFamily,
+        disabledCursor: disabled ? getComputedStyle(disabled).cursor : null,
+        disabledOpacity: disabled ? getComputedStyle(disabled).opacity : null,
+        loadingBusy: loading ? loading.getAttribute("aria-busy") : null,
+        loadingSpinner: loading ? !!loading.querySelector(".aug-button-spinner") : null,
+        loadingLabelVisibility: loading
+          ? getComputedStyle(loading.querySelector(".aug-button-label")).visibility
+          : null,
+      };
+    });
+
+  const buttonLight = await readButtonEvidence();
+  ok("default button height 36px (FD-02 structure)", buttonLight.height === "36px", buttonLight.height);
+  ok("default button radius 6px (FD-03 structure)", buttonLight.radius === "6px", buttonLight.radius);
+  ok("control typography role applies (Sora)", buttonLight.font.includes("Sora"), buttonLight.font);
+  ok(
+    "--primary resolves to a generated token (not var())",
+    /^#[0-9a-f]{6}$/i.test(buttonLight.primaryToken),
+    buttonLight.primaryToken,
+  );
+  ok("default button paints --primary (light)", buttonLight.background !== "rgba(0, 0, 0, 0)", buttonLight.background);
+  ok(
+    "dark-scoped row paints a different action color (Deep -> Green with the theme)",
+    buttonLight.background !== buttonLight.darkBackground,
+    `${buttonLight.background} vs ${buttonLight.darkBackground}`,
+  );
+  ok("disabled button cursor not-allowed", buttonLight.disabledCursor === "not-allowed", String(buttonLight.disabledCursor));
+  ok("disabled button opacity 0.5", buttonLight.disabledOpacity === "0.5", String(buttonLight.disabledOpacity));
+  ok("loading button sets aria-busy", buttonLight.loadingBusy === "true", String(buttonLight.loadingBusy));
+  ok("loading button renders the spinner", buttonLight.loadingSpinner === true);
+  ok("loading button hides its label while keeping width", buttonLight.loadingLabelVisibility === "hidden", String(buttonLight.loadingLabelVisibility));
+  await page.screenshot({ path: "/tmp/augur-docs-verify/button-page-light.png", fullPage: true });
+
+  // Pin dark on <html> per the theme contract and re-read the same nodes.
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const buttonDark = await readButtonEvidence();
+  ok(
+    "pinned dark changes the same button's action color",
+    buttonDark.background !== buttonLight.background,
+    `${buttonLight.background} -> ${buttonDark.background}`,
+  );
+  await page.close();
+
+  const cardPage = await browser.newPage();
+  await cardPage.goto(origin + site("/components/card"), { waitUntil: "networkidle" });
+  await cardPage.evaluate(() => document.fonts.ready);
+  const cardLight = await cardPage.evaluate(() => {
+    const card = document.querySelector(".example-card-grid > .aug-card:not([data-theme])");
+    const darkCard = document.querySelector(".example-card-grid > .aug-card[data-theme='dark']");
+    const cs = getComputedStyle(card);
+    return {
+      radius: cs.borderRadius,
+      background: cs.backgroundColor,
+      cardToken: cs.getPropertyValue("--card").trim(),
+      border: cs.borderTopColor,
+      darkBackground: getComputedStyle(darkCard).backgroundColor,
+      titleTag: card.querySelector(".aug-card-title")?.tagName ?? null,
+    };
+  });
+  ok("card radius 8px (FD-03 surface structure)", cardLight.radius === "8px", cardLight.radius);
+  ok("card paints the --card role (light)", cardLight.background !== "rgba(0, 0, 0, 0)", cardLight.background);
+  ok(
+    "--card resolves to a generated token (not var())",
+    /^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(cardLight.cardToken),
+    cardLight.cardToken,
+  );
+  ok("card border is the --border hairline (not transparent)", cardLight.border !== "rgba(0, 0, 0, 0)", cardLight.border);
+  ok(
+    "dark-scoped card paints a different surface",
+    cardLight.background !== cardLight.darkBackground,
+    `${cardLight.background} vs ${cardLight.darkBackground}`,
+  );
+  ok("card title renders h3", cardLight.titleTag === "H3", String(cardLight.titleTag));
+  await cardPage.screenshot({ path: "/tmp/augur-docs-verify/card-page-light.png", fullPage: true });
+  await cardPage.close();
 }
 
 await browser.close();

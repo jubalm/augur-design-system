@@ -19,5 +19,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { label: "Foundation decisions", href: "/foundations/decisions" },
   { label: "Fonts and typography", href: "/foundations/fonts" },
   { label: "Theming", href: "/foundations/theming" },
+  { label: "Button", href: "/components/button" },
+  { label: "Card", href: "/components/card" },
   { label: "Package entries", href: "/reference/package-entries" },
 ] as const;

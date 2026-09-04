@@ -1,0 +1,72 @@
+/*
+ * Card styles (issue #11).
+ *
+ * Color: ONLY semantic role custom properties from ../../styles/theme.css
+ * (which references generated tokens). No raw color values, no new
+ * custom properties.
+ *
+ * Geometry: intentional structural constants — the 24px composition
+ * padding and 8px surface radius follow the FD-01/FD-03 proposals
+ * (Proposed — pending maintainer review); no spacing/radius tokens are
+ * emitted. Decision record: ../../docs/components.md.
+ */
+
+.aug-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: 8px; /* FD-03 radius.surface (Proposed) */
+}
+
+/*
+ * Composition spacing (shadcn classic pattern): the header carries the
+ * top/bottom rhythm; content and footer close the card. The
+ * :first-child rule keeps a headerless composition from opening flush.
+ */
+.aug-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* FD-01 space.sm (Proposed): title-to-description gap */
+  padding: 24px; /* FD-01 space.2xl (Proposed) */
+}
+
+.aug-card-content {
+  padding: 0 24px 24px;
+}
+
+.aug-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px 24px;
+}
+
+.aug-card > .aug-card-content:first-child,
+.aug-card > .aug-card-footer:first-child {
+  padding-top: 24px;
+}
+
+/*
+ * Typographic margins: the role classes set type only, so block
+ * margins are reset here (the components compose the role classes).
+ */
+.aug-card-title,
+.aug-card-description {
+  margin: 0;
+}
+
+.aug-card-description {
+  color: var(--muted-foreground);
+}
+
+.aug-card-content > :first-child {
+  margin-top: 0;
+}
+
+.aug-card-content > :last-child {
+  margin-bottom: 0;
+}
