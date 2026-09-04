@@ -66,3 +66,54 @@ export type {
   DialogCloseProps,
   DialogSize,
 } from "./components/dialog/dialog";
+// Patterns (#14): the first slice of the patterns layer (ARCHITECTURE.md
+// §4). Composed of the components above; no product meaning.
+export {
+  PageHeader,
+  PageHeaderBreadcrumb,
+  PageHeaderContent,
+  PageHeaderTitle,
+  PageHeaderDescription,
+  PageHeaderActions,
+} from "./patterns/page-header/page-header";
+export type {
+  PageHeaderProps,
+  PageHeaderBreadcrumbProps,
+  PageHeaderContentProps,
+  PageHeaderTitleProps,
+  PageHeaderDescriptionProps,
+  PageHeaderActionsProps,
+  HeadingLevel,
+} from "./patterns/page-header/page-header";
+
+export {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateTitle,
+  EmptyStateDescription,
+  EmptyStateActions,
+} from "./patterns/empty-state/empty-state";
+export type {
+  EmptyStateProps,
+  EmptyStateIconProps,
+  EmptyStateTitleProps,
+  EmptyStateDescriptionProps,
+  EmptyStateActionsProps,
+} from "./patterns/empty-state/empty-state";
+export { Input } from "./components/input/input";
+export type { InputProps } from "./components/input/input";
+
+export {
+  FormField,
+  FormFieldControl,
+  FormFieldLabel,
+  FormFieldDescription,
+  FormFieldError,
+} from "./components/form-field/form-field";
+export type {
+  FormFieldProps,
+  FormFieldControlProps,
+  FormFieldLabelProps,
+  FormFieldDescriptionProps,
+  FormFieldErrorProps,
+} from "./components/form-field/form-field";
