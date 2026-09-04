@@ -1,0 +1,115 @@
+---
+title: EmptyState
+description: A reusable empty-state composition — decorative glyph, title, description, and optional primary and secondary actions over the real Buttons — with a deliberately neutral container.
+components: [button]
+order: 2
+---
+
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
+
+`EmptyState` names the moment a region has nothing to show yet and
+offers the way out. It is a patterns-layer composition: the actions are
+the real [Button](/components/button) components, the pattern owns only
+the arrangement, and the container stays deliberately neutral so the
+primary action remains the view's one green signal.
+
+## When to use
+
+- When a list, table, or dashboard region has no data yet — first run,
+  cleared filters, an empty archive.
+- When the way out is a single obvious action (create the first item,
+  clear the filter) with at most one quiet secondary.
+- Inside any surface: the region carries no background of its own, so
+  it composes with the page canvas or a [Card](/components/card).
+
+<DocExample example={examples.patterns.emptyStateActions} />
+
+## When not to use
+
+- For loading or error states: an empty state says "nothing here", not
+  "not yet" or "failed" — name those states in place instead.
+- With several competing actions. One primary and at most one quiet
+  secondary; anything more belongs on the surrounding page.
+- As a substitute for content. If the data can be summarized, show the
+  summary; an empty state is not a placeholder for design work.
+- For empty search results with suggested corrections — pair the
+  message with the suggestions as real content, not just an action.
+
+## Examples
+
+The default composition: a decorative glyph, a heading, one line of
+supporting copy, and one clear action priority:
+
+<DocExample example={examples.patterns.emptyStateActions} />
+
+Long copy wraps inside the width-capped description while the region
+stays centered:
+
+<DocExample example={examples.patterns.emptyStateLongContent} />
+
+Without a way out to offer, render the region without an actions slot:
+
+<DocExample example={examples.patterns.emptyStateNoAction} />
+
+## Accessibility
+
+- Real elements, no invented ARIA: a `div` region (no landmark role),
+  a real heading, a `p` description, and a `div` action row.
+- **Heading-level discipline:** `EmptyStateTitle` renders an `h2` by
+  default — the level beneath a page title. Pass `headingLevel` (1–6)
+  when the surrounding outline needs a different element; the heading-2
+  typography voice is kept by default so the visual hierarchy stays
+  stable.
+- The icon slot is decorative by default: pass `aria-hidden="true"` on
+  the glyph. A genuinely informative image must stay un-hidden and be
+  labeled by the consumer.
+- Actions are real Buttons with keyboard behavior from the
+  [Button](/components/button) contract; the primary action comes first
+  in DOM order, matching visual priority.
+- The container is neutral by design (the one-green-signal rule): muted
+  glyph tile, muted description, inherited foreground title — the only
+  action color comes from the primary Button. Compositions pass axe in
+  both theme scopes in the repository test harness
+  (`tests/page-header-empty-state.test.tsx`).
+
+## API
+
+```tsx
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateTitle,
+  EmptyStateDescription,
+  EmptyStateActions,
+} from "@augur/design-system";
+```
+
+| Part | Element | Voice and surface | Purpose |
+| --- | --- | --- | --- |
+| `EmptyState` | `div` | layout only, no background | Empty-state region |
+| `EmptyStateIcon` | `div` | `--muted` tile, `--muted-foreground` glyph | Decorative icon/glyph slot |
+| `EmptyStateTitle` | `h2` (default) | heading-2 typography role | State title; `headingLevel` moves the outline |
+| `EmptyStateDescription` | `p` | body voice, `--muted-foreground` | Supporting line, width-capped |
+| `EmptyStateActions` | `div` | layout only | Action row; Buttons composed by the consumer |
+
+Every part accepts the native attributes of its element, `className`
+(merged after the component classes), and a React 19 `ref` prop.
+
+## Design rationale
+
+- **Pure composition, no product meaning.** The pattern names a state,
+  not a domain: all copy, glyphs, and actions come from the consumer.
+- **Uses the real Buttons.** Primary and secondary actions are the
+  Button component's default and outline variants — no parallel action
+  styling, one action priority (issue #11's one-green-signal rule).
+- **Neutral container.** No surface color, no border, no shadow: the
+  empty region must never out-signal the page's primary action, and it
+  composes with any parent surface in both themes.
+- **Theme pairing only.** The glyph tile uses `--muted` with
+  `--muted-foreground`; the description uses `--muted-foreground`; no
+  raw values and no new tokens.
+- **Structural geometry.** Padding, gaps, the 40px tile, and the 8px
+  tile radius follow the FD-01/FD-02/FD-03 proposals (Proposed —
+  pending maintainer review); no tokens are emitted.
+- **Status: draft**, graduating on maintainer acceptance.
