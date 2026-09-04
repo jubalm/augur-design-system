@@ -11,11 +11,18 @@
  *
  * The H1/lede/status markup is the single place where page chrome is
  * decided, so every documented page renders identically and future
- * pages (#9, #10, component pages) are shared-source by default.
+ * pages (#10, component pages) are shared-source by default.
+ *
+ * Since #9 each page also renders the Copy page / View as Markdown
+ * actions (src/components/PageActions.astro), pointing at the clean
+ * `.md` representation generated from this same entry by
+ * src/pages/[...markdown].ts.
  */
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageActions from "./PageActions.astro";
+import { withBase } from "../lib/base";
 import { assertComponentSections } from "../lib/component-sections";
 
 type DocEntry = CollectionEntry<"foundations" | "components" | "patterns" | "reference">;
@@ -26,6 +33,8 @@ interface Props {
 
 const { entry } = Astro.props;
 const { title, description } = entry.data;
+// Clean-Markdown representation generated from this same entry (#9).
+const mdHref = withBase(`/${entry.collection}/${entry.id}.md`);
 
 // Build-time section enforcement for component pages (issue #8):
 // missing "When to use", "Variants", etc. fail the build with a clear,
@@ -49,6 +58,7 @@ const { Content } = await render(entry);
         </p>
       )
     }
+    <PageActions mdHref={mdHref} />
     <Content />
   </article>
 </BaseLayout>
