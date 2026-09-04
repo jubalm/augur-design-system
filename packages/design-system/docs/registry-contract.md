@@ -7,7 +7,9 @@ expectations, version-pinned installation URLs, and the local predeployment
 test path. It is backed by upstream evidence (schemas and docs fetched
 2026-09-04) and by an end-to-end empirical run of the pinned CLI recorded in
 §12. The fixture proving schema validation lives in
-[`../fixtures/registry/`](../fixtures/registry/README.md).
+[`../fixtures/registry/`](../fixtures/registry/README.md). The executable
+consumer proof of this contract (issue #18) and versioned-artifact pinning
+are documented in [`consumer-install.md`](consumer-install.md).
 
 This is a distribution contract for source-installed components. It does not
 introduce an npm package, a bundler layer, or framework promises beyond the
