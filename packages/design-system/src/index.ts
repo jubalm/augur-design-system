@@ -40,3 +40,38 @@ export type {
   CardContentProps,
   CardFooterProps,
 } from "./components/card/card";
+
+// Patterns (#14): the first slice of the patterns layer (ARCHITECTURE.md
+// §4). Composed of the components above; no product meaning.
+export {
+  PageHeader,
+  PageHeaderBreadcrumb,
+  PageHeaderContent,
+  PageHeaderTitle,
+  PageHeaderDescription,
+  PageHeaderActions,
+} from "./patterns/page-header/page-header";
+export type {
+  PageHeaderProps,
+  PageHeaderBreadcrumbProps,
+  PageHeaderContentProps,
+  PageHeaderTitleProps,
+  PageHeaderDescriptionProps,
+  PageHeaderActionsProps,
+  HeadingLevel,
+} from "./patterns/page-header/page-header";
+
+export {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateTitle,
+  EmptyStateDescription,
+  EmptyStateActions,
+} from "./patterns/empty-state/empty-state";
+export type {
+  EmptyStateProps,
+  EmptyStateIconProps,
+  EmptyStateTitleProps,
+  EmptyStateDescriptionProps,
+  EmptyStateActionsProps,
+} from "./patterns/empty-state/empty-state";
