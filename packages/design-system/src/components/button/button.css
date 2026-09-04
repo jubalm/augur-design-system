@@ -1,0 +1,185 @@
+/*
+ * Button styles (issue #11).
+ *
+ * Color: ONLY semantic role custom properties from ../../styles/theme.css
+ * (which references generated tokens). No raw color values, no new
+ * custom properties.
+ *
+ * Geometry: intentional structural constants — FD-01 (spacing), FD-02
+ * (control heights), and FD-03 (radius) are Proposed and pending
+ * maintainer review, so no spacing/radius/sizing tokens are emitted;
+ * the same pattern the FD-04 ring geometry uses in theme.css. The
+ * decision record for this slice lives in ../../docs/components.md.
+ */
+
+.aug-button {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* FD-01 space.sm (Proposed): label-to-icon gap */
+  height: 36px; /* FD-02 control.height.md (Proposed) */
+  padding: 0 16px; /* FD-01: md control padding (Proposed) */
+  margin: 0;
+  border: 1px solid transparent; /* keeps the box equal across variants */
+  border-radius: 6px; /* FD-03 radius.control (Proposed) */
+  vertical-align: middle;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Sizes: FD-01/FD-02 Proposed values as structure (sm 32/12, lg 40/24). */
+.aug-button--sm {
+  height: 32px;
+  padding: 0 12px;
+}
+
+.aug-button--lg {
+  height: 40px;
+  padding: 0 24px;
+}
+
+/*
+ * Filled variants. default = action-primary pairing (Deep + White
+ * light, Green + Navy dark — the view's one green signal); secondary
+ * sits on the quiet surface; destructive uses the strongest neutral
+ * pairing (theme decision D1: the brand defines no danger hue, so the
+ * label carries the meaning).
+ */
+.aug-button--secondary {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.aug-button--destructive {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+/* Surface variants: quiet by default; the theme's neutral
+   hover/highlight surface (accent) on hover. */
+.aug-button--outline {
+  background-color: transparent;
+  border-color: var(--input);
+  color: var(--foreground);
+}
+
+.aug-button--ghost {
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+/* Link: quiet text action. Deliberately NOT action-colored — a view
+   has one green signal (primary action, focus), and text links are not
+   it (decision D3 in docs/components.md). */
+.aug-button--link {
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+/*
+ * Hover/pressed (FD-06 Proposed interaction treatment, decision D2):
+ *   - filled variants: a subtle tint of their own color — the
+ *     plain-CSS form of the shadcn `bg-primary/90` convention — pressed
+ *     one step further down the same ladder;
+ *   - surface variants: the accent surface, pressed one step back
+ *     toward the canvas;
+ *   - link: the underline appears.
+ * color-mix only mixes existing roles with transparency; no colors are
+ * invented. Hover/pressed never apply to disabled buttons.
+ */
+.aug-button--default:hover:not(:disabled),
+.aug-button--destructive:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--primary) 90%, transparent);
+}
+
+.aug-button--default:active:not(:disabled),
+.aug-button--destructive:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--primary) 80%, transparent);
+}
+
+.aug-button--secondary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--secondary) 90%, transparent);
+}
+
+.aug-button--secondary:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--secondary) 80%, transparent);
+}
+
+.aug-button--outline:hover:not(:disabled),
+.aug-button--ghost:hover:not(:disabled) {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.aug-button--outline:active:not(:disabled),
+.aug-button--ghost:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.aug-button--link:hover:not(:disabled) {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 2px;
+}
+
+/*
+ * Disabled (FD-06 Proposed, decision D5): non-interactive via the
+ * native attribute, reduced-contrast label that remains present and
+ * readable in the DOM, never color-alone. WCAG 1.4.3 exempts disabled
+ * controls from contrast minimums.
+ */
+.aug-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/*
+ * Loading (decision D6): the label stays in the DOM (width preserved)
+ * but is hidden from eyes and assistive technology; the spinner
+ * overlays, centered; the accessible name becomes the visually hidden
+ * "Loading" status rendered by the component.
+ */
+.aug-button[aria-busy="true"] .aug-button-label {
+  visibility: hidden;
+}
+
+.aug-button-spinner {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.aug-button-spinner-icon {
+  display: block;
+  /* Structural rotation (16px inline icon size, FD-02 Proposed); no
+     motion token exists (FD-05 Proposed). The package reduced-motion
+     gate collapses this to a static arc. */
+  animation: aug-button-spin 0.8s linear infinite;
+}
+
+@keyframes aug-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Visually hidden loading status (component-scoped utility). */
+.aug-button-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

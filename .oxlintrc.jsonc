@@ -18,17 +18,6 @@
     // component library; not in oxlint's default correctness category.
     "react/rules-of-hooks": "error"
   },
-  "overrides": [
-    {
-      // packages/design-system/src is owned by the component/foundation
-      // workers (#3/#4/#5), not the CI worker (#6). The trailing
-      // `export {}` in the public entry point is a deliberate module
-      // marker from that side; disable this one rule for that tree until
-      // the owners drop it. Tighten back when #4 lands.
-      "files": ["packages/design-system/src/**/*.ts"],
-      "rules": { "typescript/no-useless-empty-export": "off" }
-    }
-  ],
   "ignorePatterns": [
     "**/node_modules/**",
     "**/dist/**",
