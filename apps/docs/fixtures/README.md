@@ -32,22 +32,33 @@ and drives it in headless Chromium.
   through its live region and puts EXACTLY the served `.md` bytes on
   the clipboard (compared byte-for-byte), and `View as Markdown` links
   the direct `.md` representation.
+- Starter components in real browsers (issue #15): the Dialog island —
+  keyboard open, focus containment under Tab/Shift+Tab, Escape and
+  overlay dismissal, scroll lock and unlock, focus restoration to the
+  trigger, ARIA name/description wiring, the dark scoped-portal panel
+  inheriting its subtree theme, mobile (375px) panel sizing with no
+  horizontal overflow, and reduced-motion transitions collapsing —
+  plus Input keyboard focus/typing/ARIA wiring in both themes,
+  Button focus-visible and Enter/Space activation, FormField
+  label/control wiring, and the PageHeader/EmptyState examples
+  rendering as built.
 
 ### Run
 
-Playwright is deliberately not a workspace dependency (browser CI wiring
-lands with issue #15). Provide it once via a gitignored link
-(playwright 1.61.x pins the Chromium build used):
+Playwright 1.61.1 is a root devDependency (pinned; its Chromium build
+is the one the assertions are written against), so a frozen workspace
+install provides it:
 
 ```sh
-mkdir -p /tmp/augur-docs-verify && cd /tmp/augur-docs-verify
-bun init -y >/dev/null && bun add playwright@1.61.1
-ln -s /tmp/augur-docs-verify/node_modules \
-      <repo>/apps/docs/fixtures/node_modules
-cd <repo>
+bun install --frozen-lockfile
+bunx playwright install chromium --with-deps   # browsers; --with-deps needs sudo once
 bun run --cwd apps/docs build
 bun apps/docs/fixtures/verify-docs.mjs
 ```
+
+(On machines where the gitignored `apps/docs/fixtures/node_modules`
+link from issue #7 already exists, it still takes precedence and works
+unchanged.)
 
 For the repository-subpath build, rebuild with the base override and run
 the same driver — it stages `dist` under the base automatically:
@@ -128,6 +139,10 @@ bun apps/docs/fixtures/verify-content-failures.mjs
 ```
 
 Exit code 0 and a `content failure verification passed` line mean both
-invalid fixtures failed the build exactly as required. This is the
+invalid fixtures failed the build exactly as required. Both Astro
+content-layer caches are cleared before AND after each scenario build,
+so the result cannot depend on a previous regular build or a crashed
+prior run, and `dist` is removed at the end (the failing builds may
+have partially overwritten it). This is the
 docs-side analogue of `tokens:verify-failures` (#3) and the registry
 invalid fixtures (#16); wiring it into CI is #15's scope.
