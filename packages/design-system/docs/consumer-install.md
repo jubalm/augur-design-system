@@ -1,0 +1,131 @@
+# Consumer installation (issue #18)
+
+Proves and documents source installation of the Augur registry in an
+independent consumer. Companion to [`registry-contract.md`](registry-contract.md)
+(spec, especially §10 verified stack, §12 local test path, §14 version-pinned
+URLs) and [`registry-generation.md`](registry-generation.md) (artifact policy).
+
+## 1. What is proven
+
+A clean standalone React consumer — created by the pinned CLI from the Vite
+template (React 19 + Tailwind CSS v4 + radix, exactly the verified stack in
+contract §10) — installs every starter registry item and, after `vite build`:
+
+- components through semantic tokens with **both light and dark themes**
+  (`data-theme="light|dark"`, plus system-preference fallback);
+- the contract §7 alias set resolves installed source
+  (`@/components/ui/*`, `@/lib/utils`, `@/components/*` patterns);
+- exact-pinned npm dependencies land in the consumer `package.json`
+  (`@fontsource/sora@5.3.0`, `@fontsource/schibsted-grotesk@5.3.0`,
+  `clsx@2.1.1`, `tailwind-merge@3.3.1`, `radix-ui@1.6.7`);
+- fonts are self-hosted (`@font-face` + woff/woff2 assets in `dist`), not
+  Google-hosted;
+- installed source is **self-contained**: it never imports
+  `@augur/design-system` or any `@augur/*` specifier (contract §11);
+- the consumer has **zero `workspace:*` links** (fully standalone);
+- `bunx shadcn@4.20.1 add --overwrite` re-run refreshes consumer-modified
+  installed source (update model, contract §11.4).
+
+## 2. Reproducible smoke
+
+```sh
+# from the repo root; requires bun and network access to npm (registry
+# artifacts themselves are committed and served locally — no GitHub access)
+bun run scripts/consumer-smoke.ts                 # working-tree artifacts
+bun run scripts/consumer-smoke.ts --ref <full-40-char-sha>   # versioned artifact
+bun run scripts/consumer-smoke.ts --keep          # keep the consumer dir to inspect
+```
+
+The script:
+
+1. starts a throwaway local registry server over the **committed**
+   `public/r/*.json` artifacts (working tree, or `git show <ref>:public/r/<item>.json`
+   when `--ref` is given), rewriting each item's `registryDependencies`
+   GitHub addresses to the local server;
+2. runs `bunx shadcn@4.20.1 init -t vite -b radix -p nova` to create the fresh
+   consumer;
+3. runs `bunx shadcn@4.20.1 add <local>/r/<item>.json -y --overwrite` for
+   `augur-theme`, `utils`, `button`, `card`, `input`, `form-field`, `dialog`,
+   `page-header`, `empty-state`;
+4. fails fast with an **actionable hint per check** — every `FAIL` line names
+   the broken guarantee and the fix. Exit code 0 = all checks passed.
+
+`GIT_TERMINAL_PROMPT=0` is exported for every child process so no subprocess
+can ever block on an interactive credential prompt; stdin is closed for the
+same reason.
+
+Recorded results (this branch):
+
+| Mode | Command | Result |
+| --- | --- | --- |
+| Working tree | `bun run scripts/consumer-smoke.ts` | PASS — all checks |
+| Versioned artifact | `bun run scripts/consumer-smoke.ts --ref 0a2c84d9…` | PASS — all checks |
+
+## 3. Versioned artifact installs and the update/overwrite model
+
+The `--ref <full-40-char-sha>` mode proves the **pinning mechanics** against a
+deterministic artifact: the local server extracts `public/r/*.json` from that
+exact commit via `git show`, so re-running the smoke on the same SHA always
+installs byte-identical source. This mirrors the consumer-facing pinning policy
+in contract §14: reproducible installs pin a full 40-character commit SHA, and
+unpinned `main` installs are the development channel, never documented as
+stable.
+
+Update/overwrite expectations (what consumers should know):
+
+- Components update by **re-running `add` against the pinned ref**; installed
+  source is a snapshot of that ref, with no automatic tracking.
+- `bunx shadcn@4.20.1 add <item> --overwrite` (short `-o`) overwrites files the
+  consumer has modified locally. Without `--overwrite`, identical files are
+  skipped and divergent ones are reported for a decision (no silent clobber).
+- The consumer's own `package.json` lockfile pins the exact npm dependencies
+  the item declares; an update that changes declared pins is a normal
+  dependency change in the consumer.
+- The smoke's §4j check proves the overwrite path: it plants local drift in the
+  installed `button.tsx`, re-runs `add --overwrite`, and fails if the drift
+  survives.
+
+## 4. GitHub-native installs (post-merge; public repo or HTTPS/gh auth required)
+
+The pinned CLI resolves `owner/repo/<item>#<ref>` GitHub addresses through
+`git ls-remote` / raw fetch over **HTTPS**. Against this private repo that path
+requires HTTPS/gh credentials in the consumer environment; in an SSH-only
+setup git falls back to the OS keychain and pops an interactive credential
+prompt, so the local-artifact harness above is the reproducible proof path and
+GitHub-native installs are documented here rather than executed in CI.
+
+Once the repository is public (or the consumer exports HTTPS/gh auth), the
+same smoke applies with full-SHA pins:
+
+```sh
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/augur-theme#<full-sha>"
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/button#<full-sha>"
+# …every item; registryDependencies resolve to the same repo/ref automatically
+```
+
+Notes:
+
+- A ref may be published for consumer pinning only after the contract §12 gate
+  (schema validate + build + local install + consumer build) passes on that
+  exact tree — see `registry-generation.md` and contract §12.
+- Release tags name the human-friendly pins once the tag scheme lands (#17
+  policy); full-SHA pins remain the reproducible default.
+- Built-JSON channel (`https://<docs-host>/r/<item>.json`, namespace
+  `@augur/…`) arrives with the docs deployment work (#19) and becomes the
+  auth-free URL path.
+
+## 5. CI integration note
+
+This issue deliberately does **not** add the smoke to `.github/workflows/ci.yml`;
+the parallel deployment work (#19) owns that workflow. The #19 follow-through
+can add a job that runs both smoke modes (`scripts/consumer-smoke.ts` and
+`--ref ${{ github.sha }}`) against the committed artifacts — the script is
+already non-interactive (`GIT_TERMINAL_PROMPT=0`, stdin closed, actionable
+failure output) and exits non-zero on any failure, so it is CI-ready as-is.
+
+## 6. Out of scope
+
+No integration into an actual external product, no npm package publication,
+and no docs-app fixture work (owned by #19). The harness rewrites
+`registryDependencies` at serve time only — committed artifacts are never
+modified.
