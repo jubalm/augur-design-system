@@ -1,0 +1,167 @@
+---
+# Button (issue #11) — rendered through the #8 content pipeline
+# (src/content/components/, route /components/button). Frontmatter is
+# the single H1 source; the body starts at H2 level and covers every
+# enforced section (src/lib/component-sections.ts). Live examples are
+# real workspace imports (src/examples/button/), synchronized with
+# their code samples by construction.
+title: Button
+description: Actions people can take — a small, shadcn-compatible button carrying Augur's semantic themes, keyboard focus, and explicit disabled and loading contracts.
+component: Button
+status: draft
+order: 1
+---
+import { DocExample } from "../../components/DocExample";
+import { examples } from "../../examples/registry";
+
+`Button` renders a native `<button>` styled only with the semantic role
+custom properties delivered by `@augur/design-system/styles.css`. It
+follows the theme contract automatically: Deep carries the primary
+action on light surfaces and Green on dark, and the shared keyboard
+focus ring paints from `--ring`.
+
+## When to use
+
+- For the one primary action of a view: the `default` variant is the
+  only variant that carries the green signal (Deep on light, Green on
+  dark), so a view usually has exactly one of them.
+- For supporting actions: `secondary`, `outline`, or `ghost` are quiet
+  surfaces and never compete with the primary action.
+- For inline actions that behave like commands rather than navigation:
+  the `link` variant.
+- For high-consequence actions: `destructive` — and the label must say
+  what it does (see States: the brand defines no danger hue, so the
+  label carries the meaning, theme decision D1).
+
+## When not to use
+
+- Not for navigation between pages: use a link; `link` is for
+  action-like text, not wayfinding.
+- Not for on/off or choice state: the API has no pressed or selected
+  state, and a control that records a choice needs semantics this
+  component deliberately does not have.
+- Not for icon-only actions: every button carries a text label;
+  specific verbs beat icons for a scannable record.
+- Not more than once as `default` per view: multiple green-carried
+  actions dilute the signal the brand reserves for intent.
+
+## Variants
+
+| Variant | Surface and label | Intent |
+| --- | --- | --- |
+| `default` | `--primary` on `--primary-foreground` | The primary action; the view's green signal |
+| `secondary` | `--secondary` on `--secondary-foreground` | Supporting action on the quiet surface |
+| `destructive` | `--destructive` on `--destructive-foreground` | High-consequence action; the label names the consequence |
+| `outline` | transparent fill, `--input` hairline, `--foreground` | Supporting action on any surface |
+| `ghost` | transparent fill, `--foreground` | Lowest-emphasis action |
+| `link` | text only, `--foreground` | Inline, action-like text |
+
+Hover and pressed treatments are quiet: filled variants tint their own
+color, surface variants step onto the theme's neutral highlight surface
+(`--accent`), and `link` gains an underline. Nothing new is green.
+
+<DocExample example={examples.button.variants} />
+
+## Sizes
+
+| Size | Height | Horizontal padding |
+| --- | --- | --- |
+| `sm` | 32px | 12px |
+| `md` (default) | 36px | 16px |
+| `lg` | 40px | 24px |
+
+These are structural values aligned with the FD-01 and FD-02 proposals,
+which remain Proposed — pending maintainer review; no spacing or sizing
+tokens are emitted. The 36px default satisfies the WCAG 2.5.8 minimum
+target size; the mobile touch-target question stays open in the
+foundation record (dense desktop records UI is the current target).
+
+## States
+
+- **Hover and pressed.** Adjacent tint or surface step (the FD-06
+  Proposed interaction treatment): filled variants mix their action
+  color toward transparency (90% hover, 80% pressed); `outline` and
+  `ghost` take the `--accent` surface (70% pressed); `link` underlines.
+  Hover never applies to disabled buttons.
+- **Focus.** Keyboard focus only, painted by the shared
+  `:focus-visible` rule from the theme contract: a 2px ring with a 2px
+  offset in `--ring` (Deep on light, Green on dark — the FD-04 Proposed
+  spec). Focus is never suppressed and needs no per-component CSS.
+- **Disabled.** Native `disabled`: non-interactive, label reduced to
+  half opacity but present and readable in the DOM, `cursor:
+  not-allowed`. Never communicate state by color alone; WCAG 1.4.3
+  exempts disabled controls from contrast minimums.
+- **Loading.** Set `loading`: the button becomes non-interactive and
+  gets `aria-busy="true"`, the label keeps its width (hidden from eyes
+  and assistive technology), a reduced-motion-safe spinner and a
+  visually hidden "Loading" status take over, and the accessible name
+  becomes "Loading". The action color does not change — loading is not
+  a change of intent.
+
+<DocExample example={examples.button.states} />
+
+## Accessibility
+
+- Native `<button>` semantics: Tab reaches it, Enter and Space activate
+  it; no ARIA is invented.
+- `type` defaults to `button` (a deliberate Augur deviation from
+  upstream shadcn, which leaves the browser's `submit` default); forms
+  opt in with `type="submit"`.
+- The accessible name comes from the label text — write specific verbs
+  ("Open record", not "OK"). While loading, the name becomes "Loading".
+- Keyboard focus is guaranteed by the theme contract's
+  `:focus-visible` rule; its ring color clears the 3:1 non-text minimum
+  against every role surface it paints on.
+- Reduced motion collapses the loading spinner to a static arc via the
+  package's shared gate.
+- The repository test harness covers keyboard activation, the disabled
+  and loading contracts, and axe findings for the full variant matrix
+  in light and dark scopes.
+
+## API
+
+```tsx
+import { Button, buttonVariants } from "@augur/design-system";
+```
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `"default" \| "secondary" \| "destructive" \| "outline" \| "ghost" \| "link"` | `"default"` | Visual intent (see Variants) |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Control size (see Sizes) |
+| `loading` | `boolean` | `false` | Non-interactive, width-preserving busy state (`aria-busy`) |
+| `disabled` | `boolean` | `false` | Native disabled attribute |
+| `type` | `"button" \| "submit" \| "reset"` | `"button"` | Native type; use `submit` inside forms |
+| `className` | `string` | — | Extra classes, appended after the component classes |
+| `ref` | `React.Ref` | — | React 19 ref prop for the underlying button element (no forwardRef) |
+| …props | native button attributes | — | Everything else spreads through to the `<button>` |
+
+`buttonVariants({ variant, size })` returns the full class string —
+component classes plus the control typography role — for class-only or
+registry-path consumers. Avoid mixing it with styling from another
+source.
+
+## Design rationale
+
+- **Augur-owned, shadcn-shaped.** The API mirrors the upstream button
+  contract without its dependency set: no class-variance-authority, no
+  Radix — a styled native button (ARCHITECTURE.md §11 compatibility
+  without dependency drift).
+- **Semantic references only.** Every color is a role custom property;
+  geometry is structural CSS aligned with FD-01, FD-02, and FD-03,
+  which stay Proposed until a maintainer adopts them. No tokens were
+  emitted and no values outside the proposal set were invented (the
+  decision record lives at
+  [packages/design-system/docs/components.md](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/components.md)
+  in the repository).
+- **One green signal.** Only `default` maps to the action pairing
+  (Deep on light, Green on dark). Hover tints reuse the variant's own
+  color rather than introducing new greens; `link` is deliberately
+  neutral so text links do not multiply green marks.
+- **`destructive` without a danger hue.** The theme maps
+  `--destructive` to the strongest neutral action pairing (theme
+  decision D1); the consequence must be legible in the label.
+- **`type="button"` default.** Safer than the browser default in a
+  records UI; submission is an explicit consumer choice.
+- **Status: draft.** The API graduates to stable after maintainer
+  acceptance of this slice and of the pending foundation proposals it
+  structurally aligns with.
