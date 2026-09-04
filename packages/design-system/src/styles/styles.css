@@ -18,9 +18,9 @@
  *   5. Semantic light/dark theme mapping (issue #4): shadcn-compatible
  *      role custom properties referencing the generated tokens only
  *      (`./theme.css`), plus the shared focus and reduced-motion behavior.
- *   6. Starter component styles (issue #11 onward): Button and Card,
- *      styled through the semantic roles only (no raw values, no new
- *      tokens).
+ *   6. Starter component styles (issue #11 onward): Button, Card, and
+ *      Dialog (issue #13), styled through the semantic roles only (no
+ *      raw values, no new tokens).
  *
  * Color roles must reference generated variables — raw `DESIGN.md` color
  * values live only in generated token output (issue #3 policy). The token
@@ -39,3 +39,4 @@
 @import "./theme.css";
 @import "../components/button/button.css";
 @import "../components/card/card.css";
+@import "../components/dialog/dialog.css";
