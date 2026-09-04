@@ -202,7 +202,11 @@ await auditPage(origin + site("/getting-started"), { expectTitleFragment: "Getti
 await auditPage(origin + site("/foundations/decisions"), { expectTitleFragment: "Foundation decisions" });
 await auditPage(origin + site("/foundations/fonts"), { expectTitleFragment: "Fonts and typography" });
 const theming = await auditPage(origin + site("/foundations/theming"), { expectTitleFragment: "Theming" });
+await auditPage(origin + site("/foundations/color"), { expectTitleFragment: "Color system" });
+await auditPage(origin + site("/foundations/proposals"), { expectTitleFragment: "Foundation proposals" });
 await auditPage(origin + site("/reference/package-entries"), { expectTitleFragment: "Package entries" });
+await auditPage(origin + site("/reference/contributing"), { expectTitleFragment: "Contributing" });
+await auditPage(origin + site("/reference/component-conventions"), { expectTitleFragment: "Component conventions" });
 await auditPage(origin + site("/components/button"), { expectTitleFragment: "Button" });
 await auditPage(origin + site("/components/card"), { expectTitleFragment: "Card" });
 
