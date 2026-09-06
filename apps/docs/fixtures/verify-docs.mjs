@@ -1095,6 +1095,63 @@ console.log("\n== Brand opening (#47) ===");
   await homeMobile.close();
 }
 
+// --- 12. Type specimen (issue #48, contract frame B). -------------------
+console.log("\n== Type specimen (#48) ===");
+{
+  const p = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await p.goto(origin + site("/foundations/fonts"), { waitUntil: "networkidle" });
+  await p.evaluate(() => document.fonts.ready);
+  const read = () =>
+    p.evaluate(() => {
+      const rows = [...document.querySelectorAll(".type-compare-row")];
+      const field = document.querySelector(".type-display-field");
+      const sample = field?.querySelector(".type-display-sample");
+      const notes = document.querySelectorAll(".type-specimen-notes > div").length;
+      const cs = getComputedStyle(field);
+      const sampleCS = getComputedStyle(sample);
+      const cols = getComputedStyle(document.querySelector(".type-specimen-grid")).gridTemplateColumns.split(" ").length;
+      return {
+        rows: rows.length,
+        fieldBg: cs.backgroundColor,
+        fieldFg: cs.color,
+        sampleWeight: sampleCS.fontWeight,
+        sampleSize: sampleCS.fontSize,
+        notes,
+        cols,
+        specs: rows.map((r) => r.querySelector(".type-compare-spec").textContent.trim().slice(0, 24)),
+        rowSampleWeights: rows.slice(0, 3).map((r) => getComputedStyle(r.querySelector("[class*='augur-type-']")).fontWeight),
+      };
+    });
+  const light = await read();
+  ok("specimen shows all ten roles as compact aligned rows", light.rows === 10, String(light.rows));
+  ok("display field is the inverse tonal field (light: Navy field, Paper text)", light.fieldBg === "rgb(14, 14, 33)" && light.fieldFg === "rgb(245, 245, 248)", `${light.fieldBg} / ${light.fieldFg}`);
+  ok("display sample renders Sora 600 at the display role", light.sampleWeight === "600" && light.sampleSize === "40px", `${light.sampleWeight} ${light.sampleSize}`);
+  ok("three rule-led support notes", light.notes === 3, String(light.notes));
+  ok("frame B holds the 2:1 specimen grid at 1440", light.cols === 2, String(light.cols));
+  ok("no false weights: leading samples carry their real roles", light.rowSampleWeights[0] === "600" && light.rowSampleWeights[2] === "600", light.rowSampleWeights.join(", "));
+  await p.screenshot({ path: "/tmp/augur-docs-verify/type-specimen-light-1440.png", fullPage: true });
+  await p.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const dark = await read();
+  ok("display field swaps Navy/Paper in dark while keeping geometry", dark.fieldBg === "rgb(245, 245, 248)" && dark.fieldFg === "rgb(14, 14, 33)", `${dark.fieldBg} / ${dark.fieldFg}`);
+  await p.screenshot({ path: "/tmp/augur-docs-verify/type-specimen-dark-1440.png", fullPage: true });
+  await p.close();
+
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await mobile.goto(origin + site("/foundations/fonts"), { waitUntil: "networkidle" });
+  const stack = await mobile.evaluate(() => {
+    const cols = getComputedStyle(document.querySelector(".type-specimen-grid")).gridTemplateColumns.split(" ").length;
+    const grid = document.querySelector(".type-specimen-grid");
+    const main = grid.children[0].getBoundingClientRect();
+    const notes = grid.children[1].getBoundingClientRect();
+    return { cols, mainFirst: main.top < notes.top, overflow: document.documentElement.scrollWidth > window.innerWidth };
+  });
+  ok("frame B stacks: specimen first, notes below at 390", stack.cols === 1 && stack.mainFirst, `cols=${stack.cols} mainFirst=${stack.mainFirst}`);
+  ok("no horizontal overflow at 390", stack.overflow === false);
+  await mobile.close();
+}
+
 await browser.close();
 server.close();
 if (serveRoot !== distDir) {
