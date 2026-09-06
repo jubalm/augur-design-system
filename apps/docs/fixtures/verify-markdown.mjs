@@ -208,6 +208,7 @@ const expectedMd = [
   "patterns/empty-state.md",
   "patterns/form-field.md",
   "patterns/page-header.md",
+  "patterns/reference-record.md",
 ];
 ok("endpoint inventory matches the substantive pages exactly", JSON.stringify(mdFiles) === JSON.stringify([...expectedMd].sort()), mdFiles.join(", "));
 ok("llms.txt exists at the site root", allFiles.some((f) => f === join(distDir, "llms.txt")));

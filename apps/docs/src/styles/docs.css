@@ -1154,3 +1154,77 @@ body {
   padding: 0.25rem 0.625rem;
   border: 1px solid var(--border);
 }
+
+/* Example module: reference-record (issue #52, contract frame C).
+   The muted outer field carries the lifted square panel; the panel's
+   separators are quiet; the signal is 32×2 through --primary; choices
+   are equal; the pair is pinned light/dark with identical geometry. */
+.example-record-field {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--muted);
+}
+
+.example-record-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+}
+
+.example-record-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.example-record-signal {
+  display: block;
+  width: 32px;
+  height: 2px;
+  flex-shrink: 0;
+  background-color: var(--primary);
+}
+
+.example-record-state-label {
+  color: var(--muted-foreground);
+}
+
+.example-record-question {
+  margin: 0;
+}
+
+.example-record-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-sm);
+  width: 100%;
+}
+
+.example-record-choices > * {
+  flex: 1 1 0;
+}
+
+.example-record-response {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--muted-foreground);
+}
+
+.example-record-id {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+@media (max-width: 599px) {
+  .example-record-field,
+  .example-record-panel {
+    padding: var(--augur-spacing-lg);
+  }
+}

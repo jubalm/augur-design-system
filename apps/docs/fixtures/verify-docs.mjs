@@ -1181,6 +1181,103 @@ console.log("\n== Type specimen (#48) ===");
   await mobile.close();
 }
 
+// --- 13. Reference record (issue #52, contract frame C). ----------------
+console.log("\n== Reference record (#52) ===");
+{
+  const p = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await p.goto(origin + site("/patterns/reference-record"), { waitUntil: "networkidle" });
+  await p.evaluate(() => document.fonts.ready);
+  const read = () =>
+    p.evaluate(() => {
+      const panels = [...document.querySelectorAll(".example-record-panel")];
+      const q = panels[0].querySelector(".example-record-question");
+      const qSize = getComputedStyle(q).fontSize;
+      const signals = [...document.querySelectorAll(".example-record-signal")].map((s) => {
+        const r = s.getBoundingClientRect();
+        return `${Math.round(r.width)}x${Math.round(r.height)} ${getComputedStyle(s).backgroundColor}`;
+      });
+      const btns = [...panels[0].querySelectorAll(".example-record-choices .aug-button")];
+      const bw = btns.map((b) => Math.round(b.getBoundingClientRect().width));
+      const bh = btns.map((b) => Math.round(b.getBoundingClientRect().height));
+      const pressed = btns.map((b) => b.getAttribute("aria-pressed"));
+      const domOrder = [...panels[0].children].map((el) => el.className);
+      return {
+        count: panels.length,
+        themes: panels.map((x) => x.dataset.theme),
+        widths: panels.map((x) => Math.round(x.getBoundingClientRect().width)),
+        heights: panels.map((x) => Math.round(x.getBoundingClientRect().height)),
+        bgs: panels.map((x) => getComputedStyle(x).backgroundColor),
+        qSize,
+        signals,
+        btnCount: btns.length,
+        bw,
+        bh,
+        pressed,
+        domOrder,
+        response: panels[0].querySelector(".example-record-response").textContent.replace(/\s+/g, " ").trim(),
+      };
+    });
+  const light = await read();
+  ok("record renders as a pinned light/dark pair", light.count === 2 && light.themes[0] === "light" && light.themes[1] === "dark", light.themes.join("/"));
+  ok("pair geometry identical", light.widths[0] === light.widths[1] && Math.abs(light.heights[0] - light.heights[1]) <= 1, `${light.widths.join("x")} / ${light.heights.join("x")}`);
+  ok("pair panels paint differently", light.bgs[0] !== light.bgs[1], light.bgs.join(" vs "));
+  ok("state signals are exactly 32x2 in both panels", light.signals.every((s) => s.startsWith("32x2")), light.signals.join(" | "));
+  ok("question is the first substantive element after the state rail", light.domOrder[0] === "example-record-state" && light.domOrder[1].includes("example-record-question"), light.domOrder.join(" > "));
+  ok("question renders at heading-1 scale (focal point)", light.qSize === "28px", light.qSize);
+  ok("choices are equal (two buttons, same size)", light.btnCount === 2 && light.bw[0] === light.bw[1] && light.bh[0] === light.bh[1], `${light.bw.join("x")} / ${light.bh.join("x")}`);
+  ok("recorded choice is marked aria-pressed, not visually promoted", light.pressed.includes("true") && light.pressed.includes("false"), light.pressed.join("/"));
+  ok("response is explicit and quiet", light.response.startsWith("Response") && light.response.includes("Yes — recorded 14:32 UTC"), light.response);
+  await p.screenshot({ path: "/tmp/augur-docs-verify/reference-record-light-1440.png", fullPage: true });
+  await p.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const dark = await read();
+  // Pinned panels keep their own themes by design: under a dark host the
+  // pinned-light signal stays Deep and the pinned-dark signal is Green.
+  ok(
+    "pair stays a true pair under dark host; signals hold Deep (light pin) and Green (dark pin)",
+    dark.bgs[0] !== dark.bgs[1] &&
+      dark.signals[0].includes("rgb(9, 94, 66)") &&
+      dark.signals[1].includes("rgb(42, 231, 168)"),
+    dark.signals.join(" | "),
+  );
+  await p.screenshot({ path: "/tmp/augur-docs-verify/reference-record-dark-1440.png", fullPage: true });
+  await p.close();
+
+  // No improvised artwork across the pattern examples.
+  const art = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const counts = {};
+  for (const route of [site("/patterns/reference-record"), site("/patterns/empty-state"), site("/patterns/page-header"), site("/patterns/form-field")]) {
+    await art.goto(origin + route, { waitUntil: "networkidle" });
+    counts[route] = await art.evaluate(() =>
+      [
+        ...document.querySelectorAll(".doc-example-preview img, .doc-example-preview svg"),
+      ].filter((el) => !el.closest("[class*='empty-state-icon']")).length,
+    );
+  }
+  ok(
+    "pattern examples contain no improvised artwork (no img/svg)",
+    Object.values(counts).every((c) => c === 0),
+    JSON.stringify(counts),
+  );
+  await art.close();
+
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await mobile.goto(origin + site("/patterns/reference-record"), { waitUntil: "networkidle" });
+  const mob = await mobile.evaluate(() => {
+    const btns = [...document.querySelectorAll(".example-record-panel")][0].querySelectorAll(".example-record-choices .aug-button");
+    const tops = [...btns].map((b) => Math.round(b.getBoundingClientRect().top));
+    return {
+      sameRow: tops[0] === tops[1],
+      overflow: document.documentElement.scrollWidth > window.innerWidth,
+    };
+  });
+  ok("choices stay side by side at 390", mob.sameRow);
+  ok("no horizontal overflow at 390", mob.overflow === false);
+  await mobile.screenshot({ path: "/tmp/augur-docs-verify/reference-record-light-390.png", fullPage: true });
+  await mobile.close();
+}
+
 await browser.close();
 server.close();
 if (serveRoot !== distDir) {
