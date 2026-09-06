@@ -1278,6 +1278,70 @@ console.log("\n== Reference record (#52) ===");
   await mobile.close();
 }
 
+// --- 14. Standalone consumer parity (issue #53). ------------------------
+console.log("\n== Standalone consumer (#53) ===");
+{
+  // Same second server pattern as the bare-host parity section: serve the
+  // repository root so packages/design-system/fixtures/bare-hosts.html —
+  // standalone markup + package styles, zero docs CSS — can load. This is
+  // the visual companion to the #18 consumer-install smoke (which proves
+  // the full registry-install path end to end).
+  const consumerServer = createServer(async (req, res) => {
+    try {
+      let path = normalize(decodeURIComponent(new URL(req.url, "http://localhost").pathname));
+      if (path.endsWith("/")) path += "index.html";
+      const file = join(repoRoot, path);
+      if (!file.startsWith(repoRoot)) throw new Error("traversal");
+      const body = await readFile(file);
+      res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });
+      res.end(body);
+    } catch {
+      res.writeHead(404);
+      res.end("not found");
+    }
+  });
+  await new Promise((resolve) => consumerServer.listen(0, "127.0.0.1", resolve));
+  const consumerOrigin = `http://127.0.0.1:${consumerServer.address().port}`;
+  const consumer = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const consumerIssues = [];
+  consumer.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") consumerIssues.push(m.text()); });
+  await consumer.goto(`${consumerOrigin}/packages/design-system/fixtures/bare-hosts.html`, { waitUntil: "networkidle" });
+  await consumer.evaluate(async () => {
+    await document.fonts.load("16px Sora");
+    await document.fonts.load("600 40px Sora");
+    await document.fonts.load("16px 'Schibsted Grotesk'");
+    await document.fonts.ready;
+  });
+  const consumerEvidence = await consumer.evaluate(() => {
+    const btn = document.querySelector(".aug-button");
+    const card = document.querySelector(".aug-card");
+    const darkCard = document.querySelector('[data-theme="dark"] .aug-card, .aug-card[data-theme="dark"]');
+    return {
+      faces: document.fonts.size,
+      fontsLoaded: document.fonts.status,
+      sora400: document.fonts.check("16px Sora"),
+      sora600: document.fonts.check("600 40px Sora"),
+      schibsted: document.fonts.check("16px 'Schibsted Grotesk'"),
+      bodyFamily: getComputedStyle(document.body).fontFamily,
+      buttonHeight: getComputedStyle(btn).height,
+      buttonRadius: getComputedStyle(btn).borderRadius,
+      cardRadius: getComputedStyle(card).borderRadius,
+      darkCardPresent: !!darkCard,
+      darkCardBg: darkCard ? getComputedStyle(darkCard).backgroundColor : null,
+      lightCardBg: getComputedStyle(card).backgroundColor,
+    };
+  });
+  ok("standalone consumer registers and loads the real font faces", consumerEvidence.faces >= 6 && consumerEvidence.fontsLoaded === "loaded" && consumerEvidence.sora400 && consumerEvidence.sora600 && consumerEvidence.schibsted, `faces=${consumerEvidence.faces} status=${consumerEvidence.fontsLoaded}`);
+  ok("standalone consumer body carries the secondary voice", consumerEvidence.bodyFamily.includes("Schibsted Grotesk"), consumerEvidence.bodyFamily);
+  ok("standalone control geometry matches the encoded contract", consumerEvidence.buttonHeight === "36px" && consumerEvidence.buttonRadius === "0px", `${consumerEvidence.buttonHeight} / ${consumerEvidence.buttonRadius}`);
+  ok("standalone card surface matches the encoded contract", consumerEvidence.cardRadius === "0px", consumerEvidence.cardRadius);
+  ok("semantic theme evidence: scoped dark subtree paints differently", consumerEvidence.darkCardPresent && consumerEvidence.darkCardBg !== consumerEvidence.lightCardBg, `${consumerEvidence.lightCardBg} vs ${consumerEvidence.darkCardBg}`);
+  ok("standalone consumer produces no console errors/warnings", consumerIssues.length === 0, consumerIssues.join("; ") || "clean");
+  await consumer.screenshot({ path: "/tmp/augur-docs-verify/standalone-consumer.png", fullPage: true });
+  await consumer.close();
+  consumerServer.close();
+}
+
 await browser.close();
 server.close();
 if (serveRoot !== distDir) {
