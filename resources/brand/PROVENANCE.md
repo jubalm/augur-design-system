@@ -80,9 +80,18 @@ the system's own typography — Sora for display/headings, per the
 `DESIGN.md` typography roles — with no drawn mark. Implementation surface
 today: the typography roles in
 `packages/design-system/src/styles/typography.css`. There is no logo
-component, no logo image, and none may be derived from the PDF. When
-masters arrive (dependency: maintainer supplies `augur-ecosystem/brand-assets`),
-this section must be updated and a real logo asset decision recorded.
+component, no logo image, and none may be derived from the PDF. The
+maintainer approved this fallback on 2026-09-06 (issue 42 authority
+comment); the maintained treatment specification — lockup roles, colors,
+clearspace, minimum sizes, and delivery rules — lives at
+`apps/docs/src/content/foundations/identity.mdx` (route
+`/foundations/identity`). A repository API lookup of
+`augur-ecosystem/brand-assets` on 2026-09-06 returned 404 with current
+credentials; that is an availability observation, not proof of licensing
+or nonexistence, and the master request remains unresolved. When
+masters arrive (dependency: maintainer supplies
+`augur-ecosystem/brand-assets`), this section must be updated and a real
+logo asset decision recorded.
 
 ## 4. Font delivery provenance
 
