@@ -19,7 +19,7 @@ quiet outer field, a 32×2 state signal, the question as the first
 substantive focal point, two choices with equal structure and
 emphasis, and an explicit, quiet response. The rendered pair pins one
 light and one dark panel — identical content, order, and geometry
-under either host theme. The recorded response is fixture copy; this
+under either host theme. All content is illustrative static data; this
 pattern owns no product submission workflow, and neither does the
 package.
 
@@ -43,31 +43,36 @@ The example is rendered live from a real module that composes the
 package [Button](/components/button); the code sample is that same
 module's source. The state signal paints `--primary` (Deep on light,
 Green on dark) at exactly 32×2; the choices share one variant so
-neither outranks the other, with the recorded choice marked
-`aria-pressed`.
+neither outranks the other. Both are `aria-disabled` because this static
+example does not collect a response; neither is preselected.
 
 <DocExample example={examples.patterns.referenceRecord} />
+
+The source imports `reference-record.css` alongside the component. Copy that
+composition stylesheet with the example; it contains only record layout and
+semantic/token references. It does not style package component internals.
 
 ## Anatomy and rules
 
 - **State rail first**: the 32×2 signal plus the explicit state label
-  ("Open") open the panel — the record's orientation, quiet by design.
+  ("Open query") and identifier ("LQ-042") open the panel — the record's orientation, quiet by design.
 - **Question leads**: the first substantive element is the question
-  (heading-1 role), larger than every label around it.
+  (heading-2 role, 20/26 as in the approved frame), larger than every label around it.
 - **Equal choices**: both choices share geometry, variant, and
-  emphasis; the recorded one carries `aria-pressed` and the explicit
-  response line, not extra visual rank.
+  emphasis; neither is selected. The explicit response is "Not submitted".
 - **Quiet metadata**: response and query identity sit in the body and
   metadata roles; separators and insets follow the encoded spacing
-  tokens (24px panels, 16px below 600px, 8px choice gap).
+  tokens (24px panel insets and choice gap; 16px below 600px).
+  Status, response, and closing time ("14:32 UTC") pair left labels with
+  right-aligned values. The question is "Did the proposal pass before 30 June?".
 - **True theme pair**: the light and dark panels pin their themes, so
   the pair stays honest under either host theme.
 
 ## Accessibility
 
 The state label and response are real text; the signal is
-`aria-hidden`. Choices remain real buttons with `aria-pressed`
-conveying the recorded selection. Contrast follows the recorded
+`aria-hidden`. Choices remain real package buttons, explicitly `aria-disabled` and
+without handlers. They do not suggest a recorded selection or working voting. Contrast follows the recorded
 pairings — labels clear 4.5:1 against their fills in both themes.
 
 ## Design rationale

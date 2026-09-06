@@ -1,0 +1,35 @@
+/* Applied #52 evidence: one task, one clear in-page action, no product state. */
+.proposal-review-page {
+  display: grid;
+  gap: var(--augur-spacing-2xl);
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.proposal-review-page > .example-record-panel {
+  max-width: 42rem;
+  margin-inline: var(--augur-spacing-xl);
+}
+
+.proposal-review-details {
+  max-width: 42rem;
+  margin-inline: var(--augur-spacing-xl);
+  padding: var(--augur-spacing-xl);
+  color: var(--foreground);
+  background-color: var(--muted);
+  border: 1px solid var(--border-quiet);
+}
+
+.proposal-review-details h2,
+.proposal-review-details p {
+  margin: 0;
+}
+
+.proposal-review-details p { margin-top: var(--augur-spacing-md); }
+
+@media (max-width: 599px) {
+  .proposal-review-page { gap: var(--augur-spacing-xl); }
+  .proposal-review-page > .example-record-panel,
+  .proposal-review-details { margin-inline: var(--augur-spacing-lg); }
+  .proposal-review-details { padding: var(--augur-spacing-lg); }
+}

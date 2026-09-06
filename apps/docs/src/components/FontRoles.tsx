@@ -101,6 +101,9 @@ export function FontRoles() {
         </p>
       </div>
 
+      {/* Keyboard focus enables horizontal scrolling without a pointer. */}
+      {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <section className="font-provenance-scroll" aria-label="Font provenance table" tabIndex={0}>
       <table className="font-demo-provenance">
         <caption className="augur-type-metadata font-demo-role-label">
           Delivered families from the imported <code>AUGUR_FONTS</code> provenance export
@@ -128,6 +131,7 @@ export function FontRoles() {
           ))}
         </tbody>
       </table>
+      </section>
     </div>
   );
 }

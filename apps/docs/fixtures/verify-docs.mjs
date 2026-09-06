@@ -248,6 +248,7 @@ await auditPage(origin + site("/components/input"), { expectTitleFragment: "Inpu
 await auditPage(origin + site("/patterns/empty-state"), { expectTitleFragment: "EmptyState" });
 await auditPage(origin + site("/patterns/form-field"), { expectTitleFragment: "FormField" });
 await auditPage(origin + site("/patterns/page-header"), { expectTitleFragment: "PageHeader" });
+await auditPage(origin + site("/proposal-review"), { expectTitleFragment: "Proposal review" });
 
 ok(
   "getting-started renders MDX-evaluated package data",
@@ -613,6 +614,7 @@ console.log("\n== Starter components in real browsers (issue #15) ==");
   // Escape closes; focus returns to the trigger; scroll unlocks.
   await page.keyboard.press("Escape");
   await page.waitForSelector(".aug-dialog-content", { state: "detached" });
+  await page.waitForFunction(() => document.activeElement?.textContent?.trim() === "Open dialog");
   const closed = await page.evaluate(() => ({
     focus: document.activeElement?.textContent?.trim() ?? null,
     overflow: getComputedStyle(document.body).overflow,
@@ -1103,7 +1105,7 @@ console.log("\n== Brand opening (#47) ===");
     const res = await fetch(origin + (h.endsWith("/") ? `${h}index.html` : h));
     if (res.status !== 200) broken.push(h);
   }
-  ok("all 16 route links resolve to built pages", routeHrefs.length === 16 && broken.length === 0, broken.join(", ") || "ok");
+  ok("all 18 route links resolve to built pages", routeHrefs.length === 18 && broken.length === 0, broken.join(", ") || "ok");
   await home1440.screenshot({ path: "/tmp/augur-docs-verify/home-opening-light-1440.png", fullPage: true });
   await home1440.evaluate(() => {
     document.documentElement.dataset.theme = "dark";
@@ -1223,10 +1225,10 @@ console.log("\n== Reference record (#52) ===");
   ok("pair panels paint differently", light.bgs[0] !== light.bgs[1], light.bgs.join(" vs "));
   ok("state signals are exactly 32x2 in both panels", light.signals.every((s) => s.startsWith("32x2")), light.signals.join(" | "));
   ok("question is the first substantive element after the state rail", light.domOrder[0] === "example-record-state" && light.domOrder[1].includes("example-record-question"), light.domOrder.join(" > "));
-  ok("question renders at heading-1 scale (focal point)", light.qSize === "28px", light.qSize);
+  ok("question renders at the approved heading-2 scale (focal point)", light.qSize === "20px", light.qSize);
   ok("choices are equal (two buttons, same size)", light.btnCount === 2 && light.bw[0] === light.bw[1] && light.bh[0] === light.bh[1], `${light.bw.join("x")} / ${light.bh.join("x")}`);
-  ok("recorded choice is marked aria-pressed, not visually promoted", light.pressed.includes("true") && light.pressed.includes("false"), light.pressed.join("/"));
-  ok("response is explicit and quiet", light.response.startsWith("Response") && light.response.includes("Yes — recorded 14:32 UTC"), light.response);
+  ok("static choices do not announce a fabricated selection", light.pressed.every((value) => value === null), light.pressed.join("/"));
+  ok("response is explicit and quiet", light.response.startsWith("Response") && light.response.includes("Not submitted"), light.response);
   await p.screenshot({ path: "/tmp/augur-docs-verify/reference-record-light-1440.png", fullPage: true });
   await p.evaluate(() => {
     document.documentElement.dataset.theme = "dark";
@@ -1276,6 +1278,97 @@ console.log("\n== Reference record (#52) ===");
   ok("no horizontal overflow at 390", mob.overflow === false);
   await mobile.screenshot({ path: "/tmp/augur-docs-verify/reference-record-light-390.png", fullPage: true });
   await mobile.close();
+}
+
+// Independent review regressions: readable reflow, real roles, locked record,
+// and touch behavior. These assertions catch failures hidden by overflow-only QA.
+console.log("\n== Applied proposal review (#52) ===");
+for (const theme of ["light", "dark"]) {
+  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+    const p = await browser.newPage({ viewport });
+    await p.goto(origin + site("/proposal-review"), { waitUntil: "networkidle" });
+    await p.evaluate((value) => { document.documentElement.dataset.theme = value; }, theme);
+    const applied = await p.evaluate(() => {
+      const page = document.querySelector(".proposal-review-page");
+      const record = page?.querySelector(".example-record-panel");
+      const choices = [...(record?.querySelectorAll(".example-record-choices button") ?? [])];
+      const action = page?.querySelector(".aug-page-header-actions form");
+      return {
+        h1: page?.querySelector("h1")?.textContent?.trim(),
+        question: record?.querySelector(".example-record-question")?.textContent?.trim(),
+        choices: choices.map((choice) => ({
+          text: choice.textContent?.trim(),
+          unavailable: choice.getAttribute("aria-disabled"),
+          pressed: choice.getAttribute("aria-pressed"),
+          rect: { width: Math.round(choice.getBoundingClientRect().width), height: Math.round(choice.getBoundingClientRect().height) },
+        })),
+        action: action?.getAttribute("action"),
+        actionLabel: action?.querySelector("button")?.textContent?.trim(),
+        details: document.querySelector("#proposal-details")?.textContent?.replace(/\s+/g, " ").trim(),
+        overflow: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+    ok(`applied review has one static task ${theme}/${viewport.width}`, applied.h1 === "Proposal review" && applied.question === "Did the proposal pass before 30 June?", JSON.stringify(applied));
+    ok(`applied review keeps equal unavailable choices ${theme}/${viewport.width}`, applied.choices.length === 2 && applied.choices.map((choice) => choice.text).join("/") === "Yes/No" && applied.choices.every((choice) => choice.unavailable === "true" && choice.pressed === null && choice.rect.width === applied.choices[0].rect.width), JSON.stringify(applied.choices));
+    ok(`applied review has an honest in-page primary action ${theme}/${viewport.width}`, applied.action === "#proposal-details" && applied.actionLabel === "Review details" && applied.details?.includes("no voting logic"), JSON.stringify(applied));
+    ok(`applied review has no horizontal overflow ${theme}/${viewport.width}`, applied.overflow === false);
+    await p.getByRole("button", { name: "Review details", exact: true }).click();
+    await p.waitForFunction(() => location.hash === "#proposal-details");
+    ok(`applied review action reaches details ${theme}/${viewport.width}`, await p.locator("#proposal-details").evaluate((details) => document.activeElement === details || location.hash === "#proposal-details"));
+    await p.screenshot({ path: `/tmp/augur-docs-verify/proposal-review-${theme}-${viewport.width}.png`, fullPage: true });
+    await p.close();
+  }
+}
+
+for (const theme of ["light", "dark"]) {
+  for (const viewport of [{width:1440,height:1000},{width:768,height:1024},{width:390,height:844}]) {
+    const p = await browser.newPage({ viewport });
+    await p.goto(origin + site("/foundations/fonts"), { waitUntil: "networkidle" });
+    await p.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
+    await p.evaluate(() => document.fonts.ready);
+    const type = await p.evaluate(() => {
+      const rows = [...document.querySelectorAll('.type-compare-row')];
+      const notes = document.querySelector('.type-specimen-notes');
+      return {
+        widths: rows.map(r => r.children[0].getBoundingClientRect().width / r.getBoundingClientRect().width),
+        noteColumns: getComputedStyle(notes).gridTemplateColumns.split(' ').length,
+        weights: [...notes.querySelectorAll('h3')].map(h => getComputedStyle(h).fontWeight),
+        bodyLines: [...notes.querySelectorAll('p')].map(h => getComputedStyle(h).lineHeight),
+      };
+    });
+    ok(`review type samples retain readable width ${theme}/${viewport.width}`, type.widths.every(w => w > (viewport.width < 600 ? .95 : .45)), JSON.stringify(type.widths));
+    ok(`review support voice is regular ${theme}/${viewport.width}`, type.weights.every(w=>w==='400') && type.bodyLines.every(l=>l==='24px'), JSON.stringify(type));
+    ok(`review tablet support grid ${theme}/${viewport.width}`, type.noteColumns === (viewport.width >= 600 && viewport.width < 960 ? 3 : 1));
+    await p.goto(origin + site('/patterns/reference-record'), { waitUntil:'networkidle' });
+    await p.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
+    const records = await p.locator('.example-record-panel').evaluateAll(panels => panels.map(panel => ({
+      text: panel.textContent,
+      gap: getComputedStyle(panel.querySelector('.example-record-choices')).gap,
+      disabled: [...panel.querySelectorAll('button')].every(b=>b.getAttribute('aria-disabled')==='true'),
+      edge: getComputedStyle(panel).borderColor,
+      quiet: getComputedStyle(panel).getPropertyValue('--border-quiet'),
+    })));
+    ok(`review fixed static record ${theme}/${viewport.width}`, records.every(r => ['Open query','LQ-042','Did the proposal pass before 30 June?','Not submitted','Closes','14:32 UTC'].every(t=>r.text.includes(t)) && r.disabled));
+    ok(`review equal choice gap ${theme}/${viewport.width}`, records.every(r=>r.gap === (viewport.width < 600 ? '16px' : '24px')));
+    await p.close();
+  }
+}
+for (const theme of ['light','dark']) {
+  const context = await browser.newContext({ viewport:{width:390,height:844}, hasTouch:true, isMobile:true });
+  const p = await context.newPage();
+  for (const route of ['/components/button','/components/input','/components/dialog']) {
+    await p.goto(origin + site(route), {waitUntil:'networkidle'});
+    await p.evaluate(theme => {document.documentElement.dataset.theme = theme;}, theme);
+    if (route.endsWith('dialog')) await openDialog(p, p.getByRole('button',{name:'Open dialog',exact:true}));
+    const targets = await p.locator('.aug-button,.aug-input,.aug-dialog-close,.theme-toggle-option,.page-action,.mobile-nav summary').evaluateAll(els => els.filter(e=>e.getBoundingClientRect().width).map(e=>({name:e.className,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})));
+    ok(`review 44px touch targets ${theme}${route}`, targets.every(t=>t.w>=44 && t.h>=44), JSON.stringify(targets.filter(t=>t.w<44 || t.h<44)));
+    if (route.endsWith('dialog')) {
+      const dialog = await p.locator('.aug-dialog-content').evaluate(el=>({animation:getComputedStyle(el).animationName,padding:getComputedStyle(el).paddingTop}));
+      ok(`review immediate mobile Dialog ${theme}`, dialog.animation==='none' && dialog.padding==='16px', JSON.stringify(dialog));
+      await p.keyboard.press('Escape');
+    }
+  }
+  await context.close();
 }
 
 // --- 14. Standalone consumer parity (issue #53). ------------------------

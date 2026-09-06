@@ -69,3 +69,8 @@
 /* Keyboard focus: painted by the theme contract's shared
    :focus-visible rule (2px ring, 2px offset, --ring); no per-component
    focus CSS, exactly like Button. */
+
+/* FD-02 adopted touch target minimum; desktop size variants remain intact. */
+@media (pointer: coarse) {
+  .aug-input { min-height: 44px; min-width: 44px; }
+}

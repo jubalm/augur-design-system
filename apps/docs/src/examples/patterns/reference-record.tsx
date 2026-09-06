@@ -1,44 +1,31 @@
-/**
- * Live example: the reference record (issue #52, contract frame C).
- *
- * A static, source-grounded composition of package components — the
- * question leads, two choices receive equal structure and emphasis,
- * and state/response/time sit explicit and quiet. There is no product
- * submission workflow: the recorded response is part of the fixture
- * copy. The record renders as a true pair — one pinned light, one
- * pinned dark panel with identical content, order, and geometry under
- * either host theme. All styling comes from the semantic roles and
- * encoded tokens; no drawn artwork.
- */
+/** Static frame C evidence. No live query, selection, or submission workflow. */
 import { Button } from "@augur/design-system";
+import "./reference-record.css";
 
-function RecordPanel(props: { theme: "light" | "dark" }) {
+/**
+ * One static record panel. The optional pinned theme is used by the paired
+ * specimen; an applied page leaves it unset and inherits its host theme.
+ */
+export function ReferenceRecordPanel(props: { theme?: "light" | "dark" }) {
   return (
     <div className="example-record-panel" data-theme={props.theme}>
       <div className="example-record-state">
         <span className="example-record-signal" aria-hidden="true" />
-        <span className="augur-type-ui example-record-state-label">
-          Open
-        </span>
+        <span className="augur-type-editorial-label">Open query</span>
+        <span className="augur-type-metadata example-record-id">LQ-042</span>
       </div>
-      <p className="augur-type-heading-1 example-record-question">
-        Vote on this query
-      </p>
-      <div className="example-record-choices">
-        <Button variant="outline" aria-pressed="true">
-          Yes
-        </Button>
-        <Button variant="outline" aria-pressed="false">
-          No
-        </Button>
+      <h3 className="augur-type-heading-2 example-record-question">
+        Did the proposal pass before 30 June?
+      </h3>
+      <div className="example-record-choices" aria-label="Illustrative choices; submission unavailable">
+        <Button variant="outline" aria-disabled="true">Yes</Button>
+        <Button variant="outline" aria-disabled="true">No</Button>
       </div>
-      <p className="augur-type-body example-record-response">
-        <span className="augur-type-editorial-label">Response</span>
-        Yes — recorded 14:32 UTC
-      </p>
-      <p className="augur-type-metadata example-record-id">
-        Query ID LQ-042
-      </p>
+      <dl className="example-record-details augur-type-body">
+        <div><dt>Status</dt><dd>Open</dd></div>
+        <div className="example-record-response"><dt>Response</dt><dd>Not submitted</dd></div>
+        <div><dt>Closes</dt><dd><time>14:32 UTC</time></dd></div>
+      </dl>
     </div>
   );
 }
@@ -46,8 +33,8 @@ function RecordPanel(props: { theme: "light" | "dark" }) {
 export function ReferenceRecordExample() {
   return (
     <div className="example-record-field">
-      <RecordPanel theme="light" />
-      <RecordPanel theme="dark" />
+      <ReferenceRecordPanel theme="light" />
+      <ReferenceRecordPanel theme="dark" />
     </div>
   );
 }

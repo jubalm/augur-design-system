@@ -145,7 +145,7 @@ This is a focused brand translation for coding agents, not a replacement for sup
 
 ## Foundation authority and status
 
-DESIGN.md is canonical for adopted design values the pinned `@google/design.md` schema can represent; the front matter above is that record. Concepts the schema cannot represent — shared spacing, control sizing, corner radius, focus treatment, motion, and state semantics — are owned by the design system's foundation documentation and component implementation, per `ARCHITECTURE.md`. The brand foundation defines none of these scales. The smallest shared proposals the starter components need are recorded with explicit review status in [foundation decision notes](apps/docs/src/content/foundations/foundation-decisions.md) and remain unresolved until a maintainer adopts them; until then, components must not present proposed values as settled or replace them with one-offs, and no product's local tokens hold foundation authority.
+DESIGN.md is canonical for adopted values representable by the pinned schema, including spacing and corner radius. Control sizing, focus, motion, and interaction policies are recorded in the [foundation decision notes](apps/docs/src/content/foundations/foundation-decisions.md) and [visual direction contract](apps/docs/src/content/foundations/visual-direction.mdx). These directions were adopted for implementation on 2026-09-06; final human visual acceptance remains pending in issue #53. No product's local tokens hold foundation authority.
 
 ## Colors
 

@@ -152,63 +152,12 @@
   border: 0;
 }
 
-/*
- * Open/close transitions (FD-05 Proposed durations as structure):
- * a quiet fade for the scrim, a short rise-and-fade for the panel.
- * The theme contract's reduced-motion gate collapses both.
- */
-.aug-dialog-overlay[data-state="open"] {
-  animation: aug-dialog-overlay-in 150ms ease-out;
+/* FD-05: immediate open/close feedback, without decorative transforms. */
+.aug-dialog-overlay, .aug-dialog-content { animation: none; }
+@media (max-width: 599px) {
+  .aug-dialog-content { padding: var(--augur-spacing-lg); }
 }
-
-.aug-dialog-overlay[data-state="closed"] {
-  animation: aug-dialog-overlay-out 100ms ease-in;
-}
-
-.aug-dialog-content[data-state="open"] {
-  animation: aug-dialog-content-in 150ms ease-out;
-}
-
-.aug-dialog-content[data-state="closed"] {
-  animation: aug-dialog-content-out 100ms ease-in;
-}
-
-@keyframes aug-dialog-overlay-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes aug-dialog-overlay-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes aug-dialog-content-in {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -48%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
-@keyframes aug-dialog-content-out {
-  from {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, -52%);
-  }
+@media (pointer: coarse) {
+  .aug-dialog-close { width: 44px; height: 44px; }
+  .aug-dialog-title, .aug-dialog-description { padding-right: 44px; }
 }

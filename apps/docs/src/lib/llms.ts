@@ -20,6 +20,7 @@
  */
 import { getCollection } from "astro:content";
 import gettingStartedRaw from "../pages/getting-started.mdx?raw";
+import { PROPOSAL_REVIEW } from "./proposal-review";
 import { withBase } from "./base";
 import { mdxPageSource } from "./markdown";
 
@@ -69,6 +70,7 @@ export async function buildLlmsTxt(): Promise<string> {
 
   lines.push(...section("Documentation", [
     `- [${gettingStarted.title}](${withBase("/getting-started.md")}): ${gettingStarted.description}`,
+    `- [${PROPOSAL_REVIEW.title}](${withBase("/proposal-review.md")}): ${PROPOSAL_REVIEW.description}`,
   ]));
 
   lines.push(...section("Foundations", foundations));
