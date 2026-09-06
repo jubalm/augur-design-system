@@ -34,3 +34,16 @@
 - Added a static font verification fixture (`packages/design-system/fixtures/`) with a browser driver asserting loaded font files, `document.fonts.check()`, computed typography values, and the absence of console/network failures; 41/41 assertions pass in Chromium 1228. (#5)
 - Added the semantic light/dark theme layer: `styles.css` now aggregates the generated `--augur-color-*` tokens plus a shadcn-compatible role mapping (`theme.css`) that references generated tokens only — light default with `[data-theme]` opt-in/opt-out and `prefers-color-scheme` fallback, Deep primary actions in light and Green in dark, validated WCAG AA pairs, keyboard-only focus rings, and a structural reduced-motion gate; recorded decisions and contrast evidence in `packages/design-system/docs/semantic-themes.md`, with a package-local `bun test` suite. (#4)
 - Added the plain Astro documentation shell under `apps/docs` (React rendering + MDX/Markdown, no Starlight): static responsive shell with accessible navigation (skip link, `aria-current` nav, native-details mobile menu), a theme control honoring the package theme contract (`data-theme` pin, system default, pre-paint restore, localStorage persistence), semantic shared styles consumed from the real `@augur/design-system` package (`styles.css` entry plus `AUGUR_FONTS`/`AUGUR_FONT_FAMILIES` imports — no private copies), environment-driven base configuration for repository-subpath and custom-domain-root deployments, docs-only dependencies, and a headless-Chromium fixture verifying builds, keyboard navigation, mobile layout, real font loading, and console cleanliness. (#7)
+
+### Visual-alignment review corrections (unreleased)
+
+Restore installed-registry typography, spacing, and explicit light scopes; repair
+responsive typography and reference-record fidelity; apply adopted touch targets,
+control-edge contrast, square geometry, and immediate neutral state feedback.
+Evidence and remaining acceptance work: `apps/docs/fixtures/acceptance/REVIEW.md`.
+
+- Added the static `/proposal-review` applied example for #52: it composes the
+  existing PageHeader, reference record, and Button around one illustrative
+  task. `Review details` targets a same-page explanation; it creates no vote,
+  backend call, or new component API. Clean Markdown, llms.txt, browser checks,
+  and the theme/viewport acceptance matrix cover the page.

@@ -94,7 +94,7 @@
 
   /* Hairline rules (divider-light) and input boundaries. */
   --border: var(--augur-color-border-light);
-  --input: var(--augur-color-border-light);
+  --input: var(--augur-color-secondary);
 
   /* Quiet editorial separators (VD-06): grouping hairlines for shell
      chrome, rules, and tables — distinct from the --border control
@@ -148,7 +148,7 @@
 
   /* Hairline rules (divider-light) and input boundaries. */
   --border: var(--augur-color-border-light);
-  --input: var(--augur-color-border-light);
+  --input: var(--augur-color-secondary);
 
   /* Quiet editorial separators (VD-06): grouping hairlines for shell
      chrome, rules, and tables — distinct from the --border control

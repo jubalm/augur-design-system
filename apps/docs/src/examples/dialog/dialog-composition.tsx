@@ -18,7 +18,7 @@ export function DialogCompositionExample() {
           <Button>Review query</Button>
         </DialogTrigger>
       </Dialog>
-      <div data-theme="dark" style={{ padding: "16px", borderRadius: "8px" }}>
+      <div data-theme="dark" style={{ padding: "16px", borderRadius: "var(--augur-rounded-surface)" }}>
         <Dialog>
           <DialogTrigger asChild>
             <Button>Review query</Button>

@@ -1,0 +1,254 @@
+[
+  {
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "evidence": {
+      "body": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "40px",
+      "padding": "24px",
+      "space": "24px",
+      "roles": [
+        {
+          "theme": "light",
+          "bg": "rgb(255, 255, 255)",
+          "fg": "rgb(14, 14, 33)",
+          "padding": "24px",
+          "question": "20px",
+          "weight": "600"
+        },
+        {
+          "theme": "dark",
+          "bg": "rgb(29, 29, 48)",
+          "fg": "rgb(245, 245, 248)",
+          "padding": "24px",
+          "question": "20px",
+          "weight": "600"
+        }
+      ],
+      "sora": true,
+      "schibsted": true,
+      "loaded": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "overflow": false,
+      "docsCss": false
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "theme": "light",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    },
+    "evidence": {
+      "body": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "40px",
+      "padding": "24px",
+      "space": "24px",
+      "roles": [
+        {
+          "theme": "light",
+          "bg": "rgb(255, 255, 255)",
+          "fg": "rgb(14, 14, 33)",
+          "padding": "24px",
+          "question": "20px",
+          "weight": "600"
+        },
+        {
+          "theme": "dark",
+          "bg": "rgb(29, 29, 48)",
+          "fg": "rgb(245, 245, 248)",
+          "padding": "24px",
+          "question": "20px",
+          "weight": "600"
+        }
+      ],
+      "sora": true,
+      "schibsted": true,
+      "loaded": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "overflow": false,
+      "docsCss": false
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "evidence": {
+      "body": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "32px",
+      "padding": "16px",
+      "space": "24px",
+      "roles": [
+        {
+          "theme": "light",
+          "bg": "rgb(255, 255, 255)",
+          "fg": "rgb(14, 14, 33)",
+          "padding": "16px",
+          "question": "20px",
+          "weight": "600"
+        },
+        {
+          "theme": "dark",
+          "bg": "rgb(29, 29, 48)",
+          "fg": "rgb(245, 245, 248)",
+          "padding": "16px",
+          "question": "20px",
+          "weight": "600"
+        }
+      ],
+      "sora": true,
+      "schibsted": true,
+      "loaded": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "overflow": false,
+      "docsCss": false
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "evidence": {
+      "body": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "40px",
+      "padding": "24px",
+      "space": "24px",
+      "roles": [
+        {
+          "theme": "light",
+          "bg": "rgb(255, 255, 255)",
+          "fg": "rgb(14, 14, 33)",
+          "padding": "24px",
+          "question": "20px",
+          "weight": "600"
+        },
+        {
+          "theme": "dark",
+          "bg": "rgb(29, 29, 48)",
+          "fg": "rgb(245, 245, 248)",
+          "padding": "24px",
+          "question": "20px",
+          "weight": "600"
+        }
+      ],
+      "sora": true,
+      "schibsted": true,
+      "loaded": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "overflow": false,
+      "docsCss": false
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "theme": "dark",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    },
+    "evidence": {
+      "body": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "40px",
+      "padding": "24px",
+      "space": "24px",
+      "roles": [
+        {
+          "theme": "light",
+          "bg": "rgb(255, 255, 255)",
+          "fg": "rgb(14, 14, 33)",
+          "padding": "24px",
+          "question": "20px",
+          "weight": "600"
+        },
+        {
+          "theme": "dark",
+          "bg": "rgb(29, 29, 48)",
+          "fg": "rgb(245, 245, 248)",
+          "padding": "24px",
+          "question": "20px",
+          "weight": "600"
+        }
+      ],
+      "sora": true,
+      "schibsted": true,
+      "loaded": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "overflow": false,
+      "docsCss": false
+    },
+    "errors": [],
+    "pass": true
+  },
+  {
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "evidence": {
+      "body": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "32px",
+      "padding": "16px",
+      "space": "24px",
+      "roles": [
+        {
+          "theme": "light",
+          "bg": "rgb(255, 255, 255)",
+          "fg": "rgb(14, 14, 33)",
+          "padding": "16px",
+          "question": "20px",
+          "weight": "600"
+        },
+        {
+          "theme": "dark",
+          "bg": "rgb(29, 29, 48)",
+          "fg": "rgb(245, 245, 248)",
+          "padding": "16px",
+          "question": "20px",
+          "weight": "600"
+        }
+      ],
+      "sora": true,
+      "schibsted": true,
+      "loaded": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "overflow": false,
+      "docsCss": false
+    },
+    "errors": [],
+    "pass": true
+  }
+]

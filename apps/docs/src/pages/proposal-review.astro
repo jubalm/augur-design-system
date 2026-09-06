@@ -1,0 +1,12 @@
+---
+/** Static applied record page for issue #52; no product workflow is implied. */
+import PageActions from "../components/PageActions.astro";
+import { ProposalReviewPage } from "../examples/patterns/proposal-review";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { PROPOSAL_REVIEW } from "../lib/proposal-review";
+import { withBase } from "../lib/base";
+---
+<BaseLayout title={PROPOSAL_REVIEW.title} description={PROPOSAL_REVIEW.description}>
+  <PageActions mdHref={withBase("/proposal-review.md")} />
+  <ProposalReviewPage />
+</BaseLayout>

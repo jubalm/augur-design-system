@@ -1,3 +1,5 @@
+> **Superseded acceptance claims:** the independent review found concrete defects in the original pass. Read [REVIEW.md](REVIEW.md) and its final source manifest for corrected evidence and the remaining #52 decision. The historical packet below is not blanket approval.
+
 # V-track acceptance packet — issue #53
 
 Single-pass execution of #43–#53 on branch `v-track-single-pass`,
@@ -10,8 +12,8 @@ blesses screenshots automatically, and nothing merges or publishes.
 
 ## 1. The acceptance matrix (reproducible)
 
-Every substantive route (20) × both themes × three contract viewports
-(1440×1000, 768×1024, 390×844) = **120 combinations, 0 failures**:
+Every substantive route (21) × both themes × three contract viewports
+(1440×1000, 768×1024, 390×844) = **126 combinations, 0 failures**:
 no console errors/warnings, no failed responses, no horizontal
 overflow, real font faces loaded (`Sora`, `Schibsted Grotesk` checks)
 on every combination.
@@ -36,12 +38,13 @@ on every combination.
 | `component-geometry/` | #50 | Card/Dialog 0px panel language light/dark + mobile |
 | `control-language/` | #51 | Button/Input/FormField light/dark + 390 |
 | `reference-record/` | #52 | frame C pair light/dark 1440 + 390 (PDF 20/23/25) |
+| `review-evidence/proposal-review-*` | #52 | static applied review: one task, equal unavailable choices, and the in-page Review details action in both themes at desktop and mobile |
 | `../visual-alignment/` | #42 | the approved contract + rendered PDF sources (unchanged, hashes intact) |
 
 Computed assertions for every criterion live in
-`apps/docs/fixtures/verify-docs.mjs` (sections 10–14 and the #44
-repair/parity sections): **458 assertions, 0 failures, both base
-paths** (`/` and `/augur-design-system`).
+`apps/docs/fixtures/verify-docs.mjs` (including the applied-review
+checks and the #44 repair/parity sections). The current review evidence
+is in `REVIEW.md`; its browser checks passed at both base paths.
 
 ## 3. Standalone consumer parity
 
@@ -63,7 +66,7 @@ frozen install · `designmd lint DESIGN.md` (0 errors) · `oxlint` ·
 `tokens:verify-failures` (4/4 controlled probes) · `registry:check`
 (no drift) · font fixture driver (10 roles) · `vitest` (70/70) · docs
 builds at both base paths · `verify-markdown` both paths ·
-`verify-docs` 458/458 both paths · acceptance matrix 120/120.
+`verify-docs` includes the applied review page · acceptance matrix 126/126.
 
 ## 5. Recorded limitations and deviations (no silent exceptions)
 
@@ -80,7 +83,7 @@ builds at both base paths · `verify-markdown` both paths ·
    any host (the pair criterion's intent).
 3. **Sub-pixel tolerances**: the 65ch measure and pair-geometry
    comparisons use 0.5–1px tolerances (computed-style rounding).
-4. **Fixture evidence volume**: the full 120-combination matrix is
+4. **Fixture evidence volume**: the original 120-combination matrix is
    reproducible by script; only curated per-issue captures are
    committed to keep the repository lean.
 5. **Known honest catches during the pass** (all fixed): two unclosed

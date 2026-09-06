@@ -106,3 +106,12 @@ Recorded 2026-09-04 (Bun 1.4.0, shadcn CLI 4.20.1, ajv 8.20.0):
   self-hosted woff2 assets, dark `data-theme` blocks, the
   `prefers-color-scheme` fallback, `:focus-visible` and reduced-motion rules,
   inlined generated token values, and zero `@augur/design-system` imports.
+
+## Visual alignment delivery correction (2026-09-07)
+
+The theme item exports every generated color, spacing, and rounded variable,
+the maintained typography stylesheet as `src/styles/augur-typography.css`,
+and explicit light and dark container scopes. The import is installed through
+the existing registry theme mechanism. `registry:check` detects output drift;
+`apps/docs/fixtures/acceptance/verify-consumer.mjs` checks rendered values after
+a fresh source install. Build success alone does not establish visual parity.

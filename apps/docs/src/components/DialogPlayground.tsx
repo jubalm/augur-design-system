@@ -102,7 +102,7 @@ export function DialogPlayground() {
       <div
         ref={darkScopeRef}
         data-theme="dark"
-        style={{ padding: "16px", borderRadius: "8px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}
+        style={{ padding: "16px", borderRadius: "var(--augur-rounded-surface)", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}
       >
         <span style={{ marginRight: "8px" }}>
           Scoped dark subtree — the dialog below portals into it:

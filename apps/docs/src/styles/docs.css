@@ -289,7 +289,7 @@ body {
    while classed package internals escape entirely. */
 .prose h1:not(.doc-example-preview h1):not(.page-title),
 .prose h2:not(.doc-example-preview h2),
-.prose h3:not(.doc-example-preview h3),
+.prose h3:not(.doc-example-preview h3):not(.type-specimen-notes h3),
 .prose h4:not(.doc-example-preview h4) {
   font-family: var(--augur-font-primary);
   font-weight: 600;
@@ -315,7 +315,7 @@ body {
   margin: 2.25em 0 0.6em;
 }
 
-.prose h3:not(.doc-example-preview h3) {
+.prose h3:not(.doc-example-preview h3):not(.type-specimen-notes h3) {
   font-size: 20px;
   line-height: 26px;
   letter-spacing: normal;
@@ -325,7 +325,7 @@ body {
   font-size: 1rem;
 }
 
-.prose p:not(.doc-example-preview p),
+.prose p:not(.doc-example-preview p):not(.type-specimen-notes p),
 .prose li:not(.doc-example-preview li) {
   line-height: 1.65;
 }
@@ -645,7 +645,7 @@ body {
 
 .type-compare-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   gap: 0.5rem 1.5rem;
   align-items: baseline;
   padding-block: 0.625rem;
@@ -658,6 +658,8 @@ body {
 }
 
 .type-compare-spec {
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: var(--muted-foreground);
   text-align: right;
 }
@@ -1155,76 +1157,25 @@ body {
   border: 1px solid var(--border);
 }
 
-/* Example module: reference-record (issue #52, contract frame C).
-   The muted outer field carries the lifted square panel; the panel's
-   separators are quiet; the signal is 32×2 through --primary; choices
-   are equal; the pair is pinned light/dark with identical geometry. */
-.example-record-field {
-  display: grid;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  background-color: var(--muted);
+/* Review: preserve legible samples instead of squeezing them behind specs. */
+@media (min-width: 600px) and (max-width: 959px) {
+  .type-specimen-grid { gap: 24px; }
+  .type-specimen-notes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-
-.example-record-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.5rem;
-  background-color: var(--card);
-  border: 1px solid var(--border);
-}
-
-.example-record-state {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.example-record-signal {
-  display: block;
-  width: 32px;
-  height: 2px;
-  flex-shrink: 0;
-  background-color: var(--primary);
-}
-
-.example-record-state-label {
-  color: var(--muted-foreground);
-}
-
-.example-record-question {
-  margin: 0;
-}
-
-.example-record-choices {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--augur-spacing-sm);
-  width: 100%;
-}
-
-.example-record-choices > * {
-  flex: 1 1 0;
-}
-
-.example-record-response {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  color: var(--muted-foreground);
-}
-
-.example-record-id {
-  margin: 0;
-  color: var(--muted-foreground);
-}
-
 @media (max-width: 599px) {
-  .example-record-field,
-  .example-record-panel {
-    padding: var(--augur-spacing-lg);
+  .type-compare-row { grid-template-columns: minmax(0, 1fr); }
+  .type-compare-spec { text-align: left; }
+  .type-specimen-grid { gap: 24px; }
+}
+/* FD-02: touch controls retain the desktop visual language with usable targets. */
+@media (pointer: coarse) {
+  .theme-toggle-option, .mobile-nav summary, .page-action, .opening-action {
+    box-sizing: border-box;
+    min-height: 44px;
+    min-width: 44px;
   }
 }
+
+/* Keep provenance columns readable; narrow screens scroll this named region. */
+.font-provenance-scroll { max-width: 100%; overflow-x: auto; }
+.font-provenance-scroll .font-demo-provenance { min-width: 40rem; }

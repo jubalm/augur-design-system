@@ -63,8 +63,8 @@ function read(rel: string): string {
 function parseTokens(): Map<string, string> {
   const css = read("src/tokens/tokens.css");
   const map = new Map<string, string>();
-  for (const m of css.matchAll(/(--augur-color-[a-z0-9-]+):\s*(#[0-9a-fA-F]{6})/g)) {
-    map.set(m[1], m[2].toUpperCase());
+  for (const m of css.matchAll(/(--augur-(?:color|spacing|rounded)-[a-z0-9-]+):\s*([^;]+);/g)) {
+    map.set(m[1], m[2].trim());
   }
   if (map.size === 0) throw new Error("no --augur-color-* tokens found in tokens.css");
   return map;
@@ -128,20 +128,7 @@ function parseFontImports(): string[] {
 
 // ------------------------------------------------------------ theme item
 
-const TOKEN_SUBSET = [
-  "--augur-color-primary",
-  "--augur-color-accent",
-  "--augur-color-accent-deep",
-  "--augur-color-surface-light",
-  "--augur-color-surface-light-raised",
-  "--augur-color-surface-light-muted",
-  "--augur-color-border-light",
-  "--augur-color-secondary",
-  "--augur-color-secondary-dark",
-  "--augur-color-surface-dark-1",
-  "--augur-color-surface-dark-2",
-  "--augur-color-surface-dark-mist",
-];
+
 
 const THEME_DOCS =
   'Apply the theme by setting `data-theme="light|dark"` on `<html>` or any container; without an attribute the system preference decides. Do not import @augur/design-system from registry-installed source; this item is self-contained.';
@@ -153,7 +140,7 @@ function buildThemeItem(): Record<string, unknown> {
   const imports = parseFontImports();
 
   const rootVars: Record<string, string> = { "color-scheme": "light" };
-  for (const t of TOKEN_SUBSET) {
+  for (const t of tokens.keys()) {
     const v = tokens.get(t);
     if (!v) throw new Error(`token ${t} missing from tokens.css (regenerate tokens)`);
     rootVars[t] = v;
@@ -171,6 +158,8 @@ function buildThemeItem(): Record<string, unknown> {
   const css: Record<string, unknown> = {};
   for (const imp of imports) css[imp] = "";
   css[":root"] = rootVars;
+  css['@import "./styles/augur-typography.css"'] = "";
+  css['[data-theme="light"]'] = { "color-scheme": "light", ...light };
   css[".dark"] = { "color-scheme": "dark" };
   css['[data-theme="dark"]'] = { "color-scheme": "dark", ...dark };
   css["@media (prefers-color-scheme: dark)"] = {
@@ -198,6 +187,12 @@ function buildThemeItem(): Record<string, unknown> {
     description:
       "Augur semantic light/dark theme: generated base tokens, shadcn-compatible role mappings, focus and reduced-motion behavior, and self-hosted Sora + Schibsted Grotesk fonts.",
     dependencies: ["@fontsource/sora@5.3.0", "@fontsource/schibsted-grotesk@5.3.0"],
+    files: [{
+      path: "packages/design-system/src/styles/typography.css",
+      type: "registry:style",
+      target: "src/styles/augur-typography.css",
+      content: read("src/styles/typography.css"),
+    }],
     cssVars: { theme: themeVars, light, dark },
     css,
     docs: THEME_DOCS,

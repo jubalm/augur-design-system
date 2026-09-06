@@ -32,7 +32,7 @@
   justify-content: center;
   width: 40px; /* FD-02 icon lg (Proposed) */
   height: 40px;
-  border-radius: 8px; /* FD-03 radius.surface (Proposed) */
+  border-radius: var(--augur-rounded-surface); /* FD-03 adopted square surface */
   background-color: var(--muted);
   color: var(--muted-foreground);
 }
