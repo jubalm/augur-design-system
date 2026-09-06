@@ -1,0 +1,457 @@
+@import "@augur/design-system/styles.css";
+@import "../../src/styles/docs.css";
+
+/*
+ * Docs navigation and reading shell prototype (issue #55, phase 0).
+ *
+ * Non-shipping frame reference. Consumes the real package stylesheet
+ * (semantic roles, fonts) and the app's real docs.css (prose, tables,
+ * page actions, footer) so the frames show the actual chrome language.
+ * Only the new shell chrome below is prototype CSS:
+ *
+ *   - Color: semantic role custom properties only (--background,
+ *     --card, --foreground, --muted-foreground, --border-quiet,
+ *     --primary, --ring). No raw values; themes swap colors only.
+ *   - Shape: 0px radius, no shadows, gradients, or glows (FD-03).
+ *   - Separation: hairline editorial separators (VD-06), never control
+ *     edges, around non-interactive rails.
+ *   - Signal: the active-document short rule is 24x2px, one per group
+ *     view (VD-05 grammar); keyboard focus is the 2px/2px ring (FD-04).
+ *   - Spacing: local scale 4/8/12/16/24/32; 48/64/80 composition roles.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- */
+/* Masthead: one deliberate row; identity, context, theme, repository */
+/* ---------------------------------------------------------------- */
+
+.masthead {
+  position: relative;
+  z-index: 5;
+  background: var(--card);
+  color: var(--card-foreground);
+  /* Editorial separator, not a control edge (VD-06). */
+  border-bottom: 1px solid var(--border-quiet);
+}
+
+.masthead-inner {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  padding-block: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px 24px;
+}
+
+@media (min-width: 960px) {
+  .masthead-inner {
+    padding-inline: 64px;
+  }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-lockup {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+/* Compact masthead (<600px): the lockup stacks so identity, context,
+   browse trigger, and theme stay on one deliberate row. Repository
+   access moves to the footer, which every page renders. */
+@media (max-width: 599px) {
+  .masthead-inner {
+    gap: 12px 16px;
+  }
+
+  .brand-lockup {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .masthead-actions a {
+    display: none;
+  }
+}
+
+.brand-lockup-descriptor {
+  color: var(--muted-foreground);
+}
+
+.masthead-actions {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.masthead-actions a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.masthead-actions a:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.theme-control {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  font: 600 14px/20px var(--augur-font-primary);
+  /* Fixed width: swapping Light/Dark must never reflow the masthead. */
+  min-width: 6rem;
+  text-align: right;
+}
+
+.theme-control:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Browse documentation disclosure (below 960px the grouped navigation
+   lives here; the sidebar is the same model at one column). The open
+   panel overlays the full width below the masthead — opening it must
+   never stretch or reflow the masthead itself. */
+.browse-docs {
+  display: block;
+}
+
+.browse-docs summary {
+  list-style: none;
+  cursor: pointer;
+  padding-block: 8px;
+  white-space: nowrap;
+}
+
+.browse-docs summary::-webkit-details-marker {
+  display: none;
+}
+
+.browse-docs summary:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.browse-docs[open] summary {
+  color: var(--foreground);
+}
+
+.browse-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border-quiet);
+  padding: 16px 24px 24px;
+  z-index: 4;
+}
+
+/* ---------------------------------------------------------------- */
+/* Shell grid: sidebar | document | optional contents rail            */
+/* ---------------------------------------------------------------- */
+
+.shell {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  padding-block: 48px 80px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 24px;
+  align-items: start;
+}
+
+/* Grouped documentation sidebar (>=960px). Quiet labels, text links,
+   short-rule current-page treatment; no cards, icons, or filled states. */
+.doc-sidebar {
+  display: none;
+  position: sticky;
+  top: 24px;
+  border-right: 1px solid var(--border-quiet);
+  padding-right: 24px;
+}
+
+.nav-group + .nav-group {
+  margin-top: 24px;
+}
+
+.nav-group .nav-group-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.nav-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: 4px;
+  font: 400 14px/20px var(--augur-font-primary);
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+
+/* Every entry reserves the marker slot so the active rule never shifts
+   the column; the rule appears only for the current document (VD-05). */
+.nav-link::before {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 2px;
+  flex-shrink: 0;
+  background: transparent;
+}
+
+.nav-link:hover {
+  color: var(--foreground);
+}
+
+.nav-link[aria-current="page"] {
+  color: var(--foreground);
+}
+
+.nav-link[aria-current="page"]::before {
+  background: var(--primary);
+}
+
+.lead-in {
+  margin-bottom: 24px;
+}
+
+.lead-in .nav-group-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* On this page rail (>=1200px), H2-derived, sticky context. */
+.page-contents {
+  display: none;
+  position: sticky;
+  top: 24px;
+  border-left: 1px solid var(--border-quiet);
+  padding-left: 24px;
+}
+
+.page-contents .page-contents-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.page-contents ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-contents a {
+  display: block;
+  font: 400 12px/16px var(--augur-font-secondary);
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+
+.page-contents a:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* On this page collapsed beneath the page opening (<960px). */
+.onthispage-collapse {
+  display: block;
+  margin: 16px 0 32px;
+  border-bottom: 1px solid var(--border-quiet);
+}
+
+.onthispage-collapse summary {
+  list-style: none;
+  cursor: pointer;
+  padding-block: 8px;
+}
+
+.onthispage-collapse summary::-webkit-details-marker {
+  display: none;
+}
+
+.onthispage-collapse ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.onthispage-collapse a {
+  font: 400 12px/16px var(--augur-font-secondary);
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+
+.onthispage-collapse a:hover {
+  color: var(--foreground);
+}
+
+/* Document column. An inline-size container so the dense-page table
+   release can reference the real column width. */
+.doc-main {
+  min-width: 0;
+  container-type: inline-size;
+}
+
+/* Dense-page release (issue #55 requirement 7): tables use the full
+   document column — the wider content region — leaving the 65ch prose
+   measure symmetrically (the generalized .doc-example mechanism), and
+   scrolling internally when individual cells need more room. */
+.doc-main .prose table {
+  display: block;
+  width: 100cqw;
+  margin-inline: calc((65ch - 100cqw) / 2);
+}
+
+@media (max-width: 959px) {
+  .doc-main .prose table {
+    width: auto;
+    margin-inline: 0;
+  }
+}
+
+/* Live specimens flow at the document column width in the three-column
+   shell (the 46rem escape predates the rails and would collide). */
+.doc-main .prose .doc-example {
+  width: auto;
+  margin-inline: 0;
+}
+
+/* Previous / next document navigation; same reading order as the
+   sidebar. Quiet rule, text links, no icons. */
+.pager {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-quiet);
+  max-width: 65ch;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.pager a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font: 600 14px/20px var(--augur-font-primary);
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+
+.pager a:hover {
+  color: var(--foreground);
+}
+
+.pager .pager-direction {
+  font: 400 12px/16px var(--augur-font-secondary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.pager .pager-next {
+  margin-inline-start: auto;
+  text-align: right;
+}
+
+/* Footer reuses the app's .site-footer/.footer-inner classes; the frame
+   width below matches the shell so all regions share one geometry. */
+.footer-inner {
+  max-width: 1200px;
+}
+
+/* ---------------------------------------------------------------- */
+/* Responsive shell: sidebar >=960, contents rail >=1200.             */
+/* Declared last so the visibility overrides win the cascade.         */
+/* ---------------------------------------------------------------- */
+
+@media (min-width: 960px) {
+  .shell {
+    grid-template-columns: 224px minmax(0, 1fr);
+    padding-inline: 64px;
+  }
+
+  .doc-sidebar {
+    display: block;
+  }
+
+  .browse-docs {
+    display: none;
+  }
+
+  .onthispage-collapse {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .shell {
+    grid-template-columns: 224px minmax(0, 1fr) 160px;
+  }
+
+  .page-contents {
+    display: block;
+  }
+}
