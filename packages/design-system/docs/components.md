@@ -1,3 +1,5 @@
+> Current authority (2026-09-06): the visual direction contract and DESIGN.md supersede the historical Proposed values below. Controls and panels have 0px radius; desktop controls use 32/36/40px heights and touch targets at least 44×44px; Dialog opens/closes immediately and uses 16px panel insets below 600px. Hover uses existing neutral surfaces, pressed controls invert neutrally, and the pending indicator is static. The dated rationale below is historical where it conflicts. Final visual acceptance remains pending in #53.
+
 # Component record — Button and Card (issue #11)
 
 Status: implemented by issue #11 (the first component slice). This file

@@ -5,11 +5,11 @@
  * (which references generated tokens). No raw color values, no new
  * custom properties.
  *
- * Geometry: intentional structural constants — FD-01 (spacing), FD-02
- * (control heights), and FD-03 (radius) are Proposed and pending
- * maintainer review, so no spacing/radius/sizing tokens are emitted;
- * the same pattern Button and Card use. FD-03 names `radius.control`
- * explicitly for inputs. The decision record for this slice lives in
+ * Geometry: FD-01 spacing and FD-03 radius consume the encoded tokens
+ * (--augur-spacing-*, --augur-rounded-control — issues #45/#51), the
+ * same pattern Button and Card use. FD-03 names `radius.control`
+ * explicitly for inputs; FD-02 control heights remain the adopted
+ * structural constants. The decision record for this slice lives in
  * ../../docs/components.md.
  */
 
@@ -17,12 +17,12 @@
   box-sizing: border-box;
   display: block;
   width: 100%;
-  height: 36px; /* FD-02 control.height.md (Proposed) */
-  padding: 0 12px; /* FD-01 control padding (Proposed); text fields read
+  height: 36px; /* FD-02 control.height.md (adopted) */
+  padding: 0 var(--augur-spacing-md); /* FD-01 control padding (encoded); text fields read
                      better a step tighter than the md button's 16px */
   margin: 0;
   border: 1px solid var(--input);
-  border-radius: 6px; /* FD-03 radius.control (Proposed) */
+  border-radius: var(--augur-rounded-control); /* FD-03 radius.control (encoded: 0px) */
   background-color: transparent; /* sits on any surface: canvas or card */
   color: var(--foreground);
   vertical-align: middle;
@@ -69,3 +69,8 @@
 /* Keyboard focus: painted by the theme contract's shared
    :focus-visible rule (2px ring, 2px offset, --ring); no per-component
    focus CSS, exactly like Button. */
+
+/* FD-02 adopted touch target minimum; desktop size variants remain intact. */
+@media (pointer: coarse) {
+  .aug-input { min-height: 44px; min-width: 44px; }
+}

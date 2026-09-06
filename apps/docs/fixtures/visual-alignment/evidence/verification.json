@@ -1,0 +1,1635 @@
+{
+  "sourceCommit": "88a6ccf46b201b921344bfa1411ed41b1ec17ba0",
+  "sourcePdfSha256": "65acce8b247ddda10834d0c068e84bc315f7afc118f5570d1d90386de8ed9c0c",
+  "fixtureSha256": {
+    "index.html": "309ee88677c81a3b99666c9dbc688232b6a34a8021fcfd4eb215ab96be344a51",
+    "reference.css": "c64d9b2e8826135ed9c6a1d4e557e7c0b28166faa227b4be4a36e7ddda333b5a",
+    "review.mjs": "c4cbc7a6d06df65c669633e15afa7ef1e8ef77643ba003b00be7244762cdd6fe"
+  },
+  "captures": [
+    {
+      "file": "light-1440x1000.png",
+      "route": "/?theme=light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "actual": {
+        "fonts": {
+          "sora400": true,
+          "sora600": true,
+          "schibsted400": true
+        },
+        "faces": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "status": "loaded"
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "status": "loaded"
+          },
+          {
+            "family": "Schibsted Grotesk",
+            "weight": "400",
+            "status": "loaded"
+          }
+        ],
+        "styles": {
+          "title": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "40px",
+            "line": "48px",
+            "tracking": "-0.4px",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 269.046875,
+            "height": 96
+          },
+          "display": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "40px",
+            "line": "44px",
+            "tracking": "-0.4px",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 714.65625,
+            "height": 88
+          },
+          "body": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(245, 245, 248)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 1440,
+            "height": 2533
+          },
+          "metadata": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "normal",
+            "color": "rgb(74, 75, 97)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 389.328125,
+            "height": 16
+          },
+          "control": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "14px",
+            "line": "20px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(236, 236, 242)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 328.328125,
+            "height": 36
+          },
+          "record": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(255, 255, 255)",
+            "border": "rgb(224, 224, 231)",
+            "radius": "0px",
+            "width": 730.65625,
+            "height": 381
+          },
+          "field": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(236, 236, 242)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 778.65625,
+            "height": 429
+          },
+          "signal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(9, 94, 66)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          },
+          "recordSignal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "1.44px",
+            "color": "rgb(74, 75, 97)",
+            "background": "rgb(9, 94, 66)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          }
+        },
+        "geometry": [
+          {
+            "tag": "opening",
+            "x": 120,
+            "y": 165,
+            "width": 1200,
+            "height": 520
+          },
+          {
+            "tag": "opening-title",
+            "x": 541.328125,
+            "y": 213,
+            "width": 269.046875,
+            "height": 96
+          },
+          {
+            "tag": "editorial",
+            "x": 120,
+            "y": 765,
+            "width": 1200,
+            "height": 655
+          },
+          {
+            "tag": "editorial-grid",
+            "x": 120,
+            "y": 942,
+            "width": 1200,
+            "height": 478
+          },
+          {
+            "tag": "compact",
+            "x": 120,
+            "y": 1500,
+            "width": 1200,
+            "height": 606
+          },
+          {
+            "tag": "record-grid",
+            "x": 120,
+            "y": 1677,
+            "width": 1200,
+            "height": 429
+          },
+          {
+            "tag": "record",
+            "x": 144,
+            "y": 1701,
+            "width": 730.65625,
+            "height": 381
+          },
+          {
+            "tag": "choices",
+            "x": 169,
+            "y": 1844,
+            "width": 680.65625,
+            "height": 36
+          },
+          {
+            "tag": "frame decision-study",
+            "x": 120,
+            "y": 2186,
+            "width": 1200,
+            "height": 219
+          }
+        ],
+        "overflow": false,
+        "coarse": false,
+        "cssFonts": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAABysABAAAAAAQ9AAABxMAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 22776
+          },
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADmEABAAAAAAfgAAADkiAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 44444
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAB1wABAAAAAAREgAAB0NAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 23236
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADqYABAAAAAAflQAADo3AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 45236
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAACzwABAAAAAAaSQAACyNAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 35912
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAF8YABAAAAAA2vgAAF60AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 72456
+          }
+        ]
+      },
+      "focus": {
+        "visible": true,
+        "width": "2px",
+        "offset": "2px",
+        "color": "rgb(9, 94, 66)"
+      },
+      "fontResponses": [],
+      "errors": [],
+      "keyboard": "Theme, text link, Yes choice tab order; Space selects local preview with explicit response label."
+    },
+    {
+      "file": "dark-1440x1000.png",
+      "route": "/?theme=dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "dark",
+      "actual": {
+        "fonts": {
+          "sora400": true,
+          "sora600": true,
+          "schibsted400": true
+        },
+        "faces": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "status": "loaded"
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "status": "loaded"
+          },
+          {
+            "family": "Schibsted Grotesk",
+            "weight": "400",
+            "status": "loaded"
+          }
+        ],
+        "styles": {
+          "title": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "40px",
+            "line": "48px",
+            "tracking": "-0.4px",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 269.046875,
+            "height": 96
+          },
+          "display": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "40px",
+            "line": "44px",
+            "tracking": "-0.4px",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 714.65625,
+            "height": 88
+          },
+          "body": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(14, 14, 33)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 1440,
+            "height": 2533
+          },
+          "metadata": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "normal",
+            "color": "rgb(161, 161, 184)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(161, 161, 184)",
+            "radius": "0px",
+            "width": 389.328125,
+            "height": 16
+          },
+          "control": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "14px",
+            "line": "20px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(29, 29, 48)",
+            "border": "rgb(113, 114, 138)",
+            "radius": "0px",
+            "width": 328.328125,
+            "height": 36
+          },
+          "record": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(29, 29, 48)",
+            "border": "rgb(36, 36, 56)",
+            "radius": "0px",
+            "width": 730.65625,
+            "height": 381
+          },
+          "field": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(22, 22, 41)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 778.65625,
+            "height": 429
+          },
+          "signal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(42, 231, 168)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          },
+          "recordSignal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "1.44px",
+            "color": "rgb(161, 161, 184)",
+            "background": "rgb(42, 231, 168)",
+            "border": "rgb(161, 161, 184)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          }
+        },
+        "geometry": [
+          {
+            "tag": "opening",
+            "x": 120,
+            "y": 165,
+            "width": 1200,
+            "height": 520
+          },
+          {
+            "tag": "opening-title",
+            "x": 541.328125,
+            "y": 213,
+            "width": 269.046875,
+            "height": 96
+          },
+          {
+            "tag": "editorial",
+            "x": 120,
+            "y": 765,
+            "width": 1200,
+            "height": 655
+          },
+          {
+            "tag": "editorial-grid",
+            "x": 120,
+            "y": 942,
+            "width": 1200,
+            "height": 478
+          },
+          {
+            "tag": "compact",
+            "x": 120,
+            "y": 1500,
+            "width": 1200,
+            "height": 606
+          },
+          {
+            "tag": "record-grid",
+            "x": 120,
+            "y": 1677,
+            "width": 1200,
+            "height": 429
+          },
+          {
+            "tag": "record",
+            "x": 144,
+            "y": 1701,
+            "width": 730.65625,
+            "height": 381
+          },
+          {
+            "tag": "choices",
+            "x": 169,
+            "y": 1844,
+            "width": 680.65625,
+            "height": 36
+          },
+          {
+            "tag": "frame decision-study",
+            "x": 120,
+            "y": 2186,
+            "width": 1200,
+            "height": 219
+          }
+        ],
+        "overflow": false,
+        "coarse": false,
+        "cssFonts": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAABysABAAAAAAQ9AAABxMAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 22776
+          },
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADmEABAAAAAAfgAAADkiAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 44444
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAB1wABAAAAAAREgAAB0NAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 23236
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADqYABAAAAAAflQAADo3AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 45236
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAACzwABAAAAAAaSQAACyNAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 35912
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAF8YABAAAAAA2vgAAF60AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 72456
+          }
+        ]
+      },
+      "focus": {
+        "visible": true,
+        "width": "2px",
+        "offset": "2px",
+        "color": "rgb(42, 231, 168)"
+      },
+      "fontResponses": [],
+      "errors": [],
+      "keyboard": "Theme, text link, Yes choice tab order; Space selects local preview with explicit response label."
+    },
+    {
+      "file": "light-768x1024.png",
+      "route": "/?theme=light",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "theme": "light",
+      "actual": {
+        "fonts": {
+          "sora400": true,
+          "sora600": true,
+          "schibsted400": true
+        },
+        "faces": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "status": "loaded"
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "status": "loaded"
+          },
+          {
+            "family": "Schibsted Grotesk",
+            "weight": "400",
+            "status": "loaded"
+          }
+        ],
+        "styles": {
+          "title": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "40px",
+            "line": "48px",
+            "tracking": "-0.4px",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 269.046875,
+            "height": 96
+          },
+          "display": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "40px",
+            "line": "44px",
+            "tracking": "-0.4px",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 656,
+            "height": 88
+          },
+          "body": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(245, 245, 248)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 768,
+            "height": 2681
+          },
+          "metadata": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "normal",
+            "color": "rgb(74, 75, 97)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 232,
+            "height": 16
+          },
+          "control": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "14px",
+            "line": "20px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(236, 236, 242)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 299,
+            "height": 36
+          },
+          "record": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(255, 255, 255)",
+            "border": "rgb(224, 224, 231)",
+            "radius": "0px",
+            "width": 672,
+            "height": 381
+          },
+          "field": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(236, 236, 242)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 720,
+            "height": 429
+          },
+          "signal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(9, 94, 66)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          },
+          "recordSignal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "1.44px",
+            "color": "rgb(74, 75, 97)",
+            "background": "rgb(9, 94, 66)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          }
+        },
+        "geometry": [
+          {
+            "tag": "opening",
+            "x": 24,
+            "y": 133,
+            "width": 720,
+            "height": 483
+          },
+          {
+            "tag": "opening-title",
+            "x": 280,
+            "y": 181,
+            "width": 269.046875,
+            "height": 96
+          },
+          {
+            "tag": "editorial",
+            "x": 24,
+            "y": 664,
+            "width": 720,
+            "height": 838
+          },
+          {
+            "tag": "editorial-grid",
+            "x": 24,
+            "y": 841,
+            "width": 720,
+            "height": 661
+          },
+          {
+            "tag": "compact",
+            "x": 24,
+            "y": 1550,
+            "width": 720,
+            "height": 768
+          },
+          {
+            "tag": "record-grid",
+            "x": 24,
+            "y": 1727,
+            "width": 720,
+            "height": 591
+          },
+          {
+            "tag": "record",
+            "x": 48,
+            "y": 1751,
+            "width": 672,
+            "height": 381
+          },
+          {
+            "tag": "choices",
+            "x": 73,
+            "y": 1894,
+            "width": 622,
+            "height": 36
+          },
+          {
+            "tag": "frame decision-study",
+            "x": 24,
+            "y": 2366,
+            "width": 720,
+            "height": 219
+          }
+        ],
+        "overflow": false,
+        "coarse": false,
+        "cssFonts": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAABysABAAAAAAQ9AAABxMAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 22776
+          },
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADmEABAAAAAAfgAAADkiAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 44444
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAB1wABAAAAAAREgAAB0NAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 23236
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADqYABAAAAAAflQAADo3AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 45236
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAACzwABAAAAAAaSQAACyNAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 35912
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAF8YABAAAAAA2vgAAF60AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 72456
+          }
+        ]
+      },
+      "focus": {
+        "visible": true,
+        "width": "2px",
+        "offset": "2px",
+        "color": "rgb(9, 94, 66)"
+      },
+      "fontResponses": [],
+      "errors": [],
+      "keyboard": "Theme, text link, Yes choice tab order; Space selects local preview with explicit response label."
+    },
+    {
+      "file": "dark-768x1024.png",
+      "route": "/?theme=dark",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "theme": "dark",
+      "actual": {
+        "fonts": {
+          "sora400": true,
+          "sora600": true,
+          "schibsted400": true
+        },
+        "faces": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "status": "loaded"
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "status": "loaded"
+          },
+          {
+            "family": "Schibsted Grotesk",
+            "weight": "400",
+            "status": "loaded"
+          }
+        ],
+        "styles": {
+          "title": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "40px",
+            "line": "48px",
+            "tracking": "-0.4px",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 269.046875,
+            "height": 96
+          },
+          "display": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "40px",
+            "line": "44px",
+            "tracking": "-0.4px",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 656,
+            "height": 88
+          },
+          "body": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(14, 14, 33)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 768,
+            "height": 2681
+          },
+          "metadata": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "normal",
+            "color": "rgb(161, 161, 184)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(161, 161, 184)",
+            "radius": "0px",
+            "width": 232,
+            "height": 16
+          },
+          "control": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "14px",
+            "line": "20px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(29, 29, 48)",
+            "border": "rgb(113, 114, 138)",
+            "radius": "0px",
+            "width": 299,
+            "height": 36
+          },
+          "record": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(29, 29, 48)",
+            "border": "rgb(36, 36, 56)",
+            "radius": "0px",
+            "width": 672,
+            "height": 381
+          },
+          "field": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(22, 22, 41)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 720,
+            "height": 429
+          },
+          "signal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(42, 231, 168)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          },
+          "recordSignal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "1.44px",
+            "color": "rgb(161, 161, 184)",
+            "background": "rgb(42, 231, 168)",
+            "border": "rgb(161, 161, 184)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          }
+        },
+        "geometry": [
+          {
+            "tag": "opening",
+            "x": 24,
+            "y": 133,
+            "width": 720,
+            "height": 483
+          },
+          {
+            "tag": "opening-title",
+            "x": 280,
+            "y": 181,
+            "width": 269.046875,
+            "height": 96
+          },
+          {
+            "tag": "editorial",
+            "x": 24,
+            "y": 664,
+            "width": 720,
+            "height": 838
+          },
+          {
+            "tag": "editorial-grid",
+            "x": 24,
+            "y": 841,
+            "width": 720,
+            "height": 661
+          },
+          {
+            "tag": "compact",
+            "x": 24,
+            "y": 1550,
+            "width": 720,
+            "height": 768
+          },
+          {
+            "tag": "record-grid",
+            "x": 24,
+            "y": 1727,
+            "width": 720,
+            "height": 591
+          },
+          {
+            "tag": "record",
+            "x": 48,
+            "y": 1751,
+            "width": 672,
+            "height": 381
+          },
+          {
+            "tag": "choices",
+            "x": 73,
+            "y": 1894,
+            "width": 622,
+            "height": 36
+          },
+          {
+            "tag": "frame decision-study",
+            "x": 24,
+            "y": 2366,
+            "width": 720,
+            "height": 219
+          }
+        ],
+        "overflow": false,
+        "coarse": false,
+        "cssFonts": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAABysABAAAAAAQ9AAABxMAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 22776
+          },
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADmEABAAAAAAfgAAADkiAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 44444
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAB1wABAAAAAAREgAAB0NAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 23236
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADqYABAAAAAAflQAADo3AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 45236
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAACzwABAAAAAAaSQAACyNAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 35912
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAF8YABAAAAAA2vgAAF60AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 72456
+          }
+        ]
+      },
+      "focus": {
+        "visible": true,
+        "width": "2px",
+        "offset": "2px",
+        "color": "rgb(42, 231, 168)"
+      },
+      "fontResponses": [],
+      "errors": [],
+      "keyboard": "Theme, text link, Yes choice tab order; Space selects local preview with explicit response label."
+    },
+    {
+      "file": "light-390x844.png",
+      "route": "/?theme=light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "actual": {
+        "fonts": {
+          "sora400": true,
+          "sora600": true,
+          "schibsted400": true
+        },
+        "faces": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "status": "loaded"
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "status": "loaded"
+          },
+          {
+            "family": "Schibsted Grotesk",
+            "weight": "400",
+            "status": "loaded"
+          }
+        ],
+        "styles": {
+          "title": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "32px",
+            "line": "40px",
+            "tracking": "-0.32px",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 215.234375,
+            "height": 80
+          },
+          "display": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "40px",
+            "line": "44px",
+            "tracking": "-0.4px",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 294,
+            "height": 132
+          },
+          "body": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(245, 245, 248)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 390,
+            "height": 3547
+          },
+          "metadata": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "normal",
+            "color": "rgb(74, 75, 97)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 342,
+            "height": 16
+          },
+          "control": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "14px",
+            "line": "20px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(236, 236, 242)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 130,
+            "height": 44
+          },
+          "record": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(255, 255, 255)",
+            "border": "rgb(224, 224, 231)",
+            "radius": "0px",
+            "width": 310,
+            "height": 415
+          },
+          "field": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(236, 236, 242)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 342,
+            "height": 447
+          },
+          "signal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgb(9, 94, 66)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          },
+          "recordSignal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "1.44px",
+            "color": "rgb(74, 75, 97)",
+            "background": "rgb(9, 94, 66)",
+            "border": "rgb(74, 75, 97)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          }
+        },
+        "geometry": [
+          {
+            "tag": "opening",
+            "x": 24,
+            "y": 141,
+            "width": 342,
+            "height": 671
+          },
+          {
+            "tag": "opening-title",
+            "x": 24,
+            "y": 217,
+            "width": 215.234375,
+            "height": 80
+          },
+          {
+            "tag": "editorial",
+            "x": 24,
+            "y": 860,
+            "width": 342,
+            "height": 1214
+          },
+          {
+            "tag": "editorial-grid",
+            "x": 24,
+            "y": 1093,
+            "width": 342,
+            "height": 981
+          },
+          {
+            "tag": "compact",
+            "x": 24,
+            "y": 2122,
+            "width": 342,
+            "height": 912
+          },
+          {
+            "tag": "record-grid",
+            "x": 24,
+            "y": 2355,
+            "width": 342,
+            "height": 679
+          },
+          {
+            "tag": "record",
+            "x": 40,
+            "y": 2371,
+            "width": 310,
+            "height": 415
+          },
+          {
+            "tag": "choices",
+            "x": 57,
+            "y": 2532,
+            "width": 276,
+            "height": 44
+          },
+          {
+            "tag": "frame decision-study",
+            "x": 24,
+            "y": 3082,
+            "width": 342,
+            "height": 353
+          }
+        ],
+        "overflow": false,
+        "coarse": true,
+        "cssFonts": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAABysABAAAAAAQ9AAABxMAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 22776
+          },
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADmEABAAAAAAfgAAADkiAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 44444
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAB1wABAAAAAAREgAAB0NAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 23236
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADqYABAAAAAAflQAADo3AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 45236
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAACzwABAAAAAAaSQAACyNAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 35912
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAF8YABAAAAAA2vgAAF60AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 72456
+          }
+        ]
+      },
+      "focus": {
+        "visible": true,
+        "width": "2px",
+        "offset": "2px",
+        "color": "rgb(9, 94, 66)"
+      },
+      "fontResponses": [],
+      "errors": [],
+      "keyboard": "Theme, text link, Yes choice tab order; Space selects local preview with explicit response label."
+    },
+    {
+      "file": "dark-390x844.png",
+      "route": "/?theme=dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "dark",
+      "actual": {
+        "fonts": {
+          "sora400": true,
+          "sora600": true,
+          "schibsted400": true
+        },
+        "faces": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "status": "loaded"
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "status": "loaded"
+          },
+          {
+            "family": "Schibsted Grotesk",
+            "weight": "400",
+            "status": "loaded"
+          }
+        ],
+        "styles": {
+          "title": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "32px",
+            "line": "40px",
+            "tracking": "-0.32px",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 215.234375,
+            "height": 80
+          },
+          "display": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "40px",
+            "line": "44px",
+            "tracking": "-0.4px",
+            "color": "rgb(14, 14, 33)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(14, 14, 33)",
+            "radius": "0px",
+            "width": 294,
+            "height": 132
+          },
+          "body": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(14, 14, 33)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 390,
+            "height": 3547
+          },
+          "metadata": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "normal",
+            "color": "rgb(161, 161, 184)",
+            "background": "rgba(0, 0, 0, 0)",
+            "border": "rgb(161, 161, 184)",
+            "radius": "0px",
+            "width": 342,
+            "height": 16
+          },
+          "control": {
+            "family": "Sora, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "600",
+            "size": "14px",
+            "line": "20px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(29, 29, 48)",
+            "border": "rgb(113, 114, 138)",
+            "radius": "0px",
+            "width": 130,
+            "height": 44
+          },
+          "record": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(29, 29, 48)",
+            "border": "rgb(36, 36, 56)",
+            "radius": "0px",
+            "width": 310,
+            "height": 415
+          },
+          "field": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(22, 22, 41)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 342,
+            "height": 447
+          },
+          "signal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "16px",
+            "line": "24px",
+            "tracking": "normal",
+            "color": "rgb(245, 245, 248)",
+            "background": "rgb(42, 231, 168)",
+            "border": "rgb(245, 245, 248)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          },
+          "recordSignal": {
+            "family": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+            "weight": "400",
+            "size": "12px",
+            "line": "16px",
+            "tracking": "1.44px",
+            "color": "rgb(161, 161, 184)",
+            "background": "rgb(42, 231, 168)",
+            "border": "rgb(161, 161, 184)",
+            "radius": "0px",
+            "width": 32,
+            "height": 2
+          }
+        },
+        "geometry": [
+          {
+            "tag": "opening",
+            "x": 24,
+            "y": 141,
+            "width": 342,
+            "height": 671
+          },
+          {
+            "tag": "opening-title",
+            "x": 24,
+            "y": 217,
+            "width": 215.234375,
+            "height": 80
+          },
+          {
+            "tag": "editorial",
+            "x": 24,
+            "y": 860,
+            "width": 342,
+            "height": 1214
+          },
+          {
+            "tag": "editorial-grid",
+            "x": 24,
+            "y": 1093,
+            "width": 342,
+            "height": 981
+          },
+          {
+            "tag": "compact",
+            "x": 24,
+            "y": 2122,
+            "width": 342,
+            "height": 912
+          },
+          {
+            "tag": "record-grid",
+            "x": 24,
+            "y": 2355,
+            "width": 342,
+            "height": 679
+          },
+          {
+            "tag": "record",
+            "x": 40,
+            "y": 2371,
+            "width": 310,
+            "height": 415
+          },
+          {
+            "tag": "choices",
+            "x": 57,
+            "y": 2532,
+            "width": 276,
+            "height": 44
+          },
+          {
+            "tag": "frame decision-study",
+            "x": 24,
+            "y": 3082,
+            "width": 342,
+            "height": 353
+          }
+        ],
+        "overflow": false,
+        "coarse": true,
+        "cssFonts": [
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAABysABAAAAAAQ9AAABxMAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 22776
+          },
+          {
+            "family": "Sora",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADmEABAAAAAAfgAAADkiAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 44444
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAB1wABAAAAAAREgAAB0NAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 23236
+          },
+          {
+            "family": "Sora",
+            "weight": "600",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAADqYABAAAAAAflQAADo3AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 45236
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAACzwABAAAAAAaSQAACyNAAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 35912
+          },
+          {
+            "family": "\"Schibsted Grotesk\"",
+            "weight": "400",
+            "source": "url(\"data:font/woff2;base64,d09GMgABAAAAAF8YABAAAAAA2vgAAF60AAEAAAAAAAAAAAAAAAAA",
+            "sourceCharacters": 72456
+          }
+        ]
+      },
+      "focus": {
+        "visible": true,
+        "width": "2px",
+        "offset": "2px",
+        "color": "rgb(42, 231, 168)"
+      },
+      "fontResponses": [],
+      "errors": [],
+      "keyboard": "Theme, text link, Yes choice tab order; Space selects local preview with explicit response label."
+    }
+  ],
+  "contrast": {
+    "light": {
+      "controlEdgeAgainstControlPanelCanvas": [
+        7.22,
+        8.5,
+        7.81
+      ],
+      "controlLabel": 16.17,
+      "body": 17.49,
+      "signal": 7.17,
+      "editorialRules": "Grouping only; headings, spacing, and tonal fields preserve structure."
+    },
+    "dark": {
+      "controlEdgeAgainstControlPanelCanvas": [
+        3.52,
+        3.52,
+        4.06
+      ],
+      "controlLabel": 15.19,
+      "body": 17.49,
+      "signal": 11.87,
+      "editorialRules": "Grouping only; headings, spacing, and tonal fields preserve structure."
+    }
+  },
+  "limitations": [
+    "Final human visual acceptance remains pending issue 53.",
+    "These local reference compositions do not migrate runtime tokens or constitute a product workflow."
+  ]
+}

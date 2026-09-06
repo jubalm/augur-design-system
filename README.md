@@ -2,7 +2,7 @@
 
 A shared interface language for Augur: maintained design guidance, generated tokens, reusable React components, and documentation for humans and agents.
 
-This repository is in **early development**. The architecture, the initial design specification, and the Bun workspace exist; the component library, registry, and documentation site are still planned work. There is no published package or live documentation deployment yet.
+This repository is in **early development**. The workspace, starter component library, source registry, and documentation site are implemented. Visual acceptance and release remain pending. There is no published package or live documentation deployment yet.
 
 ## Start here
 
@@ -38,7 +38,7 @@ Verified commands:
 | `bun run --cwd packages/design-system tokens:check` | Regenerates the base tokens (#3) in memory and byte-compares them with the committed artifacts; nonzero exit on drift. |
 | `bun run --cwd packages/design-system tokens:verify-failures` | Proves the controlled token-generation failure paths (invalid references, missing source, malformed YAML) exit nonzero and write no artifacts. |
 
-There is deliberately no `build` command yet: tsup stays deferred until actual package output is required (#1 decision). Browser-level checks (Playwright) land with [#15](https://github.com/jubalm/augur-design-system/issues/15); until then, browser behavior is verified with the manual font fixture (#5). Commands are documented here only once they do real work.
+There is deliberately no `build` command yet: tsup stays deferred until actual package output is required (#1 decision). Browser checks are implemented in `apps/docs/fixtures/verify-docs.mjs`; run them after `bun run --cwd apps/docs build`. Commands are documented here only once they do real work.
 
 Use an issue branch and a pull request for implementation. Read the issue's prerequisites before beginning; milestone order alone does not determine readiness. Start from the [delivery roadmap](ROADMAP.md) and the [GitHub Project](https://github.com/users/jubalm/projects/6) to find ready work.
 
@@ -75,7 +75,7 @@ Stable check names (GitHub check runs; candidates for required status checks whe
 | `workspace-smoke` | The workspace links load: package entry, `./styles.css` export, `apps/docs` resolution. |
 | `unit-tests` | The Vitest + Testing Library + axe suite passes against the real workspace package. |
 
-Deliberately **not** in CI yet, so the workflow stays honest about absent checks: browser coverage (Playwright, #15), a package build (deferred, no build command exists), and AI design review (advisory only, never a blocking gate).
+The `docs-verification` job covers docs builds, Markdown/browser verification, and content failure checks. A package build remains deferred; AI design review remains advisory.
 
 ## Ownership and release status
 

@@ -8,7 +8,8 @@
  *   2. `document.fonts.check()` is true for Sora 400/600 and
  *      Schibsted Grotesk 400;
  *   3. computed font family, weight, size, line height, and letter
- *      spacing match `DESIGN.md` for all seven typography roles.
+ *      spacing match `DESIGN.md` for all ten typography roles (the seven
+ *      inherited roles plus the issue-45 editorial roles).
  *
  * Playwright is deliberately NOT a workspace dependency (test tooling and
  * CI wiring belong to issues #6/#15). For local runs, provide it via a
@@ -127,6 +128,9 @@ const expectations = {
   control: { family: PRIMARY, weight: "600", fontSize: "14px", lineHeight: "20px", letterSpacing: "normal" },
   ui: { family: PRIMARY, weight: "400", fontSize: "14px", lineHeight: "20px", letterSpacing: "normal" },
   metadata: { family: SECONDARY, weight: "400", fontSize: "12px", lineHeight: "16px", letterSpacing: "normal" },
+  "editorial-title": { family: PRIMARY, weight: "400", fontSize: "40px", lineHeight: "48px", letterSpacing: "-0.4px" },
+  "editorial-section": { family: PRIMARY, weight: "400", fontSize: "28px", lineHeight: "34px", letterSpacing: "-0.14px" },
+  "editorial-label": { family: SECONDARY, weight: "400", fontSize: "12px", lineHeight: "16px", letterSpacing: "1.44px" },
 };
 
 const failures = [];

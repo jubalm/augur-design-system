@@ -1,0 +1,2446 @@
+{
+  "sourceCommit": "0335f1b0ab606ec3fe2272ee89fc2059f2cb414b",
+  "sourceDiffSha256": "bacc2f3879a60f5c1449a8e05e2be7be85d916c4575d11d3496e7704c598c868",
+  "dirty": true,
+  "capturedAt": "2026-09-06T20:35:06.482Z",
+  "generatedFrom": "/Users/jubalm/Projects/jubalm/augur-design-system/.worktrees/issue-43-text-identity/apps/docs/dist",
+  "routes": 21,
+  "themes": 2,
+  "viewports": [
+    "1440x1000",
+    "768x1024",
+    "390x844"
+  ],
+  "combinations": [
+    {
+      "route": "/",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/getting-started",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "getting-started-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/getting-started",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "getting-started-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/getting-started",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "getting-started-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/getting-started",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "getting-started-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/getting-started",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "getting-started-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/getting-started",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "getting-started-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/decisions",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "foundations_decisions-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/decisions",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "foundations_decisions-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/decisions",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "foundations_decisions-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/decisions",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "foundations_decisions-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/decisions",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "foundations_decisions-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/decisions",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "foundations_decisions-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/fonts",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "foundations_fonts-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/fonts",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "foundations_fonts-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/fonts",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "foundations_fonts-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/fonts",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "foundations_fonts-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/fonts",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "foundations_fonts-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/fonts",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "foundations_fonts-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/identity",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "foundations_identity-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/identity",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "foundations_identity-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/identity",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "foundations_identity-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/identity",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "foundations_identity-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/identity",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "foundations_identity-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/identity",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "foundations_identity-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/theming",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "foundations_theming-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/theming",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "foundations_theming-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/theming",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "foundations_theming-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/theming",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "foundations_theming-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/theming",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "foundations_theming-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/theming",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "foundations_theming-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/color",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "foundations_color-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/color",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "foundations_color-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/color",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "foundations_color-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/color",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "foundations_color-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/color",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "foundations_color-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/color",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "foundations_color-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/proposals",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "foundations_proposals-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/proposals",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "foundations_proposals-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/proposals",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "foundations_proposals-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/proposals",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "foundations_proposals-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/proposals",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "foundations_proposals-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/proposals",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "foundations_proposals-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/visual-direction",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "foundations_visual-direction-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/visual-direction",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "foundations_visual-direction-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/visual-direction",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "foundations_visual-direction-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/visual-direction",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "foundations_visual-direction-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/visual-direction",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "foundations_visual-direction-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/foundations/visual-direction",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "foundations_visual-direction-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/button",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "components_button-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/button",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "components_button-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/button",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "components_button-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/button",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "components_button-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/button",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "components_button-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/button",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "components_button-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/card",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "components_card-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/card",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "components_card-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/card",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "components_card-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/card",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "components_card-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/card",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "components_card-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/card",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "components_card-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/dialog",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "components_dialog-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true,
+      "dialog": {
+        "width": 512,
+        "height": 188,
+        "inViewport": true,
+        "animation": "none"
+      }
+    },
+    {
+      "route": "/components/dialog",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "components_dialog-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true,
+      "dialog": {
+        "width": 512,
+        "height": 188,
+        "inViewport": true,
+        "animation": "none"
+      }
+    },
+    {
+      "route": "/components/dialog",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "components_dialog-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true,
+      "dialog": {
+        "width": 374,
+        "height": 192,
+        "inViewport": true,
+        "animation": "none"
+      }
+    },
+    {
+      "route": "/components/dialog",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "components_dialog-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true,
+      "dialog": {
+        "width": 512,
+        "height": 188,
+        "inViewport": true,
+        "animation": "none"
+      }
+    },
+    {
+      "route": "/components/dialog",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "components_dialog-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true,
+      "dialog": {
+        "width": 512,
+        "height": 188,
+        "inViewport": true,
+        "animation": "none"
+      }
+    },
+    {
+      "route": "/components/dialog",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "components_dialog-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true,
+      "dialog": {
+        "width": 374,
+        "height": 192,
+        "inViewport": true,
+        "animation": "none"
+      }
+    },
+    {
+      "route": "/components/input",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "components_input-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/input",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "components_input-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/input",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "components_input-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/input",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "components_input-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/input",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "components_input-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/components/input",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "components_input-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/page-header",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "patterns_page-header-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/page-header",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "patterns_page-header-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/page-header",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "patterns_page-header-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/page-header",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "patterns_page-header-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/page-header",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "patterns_page-header-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/page-header",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "patterns_page-header-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/form-field",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "patterns_form-field-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/form-field",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "patterns_form-field-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/form-field",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "patterns_form-field-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/form-field",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "patterns_form-field-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/form-field",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "patterns_form-field-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/form-field",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "patterns_form-field-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/empty-state",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "patterns_empty-state-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/empty-state",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "patterns_empty-state-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/empty-state",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "patterns_empty-state-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/empty-state",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "patterns_empty-state-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/empty-state",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "patterns_empty-state-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/empty-state",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "patterns_empty-state-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/reference-record",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "patterns_reference-record-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/reference-record",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "patterns_reference-record-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/reference-record",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "patterns_reference-record-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/reference-record",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "patterns_reference-record-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/reference-record",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "patterns_reference-record-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/patterns/reference-record",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "patterns_reference-record-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/proposal-review",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "proposal-review-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 600",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/proposal-review",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "proposal-review-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 600",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/proposal-review",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "proposal-review-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 600",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/proposal-review",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "proposal-review-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 600",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/proposal-review",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "proposal-review-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 600",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/proposal-review",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "proposal-review-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 600",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/package-entries",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "reference_package-entries-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/package-entries",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "reference_package-entries-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/package-entries",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "reference_package-entries-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/package-entries",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "reference_package-entries-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/package-entries",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "reference_package-entries-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/package-entries",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "reference_package-entries-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/contributing",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "reference_contributing-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/contributing",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "reference_contributing-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/contributing",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "reference_contributing-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/contributing",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "reference_contributing-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/contributing",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "reference_contributing-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/contributing",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "reference_contributing-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/component-conventions",
+      "theme": "light",
+      "viewport": "1440x1000",
+      "capture": "reference_component-conventions-light-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/component-conventions",
+      "theme": "light",
+      "viewport": "768x1024",
+      "capture": "reference_component-conventions-light-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/component-conventions",
+      "theme": "light",
+      "viewport": "390x844",
+      "capture": "reference_component-conventions-light-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "light",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/component-conventions",
+      "theme": "dark",
+      "viewport": "1440x1000",
+      "capture": "reference_component-conventions-dark-1440x1000.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/component-conventions",
+      "theme": "dark",
+      "viewport": "768x1024",
+      "capture": "reference_component-conventions-dark-768x1024.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    },
+    {
+      "route": "/reference/component-conventions",
+      "theme": "dark",
+      "viewport": "390x844",
+      "capture": "reference_component-conventions-dark-390x844.png",
+      "consoleIssues": [],
+      "failedResponses": [],
+      "faces": [
+        "Sora 400",
+        "Sora 600",
+        "Schibsted Grotesk 400"
+      ],
+      "actualTheme": "dark",
+      "sora400": true,
+      "schibsted": true,
+      "titleVoice": "Sora 400",
+      "overflowX": false,
+      "pass": true
+    }
+  ]
+}

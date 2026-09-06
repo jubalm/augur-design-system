@@ -5,10 +5,11 @@
  * (which references generated tokens). No raw color values, no new
  * custom properties.
  *
- * Geometry: intentional structural constants — the 24px composition
- * padding and 8px surface radius follow the FD-01/FD-03 proposals
- * (Proposed — pending maintainer review); no spacing/radius tokens are
- * emitted. Decision record: ../../docs/components.md.
+ * Geometry: panel padding consumes the encoded FD-01 spacing tokens
+ * (24px steps to 16px below 600px, per the contract's panel rule); the
+ * surface radius consumes the encoded FD-03 token
+ * (`--augur-rounded-surface`, 0px — issues #45/#50). Decision record:
+ * ../../docs/components.md.
  */
 
 .aug-card {
@@ -18,7 +19,7 @@
   background-color: var(--card);
   color: var(--card-foreground);
   border: 1px solid var(--border);
-  border-radius: 8px; /* FD-03 radius.surface (Proposed) */
+  border-radius: var(--augur-rounded-surface); /* FD-03, encoded: 0px */
 }
 
 /*
@@ -29,25 +30,47 @@
 .aug-card-header {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* FD-01 space.sm (Proposed): title-to-description gap */
-  padding: 24px; /* FD-01 space.2xl (Proposed) */
+  gap: var(--augur-spacing-sm); /* FD-01 space.sm (encoded): title-to-description gap */
+  padding: var(--augur-spacing-xl); /* FD-01 space.xl (encoded): contract panel padding */
 }
 
 .aug-card-content {
-  padding: 0 24px 24px;
+  padding: 0 var(--augur-spacing-xl) var(--augur-spacing-xl);
 }
 
 .aug-card-footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  padding: 0 24px 24px;
+  gap: var(--augur-spacing-sm);
+  padding: 0 var(--augur-spacing-xl) var(--augur-spacing-xl);
 }
 
 .aug-card > .aug-card-content:first-child,
 .aug-card > .aug-card-footer:first-child {
-  padding-top: 24px;
+  padding-block-start: var(--augur-spacing-xl);
+}
+
+/* Contract panel padding steps to 16px below 600px (FD-01 composition
+   rule for record fields and panels, encoded direction). */
+@media (max-width: 599px) {
+  .aug-card-header,
+  .aug-card-content,
+  .aug-card-footer {
+    padding-inline: var(--augur-spacing-lg);
+    padding-block-start: var(--augur-spacing-lg);
+  }
+
+  .aug-card-content,
+  .aug-card-footer {
+    padding-inline-end: var(--augur-spacing-lg);
+    padding-block-end: var(--augur-spacing-lg);
+  }
+
+  .aug-card > .aug-card-content:first-child,
+  .aug-card > .aug-card-footer:first-child {
+    padding-block-start: var(--augur-spacing-lg);
+  }
 }
 
 /*

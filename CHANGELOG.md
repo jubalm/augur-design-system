@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Encoded the adopted visual foundations in `DESIGN.md` (#45): the six-step component spacing scale as `spacing` tokens (`--augur-spacing-xs…2xl`, 4/8/12/16/24/32px), 0px radius for controls and surfaces as `rounded` tokens (`--augur-rounded-control/surface`, decision FD-03 — the 8px/6px radius proposal is superseded), and the three editorial typography roles `editorial-title`/`editorial-section`/`editorial-label` (decision VD-03, Sora 400 editorial voice with tracked Schibsted Grotesk labels; the adopted 32/40 and 24/32 mobile steps live in the runtime typography layer). Regenerated all token artifacts deterministically, extended the token generator's degenerate-export guard to cover the spacing/rounded groups with a new `missing-45-sections` controlled-failure probe, and updated the fonts fixture, its driver, and the foundation/typography docs to all ten roles with their decision-record statuses flipped to encoded. The 48/64/80px composition roles, 1200px frame, gutters, section gaps, and 65ch measure remain composition geometry in the visual contract, not component tokens. Documentation-only change; no package release is claimed.
 - Established the architecture, initial DESIGN.md, and upstream brand reference.
 - Added contributor instructions and a dependency-linked GitHub delivery plan.
 - No runtime implementation or released artifacts yet.
@@ -33,3 +34,16 @@
 - Added a static font verification fixture (`packages/design-system/fixtures/`) with a browser driver asserting loaded font files, `document.fonts.check()`, computed typography values, and the absence of console/network failures; 41/41 assertions pass in Chromium 1228. (#5)
 - Added the semantic light/dark theme layer: `styles.css` now aggregates the generated `--augur-color-*` tokens plus a shadcn-compatible role mapping (`theme.css`) that references generated tokens only — light default with `[data-theme]` opt-in/opt-out and `prefers-color-scheme` fallback, Deep primary actions in light and Green in dark, validated WCAG AA pairs, keyboard-only focus rings, and a structural reduced-motion gate; recorded decisions and contrast evidence in `packages/design-system/docs/semantic-themes.md`, with a package-local `bun test` suite. (#4)
 - Added the plain Astro documentation shell under `apps/docs` (React rendering + MDX/Markdown, no Starlight): static responsive shell with accessible navigation (skip link, `aria-current` nav, native-details mobile menu), a theme control honoring the package theme contract (`data-theme` pin, system default, pre-paint restore, localStorage persistence), semantic shared styles consumed from the real `@augur/design-system` package (`styles.css` entry plus `AUGUR_FONTS`/`AUGUR_FONT_FAMILIES` imports — no private copies), environment-driven base configuration for repository-subpath and custom-domain-root deployments, docs-only dependencies, and a headless-Chromium fixture verifying builds, keyboard navigation, mobile layout, real font loading, and console cleanliness. (#7)
+
+### Visual-alignment review corrections (unreleased)
+
+Restore installed-registry typography, spacing, and explicit light scopes; repair
+responsive typography and reference-record fidelity; apply adopted touch targets,
+control-edge contrast, square geometry, and immediate neutral state feedback.
+Evidence and remaining acceptance work: `apps/docs/fixtures/acceptance/REVIEW.md`.
+
+- Added the static `/proposal-review` applied example for #52: it composes the
+  existing PageHeader, reference record, and Button around one illustrative
+  task. `Review details` targets a same-page explanation; it creates no vote,
+  backend call, or new component API. Clean Markdown, llms.txt, browser checks,
+  and the theme/viewport acceptance matrix cover the page.

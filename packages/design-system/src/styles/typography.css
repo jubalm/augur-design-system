@@ -3,14 +3,16 @@
  *
  * Each class mirrors one `DESIGN.md` front-matter `typography` role,
  * keyed by the role name. Values are hand-authored to match `DESIGN.md`
- * exactly (verified against PDF page 04.1 in the foundation decision
- * audit) and must be replaced by generated token output when the token
- * pipeline exists (issue #3). Do not add roles or values that are not in
- * `DESIGN.md`.
+ * exactly and verified against it by the fonts fixture driver
+ * (`fixtures/verify-fonts.mjs`); the token pipeline (issue #3) generates
+ * the primitive tokens, while role classes stay the maintained runtime
+ * mapping. Do not add roles or values that are not in `DESIGN.md`.
  *
  * Families come from `./fonts.css` custom properties; font files are
  * delivered via `styles.css`. Weights rely on faces loaded by the pinned
- * `@fontsource` packages (Sora 400/600, Schibsted Grotesk 400).
+ * `@fontsource` packages (Sora 400/600, Schibsted Grotesk 400) — the
+ * editorial roles (issue 45, contract decision VD-03) deliberately reuse
+ * the 400 faces; no Sora Light dependency exists.
  */
 
 /* Base: body copy uses the secondary voice unless a role overrides it. */
@@ -75,4 +77,51 @@ body {
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
+}
+
+/* DESIGN.md `typography.editorial-title` — Sora 400, 40/48, -0.01em.
+   The editorial voice (VD-03): long-form titles set regular so size
+   alone creates order. The 32/40 step below 600px is part of the
+   adopted role, per the visual direction contract. */
+.augur-type-editorial-title {
+  font-family: var(--augur-font-primary);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 48px;
+  letter-spacing: -0.01em;
+}
+
+/* DESIGN.md `typography.editorial-section` — Sora 400, 28/34, -0.005em. */
+.augur-type-editorial-section {
+  font-family: var(--augur-font-primary);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.005em;
+}
+
+/* DESIGN.md `typography.editorial-label` — Schibsted Grotesk 400,
+   12/16, +0.12em: short tracked uppercase labels. Wrapping is allowed;
+   the tracking is never reduced to fit. */
+.augur-type-editorial-label {
+  font-family: var(--augur-font-secondary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Adopted mobile steps for the editorial roles (visual direction
+   contract, VD-03). The seven inherited roles have no mobile steps. */
+@media (max-width: 599px) {
+  .augur-type-editorial-title {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .augur-type-editorial-section {
+    font-size: 24px;
+    line-height: 32px;
+  }
 }
