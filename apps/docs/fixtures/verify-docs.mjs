@@ -44,6 +44,14 @@
  *      pattern-page examples rendering, both themes on the same nodes,
  *      mobile (375px) dialog sizing/scroll, and reduced-motion
  *      transitions collapsing.
+ *   9. Specimen rendering repair (issue #44): palette chips paint as
+ *      fields with computed dimensions in both themes and at 390px, and
+ *      Card/PageHeader computed typography and spacing are identical in
+ *      the bare package host (`packages/design-system/fixtures/
+ *      bare-hosts.html`, served from the repository root) and inside
+ *      the docs prose host — so a prose-selector leak into
+ *      `.doc-example-preview` fails the check instead of silently
+ *      distorting the specimens.
  *
  * Exit code 0 = all assertions passed; 1 = at least one failed.
  * Screenshots are written to /tmp/augur-docs-verify/ as visual evidence.
@@ -742,6 +750,160 @@ console.log("\n== Starter components in real browsers (issue #15) ==");
   await btnPage.waitForTimeout(300);
   ok("button activates via Enter and Space", clicks === 2, String(clicks));
   await btnPage.close();
+}
+
+// --- 8. Specimen rendering repair (issue #44). ---------------------------
+console.log("\n== Specimen rendering repair (#44) ===");
+{
+  // A shared reader for the exact example markup of Card and PageHeader;
+  // evaluated in the bare host and in the docs pages so parity is a
+  // straight computed-value comparison.
+  const componentMetrics = () => {
+    const g = (el, prop) => (el ? getComputedStyle(el)[prop] : null);
+    const card = document.querySelector(".aug-card:not([data-theme])");
+    const title = card?.querySelector(".aug-card-title");
+    const desc = card?.querySelector(".aug-card-description");
+    const contentP = card?.querySelector(".aug-card-content > p");
+    const header = document.querySelector(".aug-page-header:not([data-theme])");
+    const phTitle = header?.querySelector(".aug-page-header-title");
+    const phDesc = header?.querySelector(".aug-page-header-description");
+    const ol = header?.querySelector(".aug-page-header-breadcrumb ol");
+    const li2 = header?.querySelector(".aug-page-header-breadcrumb li + li");
+    const crumb = header?.querySelector(".aug-page-header-breadcrumb a:not([aria-current])");
+    const current = header?.querySelector('.aug-page-header-breadcrumb [aria-current="page"]');
+    return {
+      cardTitleSize: g(title, "fontSize"),
+      cardTitleLh: g(title, "lineHeight"),
+      cardTitleMt: g(title, "marginTop"),
+      cardTitleMb: g(title, "marginBottom"),
+      cardTitleWeight: g(title, "fontWeight"),
+      cardDescLh: g(desc, "lineHeight"),
+      cardContentPLh: g(contentP, "lineHeight"),
+      phTitleSize: g(phTitle, "fontSize"),
+      phTitleMt: g(phTitle, "marginTop"),
+      phDescLh: g(phDesc, "lineHeight"),
+      olPadding: g(ol, "paddingInlineStart"),
+      li2MarginTop: g(li2, "marginTop"),
+      crumbColor: g(crumb, "color"),
+      crumbDecoration: g(crumb, "textDecorationLine"),
+      currentColor: g(current, "color"),
+    };
+  };
+  const metricLabels = {
+    cardTitleSize: "card title font-size",
+    cardTitleLh: "card title line-height",
+    cardTitleMt: "card title margin-top",
+    cardTitleMb: "card title margin-bottom",
+    cardTitleWeight: "card title font-weight",
+    cardDescLh: "card description line-height",
+    cardContentPLh: "card content paragraph line-height",
+    phTitleSize: "page-header title font-size",
+    phTitleMt: "page-header title margin-top",
+    phDescLh: "page-header description line-height",
+    olPadding: "breadcrumb list inline padding",
+    li2MarginTop: "breadcrumb second-item offset",
+    crumbColor: "breadcrumb link color",
+    crumbDecoration: "breadcrumb link decoration",
+    currentColor: "breadcrumb current-page color",
+  };
+
+  // Bare host: the same markup with no docs shell, served from the
+  // repository root on a second loopback server.
+  const bareServer = createServer(async (req, res) => {
+    try {
+      let path = normalize(decodeURIComponent(new URL(req.url, "http://localhost").pathname));
+      if (path.endsWith("/")) path += "index.html";
+      const file = join(repoRoot, path);
+      if (!file.startsWith(repoRoot)) throw new Error("traversal");
+      const body = await readFile(file);
+      res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });
+      res.end(body);
+    } catch {
+      res.writeHead(404);
+      res.end("not found");
+    }
+  });
+  await new Promise((resolve) => bareServer.listen(0, "127.0.0.1", resolve));
+  const bareOrigin = `http://127.0.0.1:${bareServer.address().port}`;
+  const barePage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await barePage.goto(`${bareOrigin}/packages/design-system/fixtures/bare-hosts.html`, { waitUntil: "networkidle" });
+  await barePage.evaluate(() => document.fonts.ready);
+  const bareMetrics = await barePage.evaluate(componentMetrics);
+  await barePage.screenshot({ path: "/tmp/augur-docs-verify/bare-hosts.png", fullPage: true });
+  await barePage.close();
+  bareServer.close();
+
+  // Docs hosts: the same components inside .doc-example-preview.
+  const docsMetrics = {};
+  for (const [route, keys] of [
+    [site("/components/card"), Object.keys(metricLabels).filter((k) => k.startsWith("card"))],
+    [site("/patterns/page-header"), Object.keys(metricLabels).filter((k) => k.startsWith("ph") || k.startsWith("ol") || k.startsWith("li2") || k.startsWith("crumb") || k.startsWith("current"))],
+  ]) {
+    const p = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    await p.goto(origin + route, { waitUntil: "networkidle" });
+    await p.evaluate(() => document.fonts.ready);
+    const read = await p.evaluate(componentMetrics);
+    for (const k of keys) docsMetrics[k] = read[k];
+    await p.close();
+  }
+
+  for (const [key, label] of Object.entries(metricLabels)) {
+    ok(
+      `${label} identical in bare host and docs`,
+      docsMetrics[key] != null && docsMetrics[key] === bareMetrics[key],
+      `docs ${docsMetrics[key]} vs bare ${bareMetrics[key]}`,
+    );
+  }
+
+  // Palette chips: fields with computed dimensions, both themes, and at
+  // a narrow viewport. Reads computed styles, never CSS text.
+  const readChips = (page) =>
+    page.evaluate(() => {
+      const chips = [...document.querySelectorAll(".example-palette-chip")];
+      const cs = getComputedStyle(chips[0]);
+      const rect = chips[0].getBoundingClientRect();
+      return {
+        count: chips.length,
+        display: cs.display,
+        height: cs.height,
+        painted: `${Math.round(rect.width)}x${Math.round(rect.height)}`,
+        background: cs.backgroundColor,
+        border: cs.borderTopColor,
+      };
+    });
+  const paletteLight = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await paletteLight.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+  await paletteLight.evaluate(() => document.fonts.ready);
+  const chipsLight = await readChips(paletteLight);
+  ok("palette renders 15 chip fields (light)", chipsLight.count === 15, String(chipsLight.count));
+  ok("palette chip is a 40px block field (light)", chipsLight.display === "block" && chipsLight.height === "40px", `${chipsLight.display} ${chipsLight.height}`);
+  ok("palette chip paints a visible field (light)", !chipsLight.painted.startsWith("0x"), chipsLight.painted);
+  ok("palette chip paints a token color (light)", chipsLight.background !== "rgba(0, 0, 0, 0)", chipsLight.background);
+  ok("palette chip keeps the hairline edge (light)", chipsLight.border !== "rgba(0, 0, 0, 0)", chipsLight.border);
+  await paletteLight.screenshot({ path: "/tmp/augur-docs-verify/color-repaired-light.png", fullPage: true });
+  await paletteLight.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const chipsDark = await readChips(paletteLight);
+  ok("palette chip is a 40px block field (pinned dark)", chipsDark.display === "block" && chipsDark.height === "40px", `${chipsDark.display} ${chipsDark.height}`);
+  // Chips paint theme-invariant PRIMITIVE tokens (--augur-color-*): a
+  // palette reference shows the same fixed fields under either theme;
+  // only the page's semantic surface changes. Assert painted, unchanged.
+  ok(
+    "palette chip paints its primitive token in pinned dark (theme-invariant by design)",
+    chipsDark.background !== "rgba(0, 0, 0, 0)" && chipsDark.background === chipsLight.background,
+    `${chipsLight.background} -> ${chipsDark.background}`,
+  );
+  await paletteLight.screenshot({ path: "/tmp/augur-docs-verify/color-repaired-dark.png", fullPage: true });
+  await paletteLight.close();
+
+  const paletteMobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await paletteMobile.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+  const mobileChips = await readChips(paletteMobile);
+  const mobileOverflow = await paletteMobile.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+  ok("palette chip is a visible field at 390px", mobileChips.display === "block" && !mobileChips.painted.startsWith("0x"), mobileChips.painted);
+  ok("color page has no horizontal overflow at 390px", mobileOverflow === false);
+  await paletteMobile.close();
 }
 
 await browser.close();
