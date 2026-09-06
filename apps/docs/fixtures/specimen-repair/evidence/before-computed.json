@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-09-06",
+  "commit": "56cb770",
+  "note": "Computed-style reproduction of the #44 defects at commit 56cb770 (before repair), observed via the probe in the execution log. Chips rendered inline because the two unclosed docs.css blocks nested every later rule inside breadcrumb/form-field ancestors (CSS nesting); prose selectors leaked into .doc-example-preview because nothing excluded preview content.",
+  "palette": {
+    "chipCount": 15,
+    "display": "inline",
+    "width": "auto",
+    "height": "auto",
+    "paintedRect": "0x20",
+    "background": "rgb(14, 14, 33)"
+  },
+  "card": {
+    "titleFontSize": "19px",
+    "titleLineHeight": "23.75px",
+    "titleMarginTop": "42.75px",
+    "titleMarginBottom": "11.4px",
+    "titleWeight": "600",
+    "descLineHeight": "19.8px",
+    "descFontSize": "12px",
+    "contentPLineHeight": "26.4px"
+  },
+  "pageHeader": {
+    "olPaddingInlineStart": "24px",
+    "crumbColor": "rgb(74, 75, 97)",
+    "crumbTextDecoration": "none",
+    "currentColor": "rgb(14, 14, 33)",
+    "liMarginTop": "6px",
+    "liLineHeight": "23.1px",
+    "titleTag": "H2",
+    "titleFontSize": "24px",
+    "titleMarginTop": "54px",
+    "descLineHeight": "26.4px"
+  }
+}
