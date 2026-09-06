@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Encoded the adopted visual foundations in `DESIGN.md` (#45): the six-step component spacing scale as `spacing` tokens (`--augur-spacing-xs…2xl`, 4/8/12/16/24/32px), 0px radius for controls and surfaces as `rounded` tokens (`--augur-rounded-control/surface`, decision FD-03 — the 8px/6px radius proposal is superseded), and the three editorial typography roles `editorial-title`/`editorial-section`/`editorial-label` (decision VD-03, Sora 400 editorial voice with tracked Schibsted Grotesk labels; the adopted 32/40 and 24/32 mobile steps live in the runtime typography layer). Regenerated all token artifacts deterministically, extended the token generator's degenerate-export guard to cover the spacing/rounded groups with a new `missing-45-sections` controlled-failure probe, and updated the fonts fixture, its driver, and the foundation/typography docs to all ten roles with their decision-record statuses flipped to encoded. The 48/64/80px composition roles, 1200px frame, gutters, section gaps, and 65ch measure remain composition geometry in the visual contract, not component tokens. Documentation-only change; no package release is claimed.
 - Established the architecture, initial DESIGN.md, and upstream brand reference.
 - Added contributor instructions and a dependency-linked GitHub delivery plan.
 - No runtime implementation or released artifacts yet.

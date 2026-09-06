@@ -5,7 +5,7 @@
     "source": {
       "file": "DESIGN.md",
       "location": "repository root",
-      "sha256": "fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5"
+      "sha256": "155c0216deb39c437afd1a3ca620c7e2b9cfe84e02130b2ebfe7bc9174df0e05"
     },
     "tool": {
       "name": "@google/design.md",
@@ -17,7 +17,7 @@
     "lint": {
       "errors": 0,
       "warnings": 0,
-      "infos": 3
+      "infos": 1
     },
     "determinism": "Deterministic output: no timestamps or volatile metadata. Identical source content + identical tool version produce byte-identical artifacts."
   },
@@ -25,20 +25,20 @@
     {
       "file": "tokens.css",
       "format": "css-vars",
-      "sha256": "ce1367992ad40384985e63d3292a071a94752532b0b77361c2ada43721f6dea7",
-      "bytes": 1242
+      "sha256": "edfb919cdccf1d5a4baa3594d474571ebe4259c5defc893ac7df2c994a13989a",
+      "bytes": 1473
     },
     {
       "file": "tokens.tailwind.css",
       "format": "css-tailwind",
-      "sha256": "159c51e72f0527e68201723419d84b25d32e5c03ab39aeb6d3d5da5c4b11c330",
-      "bytes": 1969
+      "sha256": "b5b16df3877f49384f0bfb69b4e43e7c41c3453c588f7a94d1c2cb72905be3fe",
+      "bytes": 2707
     },
     {
       "file": "tokens.dtcg.json",
       "format": "dtcg",
-      "sha256": "0f77d94e650c4d31dda9c75cae604286cd816920b40d0b84ac9afb19e8467a41",
-      "bytes": 6602
+      "sha256": "53482aa28f95af76c4845902e3c58409fba8aea9ca00fbb64a99d59a0a5b5b3d",
+      "bytes": 8619
     }
   ]
 }

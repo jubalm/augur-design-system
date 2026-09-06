@@ -11,7 +11,8 @@ A minimal rendered fixture that verifies the fonts delivered by
 - `document.fonts.check()` is true for Sora 400, Sora 600, and
   Schibsted Grotesk 400.
 - Computed font family, weight, size, line height, and letter spacing of
-  all seven `DESIGN.md` typography roles match the specification.
+  all ten `DESIGN.md` typography roles (seven inherited plus the
+  issue-45 editorial roles) match the specification.
 
 ## Run
 

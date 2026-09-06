@@ -5,7 +5,7 @@
     "source": {
       "file": "DESIGN.md",
       "location": "repository root",
-      "sha256": "fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5"
+      "sha256": "155c0216deb39c437afd1a3ca620c7e2b9cfe84e02130b2ebfe7bc9174df0e05"
     },
     "tool": {
       "name": "@google/design.md",
@@ -17,7 +17,7 @@
     "lint": {
       "errors": 0,
       "warnings": 0,
-      "infos": 3
+      "infos": 1
     },
     "determinism": "Deterministic output: no timestamps or volatile metadata. Identical source content + identical tool version produce byte-identical artifacts."
   },
@@ -192,6 +192,60 @@
         }
       }
     },
+    "spacing": {
+      "$type": "dimension",
+      "xs": {
+        "$value": {
+          "value": 4,
+          "unit": "px"
+        }
+      },
+      "sm": {
+        "$value": {
+          "value": 8,
+          "unit": "px"
+        }
+      },
+      "md": {
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        }
+      },
+      "lg": {
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "xl": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      },
+      "2xl": {
+        "$value": {
+          "value": 32,
+          "unit": "px"
+        }
+      }
+    },
+    "rounded": {
+      "$type": "dimension",
+      "control": {
+        "$value": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "surface": {
+        "$value": {
+          "value": 0,
+          "unit": "px"
+        }
+      }
+    },
     "typography": {
       "display": {
         "$type": "typography",
@@ -282,6 +336,54 @@
             "unit": "px"
           },
           "fontWeight": 400,
+          "lineHeight": 16
+        }
+      },
+      "editorial-title": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Sora",
+          "fontSize": {
+            "value": 40,
+            "unit": "px"
+          },
+          "fontWeight": 400,
+          "letterSpacing": {
+            "value": -0.01,
+            "unit": "em"
+          },
+          "lineHeight": 48
+        }
+      },
+      "editorial-section": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Sora",
+          "fontSize": {
+            "value": 28,
+            "unit": "px"
+          },
+          "fontWeight": 400,
+          "letterSpacing": {
+            "value": -0.005,
+            "unit": "em"
+          },
+          "lineHeight": 34
+        }
+      },
+      "editorial-label": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Schibsted Grotesk",
+          "fontSize": {
+            "value": 12,
+            "unit": "px"
+          },
+          "fontWeight": 400,
+          "letterSpacing": {
+            "value": 0.12,
+            "unit": "em"
+          },
           "lineHeight": 16
         }
       }

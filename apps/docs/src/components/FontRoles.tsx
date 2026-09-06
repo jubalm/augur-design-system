@@ -26,6 +26,9 @@ const ROLES: readonly { className: string; label: string; sample: string }[] = [
   { className: "augur-type-control", label: "control", sample: "Record your response" },
   { className: "augur-type-ui", label: "ui", sample: "Filter: open queries" },
   { className: "augur-type-metadata", label: "metadata", sample: "Final · 14 responses · updated 2h ago" },
+  { className: "augur-type-editorial-title", label: "editorial-title", sample: "Make what matters clear." },
+  { className: "augur-type-editorial-section", label: "editorial-section", sample: "A quieter title" },
+  { className: "augur-type-editorial-label", label: "editorial-label", sample: "Open query" },
 ] as const;
 
 export function FontRoles() {
@@ -35,8 +38,11 @@ export function FontRoles() {
         {ROLES.map((role) => (
           <div key={role.className} className="font-demo-role">
             <p className="augur-type-metadata font-demo-role-label">{role.label}</p>
-            {/* The role class carries the family/size/weight; no local copies. */}
-            <p className={role.className}>{role.sample}</p>
+            {/* The role class carries the family/size/weight; no local copies.
+                The sample is a <div>, not a <p>: as prose content a <p> would
+                take the prose line-height over the role's own value, and this
+                page must demonstrate the package values exactly (issue #45). */}
+            <div className={role.className}>{role.sample}</div>
           </div>
         ))}
       </div>

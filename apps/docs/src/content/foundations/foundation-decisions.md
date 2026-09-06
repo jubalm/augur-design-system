@@ -22,14 +22,14 @@ schema stay in maintained foundations and component implementation.
 
 | ID | Initial proposal | Current decision | Status |
 | --- | --- | --- | --- |
-| FD-01 | Local 4/8/12/16/24/32px spacing | Retain local steps; add 48/64/80px composition roles, 1200px frame, 64/24px outer gutters, 80/48px section gaps, 65ch reading measure, with exact breakpoints in the visual contract | Adopted direction; canonical migration pending issue 45 |
+| FD-01 | Local 4/8/12/16/24/32px spacing | Retain local steps; add 48/64/80px composition roles, 1200px frame, 64/24px outer gutters, 80/48px section gaps, 65ch reading measure, with exact breakpoints in the visual contract | Adopted and encoded: the six component steps are the `spacing` tokens in `DESIGN.md` (issue 45); 48/64/80px, the frame, gutters, section gaps, and the 65ch measure remain composition roles in the visual contract, not component tokens |
 | FD-02 | Desktop heights 32/36/40px; mobile policy open | Retain desktop sizes and 16/20px icons; actionable targets at least 44×44px on coarse pointers | Adopted direction; component migration pending |
-| FD-03 | 8px surface / 6px control, subtraction rule | 0px panels, controls, and Dialog; only intrinsic radio circles and supplied identity artwork keep their required shape | Old proposal rejected; square direction adopted |
+| FD-03 | 8px surface / 6px control, subtraction rule | 0px panels, controls, and Dialog; only intrinsic radio circles and supplied identity artwork keep their required shape | Old proposal rejected; 0px encoded as `rounded: {control: 0px, surface: 0px}` in `DESIGN.md` (issue 45); component geometry migrates with the component issues |
 | FD-04 | 2px ring / 2px offset; Deep/Green | Adopt geometry and theme relationship; use focus-visible browser heuristics, never hide required input focus | Adopted direction |
 | FD-05 | Universal 150/250ms durations | Immediate 0ms state feedback; no decorative motion; retain reduced-motion safety for legacy migration | Old duration proposal rejected; immediate direction adopted |
 | FD-06 | Inherited state names; proposed interaction | Keep Open/Closed/Pending/Final; neutral hover/selection; explicit disabled/loading labels, stable loading width and aria-busy | Labels inherited; interaction direction adopted |
-| VD-03 | No editorial roles | Add Sora 400 editorial title 40/48 and section 28/34, with mobile rules; preserve seven inherited roles | Adopted direction; canonical migration pending issue 45 |
-| VD-05/06 | Signal logic and tonal depth inherited | 32×2px signal; quiet editorial separators distinct from perceivable control edges | Adopted direction; semantic migration pending issue 45 |
+| VD-03 | No editorial roles | Add Sora 400 editorial title 40/48 and section 28/34, with mobile rules; preserve seven inherited roles | Adopted and encoded: `editorial-title`/`editorial-section`/`editorial-label` in `DESIGN.md` and the runtime typography layer with the adopted mobile steps (issue 45) |
+| VD-05/06 | Signal logic and tonal depth inherited | 32×2px signal; quiet editorial separators distinct from perceivable control edges | Adopted direction; relationships and contrast evidence recorded (issue 45); runtime semantic border roles land with the consuming frame work (#46) |
 | Final visual acceptance | Not performed by issue 2 | Maintainer inspects resulting rendered surfaces through issue 53 | Unresolved; do not claim human acceptance or release approval |
 
 ## Source precedence and history

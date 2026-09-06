@@ -27,9 +27,9 @@ Everything in `packages/design-system/src/tokens` is generated **except**
 
 | File | Format | Contents |
 | --- | --- | --- |
-| `tokens.css` | `design.md export --format css-vars --prefix augur` | Colors as `--augur-color-*` custom properties |
-| `tokens.tailwind.css` | `design.md export --format css-tailwind` | Tailwind v4 `@theme` block: colors + typography tokens |
-| `tokens.dtcg.json` | `design.md export --format dtcg` | W3C Design Tokens (colors + typography), wrapped in a `$provenance` envelope under a `tokens` key |
+| `tokens.css` | `design.md export --format css-vars --prefix augur` | Colors as `--augur-color-*`, spacing as `--augur-spacing-*`, and radius as `--augur-rounded-*` custom properties |
+| `tokens.tailwind.css` | `design.md export --format css-tailwind` | Tailwind v4 `@theme` block: colors, typography, spacing, and radius tokens |
+| `tokens.dtcg.json` | `design.md export --format dtcg` | W3C Design Tokens (color, typography, spacing, rounded groups), wrapped in a `$provenance` envelope under a `tokens` key |
 | `manifest.json` | built by the generator | Provenance + per-artifact sha256/bytes; machine-checkable generation record |
 
 Policy:
@@ -93,11 +93,14 @@ exiting `0`. Generation therefore fails closed on three paths, each proven by
    source, stops the pipeline.
    *Proven with:* a nonexistent source path → `source-missing`, exit nonzero.
 3. **Degenerate exports** — outputs are verified structurally and
-   cross-artifact (dtcg parses with non-empty `color`/`typography` groups;
-   css-vars custom-property count equals the dtcg color count; css-tailwind
-   contains the `@theme` block with matching color count and typography
-   properties). Verification checks structure and counts, never hardcoded
-   design values.
+   cross-artifact (dtcg parses with non-empty `color`, `typography`,
+   `spacing`, and `rounded` groups; css-vars custom-property count equals
+   the dtcg color + spacing + rounded counts; css-tailwind contains the
+   `@theme` block with matching color, spacing, and radius counts plus
+   typography properties). Verification checks structure and counts, never
+   hardcoded design values. Since issue 45 a controlled fixture
+   (`missing-45-sections`) proves the guard fires when the adopted
+   spacing/rounded sections go missing from an otherwise valid source.
    *Proven with:* `fixtures/malformed-yaml/DESIGN.md` → lint passes with
    warnings only, export emits an empty token document, verification fails the
    pipeline with `degenerate-export`.
@@ -137,19 +140,16 @@ ce1367992ad40384985e63d3292a071a94752532b0b77361c2ada43721f6dea7  tokens.css
 
 What the pinned toolchain supports, and therefore what this generator emits:
 
-- **Exported as base tokens:** the `colors` and `typography` front-matter
-  groups (the toolchain's exportable groups). This is the complete emitted
-  surface — no more, no less.
+- **Exported as base tokens:** the `colors`, `typography`, `spacing`, and
+  `rounded` front-matter groups (the toolchain's exportable groups). Since
+  issue 45 the spacing scale (xs–2xl = 4/8/12/16/24/32px) and the 0px
+  control/surface radius (FD-03) are adopted and emitted. This is the
+  complete emitted surface — no more, no less.
 - **Validated but not exported:** the `components` section (pairings such as
   `action-primary-light`). The linter checks its `{references}`; no 0.4.0
   export format emits it. Pairings remain a `DESIGN.md` concern and are
   expected to inform the semantic theme mapping (#4), which must reference
   generated base tokens rather than restate raw values.
-- **Intentionally omitted sections:** `spacing` and `rounded` are declared
-  omissions in `DESIGN.md` front matter. The corresponding proposals FD-01
-  (spacing) and FD-03 (radius) in
-  `apps/docs/src/content/foundations/foundation-decisions.md` are **Proposed,
-  not adopted**; no spacing or radius tokens are emitted.
 - **Not representable by the schema → no tokens:** control sizing (FD-02),
   focus treatment (FD-04), motion/reduced motion (FD-05), and interaction-state
   treatment (FD-06) have no schema sections and stay owned by foundation
