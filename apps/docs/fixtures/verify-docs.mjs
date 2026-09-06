@@ -228,7 +228,8 @@ await auditPage(origin + site("/foundations/decisions"), { expectTitleFragment: 
 await auditPage(origin + site("/foundations/fonts"), { expectTitleFragment: "Fonts and typography" });
 const theming = await auditPage(origin + site("/foundations/theming"), { expectTitleFragment: "Theming" });
 await auditPage(origin + site("/foundations/color"), { expectTitleFragment: "Color system" });
-await auditPage(origin + site("/foundations/proposals"), { expectTitleFragment: "Foundation proposals" });
+await auditPage(origin + site("/foundations/proposals"), { expectTitleFragment: "Foundation adoption" });
+await auditPage(origin + site("/foundations/visual-direction"), { expectTitleFragment: "Visual direction" });
 await auditPage(origin + site("/reference/package-entries"), { expectTitleFragment: "Package entries" });
 await auditPage(origin + site("/reference/contributing"), { expectTitleFragment: "Contributing" });
 await auditPage(origin + site("/reference/component-conventions"), { expectTitleFragment: "Component conventions" });
