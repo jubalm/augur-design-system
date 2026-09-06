@@ -2,7 +2,7 @@
 
 ## Pause boundary
 
-The maintainer requested a pause after finishing the pending visual contract, before starting the remaining implementation. Issue #42 is prepared and verified on `issue-42-visual-contract`; no production restyling, main merge, or deployment occurred. The final commit and PR are linked in issue #42. Final human visual acceptance remains #53.
+The maintainer requested a pause after finishing the pending visual contract, before starting the remaining implementation. Issue #42 is prepared and verified on `issue-42-visual-contract`; no production restyling, main merge, or deployment occurred. Review PR: https://github.com/jubalm/augur-design-system/pull/54 (base `visual-alignment-review`). The final commit is linked in issue #42. Final human visual acceptance remains #53.
 
 ## Completed contract
 
