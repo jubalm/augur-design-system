@@ -1,51 +1,51 @@
 ---
-# Foundation decisions record (issue #2; rendered through the issue #8
-# docs content conventions — src/content/foundations/, route
-# /foundations/decisions). The title/description metadata below is the
-# single H1 source: the page renderer and the future Markdown endpoint
-# (#9) synthesize the H1 from it, so the body starts at H2 level.
-title: "Foundation decisions"
-description: >-
-  Audit, naming fidelity, and pending foundation proposals (FD-01 through
-  FD-06) for the Augur Design System — the review record referenced by
-  DESIGN.md.
+title: Foundation decisions
+description: Inherited brand facts, the original foundation audit, and the adopted visual direction that supersedes the initial proposals.
 order: 3
 ---
 
-> **Review status: OPEN.** This record separates three kinds of content: inherited brand
-> facts verified against the upstream reference, corrections applied to `DESIGN.md`, and
-> novel proposals. Every proposal is marked **Proposed** and is **unresolved** until a
-> maintainer records review here or in
-> [jubalm/augur-design-system#2](https://github.com/jubalm/augur-design-system/issues/2).
-> Nothing in this file overrides `DESIGN.md`; until a proposal is adopted, the value it
-> describes has no settled system definition.
+## Current decision status
 
-- Issue: [jubalm/augur-design-system#2](https://github.com/jubalm/augur-design-system/issues/2)
-- Branch at time of audit: `issue-2-foundation-authority`, based on `6a66172`
-- Audit date: 2026-09-04
-- Sources: `DESIGN.md` (repository root), `ARCHITECTURE.md`, and
-  `resources/brand/augur-brand-foundation.pdf` (upstream reference only)
+**Implementation direction adopted under delegated maintainer authority on 2026-09-06;
+final human visual acceptance remains pending in issue 53.** The full executable
+contract is [Visual direction](/foundations/visual-direction). Its
+[authority record](https://github.com/jubalm/augur-design-system/issues/42#issuecomment-5556190059)
+records the maintainer's delegation of exact visual choices to the Astra visual
+director. This is an explicit decision made after the initial issue 2 audit;
+closing issue 2 did not adopt its proposals.
 
-## 1. Purpose
+No runtime tokens or component geometry change in issue 42. The adopted direction
+is a migration contract: issue 45 must encode representable values in canonical
+`DESIGN.md` and regenerate outputs before runtime consumers adopt them. Technical
+structure remains governed by `ARCHITECTURE.md`; concepts outside the pinned
+schema stay in maintained foundations and component implementation.
 
-`DESIGN.md` arrived with unresolved spacing/radius ownership language and no shared
-decision record for the concepts its pinned schema cannot represent. This file is the
-foundation review record required before issue #3 (token export), #4 (semantic themes),
-and #10 (foundation documentation) can consume settled values. It documents what the
-audit verified, what was corrected, what is proposed, and who owns each concept.
+| ID | Initial proposal | Current decision | Status |
+| --- | --- | --- | --- |
+| FD-01 | Local 4/8/12/16/24/32px spacing | Retain local steps; add 48/64/80px composition roles, 1200px frame, 64/24px outer gutters, 80/48px section gaps, 65ch reading measure, with exact breakpoints in the visual contract | Adopted direction; canonical migration pending issue 45 |
+| FD-02 | Desktop heights 32/36/40px; mobile policy open | Retain desktop sizes and 16/20px icons; actionable targets at least 44×44px on coarse pointers | Adopted direction; component migration pending |
+| FD-03 | 8px surface / 6px control, subtraction rule | 0px panels, controls, and Dialog; only intrinsic radio circles and supplied identity artwork keep their required shape | Old proposal rejected; square direction adopted |
+| FD-04 | 2px ring / 2px offset; Deep/Green | Adopt geometry and theme relationship; use focus-visible browser heuristics, never hide required input focus | Adopted direction |
+| FD-05 | Universal 150/250ms durations | Immediate 0ms state feedback; no decorative motion; retain reduced-motion safety for legacy migration | Old duration proposal rejected; immediate direction adopted |
+| FD-06 | Inherited state names; proposed interaction | Keep Open/Closed/Pending/Final; neutral hover/selection; explicit disabled/loading labels, stable loading width and aria-busy | Labels inherited; interaction direction adopted |
+| VD-03 | No editorial roles | Add Sora 400 editorial title 40/48 and section 28/34, with mobile rules; preserve seven inherited roles | Adopted direction; canonical migration pending issue 45 |
+| VD-05/06 | Signal logic and tonal depth inherited | 32×2px signal; quiet editorial separators distinct from perceivable control edges | Adopted direction; semantic migration pending issue 45 |
+| Final visual acceptance | Not performed by issue 2 | Maintainer inspects resulting rendered surfaces through issue 53 | Unresolved; do not claim human acceptance or release approval |
 
-## 2. Source precedence
+## Source precedence and history
 
-Summary of `ARCHITECTURE.md` ("Authority and source precedence"), applied throughout
-this record:
+`DESIGN.md` owns adopted representable values; generated outputs are derived, never
+independently edited. The PDF informs the system but does not silently override
+current decisions. The current visual contract distinguishes inherited facts,
+observed composition, new web choices, and delegated adoption.
 
-| Rank | Source | Governs |
-| --- | --- | --- |
-| 1 | `DESIGN.md` (front matter + prose) | Adopted design values representable by the pinned `@google/design.md` schema, and maintained brand guidance |
-| 2 | Generated tokens / theme output | Build artifacts derived from `DESIGN.md`; never edited as independent sources |
-| 3 | Foundation documentation + component implementation | Concepts the pinned schema cannot represent (spacing, sizing, radius, focus, motion, state semantics) |
-| — | `resources/brand/augur-brand-foundation.pdf` | Upstream reference; informs the system, never silently overrides maintained decisions |
-| — | This record | Proposals and review status; carries no authority until a value is adopted |
+The original audit was performed on 2026-09-04 on `issue-2-foundation-authority`,
+based on `6a66172`. Its full proposals, rationale, and contrast evidence remain in
+the [pre-adoption decision record](https://github.com/jubalm/augur-design-system/blob/88a6ccf46b201b921344bfa1411ed41b1ec17ba0/apps/docs/src/content/foundations/foundation-decisions.md).
+The factual audit below is preserved; historical proposal language in that pinned
+record is superseded by the current table. The unresolved radius/spacing wording
+in `DESIGN.md` is updated through issue 45's canonical migration, not silently
+rewritten by this review fixture.
 
 ## 3. Audit of `DESIGN.md`
 
@@ -145,161 +145,12 @@ No conflation remains in `DESIGN.md` after the §3.2 corrections. Future tokens 
 preserve these distinctions; semantic theme mapping (#4) should reference companions by
 companion name and surfaces by role name.
 
-## 5. Proposals pending maintainer review
 
-Scope of the proposal set: the **smallest** shared foundation the starter components
-need — Button, Card (issue #11), Input, FormField (#12), Dialog (#13), PageHeader,
-EmptyState (#14) — plus the focus/reduced-motion semantics issue #4 requires. Values are
-expressed in px with rem equivalents on a 4px base. **All items in this section are
-Proposed — pending maintainer review; none is adopted, and none may move into
-`DESIGN.md` front matter or generated tokens before review.**
+## Verification boundaries
 
-### FD-01 — Shared spacing scale — Proposed
-
-- Proposal: six steps on a 4px base — `space.xs` 4px (0.25rem), `space.sm` 8px
-  (0.5rem), `space.md` 12px (0.75rem), `space.lg` 16px (1rem), `space.xl` 24px
-  (1.5rem), `space.2xl` 32px (2rem). Naming follows the illustrative token style in
-  `ARCHITECTURE.md` §3 ("Terminology").
-- Rationale: 4px base aligns with the 16px body and 20px control line-heights already
-  adopted; six steps cover every padding/gap need found in the starter set without a
-  larger taxonomy (excluded by the issue).
-- Starter needs: Button padding 8/16 (12 small), Input horizontal 12, FormField
-  label-to-control gap 8–12, Card/Dialog padding 24, PageHeader/EmptyState rhythm 24/32,
-  icon-to-label gap 4–8.
-- Evidence: no contrast impact; interaction benefit is consistent optical density and
-  hit-area spacing across controls.
-- Status: **Proposed — pending review.**
-
-### FD-02 — Control sizing — Proposed
-
-- Proposal: control heights `control.height.sm` 32px, `control.height.md` 36px,
-  `control.height.lg` 40px; icon sizes 16px (inline) and 20px (standalone).
-- Rationale: matches shadcn size conventions (h-8/h-9/h-10), which the architecture
-  adopts for familiarity (`ARCHITECTURE.md` §11); 36px default fits the 20px control
-  line-height with 8px vertical padding from the FD-01 scale.
-- Evidence (interaction): 36px ≥ 24px WCAG 2.5.8 minimum target size. Open sub-question:
-  36px is below the 44px mobile touch guidance; the system currently targets dense
-  desktop records UI. Maintainer to confirm the touch-target policy (§8, Q2).
-- Status: **Proposed — pending review.**
-
-### FD-03 — Corner radius — Proposed
-
-- Proposal: `radius.surface` 8px (panels: Card, Dialog) and `radius.control` 6px
-  (inputs, buttons, triggers), with the derivation rule control = surface − 2px,
-  mirroring shadcn's `calc(var(--radius) …)` convention. Naming matches the
-  `ARCHITECTURE.md` §3 examples.
-- Rationale: two values are the smallest shadcn-compatible set; the tonal-depth model
-  (no shadows) lets radius carry grouping without competing with fixed identity
-  geometry, which remains untouched.
-- Evidence: no contrast impact; preserves the PDF constraint that no global radius
-  scale is defined upstream — this is a new system decision requiring review.
-- Status: **Proposed — pending review.**
-
-### FD-04 — Focus treatment — Proposed
-
-- Proposal: `focus-visible` ring 2px wide with 2px offset; ring color Deep on light
-  surfaces, Green on dark surfaces; keyboard focus always visible, pointer-triggered
-  focus never painted. Focus is always a second cue alongside an existing state change.
-- Rationale: extends the inherited rule that green signals intent/focus, and mirrors the
-  adopted action-color split (Deep on light, Green on dark) so focus and intent share one
-  voice. Ring-on-offset keeps the brand's no-glow/no-shadow rule.
-- Evidence (contrast, recomputed §9): Deep on Paper 7.17:1 and Green on Navy 11.87:1 —
-  both exceed the 3:1 non-text minimum (WCAG 1.4.11) and focus-appearance guidance.
-- Status: **Proposed — pending review.**
-
-### FD-05 — Motion and reduced motion — Proposed
-
-- Proposal: `motion.duration.fast` 150ms (hover/press/focus state feedback),
-  `motion.duration.base` 250ms (overlay enter/exit such as Dialog, collapsible
-  regions); ease-out for entrances, ease-in for exits; no springs or decorative loops.
-  Under `prefers-reduced-motion: reduce`, durations collapse to ≤ 0.01ms and
-  transform-based entrances are replaced with opacity-only equivalents.
-- Rationale: the PDF defines no motion values, so any duration is a new system decision.
-  150ms sits in the common perceptual band for state feedback; 250ms covers overlay
-  transitions without delay. The reduced-motion rule is required by issue #13's examples
-  and issue #4's theme contract, and follows the standard `prefers-reduced-motion`
-  pattern (WCAG 2.3.3 intent).
-- Evidence (interaction): reduced-motion collapse is the established accessibility
-  fallback; no motion contrast concerns.
-- Status: **Proposed — pending review.**
-
-### FD-06 — State semantics — labels Inherited; interaction treatment Proposed
-
-- Inherited (already adopted in `DESIGN.md`, verified §3.1): record states are named
-  Open, Closed, Pending, Final; state is carried by a text label with color as
-  reinforcement only; usually one green signal per view.
-- Proposal (interaction contract for controls):
-  - hover: adjacent surface step or subtle action-color tint; no shadows (tonal depth
-    only, per inherited elevation rules)
-  - pressed: one step beyond hover on the same ladder
-  - focus-visible: FD-04 ring, never suppressed
-  - disabled: non-interactive, reduced-contrast label that remains present and
-    readable in the DOM; never color-alone (inherited rule), `cursor: not-allowed`
-  - loading: width-preserving affordance with `aria-busy`; action color unchanged to
-    avoid implying a state change
-  - record states map onto the existing `signal-light` / `signal-dark` / `signal-wash`
-    pairings; the exact per-state mapping is validated with real pairs in issue #4 and
-    is deliberately not fixed here.
-- Rationale: issues #11/#12 require disabled/loading contracts; the PDF supplies state
-  words but no interaction-state visuals, so the treatment is novel.
-- Evidence: WCAG 1.4.1 (use of color); inherited "never hide meaning in color alone";
-  contrast for the existing pairings recomputed in §9.
-- Status: labels **Adopted (inherited)**; interaction treatment **Proposed — pending
-  review.**
-
-## 6. Decision table
-
-| ID | Decision | Source | Proposed value / relationship | Rationale | Contrast / interaction evidence | Adoption status |
-| --- | --- | --- | --- | --- | --- | --- |
-| FD-01 | Shared spacing scale | New system decision (4px base; `ARCHITECTURE.md` §3 naming) | `space.xs/sm/md/lg/xl/2xl` = 4/8/12/16/24/32px | Covers all starter-set padding/gaps; no larger taxonomy | No contrast impact; consistent density/hit spacing | **Proposed — pending review** |
-| FD-02 | Control sizing | shadcn conventions via `ARCHITECTURE.md` §11 | heights 32/36/40px; icons 16/20px | shadcn familiarity; fits 20px control line-height | ≥ 24px WCAG 2.5.8; 44px touch policy open (Q2) | **Proposed — pending review** |
-| FD-03 | Corner radius | New system decision (shadcn derivation) | `radius.surface` 8px, `radius.control` 6px (−2px rule) | Smallest shadcn-compatible set; tonal depth needs no shadow | No contrast impact; identity geometry untouched | **Proposed — pending review** |
-| FD-04 | Focus treatment | Extension of inherited green-signal rule | 2px ring, 2px offset; Deep (light) / Green (dark); `focus-visible` only painted | One voice for intent + focus; no glow/shadow | Deep on Paper 7.17:1; Green on Navy 11.87:1; ≥ 3:1 non-text | **Proposed — pending review** |
-| FD-05 | Motion / reduced motion | New system decision (PDF defines none) | 150ms fast / 250ms base; ease-out in, ease-in out; reduced-motion collapse ≤ 0.01ms | Common perceptual bands; required by #4 and #13 | WCAG 2.3.3 intent; standard reduced-motion pattern | **Proposed — pending review** |
-| FD-06 | State semantics | Labels inherited (PDF; `DESIGN.md`); treatment new | Open/Closed/Pending/Final by label; hover/press/focus/disabled/loading contract | Issues #11–#12 contracts; neutrality constraint | WCAG 1.4.1; pairings ≥ AA per §3.1 | Labels **Adopted**; treatment **Proposed — pending review** |
-| — | Pewter on Surface 3 pairing | PDF §03.2 (inherited fact) | 6.00:1 added to `DESIGN.md` pairings | Restores a recorded fact relevant to dark panels | Recomputed 6.00:1, AA text | **Adopted (inherited)** |
-| — | Muted vs Mist naming | PDF §03.1/03.2 (inherited fact) | Prose corrected in `DESIGN.md`; see §4 | Removes silent companion/role conflation | n/a | **Corrected (source-aligned)** |
-| — | Foundation ownership wording | `ARCHITECTURE.md` §13 | Product-ownership language replaced in `DESIGN.md` | Products consume foundations; system owns them | n/a | **Corrected (architecture-aligned)** |
-
-## 7. Ownership of concepts outside the pinned schema
-
-| Concept | In `@google/design.md` schema? | Authority while unresolved | Home once adopted |
-| --- | --- | --- | --- |
-| Colors, typography, component pairings | Yes | `DESIGN.md` front matter (already) | `DESIGN.md` |
-| Spacing | Section exists; omitted here | This record (FD-01), visibly unresolved | `DESIGN.md` `omitted` entry replaced by values; tokens generated via #3 |
-| Corner radius | Section exists; omitted here | This record (FD-03) | Same path as spacing |
-| Control sizing | No | This record (FD-02), then foundation docs + component code | Docs + component implementation |
-| Focus treatment | No | This record (FD-04), then theme mapping (#4) | Semantic theme mapping + component code |
-| Motion / reduced motion | No | This record (FD-05), then theme mapping (#4) | Semantic theme mapping + component code |
-| State semantics | No (labels are prose guidance) | `DESIGN.md` prose (labels); this record (treatment) | `DESIGN.md` prose + component contracts |
-
-Per `ARCHITECTURE.md`, concepts outside the schema stay in component implementation and
-current documentation; they must not be forced into the format. If FD-01/FD-03 are
-adopted, moving them into the schema's `spacing`/`rounded` sections is a deliberate
-migration made with the pinned toolchain from issue #3 — not a silent edit.
-
-## 8. Open questions for maintainer review
-
-1. Approve or adjust the FD-01 spacing steps (4/8/12/16/24/32) and their names.
-2. Approve FD-02 control heights and set the touch-target policy (36px desktop default
-   vs 44px mobile guidance; dense-records UI is the current target).
-3. Approve the FD-03 two-value radius set and the −2px control derivation.
-4. Approve the FD-04 focus ring spec (2px / 2px offset, Deep/Green by theme).
-5. Approve FD-05 durations (150/250ms) and the reduced-motion collapse behavior.
-6. Confirm the FD-06 interaction-state contract before #11–#14 implement it.
-7. Confirm that, once adopted, spacing/radius values migrate into `DESIGN.md` front
-   matter via the pinned toolchain (issue #3) rather than runtime-only tokens.
-
-## 9. Verification evidence for this record
-
-Commands were run ad hoc in an isolated sandbox because the repository does not yet
-contain a workspace or checks (issues #1/#6 own those). No repo validation command was
-available to run, and none is claimed.
-
-- Contrast recomputation: WCAG 2.x relative-luminance script over all `DESIGN.md` and
-  PDF pairings — results in §3.1 (all claimed values reproduce; component pairings ≥ 4.5:1;
-  Border on Paper 1.21:1 confirms borders may never carry meaning alone).
-- Hex/type verification: programmatic comparison of `DESIGN.md` front matter against
-  `pdftotext` extraction of `resources/brand/augur-brand-foundation.pdf` (§3.1 tables).
-- No design.md lint, token export, type check, or test suite exists at this planning
-  stage; the pinned `@google/design.md` validation belongs to issue #3's toolchain.
+The original audit independently recomputed the listed PDF contrast pairings and
+checked naming/type values. It did not prove editorial visual fidelity. Issue 42
+adds rendered physical-page review, isolated browser frames in both themes at
+three viewport sizes, font/network/computed-style evidence, meaningful boundary
+contrast checks, keyboard review, and clean Markdown verification. See the
+[visual contract](/foundations/visual-direction) and its retained evidence.

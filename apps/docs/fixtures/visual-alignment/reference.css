@@ -1,0 +1,61 @@
+@import "@augur/design-system/styles.css";
+/* Isolated reference decisions. These never enter the shipping package or docs CSS. */
+:root { --review-rule: var(--augur-color-border-light); --review-control-edge: var(--augur-color-secondary); --review-field: var(--augur-color-surface-light-muted); }
+[data-theme="dark"] { --review-rule: var(--augur-color-surface-dark-3); --review-control-edge: var(--augur-color-surface-dark-mist); --review-field: var(--augur-color-surface-dark-1); }
+* { box-sizing: border-box; }
+body { margin: 0; font: 400 16px/24px var(--augur-font-secondary); }
+h1,h2,h3,p { margin: 0; }
+a { color: inherit; }
+button { font: 600 14px/20px var(--augur-font-primary); color: var(--foreground); background: var(--secondary); border: 1px solid var(--review-control-edge); border-radius: 0; min-height: 36px; padding: 7px 16px; cursor: pointer; }
+button:hover { background: var(--card); }
+button:active,button[aria-pressed="true"] { background: var(--foreground); color: var(--background); }
+button:focus-visible,a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.review-bar { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 64px; border-bottom: 1px solid var(--review-rule); font-size: 12px; line-height: 16px; color: var(--muted-foreground); }
+.frame { width: min(1200px, calc(100% - 128px)); margin-inline: auto; }
+main > section { margin-block: 80px; }
+.label { font: 400 12px/16px var(--augur-font-secondary); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); }
+.meta { font: 400 12px/16px var(--augur-font-secondary); color: var(--muted-foreground); }
+.editorial-title { font: 400 40px/48px var(--augur-font-primary); letter-spacing: -0.01em; }
+.editorial-section { font: 400 28px/34px var(--augur-font-primary); letter-spacing: -0.005em; }
+.lede { color: var(--muted-foreground); max-width: 65ch; }
+.signal { display: block; width: 32px; height: 2px; flex-shrink: 0; background: var(--primary); }
+.opening { display: grid; grid-template-columns: 1fr 2fr; gap: 80px 32px; min-height: 520px; align-content: start; padding-top: 48px; }
+.section-rail { display: flex; flex-direction: column; gap: 24px; }
+.section-rail p { max-width: 24ch; color: var(--muted-foreground); }
+.opening-message { display: flex; flex-direction: column; align-items: flex-start; gap: 32px; }
+.text-action { font: 600 14px/20px var(--augur-font-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 16px; min-height: 36px; }
+.text-action:hover { text-decoration: underline; }
+.opening-footer { grid-column: 1/-1; display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; padding-top: 24px; border-top: 1px solid var(--review-rule); }
+.opening-footer p { margin-top: 12px; }
+.section-heading { border-top: 1px solid var(--review-rule); padding-top: 24px; margin-bottom: 32px; display: grid; gap: 16px; }
+.editorial-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
+.display-field { background: var(--foreground); color: var(--background); padding: 32px; display: grid; gap: 32px; }
+.display-field .label,.display-field .meta { color: inherit; }
+.augur-display { font: 600 40px/44px var(--augur-font-primary); letter-spacing: -0.01em; }
+.augur-heading-2 { font: 600 20px/26px var(--augur-font-primary); }
+.type-row { border-bottom: 1px solid var(--review-rule); padding-block: 24px; display: grid; gap: 12px; }
+.type-row p,.specimen-notes p,.record-notes p { color: var(--muted-foreground); }
+.specimen-notes > div { border-top: 1px solid var(--review-rule); padding-block: 24px; display: grid; gap: 12px; }
+.record-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; align-items: start; }
+.record-field { padding: 24px; background: var(--review-field); }
+.record { background: var(--card); border: 1px solid var(--review-rule); padding: 24px; }
+[data-theme="dark"] .record { background: var(--augur-color-surface-dark-2); }
+.record-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.record-header .label { display: inline-flex; align-items: center; gap: 12px; }
+.record h3 { margin-block: 24px; }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+legend { padding: 0; margin-bottom: 12px; }
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.record-facts { margin: 24px 0 0; border-top: 1px solid var(--review-rule); padding-top: 16px; display: grid; gap: 12px; }
+.record-facts > div { display: flex; justify-content: space-between; gap: 24px; }
+dt { color: var(--muted-foreground); } dd { margin: 0; text-align: right; }
+.record-note { margin-top: 24px; }
+.record-notes { display: grid; gap: 16px; }
+.decision-study { border-top: 1px solid var(--review-rule); padding-top: 24px; display: grid; gap: 16px; }
+.comparison { display: flex; flex-wrap: wrap; gap: 32px; margin-top: 8px; }
+.comparison > div { display: grid; gap: 12px; }
+button.legacy { border-radius: 6px; }
+.review-footer { font-size: 12px; line-height: 16px; color: var(--muted-foreground); padding-bottom: 32px; }
+@media (max-width: 959px) { .review-bar { padding-inline: 24px; } .frame { width: calc(100% - 48px); } main > section { margin-block: 48px; } .opening { gap: 48px 24px; min-height: 0; } .editorial-grid,.record-grid { grid-template-columns: 1fr; gap: 24px; } .specimen-notes { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; } .specimen-notes .editorial-section { font-size: 20px; line-height: 26px; } }
+@media (max-width: 599px) { .review-bar { gap: 16px; } .opening { grid-template-columns: 1fr; padding-top: 0; gap: 32px; } .section-rail { gap: 12px; } .section-rail p { display: none; } .opening-footer,.specimen-notes { grid-template-columns: 1fr; gap: 24px; } .opening-footer { margin-top: 16px; } .editorial-title { font-size: 32px; line-height: 40px; } .editorial-section { font-size: 24px; line-height: 32px; } .display-field { padding: 24px; } .augur-display { overflow-wrap: normal; } .record-field { padding: 16px; } .record { padding: 16px; } .record-header { align-items: flex-start; } .record-header .label { gap: 8px; } .choices { gap: 16px; } .record-facts > div { gap: 16px; } }
+@media (pointer: coarse) { button,.text-action { min-height: 44px; } }
