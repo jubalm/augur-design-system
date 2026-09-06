@@ -193,6 +193,7 @@ const expectedMd = [
   "foundations/color.md",
   "foundations/decisions.md",
   "foundations/fonts.md",
+  "foundations/identity.md",
   "foundations/proposals.md",
   "foundations/visual-direction.md",
   "foundations/theming.md",
@@ -289,7 +290,7 @@ for (const [rel, text] of mdContents) {
 // --- 7. Action wiring in the rendered pages --------------------------------
 console.log("\n== Copy/View action wiring ==");
 {
-  for (const rel of ["getting-started/index.html", "foundations/decisions/index.html", "foundations/fonts/index.html", "foundations/theming/index.html", "foundations/color/index.html", "foundations/proposals/index.html", "foundations/visual-direction/index.html", "reference/package-entries/index.html", "reference/contributing/index.html", "reference/component-conventions/index.html"]) {
+  for (const rel of ["getting-started/index.html", "foundations/decisions/index.html", "foundations/fonts/index.html", "foundations/identity/index.html", "foundations/theming/index.html", "foundations/color/index.html", "foundations/proposals/index.html", "foundations/visual-direction/index.html", "reference/package-entries/index.html", "reference/contributing/index.html", "reference/component-conventions/index.html"]) {
     const html = await readFile(join(distDir, rel), "utf8");
     const { mdLinks: actions } = htmlOutline(html);
     const expectedHref = site(`/${rel.replace(/\/index\.html$/, ".md")}`);
