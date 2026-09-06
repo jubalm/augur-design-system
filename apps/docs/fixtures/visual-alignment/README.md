@@ -132,6 +132,8 @@ validation of this visual composition.
 At the issue 42 checkpoint, frozen install, the six-pair reference driver, root
 and subpath Astro builds, root and subpath clean-Markdown verification,
 `bun run lint:code`, `bun run typecheck`, and `git diff --check` passed.
+The complete existing browser driver also passed under `/augur-design-system`,
+including the renamed foundation page and the new visual guide.
 The coordinator independently inspected the corrected light/dark desktop and
 mobile reference images and verified all three fixture source hashes against
 the retained report. No runtime token or component implementation was changed.
