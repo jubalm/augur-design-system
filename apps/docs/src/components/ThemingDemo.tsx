@@ -1,15 +1,15 @@
 /**
- * Live theming demonstration for the docs (issue #7).
+ * Live theming demonstration for the docs (issue #49): a true paired
+ * record — one light panel and one dark panel, identical content, order,
+ * and geometry, under EITHER host theme.
  *
- * Rendered statically: the panels are plain elements styled only with the
- * semantic role custom properties delivered by
- * `@augur/design-system/styles.css`, so they visibly re-resolve when the
- * page theme changes (header toggle, system preference, or the scoped
- * `[data-theme]` subtree required by the package's theme contract).
- *
- * The inner panel carries `data-theme="dark"` directly, demonstrating the
- * contract's container-level scope: a dark region inside a light page (or
- * the reverse, when the page is dark — the mapping is symmetric).
+ * Both panels pin `data-theme` explicitly (light / dark), so the pair
+ * never collapses into one theme when the host page changes. The panels
+ * are plain elements styled only with the semantic role custom
+ * properties delivered by `@augur/design-system/styles.css`; the paint
+ * always follows the resolved role, never a local color value. The
+ * scoping mechanism itself (inherit vs pin) is demonstrated separately
+ * by the scoped-subtree example on this page.
  */
 
 const SWATCHES: readonly { token: string; label: string }[] = [
@@ -19,11 +19,11 @@ const SWATCHES: readonly { token: string; label: string }[] = [
   { token: "--muted", label: "quiet region" },
   { token: "--border", label: "hairline rule" },
   { token: "--ring", label: "focus ring" },
-] as const;
+];
 
 function SwatchRow() {
   return (
-    <ul className="theme-swatch-row" aria-label="Semantic color roles in the current theme">
+    <ul className="theme-swatch-row" aria-label="Semantic color roles in this record">
       {SWATCHES.map((swatch) => (
         <li key={swatch.token} className="theme-swatch">
           {/* The inline custom property reference IS the demonstration:
@@ -37,29 +37,24 @@ function SwatchRow() {
   );
 }
 
+function ThemeRecord(props: { theme: "light" | "dark"; title: string }) {
+  return (
+    <div className="theme-demo-panel" data-theme={props.theme}>
+      <p className="augur-type-ui theme-demo-title">{props.title}</p>
+      <p className="augur-type-body">
+        The same content, order, and geometry as its pair — only the
+        resolved roles differ.
+      </p>
+      <SwatchRow />
+    </div>
+  );
+}
+
 export function ThemingDemo() {
   return (
     <div className="theme-demo">
-      <div className="theme-demo-panel">
-        <p className="augur-type-ui theme-demo-title">Current page theme</p>
-        <p className="augur-type-body">
-          Toggle System / Light / Dark in the header, or change your system
-          preference while "System" is selected — these chips re-resolve
-          through the package's semantic roles.
-        </p>
-        <SwatchRow />
-      </div>
-
-      <div className="theme-demo-panel" data-theme="dark">
-        <p className="augur-type-ui theme-demo-title">
-          Scoped subtree: <code>data-theme="dark"</code> on this panel
-        </p>
-        <p className="augur-type-body">
-          The theme contract applies at any container level. This region
-          renders the dark role set even when the surrounding page is light.
-        </p>
-        <SwatchRow />
-      </div>
+      <ThemeRecord theme="light" title={'Pinned light: data-theme="light"'} />
+      <ThemeRecord theme="dark" title={'Pinned dark: data-theme="dark"'} />
     </div>
   );
 }
