@@ -1,0 +1,103 @@
+---
+# Brand identity (issue #43). Resolves the identity question for this
+# run: production logo masters are explicitly missing
+# (resources/brand/PROVENANCE.md §3), and the maintainer approved the
+# text-only fallback on 2026-09-06 (issue 42 authority comment). This
+# page is the linked treatment specification consumed by the docs shell
+# (#46) and the home page (#47). It records provenance and delivery
+# rules; it introduces no artwork.
+title: Brand identity
+description: The maintainer-approved text identity for Augur — how the wordmark and descriptor are set, where official masters stand, and what may never be drawn.
+order: 7
+---
+
+## Provenance status
+
+The only brand asset supplied to this repository is the
+[pinned brand foundation PDF](https://github.com/jubalm/augur-design-system/blob/88a6ccf46b201b921344bfa1411ed41b1ec17ba0/resources/brand/augur-brand-foundation.pdf)
+(sha-256 `65acce8b247ddda10834d0c068e84bc315f7afc118f5570d1d90386de8ed9c0c`).
+It is upstream reference material, not a source of production files. The
+PDF names the master location — `augur-ecosystem/brand-assets` — and the
+[asset provenance record](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md)
+lists every master that was never received: the horizontal lockup, the
+vertical lockup, the glyph, the token icon, and the favicon export set.
+
+A repository API lookup of `augur-ecosystem/brand-assets` on 2026-09-06
+returned 404 with current credentials. That is an availability
+observation, not proof of licensing status or nonexistence. **The master
+request remains unresolved.**
+
+Because verified official artwork is unavailable, the maintainer
+approved the interim text identity on 2026-09-06 in the
+[issue 42 authority record](https://github.com/jubalm/augur-design-system/issues/42#issuecomment-5556190059):
+text-only Sora “Augur” with a quieter “Design system” descriptor. That
+approval is the recorded fallback decision for this run. Adding any logo
+or mark asset still requires a maintainer decision that updates the
+provenance record first.
+
+## The approved text identity
+
+The identity is live text in the system's own typography. It has no
+drawn mark, no container, and no image file. It is two elements set as
+one quiet lockup:
+
+| Element | Voice and role | Treatment |
+| --- | --- | --- |
+| Wordmark “Augur” | Sora 400 — the editorial-title role at opening scale (40/48, −0.01em; 32/40 below 600px) | Sentence case. Never uppercase, never semibold, never Sora Light. The regular weight is the identity's voice. |
+| Descriptor “Design system” | Schibsted Grotesk 400 — the editorial-label role (12/16, 0.12em tracking), uppercase | The quieter element: smaller scale, secondary color, tracked short label. One or two words; it never wraps mid-phrase. |
+
+The editorial roles are the recorded contract direction; issue 45
+performs their canonical migration into `DESIGN.md` and the generated
+typography layer. Until then the role metrics above are the
+specification, exactly as recorded in the
+[visual direction](/foundations/visual-direction) contract.
+
+Color is semantic and theme-adaptive: the wordmark uses the foreground
+text color and the descriptor the secondary text color of the active
+theme, through the existing token relationships. There are no
+fixed-color variants, no reversed special edition, and **no accent color
+in the lockup** — accent is the one-signal/action voice, and the
+identity never spends it.
+
+### Prohibitions
+
+- No reconstructed, recolored, stretched, cropped, traced, or redrawn
+  mark — nothing may be extracted from the PDF (see the provenance
+  record's usage constraints).
+- No logo component, logo image, SVG mark, or font-based glyph
+  pretending to be one may exist while masters are unresolved.
+- No container, box, pill, or panel around the lockup; the identity is
+  bare text on the surface it sits on.
+- No letterspacing, casing, or weight inversion of the wordmark; no
+  extra weights (only Sora 400/600 and Schibsted Grotesk 400 are
+  delivered).
+- The neutral favicon anchor (issue #7) stays as documented shell
+  chrome; it is deliberately not a mark and must not drift toward one.
+
+## Delivery instructions
+
+| Concern | Rule |
+| --- | --- |
+| Exact files | Specification: this page and its clean Markdown endpoint. Asset record: `resources/brand/PROVENANCE.md`. Runtime type roles: `packages/design-system/src/styles/typography.css` (canonical migration in issue 45). Adoption surfaces: the docs shell brand region (`apps/docs/src/layouts/BaseLayout.astro`, issue 46) and the home route (issue 47). Rendered reference: the visual contract fixture's opening frame and its retained captures. |
+| Theme variants | Light and dark only, through the semantic text-color relationships above. Both themes render the same text, sizes, and geometry. |
+| Aspect ratio | None. The text identity is live text and has no canvas or fixed proportions. The PDF's lockup ratios and minimum sizes (recorded in the foundation decision audit) bind only the official masters when they arrive. |
+| Clearspace | Interim text rule: at least one descriptor line-height (16px) of clear space on all sides inside UI chrome. In composed openings, the frame gutters and section spacing govern instead of extra padding. The PDF's clearspace rules for drawn marks do not apply to text. |
+| Minimum size | The descriptor never renders below 12/16 with its full 0.12em tracking; if the space cannot fit that, the descriptor is omitted — never shrunk, condensed, or de-tracked. The wordmark's floor in shell chrome is the ui role (14/20) pending issue 46's adoption. |
+| Fallback behavior | When verified masters arrive, a maintainer decision updates the provenance record (its §3 and rule 4), and the official artwork replaces the text lockup per PDF §01.1: always start from a supplied file. Until then, no intermediate logo approximation is permitted. |
+
+## Adoption and scope
+
+The docs shell currently renders the text string “Augur Design System”
+as shell chrome plus a neutral anchor square. That predates this
+specification; aligning the shell with the lockup above is issue 46's
+scope, and composing the home opening with it is issue 47's. The first
+sanctioned render of the lockup therefore happens in those issues, from
+this page as the linked reference.
+
+Licensing, domain, and release questions remain in
+[issue 20](https://github.com/jubalm/augur-design-system/issues/20);
+this page records identity treatment only. Related reading:
+[visual direction](/foundations/visual-direction) (the adopted
+contract), [fonts and typography](/foundations/fonts) (the delivered
+voices), and the [foundation decisions](/foundations/decisions) record
+(the audited PDF facts).

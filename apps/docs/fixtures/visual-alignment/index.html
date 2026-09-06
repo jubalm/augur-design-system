@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Augur — visual contract reference</title><link rel="icon" href="data:,"><link rel="stylesheet" href="./reference.css"></head>
+<body>
+<header class="review-bar"><span>Augur · reference compositions</span><button id="theme" type="button">Use dark theme</button></header>
+<main>
+<section class="opening frame" id="opening" aria-labelledby="opening-title">
+<div class="section-rail"><span class="label">A / Brand opening</span><p>Make what matters clear.</p><span class="meta">PDF 1 · 3 · 25</span></div>
+<div class="opening-message"><h1 id="opening-title" class="editorial-title">Make what<br>matters clear.</h1><span class="signal" aria-hidden="true"></span><p class="lede">A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces.</p><a class="text-action" href="#editorial">Explore the foundations <span aria-hidden="true">→</span></a></div>
+<div class="opening-footer"><div><span class="label">Purpose</span><p>Ask. Vote. Reach a result.</p></div><div><span class="label">Character</span><p>Clear-eyed, credible, neutral, human.</p></div><div><span class="label">System</span><p>One language. Two everyday themes.</p></div></div>
+</section>
+<section class="frame editorial" id="editorial" aria-labelledby="editorial-title">
+<div class="section-heading"><span class="label">B / Editorial specimen · PDF 18 · 22 · 23</span><h2 id="editorial-title" class="editorial-title">Two voices. Clear roles.</h2><p class="lede">Sora leads. Schibsted Grotesk supports. Size creates order; weight confirms it.</p></div>
+<div class="editorial-grid"><div><div class="display-field"><span class="label">Sora / Display</span><p class="augur-display">Make it clear.<br>Remove the noise.</p><span class="meta">40/44 · 600 · −0.01em</span></div><div class="type-row"><h3 class="editorial-section">A quieter title</h3><p>Editorial section · Sora 400 · 28/34</p></div><div class="type-row"><h3 class="augur-heading-2">Available choices</h3><p>Component heading · Sora 600 · 20/26</p></div></div><aside class="specimen-notes" aria-label="Typeface roles"><div><h3 class="editorial-section">The primary voice</h3><p>Sora gives identity, headings, navigation, and actions a precise voice.</p></div><div><h3 class="editorial-section">The supporting voice</h3><p>Schibsted Grotesk carries paragraphs, helper text, metadata, and dense records.</p></div><div><h3 class="editorial-section">One clear priority</h3><p>Use alignment, space, and quiet rules to reveal the reading order.</p></div></aside></div>
+</section>
+<section class="frame compact" id="compact" aria-labelledby="compact-title">
+<div class="section-heading"><span class="label">C / Compact record · PDF 20 · 23 · 25</span><h2 id="compact-title" class="editorial-title">Keep the record clear.</h2><p class="lede">The question leads. Every choice receives the same structure and emphasis.</p></div>
+<div class="record-grid"><div class="record-field"><article class="record" aria-labelledby="query-title"><header class="record-header"><span class="label"><span class="signal" aria-hidden="true"></span>Open query</span><span class="meta">LQ-042</span></header><h3 id="query-title" class="augur-heading-2">Did the proposal pass before 30 June?</h3><fieldset><legend class="label">Choices</legend><div class="choices"><button type="button" aria-pressed="false" data-choice="Yes">Yes</button><button type="button" aria-pressed="false" data-choice="No">No</button></div></fieldset><dl class="record-facts"><div><dt>Status</dt><dd>Open</dd></div><div><dt>Your response</dt><dd id="response" aria-live="polite">Not submitted</dd></div><div><dt>Closes</dt><dd>14:32 UTC</dd></div></dl><p class="meta record-note">Local reference only. Choices preview a response; no vote is submitted.</p></article></div><aside class="record-notes"><h3 class="editorial-section">A compact rhythm</h3><p>Square fields. Perceivable controls. Plain status language. One short signal, with green focus appearing only during keyboard navigation.</p><p>The same record holds the same order, spacing, and geometry in both themes.</p></aside></div>
+</section>
+<section class="frame decision-study" aria-labelledby="decision-title"><span class="label">Decision reference / shown once</span><h2 id="decision-title" class="editorial-section">Square controls selected</h2><p>The 6px alternative is retained here as the rejected comparison, not a second style.</p><div class="comparison"><div><button type="button">Square · 0px</button><span class="meta">Selected under delegated direction</span></div><div><button type="button" class="legacy">Rounded · 6px</button><span class="meta">Rejected alternative</span></div></div></section>
+</main><footer class="frame review-footer">Implementation direction adopted under delegated authority · Final human visual acceptance pending #53</footer>
+<script>
+const themeButton = document.querySelector('#theme');
+const selectedTheme = new URLSearchParams(location.search).get('theme');
+function setTheme(theme) { document.documentElement.dataset.theme = theme; themeButton.textContent = theme === 'dark' ? 'Use light theme' : 'Use dark theme'; }
+setTheme(selectedTheme === 'dark' ? 'dark' : 'light');
+themeButton.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+document.querySelectorAll('[data-choice]').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('[data-choice]').forEach(choice => choice.setAttribute('aria-pressed', String(choice === button))); document.querySelector('#response').textContent = button.dataset.choice + ' · preview only'; }));
+</script>
+</body></html>

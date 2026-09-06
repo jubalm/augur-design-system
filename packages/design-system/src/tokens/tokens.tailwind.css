@@ -1,10 +1,10 @@
 /**
  * GENERATED FILE — do not edit. Regenerate: `bun run tokens:generate` in packages/design-system. Verify: `bun run tokens:check`. Policy and schema boundaries: packages/design-system/docs/token-generation.md.
  *
- * Source:  DESIGN.md (repository root), sha256 fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5
+ * Source:  DESIGN.md (repository root), sha256 26b367ad92b8b9ec955a81880240e9c5b6d76bf90e3df33fc2d04c1309a6a7a7
  * Tool:    @google/design.md@0.4.0 (exact pin in packages/design-system/package.json (0.4.0))
  * Command: design.md export DESIGN.md --format css-tailwind
- * Lint:    0 errors / 0 warnings / 3 infos at generation time
+ * Lint:    0 errors / 0 warnings / 1 infos at generation time
  *
  * Everything below this header is the pinned CLI's verbatim stdout.
  */
@@ -32,6 +32,9 @@
   --font-control: "Sora";
   --font-ui: "Sora";
   --font-metadata: "Schibsted Grotesk";
+  --font-editorial-title: "Sora";
+  --font-editorial-section: "Sora";
+  --font-editorial-label: "Schibsted Grotesk";
   --text-display: 40px;
   --text-heading-1: 28px;
   --text-heading-2: 20px;
@@ -39,6 +42,9 @@
   --text-control: 14px;
   --text-ui: 14px;
   --text-metadata: 12px;
+  --text-editorial-title: 40px;
+  --text-editorial-section: 28px;
+  --text-editorial-label: 12px;
   --leading-display: 44px;
   --leading-heading-1: 34px;
   --leading-heading-2: 26px;
@@ -46,8 +52,14 @@
   --leading-control: 20px;
   --leading-ui: 20px;
   --leading-metadata: 16px;
+  --leading-editorial-title: 48px;
+  --leading-editorial-section: 34px;
+  --leading-editorial-label: 16px;
   --tracking-display: -0.01em;
   --tracking-heading-1: -0.005em;
+  --tracking-editorial-title: -0.01em;
+  --tracking-editorial-section: -0.005em;
+  --tracking-editorial-label: 0.12em;
   --font-weight-display: 600;
   --font-weight-heading-1: 600;
   --font-weight-heading-2: 600;
@@ -55,4 +67,15 @@
   --font-weight-control: 600;
   --font-weight-ui: 400;
   --font-weight-metadata: 400;
+  --font-weight-editorial-title: 400;
+  --font-weight-editorial-section: 400;
+  --font-weight-editorial-label: 400;
+  --radius-control: 0px;
+  --radius-surface: 0px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
 }

@@ -8,10 +8,10 @@
  * the stepped Surface 2 on dark — one step above cards, because the
  * dialog floats over everything (theme decision D3).
  *
- * Geometry and motion: intentional structural constants — the 24px
- * panel padding and 8px gaps follow the FD-01 proposal, the 8px panel
- * radius the FD-03 proposal, and the transition durations the FD-05
- * proposal (all Proposed — pending maintainer review). The package's
+ * Geometry and motion: panel padding and gaps consume the encoded
+ * FD-01 spacing tokens (24px/8px), the radius consumes the encoded
+ * FD-03 token (0px, issues #45/#50), and the transition durations
+ * follow the FD-05 adopted direction (0ms). The package's
  * reduced-motion gate collapses the open/close transitions.
  *
  * Decision record: ../../docs/components.md.
@@ -52,9 +52,9 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: 24px; /* FD-01 space.2xl (Proposed) */
+  padding: var(--augur-spacing-xl); /* FD-01 space.2xl (Proposed) */
   border: 1px solid var(--border);
-  border-radius: 8px; /* FD-03 radius.surface (Proposed) */
+  border-radius: var(--augur-rounded-surface); /* FD-03, encoded: 0px */
   background-color: var(--popover);
   color: var(--popover-foreground);
   max-height: calc(100vh - 32px); /* 2x the FD-01 edge gutter (Proposed) */
@@ -82,7 +82,7 @@
 .aug-dialog-header {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* FD-01 space.sm (Proposed): title-to-description gap */
+  gap: var(--augur-spacing-sm); /* FD-01 space.sm (Proposed): title-to-description gap */
   margin-bottom: 16px; /* FD-01 space.md (Proposed): header-to-body gap */
 }
 
@@ -91,14 +91,14 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
-  gap: 8px;
+  gap: var(--augur-spacing-sm);
   margin-top: 16px; /* FD-01 space.md (Proposed): body-to-footer gap */
 }
 
 .aug-dialog-title,
 .aug-dialog-description {
   margin: 0;
-  padding-right: 32px; /* clears the absolutely-positioned close button */
+  padding-right: var(--augur-spacing-2xl); /* clears the absolutely-positioned close button */
 }
 
 .aug-dialog-description {
@@ -124,7 +124,7 @@
   padding: 0;
   margin: 0;
   border: 1px solid transparent;
-  border-radius: 6px; /* FD-03 radius.control (Proposed) */
+  border-radius: var(--augur-rounded-control); /* FD-03, encoded: 0px */
   cursor: pointer;
   background-color: transparent;
   color: var(--foreground);
@@ -152,63 +152,12 @@
   border: 0;
 }
 
-/*
- * Open/close transitions (FD-05 Proposed durations as structure):
- * a quiet fade for the scrim, a short rise-and-fade for the panel.
- * The theme contract's reduced-motion gate collapses both.
- */
-.aug-dialog-overlay[data-state="open"] {
-  animation: aug-dialog-overlay-in 150ms ease-out;
+/* FD-05: immediate open/close feedback, without decorative transforms. */
+.aug-dialog-overlay, .aug-dialog-content { animation: none; }
+@media (max-width: 599px) {
+  .aug-dialog-content { padding: var(--augur-spacing-lg); }
 }
-
-.aug-dialog-overlay[data-state="closed"] {
-  animation: aug-dialog-overlay-out 100ms ease-in;
-}
-
-.aug-dialog-content[data-state="open"] {
-  animation: aug-dialog-content-in 150ms ease-out;
-}
-
-.aug-dialog-content[data-state="closed"] {
-  animation: aug-dialog-content-out 100ms ease-in;
-}
-
-@keyframes aug-dialog-overlay-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes aug-dialog-overlay-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes aug-dialog-content-in {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -48%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
-@keyframes aug-dialog-content-out {
-  from {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, -52%);
-  }
+@media (pointer: coarse) {
+  .aug-dialog-close { width: 44px; height: 44px; }
+  .aug-dialog-title, .aug-dialog-description { padding-right: 44px; }
 }

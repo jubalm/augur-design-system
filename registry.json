@@ -13,6 +13,13 @@
         "@fontsource/sora@5.3.0",
         "@fontsource/schibsted-grotesk@5.3.0"
       ],
+      "files": [
+        {
+          "path": "packages/design-system/src/styles/typography.css",
+          "type": "registry:style",
+          "target": "src/styles/augur-typography.css"
+        }
+      ],
       "cssVars": {
         "theme": {
           "--font-sans": "var(--augur-font-primary)",
@@ -20,6 +27,7 @@
           "--color-accent-foreground": "var(--accent-foreground)",
           "--color-background": "var(--background)",
           "--color-border": "var(--border)",
+          "--color-border-quiet": "var(--border-quiet)",
           "--color-card": "var(--card)",
           "--color-card-foreground": "var(--card-foreground)",
           "--color-destructive": "var(--destructive)",
@@ -54,7 +62,8 @@
           "--destructive": "var(--augur-color-primary)",
           "--destructive-foreground": "var(--augur-color-surface-light-raised)",
           "--border": "var(--augur-color-border-light)",
-          "--input": "var(--augur-color-border-light)",
+          "--input": "var(--augur-color-secondary)",
+          "--border-quiet": "var(--augur-color-border-light)",
           "--ring": "var(--augur-color-accent-deep)"
         },
         "dark": {
@@ -76,6 +85,7 @@
           "--destructive-foreground": "var(--augur-color-primary)",
           "--border": "var(--augur-color-surface-dark-mist)",
           "--input": "var(--augur-color-surface-dark-mist)",
+          "--border-quiet": "var(--augur-color-surface-dark-3)",
           "--ring": "var(--augur-color-accent)"
         }
       },
@@ -85,20 +95,55 @@
         "@import \"@fontsource/schibsted-grotesk/400.css\"": "",
         ":root": {
           "color-scheme": "light",
-          "--augur-color-primary": "#0E0E21",
-          "--augur-color-accent": "#2AE7A8",
-          "--augur-color-accent-deep": "#095E42",
-          "--augur-color-surface-light": "#F5F5F8",
-          "--augur-color-surface-light-raised": "#FFFFFF",
-          "--augur-color-surface-light-muted": "#ECECF2",
-          "--augur-color-border-light": "#E0E0E7",
-          "--augur-color-secondary": "#4A4B61",
-          "--augur-color-secondary-dark": "#A1A1B8",
+          "--augur-color-primary": "#0e0e21",
+          "--augur-color-accent": "#2ae7a8",
+          "--augur-color-neutral": "#f5f5f8",
+          "--augur-color-secondary": "#4a4b61",
+          "--augur-color-secondary-dark": "#a1a1b8",
+          "--augur-color-surface-light": "#f5f5f8",
+          "--augur-color-surface-light-raised": "#ffffff",
+          "--augur-color-surface-light-muted": "#ececf2",
+          "--augur-color-border-light": "#e0e0e7",
+          "--augur-color-accent-deep": "#095e42",
+          "--augur-color-accent-wash": "#c9ffe5",
           "--augur-color-surface-dark-1": "#161629",
-          "--augur-color-surface-dark-2": "#1D1D30",
-          "--augur-color-surface-dark-mist": "#71728A",
+          "--augur-color-surface-dark-2": "#1d1d30",
+          "--augur-color-surface-dark-3": "#242438",
+          "--augur-color-surface-dark-mist": "#71728a",
+          "--augur-spacing-xs": "4px",
+          "--augur-spacing-sm": "8px",
+          "--augur-spacing-md": "12px",
+          "--augur-spacing-lg": "16px",
+          "--augur-spacing-xl": "24px",
+          "--augur-spacing-2xl": "32px",
+          "--augur-rounded-control": "0px",
+          "--augur-rounded-surface": "0px",
           "--augur-font-primary": "\"Sora\", ui-sans-serif, system-ui, sans-serif",
           "--augur-font-secondary": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif"
+        },
+        "@import \"./styles/augur-typography.css\"": "",
+        "[data-theme=\"light\"]": {
+          "color-scheme": "light",
+          "--background": "var(--augur-color-surface-light)",
+          "--foreground": "var(--augur-color-primary)",
+          "--card": "var(--augur-color-surface-light-raised)",
+          "--card-foreground": "var(--augur-color-primary)",
+          "--popover": "var(--augur-color-surface-light-raised)",
+          "--popover-foreground": "var(--augur-color-primary)",
+          "--primary": "var(--augur-color-accent-deep)",
+          "--primary-foreground": "var(--augur-color-surface-light-raised)",
+          "--secondary": "var(--augur-color-surface-light-muted)",
+          "--secondary-foreground": "var(--augur-color-primary)",
+          "--muted": "var(--augur-color-surface-light-muted)",
+          "--muted-foreground": "var(--augur-color-secondary)",
+          "--accent": "var(--augur-color-surface-light-muted)",
+          "--accent-foreground": "var(--augur-color-primary)",
+          "--destructive": "var(--augur-color-primary)",
+          "--destructive-foreground": "var(--augur-color-surface-light-raised)",
+          "--border": "var(--augur-color-border-light)",
+          "--input": "var(--augur-color-secondary)",
+          "--border-quiet": "var(--augur-color-border-light)",
+          "--ring": "var(--augur-color-accent-deep)"
         },
         ".dark": {
           "color-scheme": "dark"
@@ -123,6 +168,7 @@
           "--destructive-foreground": "var(--augur-color-primary)",
           "--border": "var(--augur-color-surface-dark-mist)",
           "--input": "var(--augur-color-surface-dark-mist)",
+          "--border-quiet": "var(--augur-color-surface-dark-3)",
           "--ring": "var(--augur-color-accent)"
         },
         "@media (prefers-color-scheme: dark)": {
@@ -146,6 +192,7 @@
             "--destructive-foreground": "var(--augur-color-primary)",
             "--border": "var(--augur-color-surface-dark-mist)",
             "--input": "var(--augur-color-surface-dark-mist)",
+            "--border-quiet": "var(--augur-color-surface-dark-3)",
             "--ring": "var(--augur-color-accent)"
           }
         },
@@ -167,8 +214,7 @@
         },
         "@custom-variant dark (&:is([data-theme=\"dark\"], [data-theme=\"dark\"] *, :root:not([data-theme=\"light\"]) *))": ""
       },
-      "docs": "Apply the theme by setting `data-theme=\"light|dark\"` on `<html>` or any container; without an attribute the system preference decides. Do not import @augur/design-system from registry-installed source; this item is self-contained.",
-      "files": []
+      "docs": "Apply the theme by setting `data-theme=\"light|dark\"` on `<html>` or any container; without an attribute the system preference decides. Do not import @augur/design-system from registry-installed source; this item is self-contained."
     },
     {
       "name": "utils",

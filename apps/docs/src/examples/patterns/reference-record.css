@@ -1,0 +1,66 @@
+/* Example module: reference-record (issue #52, contract frame C).
+   The muted outer field carries the lifted square panel; the panel's
+   separators are quiet; the signal is 32×2 through --primary; choices
+   are equal; the pair is pinned light/dark with identical geometry. */
+.example-record-field {
+  display: grid;
+  gap: var(--augur-spacing-xl);
+}
+.example-record-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--augur-spacing-xl);
+  padding: var(--augur-spacing-xl);
+  background-color: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border-quiet);
+  /* Each pinned panel keeps its quiet outer field under either host. */
+  outline: var(--augur-spacing-xl) solid var(--muted);
+  margin: var(--augur-spacing-xl);
+}
+.example-record-state {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-md);
+  color: var(--muted-foreground);
+}
+.example-record-signal {
+  display: block;
+  width: 32px;
+  height: 2px;
+  flex-shrink: 0;
+  background-color: var(--primary);
+}
+.example-record-id { margin-left: auto; }
+.example-record-question { margin: 0; }
+.example-record-choices {
+  display: flex;
+  gap: var(--augur-spacing-xl);
+  padding-top: var(--augur-spacing-xl);
+  border-top: 1px solid var(--border-quiet);
+}
+.example-record-choices > * { flex: 1 1 0; }
+.example-record-details {
+  display: grid;
+  gap: var(--augur-spacing-lg);
+  margin: 0;
+  padding-top: var(--augur-spacing-xl);
+  border-top: 1px solid var(--border-quiet);
+}
+.example-record-details > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--augur-spacing-lg);
+}
+.example-record-details dt { color: var(--muted-foreground); }
+.example-record-details dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+@media (max-width: 599px) {
+  .example-record-panel {
+    padding: var(--augur-spacing-lg);
+    margin: var(--augur-spacing-lg);
+    outline-width: var(--augur-spacing-lg);
+  }
+  .example-record-choices { gap: var(--augur-spacing-lg); }
+}
+

@@ -44,6 +44,14 @@
  *      pattern-page examples rendering, both themes on the same nodes,
  *      mobile (375px) dialog sizing/scroll, and reduced-motion
  *      transitions collapsing.
+ *   9. Specimen rendering repair (issue #44): palette chips paint as
+ *      fields with computed dimensions in both themes and at 390px, and
+ *      Card/PageHeader computed typography and spacing are identical in
+ *      the bare package host (`packages/design-system/fixtures/
+ *      bare-hosts.html`, served from the repository root) and inside
+ *      the docs prose host — so a prose-selector leak into
+ *      `.doc-example-preview` fails the check instead of silently
+ *      distorting the specimens.
  *
  * Exit code 0 = all assertions passed; 1 = at least one failed.
  * Screenshots are written to /tmp/augur-docs-verify/ as visual evidence.
@@ -228,7 +236,8 @@ await auditPage(origin + site("/foundations/decisions"), { expectTitleFragment: 
 await auditPage(origin + site("/foundations/fonts"), { expectTitleFragment: "Fonts and typography" });
 const theming = await auditPage(origin + site("/foundations/theming"), { expectTitleFragment: "Theming" });
 await auditPage(origin + site("/foundations/color"), { expectTitleFragment: "Color system" });
-await auditPage(origin + site("/foundations/proposals"), { expectTitleFragment: "Foundation proposals" });
+await auditPage(origin + site("/foundations/proposals"), { expectTitleFragment: "Foundation adoption" });
+await auditPage(origin + site("/foundations/visual-direction"), { expectTitleFragment: "Visual direction" });
 await auditPage(origin + site("/reference/package-entries"), { expectTitleFragment: "Package entries" });
 await auditPage(origin + site("/reference/contributing"), { expectTitleFragment: "Contributing" });
 await auditPage(origin + site("/reference/component-conventions"), { expectTitleFragment: "Component conventions" });
@@ -239,16 +248,17 @@ await auditPage(origin + site("/components/input"), { expectTitleFragment: "Inpu
 await auditPage(origin + site("/patterns/empty-state"), { expectTitleFragment: "EmptyState" });
 await auditPage(origin + site("/patterns/form-field"), { expectTitleFragment: "FormField" });
 await auditPage(origin + site("/patterns/page-header"), { expectTitleFragment: "PageHeader" });
+await auditPage(origin + site("/proposal-review"), { expectTitleFragment: "Proposal review" });
 
 ok(
   "getting-started renders MDX-evaluated package data",
   (await readFile(join(distDir, "getting-started/index.html"), "utf8")).includes("<strong>2 font families</strong>"),
 );
 ok(
-  "theming page exposes scoped [data-theme=dark] demo",
-  (await readFile(join(distDir, "foundations/theming/index.html"), "utf8")).includes('data-theme="dark"'),
+  "theming page exposes pinned light/dark paired records",
+  (await readFile(join(distDir, "foundations/theming/index.html"), "utf8")).includes('data-theme="dark"') &&
+    (await readFile(join(distDir, "foundations/theming/index.html"), "utf8")).includes('data-theme="light"'),
 );
-ok("theming page nav marks current page", theming.ariaCurrent.includes("Theming"), theming.ariaCurrent.join(", "));
 
 // --- 2. Theme contract behavior via keyboard. ----------------------------
 console.log("\n== Theme contract (keyboard-driven, home page) ==");
@@ -347,28 +357,57 @@ console.log("\n== Mobile layout (375x812) ==");
   await page.close();
 }
 
-// --- 4. Theming page demo. -------------------------------------------------
-console.log("\n== Theming page demo ==");
+// --- 4. Theming page demo + paired records (issue #49). -------------------
+console.log("\n== Theming page demo (#49 paired records) ==");
 {
+  const readPair = (page) =>
+    page.evaluate(() => {
+      const panels = [...document.querySelectorAll(".theme-demo-panel")];
+      const rects = panels.map((p) => p.getBoundingClientRect());
+      const texts = panels.map((p) => p.textContent.replace(/\s+/g, " ").trim());
+      return {
+        count: panels.length,
+        themes: panels.map((p) => p.dataset.theme ?? null),
+        bgs: panels.map((p) => getComputedStyle(p).backgroundColor),
+        widths: rects.map((r) => Math.round(r.width)),
+        heights: rects.map((r) => Math.round(r.height)),
+        swatches: document.querySelectorAll(".theme-swatch").length,
+        contentParity: texts[0].replace(/light|dark/g, "X") === texts[1].replace(/light|dark/g, "X"),
+      };
+    });
+
+  await auditPage(origin + site("/foundations/theming"), { expectTitleFragment: "Theming" });
   const page = await browser.newPage();
   await page.goto(origin + site("/foundations/theming"), { waitUntil: "networkidle" });
-  const demo = await page.evaluate(() => {
-    const panel = document.querySelector(".theme-demo-panel");
-    const scoped = document.querySelector('.theme-demo-panel[data-theme="dark"]');
-    return {
-      panelCount: document.querySelectorAll(".theme-demo-panel").length,
-      scopedPresent: !!scoped,
-      panelBg: panel ? getComputedStyle(panel).backgroundColor : null,
-      scopedBg: scoped ? getComputedStyle(scoped).backgroundColor : null,
-      swatches: document.querySelectorAll(".theme-swatch").length,
-    };
+  const pairLight = await readPair(page);
+  ok("paired records: two pinned panels (light + dark)", pairLight.count === 2 && pairLight.themes[0] === "light" && pairLight.themes[1] === "dark", pairLight.themes.join("/"));
+  ok("pair paints differently under light host", pairLight.bgs[0] !== pairLight.bgs[1], pairLight.bgs.join(" vs "));
+  ok("pair content/order identical (title aside)", pairLight.contentParity === true);
+  ok("pair geometry identical under light host", pairLight.widths[0] === pairLight.widths[1] && Math.abs(pairLight.heights[0] - pairLight.heights[1]) <= 1, `${pairLight.widths.join("x")} / ${pairLight.heights.join("x")}`);
+  ok("12 role swatches render across the pair", pairLight.swatches === 12, String(pairLight.swatches));
+  await page.screenshot({ path: "/tmp/augur-docs-verify/theming-paired-light.png", fullPage: true });
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
   });
-  ok("demo renders 2 panels", demo.panelCount === 2, String(demo.panelCount));
-  ok("scoped dark panel present", demo.scopedPresent === true);
-  ok("scoped dark panel paints differently from the page panel", demo.panelBg !== demo.scopedBg, `${demo.panelBg} vs ${demo.scopedBg}`);
-  ok("12 role swatches render", demo.swatches === 12, String(demo.swatches));
-  await page.screenshot({ path: "/tmp/augur-docs-verify/theming-light.png", fullPage: true });
+  const pairDark = await readPair(page);
+  ok("pair still light+dark under dark host", pairDark.bgs[0] !== pairDark.bgs[1], pairDark.bgs.join(" vs "));
+  ok("pair geometry identical under dark host", pairDark.widths[0] === pairDark.widths[1] && Math.abs(pairDark.heights[0] - pairDark.heights[1]) <= 1, `${pairDark.widths.join("x")} / ${pairDark.heights.join("x")}`);
+  ok("theming page nav marks current page", theming.ariaCurrent.includes("Theming"), theming.ariaCurrent.join(", "));
+  await page.screenshot({ path: "/tmp/augur-docs-verify/theming-paired-dark.png", fullPage: true });
   await page.close();
+
+  // Color page: core palette and companions lead, ladders follow (#49).
+  const colorPage = await browser.newPage();
+  await colorPage.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+  const groupOrder = await colorPage.evaluate(() =>
+    [...document.querySelectorAll(".example-palette-group-title")].map((e) => e.textContent.trim()),
+  );
+  ok(
+    "palette order: anchors, companions, then surface ladders",
+    JSON.stringify(groupOrder) === JSON.stringify(["Brand anchors", "Companions", "Light surfaces", "Dark surfaces"]),
+    groupOrder.join(" | "),
+  );
+  await colorPage.close();
 }
 
 // --- 5. Copy page / View as Markdown (issue #9). ---------------------------
@@ -451,7 +490,7 @@ console.log("\n== Component slice (Button/Card computed styles, both themes) =="
 
   const buttonLight = await readButtonEvidence();
   ok("default button height 36px (FD-02 structure)", buttonLight.height === "36px", buttonLight.height);
-  ok("default button radius 6px (FD-03 structure)", buttonLight.radius === "6px", buttonLight.radius);
+  ok("default button radius 0px (FD-03 encoded, issue #45/#51)", buttonLight.radius === "0px", buttonLight.radius);
   ok("control typography role applies (Sora)", buttonLight.font.includes("Sora"), buttonLight.font);
   ok(
     "--primary resolves to a generated token (not var())",
@@ -499,7 +538,7 @@ console.log("\n== Component slice (Button/Card computed styles, both themes) =="
       titleTag: card.querySelector(".aug-card-title")?.tagName ?? null,
     };
   });
-  ok("card radius 8px (FD-03 surface structure)", cardLight.radius === "8px", cardLight.radius);
+  ok("card radius 0px (FD-03 encoded, issue #45/#50)", cardLight.radius === "0px", cardLight.radius);
   ok("card paints the --card role (light)", cardLight.background !== "rgba(0, 0, 0, 0)", cardLight.background);
   ok(
     "--card resolves to a generated token (not var())",
@@ -575,6 +614,7 @@ console.log("\n== Starter components in real browsers (issue #15) ==");
   // Escape closes; focus returns to the trigger; scroll unlocks.
   await page.keyboard.press("Escape");
   await page.waitForSelector(".aug-dialog-content", { state: "detached" });
+  await page.waitForFunction(() => document.activeElement?.textContent?.trim() === "Open dialog");
   const closed = await page.evaluate(() => ({
     focus: document.activeElement?.textContent?.trim() ?? null,
     overflow: getComputedStyle(document.body).overflow,
@@ -741,6 +781,658 @@ console.log("\n== Starter components in real browsers (issue #15) ==");
   await btnPage.waitForTimeout(300);
   ok("button activates via Enter and Space", clicks === 2, String(clicks));
   await btnPage.close();
+}
+
+// --- 8. Specimen rendering repair (issue #44). ---------------------------
+console.log("\n== Specimen rendering repair (#44) ===");
+{
+  // A shared reader for the exact example markup of Card and PageHeader;
+  // evaluated in the bare host and in the docs pages so parity is a
+  // straight computed-value comparison.
+  const componentMetrics = () => {
+    const g = (el, prop) => (el ? getComputedStyle(el)[prop] : null);
+    const card = document.querySelector(".aug-card:not([data-theme])");
+    const title = card?.querySelector(".aug-card-title");
+    const desc = card?.querySelector(".aug-card-description");
+    const contentP = card?.querySelector(".aug-card-content > p");
+    const header = document.querySelector(".aug-page-header:not([data-theme])");
+    const phTitle = header?.querySelector(".aug-page-header-title");
+    const phDesc = header?.querySelector(".aug-page-header-description");
+    const ol = header?.querySelector(".aug-page-header-breadcrumb ol");
+    const li2 = header?.querySelector(".aug-page-header-breadcrumb li + li");
+    const crumb = header?.querySelector(".aug-page-header-breadcrumb a:not([aria-current])");
+    const current = header?.querySelector('.aug-page-header-breadcrumb [aria-current="page"]');
+    return {
+      cardTitleSize: g(title, "fontSize"),
+      cardTitleLh: g(title, "lineHeight"),
+      cardTitleMt: g(title, "marginTop"),
+      cardTitleMb: g(title, "marginBottom"),
+      cardTitleWeight: g(title, "fontWeight"),
+      cardDescLh: g(desc, "lineHeight"),
+      cardContentPLh: g(contentP, "lineHeight"),
+      phTitleSize: g(phTitle, "fontSize"),
+      phTitleMt: g(phTitle, "marginTop"),
+      phDescLh: g(phDesc, "lineHeight"),
+      olPadding: g(ol, "paddingInlineStart"),
+      li2MarginTop: g(li2, "marginTop"),
+      crumbColor: g(crumb, "color"),
+      crumbDecoration: g(crumb, "textDecorationLine"),
+      currentColor: g(current, "color"),
+    };
+  };
+  const metricLabels = {
+    cardTitleSize: "card title font-size",
+    cardTitleLh: "card title line-height",
+    cardTitleMt: "card title margin-top",
+    cardTitleMb: "card title margin-bottom",
+    cardTitleWeight: "card title font-weight",
+    cardDescLh: "card description line-height",
+    cardContentPLh: "card content paragraph line-height",
+    phTitleSize: "page-header title font-size",
+    phTitleMt: "page-header title margin-top",
+    phDescLh: "page-header description line-height",
+    olPadding: "breadcrumb list inline padding",
+    li2MarginTop: "breadcrumb second-item offset",
+    crumbColor: "breadcrumb link color",
+    crumbDecoration: "breadcrumb link decoration",
+    currentColor: "breadcrumb current-page color",
+  };
+
+  // Bare host: the same markup with no docs shell, served from the
+  // repository root on a second loopback server.
+  const bareServer = createServer(async (req, res) => {
+    try {
+      let path = normalize(decodeURIComponent(new URL(req.url, "http://localhost").pathname));
+      if (path.endsWith("/")) path += "index.html";
+      const file = join(repoRoot, path);
+      if (!file.startsWith(repoRoot)) throw new Error("traversal");
+      const body = await readFile(file);
+      res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });
+      res.end(body);
+    } catch {
+      res.writeHead(404);
+      res.end("not found");
+    }
+  });
+  await new Promise((resolve) => bareServer.listen(0, "127.0.0.1", resolve));
+  const bareOrigin = `http://127.0.0.1:${bareServer.address().port}`;
+  const barePage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await barePage.goto(`${bareOrigin}/packages/design-system/fixtures/bare-hosts.html`, { waitUntil: "networkidle" });
+  await barePage.evaluate(() => document.fonts.ready);
+  const bareMetrics = await barePage.evaluate(componentMetrics);
+  await barePage.screenshot({ path: "/tmp/augur-docs-verify/bare-hosts.png", fullPage: true });
+  await barePage.close();
+  bareServer.close();
+
+  // Docs hosts: the same components inside .doc-example-preview.
+  const docsMetrics = {};
+  for (const [route, keys] of [
+    [site("/components/card"), Object.keys(metricLabels).filter((k) => k.startsWith("card"))],
+    [site("/patterns/page-header"), Object.keys(metricLabels).filter((k) => k.startsWith("ph") || k.startsWith("ol") || k.startsWith("li2") || k.startsWith("crumb") || k.startsWith("current"))],
+  ]) {
+    const p = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    await p.goto(origin + route, { waitUntil: "networkidle" });
+    await p.evaluate(() => document.fonts.ready);
+    const read = await p.evaluate(componentMetrics);
+    for (const k of keys) docsMetrics[k] = read[k];
+    await p.close();
+  }
+
+  for (const [key, label] of Object.entries(metricLabels)) {
+    ok(
+      `${label} identical in bare host and docs`,
+      docsMetrics[key] != null && docsMetrics[key] === bareMetrics[key],
+      `docs ${docsMetrics[key]} vs bare ${bareMetrics[key]}`,
+    );
+  }
+
+  // Palette chips: fields with computed dimensions, both themes, and at
+  // a narrow viewport. Reads computed styles, never CSS text.
+  const readChips = (page) =>
+    page.evaluate(() => {
+      const chips = [...document.querySelectorAll(".example-palette-chip")];
+      const cs = getComputedStyle(chips[0]);
+      const rect = chips[0].getBoundingClientRect();
+      return {
+        count: chips.length,
+        display: cs.display,
+        height: cs.height,
+        painted: `${Math.round(rect.width)}x${Math.round(rect.height)}`,
+        background: cs.backgroundColor,
+        border: cs.borderTopColor,
+      };
+    });
+  const paletteLight = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await paletteLight.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+  await paletteLight.evaluate(() => document.fonts.ready);
+  const chipsLight = await readChips(paletteLight);
+  ok("palette renders 15 chip fields (light)", chipsLight.count === 15, String(chipsLight.count));
+  ok("palette chip is a 40px block field (light)", chipsLight.display === "block" && chipsLight.height === "40px", `${chipsLight.display} ${chipsLight.height}`);
+  ok("palette chip paints a visible field (light)", !chipsLight.painted.startsWith("0x"), chipsLight.painted);
+  ok("palette chip paints a token color (light)", chipsLight.background !== "rgba(0, 0, 0, 0)", chipsLight.background);
+  ok("palette chip keeps the hairline edge (light)", chipsLight.border !== "rgba(0, 0, 0, 0)", chipsLight.border);
+  await paletteLight.screenshot({ path: "/tmp/augur-docs-verify/color-repaired-light.png", fullPage: true });
+  await paletteLight.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const chipsDark = await readChips(paletteLight);
+  ok("palette chip is a 40px block field (pinned dark)", chipsDark.display === "block" && chipsDark.height === "40px", `${chipsDark.display} ${chipsDark.height}`);
+  // Chips paint theme-invariant PRIMITIVE tokens (--augur-color-*): a
+  // palette reference shows the same fixed fields under either theme;
+  // only the page's semantic surface changes. Assert painted, unchanged.
+  ok(
+    "palette chip paints its primitive token in pinned dark (theme-invariant by design)",
+    chipsDark.background !== "rgba(0, 0, 0, 0)" && chipsDark.background === chipsLight.background,
+    `${chipsLight.background} -> ${chipsDark.background}`,
+  );
+  await paletteLight.screenshot({ path: "/tmp/augur-docs-verify/color-repaired-dark.png", fullPage: true });
+  await paletteLight.close();
+
+  const paletteMobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await paletteMobile.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+  const mobileChips = await readChips(paletteMobile);
+  const mobileOverflow = await paletteMobile.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+  ok("palette chip is a visible field at 390px", mobileChips.display === "block" && !mobileChips.painted.startsWith("0x"), mobileChips.painted);
+  ok("color page has no horizontal overflow at 390px", mobileOverflow === false);
+  await paletteMobile.close();
+}
+
+// --- 10. Shared frame alignment (issue #46). -----------------------------
+console.log("\n== Shared frame alignment (#46) ===");
+{
+  const readFrame = (page) =>
+    page.evaluate(() => {
+      const cs = (sel, prop) => {
+        const el = document.querySelector(sel);
+        return el ? getComputedStyle(el)[prop] : null;
+      };
+      const probeCh = document.createElement("div");
+      probeCh.style.width = "65ch";
+      probeCh.style.position = "absolute";
+      probeCh.style.visibility = "hidden";
+      document.body.appendChild(probeCh);
+      const measure65 = probeCh.getBoundingClientRect().width;
+      probeCh.remove();
+      const title = getComputedStyle(document.querySelector(".page-title"));
+      const h2 = document.querySelector(".prose h2");
+      return {
+        frameMax: cs(".site-main", "maxWidth"),
+        framePad: cs(".site-main", "paddingLeft"),
+        mainX: Math.round(document.querySelector(".site-main").getBoundingClientRect().x),
+        proseMax: cs(".prose", "maxWidth"),
+        measure65: `${measure65}px`,
+        titleFont: `${title.fontFamily.split(",")[0]} ${title.fontWeight} ${title.fontSize}/${title.lineHeight} ${title.letterSpacing}`,
+        h2: h2 ? `${getComputedStyle(h2).fontSize}/${getComputedStyle(h2).lineHeight} w${getComputedStyle(h2).fontWeight}` : null,
+        wordmark: (() => {
+          const el = document.querySelector(".brand-lockup-wordmark");
+          if (!el) return null;
+          const s = getComputedStyle(el);
+          return `${s.fontFamily.split(",")[0]} ${s.fontWeight} ${s.fontSize}/${s.lineHeight}`;
+        })(),
+        descriptor: (() => {
+          const el = document.querySelector(".brand-lockup-descriptor");
+          if (!el) return null;
+          const s = getComputedStyle(el);
+          return `${s.textTransform} ${s.letterSpacing} ${s.color}`;
+        })(),
+        headerBorder: cs(".site-header", "borderBottomColor"),
+        controlEdge: cs(".theme-toggle", "borderTopColor"),
+        overflowX: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+
+  const frame1440 = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await frame1440.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+  await frame1440.evaluate(() => document.fonts.ready);
+  const light = await readFrame(frame1440);
+  ok("frame is 1200px with 64px gutters at 1440", light.frameMax === "1200px" && light.framePad === "64px", `${light.frameMax} / ${light.framePad}`);
+  ok("centered frame leaves the 120px side margin at 1440", light.mainX === 120, String(light.mainX));
+  ok(
+    "reading measure is exactly 65ch",
+    Math.abs(parseFloat(light.proseMax) - parseFloat(light.measure65)) < 0.5,
+    `${light.proseMax} vs ${light.measure65}`,
+  );
+  ok("page title renders the editorial-title role (Sora 400 40/48)", light.titleFont === "Sora 400 40px/48px -0.4px", light.titleFont);
+  ok("section headings render the editorial-section metrics (28/34, regular)", light.h2 === "28px/34px w400", String(light.h2));
+  ok("header wordmark is the ui role (Sora 400 14/20)", light.wordmark === "Sora 400 14px/20px", String(light.wordmark));
+  ok(
+    "descriptor is uppercase tracked secondary text (+0.12em)",
+    light.descriptor === "uppercase 1.44px rgb(74, 75, 97)",
+    String(light.descriptor),
+  );
+  ok(
+    "light header hairline matches the (shared) quiet separator",
+    light.headerBorder === light.controlEdge,
+    `${light.headerBorder} vs ${light.controlEdge}`,
+  );
+  ok("no horizontal overflow at 1440", light.overflowX === false);
+  await frame1440.screenshot({ path: "/tmp/augur-docs-verify/frame-1440-light.png", fullPage: true });
+
+  await frame1440.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const dark = await readFrame(frame1440);
+  ok(
+    "dark editorial separator is the quiet Surface 3 step, not the Mist control edge",
+    dark.headerBorder === "rgb(36, 36, 56)" && dark.headerBorder !== dark.controlEdge,
+    `${dark.headerBorder} vs control ${dark.controlEdge}`,
+  );
+  ok(
+    "dark descriptor flips to the dark secondary role",
+    dark.descriptor === "uppercase 1.44px rgb(161, 161, 184)",
+    String(dark.descriptor),
+  );
+  await frame1440.screenshot({ path: "/tmp/augur-docs-verify/frame-1440-dark.png", fullPage: true });
+  await frame1440.close();
+
+  for (const [label, viewport] of [
+    ["768", { width: 768, height: 1024 }],
+    ["390", { width: 390, height: 844 }],
+  ]) {
+    const p = await browser.newPage({ viewport });
+    await p.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+    const narrow = await readFrame(p);
+    ok(`frame uses 24px gutters at ${label}`, narrow.framePad === "24px", narrow.framePad);
+    ok(`no horizontal overflow at ${label}`, narrow.overflowX === false);
+    if (label === "390") {
+      ok(
+        "page title steps down to the adopted 32/40 mobile size",
+        narrow.titleFont === "Sora 400 32px/40px -0.32px",
+        narrow.titleFont,
+      );
+    }
+    await p.screenshot({ path: `/tmp/augur-docs-verify/frame-${label}-light.png`, fullPage: true });
+    await p.close();
+  }
+}
+
+// --- 11. Brand opening (issue #47, contract frame A). -------------------
+console.log("\n== Brand opening (#47) ===");
+{
+  const readOpening = (page) =>
+    page.evaluate(() => {
+      const cs = (sel, prop) => {
+        const el = document.querySelector(sel);
+        return el ? getComputedStyle(el)[prop] : null;
+      };
+      const sig = document.querySelector(".opening-signal");
+      const r = sig.getBoundingClientRect();
+      const cols = cs(".opening", "gridTemplateColumns").split(" ").map(parseFloat);
+      return {
+        titleText: document.querySelector(".opening-message h1").textContent,
+        titleFont: (() => {
+          const s = getComputedStyle(document.querySelector(".opening-message h1"));
+          return `${s.fontWeight} ${s.fontSize}/${s.lineHeight}`;
+        })(),
+        signal: `${Math.round(r.width)}x${Math.round(r.height)}`,
+        signalColor: cs(".opening-signal", "backgroundColor"),
+        actionColor: cs(".opening-action", "color"),
+        actionText: document.querySelector(".opening-action").textContent.trim(),
+        lede: document.querySelector(".opening-lede").textContent.replace(/\s+/g, " ").trim(),
+        colRatio: cols.length === 2 ? cols[1] / cols[0] : null,
+        openingHeight: Math.round(document.querySelector(".opening").getBoundingClientRect().height),
+        tracks: document.querySelectorAll(".opening-footer > div").length,
+        wordmarkSize: cs(".opening-wordmark", "fontSize"),
+        display: cs(".opening", "display"),
+        overflowX: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+
+  const home1440 = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await home1440.goto(origin + site("/"), { waitUntil: "networkidle" });
+  await home1440.evaluate(() => document.fonts.ready);
+  const openLight = await readOpening(home1440);
+  // <br> joins without whitespace in textContent, hence "whatmatters".
+  ok(
+    "opening title is the locked message in the editorial-title role",
+    openLight.titleText.trim() === "Make whatmatters clear." && openLight.titleFont === "400 40px/48px",
+    `${openLight.titleFont} "${openLight.titleText.replace(/\s+/g, " ").trim()}"`,
+  );
+  ok("opening signal is exactly 32x2", openLight.signal === "32x2", openLight.signal);
+  ok("light signal paints Deep through --primary", openLight.signalColor === "rgb(9, 94, 66)", openLight.signalColor);
+  ok("text action stays neutral foreground (not accent)", openLight.actionColor === "rgb(14, 14, 33)" && openLight.actionText.startsWith("Explore the foundations"), `${openLight.actionColor} "${openLight.actionText}"`);
+  ok("lede is the locked shared-interface-language copy", openLight.lede.startsWith("A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces."), openLight.lede.slice(0, 60));
+  ok("rail and message hold the 1:2 opening columns", openLight.colRatio !== null && Math.abs(openLight.colRatio - 2) < 0.05, String(openLight.colRatio));
+  ok("opening meets the 520px desktop minimum height", openLight.openingHeight >= 520, String(openLight.openingHeight));
+  ok("metadata row has three equal tracks", openLight.tracks === 3, String(openLight.tracks));
+  ok("identity lockup renders at opening scale", openLight.wordmarkSize === "40px", openLight.wordmarkSize);
+  ok("no horizontal overflow at 1440", openLight.overflowX === false);
+  const routeHrefs = await home1440.evaluate(() =>
+    [...document.querySelectorAll(".route-group a")].map((a) => new URL(a.getAttribute("href"), location.href).pathname),
+  );
+  const broken = [];
+  for (const h of routeHrefs) {
+    const res = await fetch(origin + (h.endsWith("/") ? `${h}index.html` : h));
+    if (res.status !== 200) broken.push(h);
+  }
+  ok("all 18 route links resolve to built pages", routeHrefs.length === 18 && broken.length === 0, broken.join(", ") || "ok");
+  await home1440.screenshot({ path: "/tmp/augur-docs-verify/home-opening-light-1440.png", fullPage: true });
+  await home1440.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const openDark = await readOpening(home1440);
+  ok("dark signal swaps to Green on the same node", openDark.signalColor === "rgb(42, 231, 168)", openDark.signalColor);
+  ok("dark action stays neutral foreground", openDark.actionColor === "rgb(245, 245, 248)", openDark.actionColor);
+  await home1440.screenshot({ path: "/tmp/augur-docs-verify/home-opening-dark-1440.png", fullPage: true });
+  await home1440.close();
+
+  const homeMobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await homeMobile.goto(origin + site("/"), { waitUntil: "networkidle" });
+  const openMobile = await readOpening(homeMobile);
+  ok("mobile stacks the opening (rail above message)", openMobile.display === "flex", openMobile.display);
+  ok("mobile title steps to the adopted 32/40", openMobile.titleFont === "400 32px/40px", openMobile.titleFont);
+  ok("no horizontal overflow at 390", openMobile.overflowX === false);
+  await homeMobile.screenshot({ path: "/tmp/augur-docs-verify/home-opening-light-390.png", fullPage: true });
+  await homeMobile.close();
+}
+
+// --- 12. Type specimen (issue #48, contract frame B). -------------------
+console.log("\n== Type specimen (#48) ===");
+{
+  const p = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await p.goto(origin + site("/foundations/fonts"), { waitUntil: "networkidle" });
+  await p.evaluate(() => document.fonts.ready);
+  const read = () =>
+    p.evaluate(() => {
+      const rows = [...document.querySelectorAll(".type-compare-row")];
+      const field = document.querySelector(".type-display-field");
+      const sample = field?.querySelector(".type-display-sample");
+      const notes = document.querySelectorAll(".type-specimen-notes > div").length;
+      const cs = getComputedStyle(field);
+      const sampleCS = getComputedStyle(sample);
+      const cols = getComputedStyle(document.querySelector(".type-specimen-grid")).gridTemplateColumns.split(" ").length;
+      return {
+        rows: rows.length,
+        fieldBg: cs.backgroundColor,
+        fieldFg: cs.color,
+        sampleWeight: sampleCS.fontWeight,
+        sampleSize: sampleCS.fontSize,
+        notes,
+        cols,
+        specs: rows.map((r) => r.querySelector(".type-compare-spec").textContent.trim().slice(0, 24)),
+        rowSampleWeights: rows.slice(0, 3).map((r) => getComputedStyle(r.querySelector("[class*='augur-type-']")).fontWeight),
+      };
+    });
+  const light = await read();
+  ok("specimen shows all ten roles as compact aligned rows", light.rows === 10, String(light.rows));
+  ok("display field is the inverse tonal field (light: Navy field, Paper text)", light.fieldBg === "rgb(14, 14, 33)" && light.fieldFg === "rgb(245, 245, 248)", `${light.fieldBg} / ${light.fieldFg}`);
+  ok("display sample renders Sora 600 at the display role", light.sampleWeight === "600" && light.sampleSize === "40px", `${light.sampleWeight} ${light.sampleSize}`);
+  ok("three rule-led support notes", light.notes === 3, String(light.notes));
+  ok("frame B holds the 2:1 specimen grid at 1440", light.cols === 2, String(light.cols));
+  ok("no false weights: leading samples carry their real roles", light.rowSampleWeights[0] === "600" && light.rowSampleWeights[2] === "600", light.rowSampleWeights.join(", "));
+  await p.screenshot({ path: "/tmp/augur-docs-verify/type-specimen-light-1440.png", fullPage: true });
+  await p.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const dark = await read();
+  ok("display field swaps Navy/Paper in dark while keeping geometry", dark.fieldBg === "rgb(245, 245, 248)" && dark.fieldFg === "rgb(14, 14, 33)", `${dark.fieldBg} / ${dark.fieldFg}`);
+  await p.screenshot({ path: "/tmp/augur-docs-verify/type-specimen-dark-1440.png", fullPage: true });
+  await p.close();
+
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await mobile.goto(origin + site("/foundations/fonts"), { waitUntil: "networkidle" });
+  const stack = await mobile.evaluate(() => {
+    const cols = getComputedStyle(document.querySelector(".type-specimen-grid")).gridTemplateColumns.split(" ").length;
+    const grid = document.querySelector(".type-specimen-grid");
+    const main = grid.children[0].getBoundingClientRect();
+    const notes = grid.children[1].getBoundingClientRect();
+    return { cols, mainFirst: main.top < notes.top, overflow: document.documentElement.scrollWidth > window.innerWidth };
+  });
+  ok("frame B stacks: specimen first, notes below at 390", stack.cols === 1 && stack.mainFirst, `cols=${stack.cols} mainFirst=${stack.mainFirst}`);
+  ok("no horizontal overflow at 390", stack.overflow === false);
+  await mobile.close();
+}
+
+// --- 13. Reference record (issue #52, contract frame C). ----------------
+console.log("\n== Reference record (#52) ===");
+{
+  const p = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await p.goto(origin + site("/patterns/reference-record"), { waitUntil: "networkidle" });
+  await p.evaluate(() => document.fonts.ready);
+  const read = () =>
+    p.evaluate(() => {
+      const panels = [...document.querySelectorAll(".example-record-panel")];
+      const q = panels[0].querySelector(".example-record-question");
+      const qSize = getComputedStyle(q).fontSize;
+      const signals = [...document.querySelectorAll(".example-record-signal")].map((s) => {
+        const r = s.getBoundingClientRect();
+        return `${Math.round(r.width)}x${Math.round(r.height)} ${getComputedStyle(s).backgroundColor}`;
+      });
+      const btns = [...panels[0].querySelectorAll(".example-record-choices .aug-button")];
+      const bw = btns.map((b) => Math.round(b.getBoundingClientRect().width));
+      const bh = btns.map((b) => Math.round(b.getBoundingClientRect().height));
+      const pressed = btns.map((b) => b.getAttribute("aria-pressed"));
+      const domOrder = [...panels[0].children].map((el) => el.className);
+      return {
+        count: panels.length,
+        themes: panels.map((x) => x.dataset.theme),
+        widths: panels.map((x) => Math.round(x.getBoundingClientRect().width)),
+        heights: panels.map((x) => Math.round(x.getBoundingClientRect().height)),
+        bgs: panels.map((x) => getComputedStyle(x).backgroundColor),
+        qSize,
+        signals,
+        btnCount: btns.length,
+        bw,
+        bh,
+        pressed,
+        domOrder,
+        response: panels[0].querySelector(".example-record-response").textContent.replace(/\s+/g, " ").trim(),
+      };
+    });
+  const light = await read();
+  ok("record renders as a pinned light/dark pair", light.count === 2 && light.themes[0] === "light" && light.themes[1] === "dark", light.themes.join("/"));
+  ok("pair geometry identical", light.widths[0] === light.widths[1] && Math.abs(light.heights[0] - light.heights[1]) <= 1, `${light.widths.join("x")} / ${light.heights.join("x")}`);
+  ok("pair panels paint differently", light.bgs[0] !== light.bgs[1], light.bgs.join(" vs "));
+  ok("state signals are exactly 32x2 in both panels", light.signals.every((s) => s.startsWith("32x2")), light.signals.join(" | "));
+  ok("question is the first substantive element after the state rail", light.domOrder[0] === "example-record-state" && light.domOrder[1].includes("example-record-question"), light.domOrder.join(" > "));
+  ok("question renders at the approved heading-2 scale (focal point)", light.qSize === "20px", light.qSize);
+  ok("choices are equal (two buttons, same size)", light.btnCount === 2 && light.bw[0] === light.bw[1] && light.bh[0] === light.bh[1], `${light.bw.join("x")} / ${light.bh.join("x")}`);
+  ok("static choices do not announce a fabricated selection", light.pressed.every((value) => value === null), light.pressed.join("/"));
+  ok("response is explicit and quiet", light.response.startsWith("Response") && light.response.includes("Not submitted"), light.response);
+  await p.screenshot({ path: "/tmp/augur-docs-verify/reference-record-light-1440.png", fullPage: true });
+  await p.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const dark = await read();
+  // Pinned panels keep their own themes by design: under a dark host the
+  // pinned-light signal stays Deep and the pinned-dark signal is Green.
+  ok(
+    "pair stays a true pair under dark host; signals hold Deep (light pin) and Green (dark pin)",
+    dark.bgs[0] !== dark.bgs[1] &&
+      dark.signals[0].includes("rgb(9, 94, 66)") &&
+      dark.signals[1].includes("rgb(42, 231, 168)"),
+    dark.signals.join(" | "),
+  );
+  await p.screenshot({ path: "/tmp/augur-docs-verify/reference-record-dark-1440.png", fullPage: true });
+  await p.close();
+
+  // No improvised artwork across the pattern examples.
+  const art = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const counts = {};
+  for (const route of [site("/patterns/reference-record"), site("/patterns/empty-state"), site("/patterns/page-header"), site("/patterns/form-field")]) {
+    await art.goto(origin + route, { waitUntil: "networkidle" });
+    counts[route] = await art.evaluate(() =>
+      [
+        ...document.querySelectorAll(".doc-example-preview img, .doc-example-preview svg"),
+      ].filter((el) => !el.closest("[class*='empty-state-icon']")).length,
+    );
+  }
+  ok(
+    "pattern examples contain no improvised artwork (no img/svg)",
+    Object.values(counts).every((c) => c === 0),
+    JSON.stringify(counts),
+  );
+  await art.close();
+
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await mobile.goto(origin + site("/patterns/reference-record"), { waitUntil: "networkidle" });
+  const mob = await mobile.evaluate(() => {
+    const btns = [...document.querySelectorAll(".example-record-panel")][0].querySelectorAll(".example-record-choices .aug-button");
+    const tops = [...btns].map((b) => Math.round(b.getBoundingClientRect().top));
+    return {
+      sameRow: tops[0] === tops[1],
+      overflow: document.documentElement.scrollWidth > window.innerWidth,
+    };
+  });
+  ok("choices stay side by side at 390", mob.sameRow);
+  ok("no horizontal overflow at 390", mob.overflow === false);
+  await mobile.screenshot({ path: "/tmp/augur-docs-verify/reference-record-light-390.png", fullPage: true });
+  await mobile.close();
+}
+
+// Independent review regressions: readable reflow, real roles, locked record,
+// and touch behavior. These assertions catch failures hidden by overflow-only QA.
+console.log("\n== Applied proposal review (#52) ===");
+for (const theme of ["light", "dark"]) {
+  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+    const p = await browser.newPage({ viewport });
+    await p.goto(origin + site("/proposal-review"), { waitUntil: "networkidle" });
+    await p.evaluate((value) => { document.documentElement.dataset.theme = value; }, theme);
+    const applied = await p.evaluate(() => {
+      const page = document.querySelector(".proposal-review-page");
+      const record = page?.querySelector(".example-record-panel");
+      const choices = [...(record?.querySelectorAll(".example-record-choices button") ?? [])];
+      const action = page?.querySelector(".aug-page-header-actions form");
+      return {
+        h1: page?.querySelector("h1")?.textContent?.trim(),
+        question: record?.querySelector(".example-record-question")?.textContent?.trim(),
+        choices: choices.map((choice) => ({
+          text: choice.textContent?.trim(),
+          unavailable: choice.getAttribute("aria-disabled"),
+          pressed: choice.getAttribute("aria-pressed"),
+          rect: { width: Math.round(choice.getBoundingClientRect().width), height: Math.round(choice.getBoundingClientRect().height) },
+        })),
+        action: action?.getAttribute("action"),
+        actionLabel: action?.querySelector("button")?.textContent?.trim(),
+        details: document.querySelector("#proposal-details")?.textContent?.replace(/\s+/g, " ").trim(),
+        overflow: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+    ok(`applied review has one static task ${theme}/${viewport.width}`, applied.h1 === "Proposal review" && applied.question === "Did the proposal pass before 30 June?", JSON.stringify(applied));
+    ok(`applied review keeps equal unavailable choices ${theme}/${viewport.width}`, applied.choices.length === 2 && applied.choices.map((choice) => choice.text).join("/") === "Yes/No" && applied.choices.every((choice) => choice.unavailable === "true" && choice.pressed === null && choice.rect.width === applied.choices[0].rect.width), JSON.stringify(applied.choices));
+    ok(`applied review has an honest in-page primary action ${theme}/${viewport.width}`, applied.action === "#proposal-details" && applied.actionLabel === "Review details" && applied.details?.includes("no voting logic"), JSON.stringify(applied));
+    ok(`applied review has no horizontal overflow ${theme}/${viewport.width}`, applied.overflow === false);
+    await p.getByRole("button", { name: "Review details", exact: true }).click();
+    await p.waitForFunction(() => location.hash === "#proposal-details");
+    ok(`applied review action reaches details ${theme}/${viewport.width}`, await p.locator("#proposal-details").evaluate((details) => document.activeElement === details || location.hash === "#proposal-details"));
+    await p.screenshot({ path: `/tmp/augur-docs-verify/proposal-review-${theme}-${viewport.width}.png`, fullPage: true });
+    await p.close();
+  }
+}
+
+for (const theme of ["light", "dark"]) {
+  for (const viewport of [{width:1440,height:1000},{width:768,height:1024},{width:390,height:844}]) {
+    const p = await browser.newPage({ viewport });
+    await p.goto(origin + site("/foundations/fonts"), { waitUntil: "networkidle" });
+    await p.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
+    await p.evaluate(() => document.fonts.ready);
+    const type = await p.evaluate(() => {
+      const rows = [...document.querySelectorAll('.type-compare-row')];
+      const notes = document.querySelector('.type-specimen-notes');
+      return {
+        widths: rows.map(r => r.children[0].getBoundingClientRect().width / r.getBoundingClientRect().width),
+        noteColumns: getComputedStyle(notes).gridTemplateColumns.split(' ').length,
+        weights: [...notes.querySelectorAll('h3')].map(h => getComputedStyle(h).fontWeight),
+        bodyLines: [...notes.querySelectorAll('p')].map(h => getComputedStyle(h).lineHeight),
+      };
+    });
+    ok(`review type samples retain readable width ${theme}/${viewport.width}`, type.widths.every(w => w > (viewport.width < 600 ? .95 : .45)), JSON.stringify(type.widths));
+    ok(`review support voice is regular ${theme}/${viewport.width}`, type.weights.every(w=>w==='400') && type.bodyLines.every(l=>l==='24px'), JSON.stringify(type));
+    ok(`review tablet support grid ${theme}/${viewport.width}`, type.noteColumns === (viewport.width >= 600 && viewport.width < 960 ? 3 : 1));
+    await p.goto(origin + site('/patterns/reference-record'), { waitUntil:'networkidle' });
+    await p.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
+    const records = await p.locator('.example-record-panel').evaluateAll(panels => panels.map(panel => ({
+      text: panel.textContent,
+      gap: getComputedStyle(panel.querySelector('.example-record-choices')).gap,
+      disabled: [...panel.querySelectorAll('button')].every(b=>b.getAttribute('aria-disabled')==='true'),
+      edge: getComputedStyle(panel).borderColor,
+      quiet: getComputedStyle(panel).getPropertyValue('--border-quiet'),
+    })));
+    ok(`review fixed static record ${theme}/${viewport.width}`, records.every(r => ['Open query','LQ-042','Did the proposal pass before 30 June?','Not submitted','Closes','14:32 UTC'].every(t=>r.text.includes(t)) && r.disabled));
+    ok(`review equal choice gap ${theme}/${viewport.width}`, records.every(r=>r.gap === (viewport.width < 600 ? '16px' : '24px')));
+    await p.close();
+  }
+}
+for (const theme of ['light','dark']) {
+  const context = await browser.newContext({ viewport:{width:390,height:844}, hasTouch:true, isMobile:true });
+  const p = await context.newPage();
+  for (const route of ['/components/button','/components/input','/components/dialog']) {
+    await p.goto(origin + site(route), {waitUntil:'networkidle'});
+    await p.evaluate(theme => {document.documentElement.dataset.theme = theme;}, theme);
+    if (route.endsWith('dialog')) await openDialog(p, p.getByRole('button',{name:'Open dialog',exact:true}));
+    const targets = await p.locator('.aug-button,.aug-input,.aug-dialog-close,.theme-toggle-option,.page-action,.mobile-nav summary').evaluateAll(els => els.filter(e=>e.getBoundingClientRect().width).map(e=>({name:e.className,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})));
+    ok(`review 44px touch targets ${theme}${route}`, targets.every(t=>t.w>=44 && t.h>=44), JSON.stringify(targets.filter(t=>t.w<44 || t.h<44)));
+    if (route.endsWith('dialog')) {
+      const dialog = await p.locator('.aug-dialog-content').evaluate(el=>({animation:getComputedStyle(el).animationName,padding:getComputedStyle(el).paddingTop}));
+      ok(`review immediate mobile Dialog ${theme}`, dialog.animation==='none' && dialog.padding==='16px', JSON.stringify(dialog));
+      await p.keyboard.press('Escape');
+    }
+  }
+  await context.close();
+}
+
+// --- 14. Standalone consumer parity (issue #53). ------------------------
+console.log("\n== Standalone consumer (#53) ===");
+{
+  // Same second server pattern as the bare-host parity section: serve the
+  // repository root so packages/design-system/fixtures/bare-hosts.html —
+  // standalone markup + package styles, zero docs CSS — can load. This is
+  // the visual companion to the #18 consumer-install smoke (which proves
+  // the full registry-install path end to end).
+  const consumerServer = createServer(async (req, res) => {
+    try {
+      let path = normalize(decodeURIComponent(new URL(req.url, "http://localhost").pathname));
+      if (path.endsWith("/")) path += "index.html";
+      const file = join(repoRoot, path);
+      if (!file.startsWith(repoRoot)) throw new Error("traversal");
+      const body = await readFile(file);
+      res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });
+      res.end(body);
+    } catch {
+      res.writeHead(404);
+      res.end("not found");
+    }
+  });
+  await new Promise((resolve) => consumerServer.listen(0, "127.0.0.1", resolve));
+  const consumerOrigin = `http://127.0.0.1:${consumerServer.address().port}`;
+  const consumer = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const consumerIssues = [];
+  consumer.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") consumerIssues.push(m.text()); });
+  await consumer.goto(`${consumerOrigin}/packages/design-system/fixtures/bare-hosts.html`, { waitUntil: "networkidle" });
+  await consumer.evaluate(async () => {
+    await document.fonts.load("16px Sora");
+    await document.fonts.load("600 40px Sora");
+    await document.fonts.load("16px 'Schibsted Grotesk'");
+    await document.fonts.ready;
+  });
+  const consumerEvidence = await consumer.evaluate(() => {
+    const btn = document.querySelector(".aug-button");
+    const card = document.querySelector(".aug-card");
+    const darkCard = document.querySelector('[data-theme="dark"] .aug-card, .aug-card[data-theme="dark"]');
+    return {
+      faces: document.fonts.size,
+      fontsLoaded: document.fonts.status,
+      sora400: document.fonts.check("16px Sora"),
+      sora600: document.fonts.check("600 40px Sora"),
+      schibsted: document.fonts.check("16px 'Schibsted Grotesk'"),
+      bodyFamily: getComputedStyle(document.body).fontFamily,
+      buttonHeight: getComputedStyle(btn).height,
+      buttonRadius: getComputedStyle(btn).borderRadius,
+      cardRadius: getComputedStyle(card).borderRadius,
+      darkCardPresent: !!darkCard,
+      darkCardBg: darkCard ? getComputedStyle(darkCard).backgroundColor : null,
+      lightCardBg: getComputedStyle(card).backgroundColor,
+    };
+  });
+  ok("standalone consumer registers and loads the real font faces", consumerEvidence.faces >= 6 && consumerEvidence.fontsLoaded === "loaded" && consumerEvidence.sora400 && consumerEvidence.sora600 && consumerEvidence.schibsted, `faces=${consumerEvidence.faces} status=${consumerEvidence.fontsLoaded}`);
+  ok("standalone consumer body carries the secondary voice", consumerEvidence.bodyFamily.includes("Schibsted Grotesk"), consumerEvidence.bodyFamily);
+  ok("standalone control geometry matches the encoded contract", consumerEvidence.buttonHeight === "36px" && consumerEvidence.buttonRadius === "0px", `${consumerEvidence.buttonHeight} / ${consumerEvidence.buttonRadius}`);
+  ok("standalone card surface matches the encoded contract", consumerEvidence.cardRadius === "0px", consumerEvidence.cardRadius);
+  ok("semantic theme evidence: scoped dark subtree paints differently", consumerEvidence.darkCardPresent && consumerEvidence.darkCardBg !== consumerEvidence.lightCardBg, `${consumerEvidence.lightCardBg} vs ${consumerEvidence.darkCardBg}`);
+  ok("standalone consumer produces no console errors/warnings", consumerIssues.length === 0, consumerIssues.join("; ") || "clean");
+  await consumer.screenshot({ path: "/tmp/augur-docs-verify/standalone-consumer.png", fullPage: true });
+  await consumer.close();
+  consumerServer.close();
 }
 
 await browser.close();

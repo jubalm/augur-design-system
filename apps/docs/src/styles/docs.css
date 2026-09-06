@@ -44,13 +44,31 @@ body {
 .site-header {
   background-color: var(--card);
   color: var(--card-foreground);
-  border-bottom: 1px solid var(--border);
+  /* Editorial separator, not a control edge (VD-06). */
+  border-bottom: 1px solid var(--border-quiet);
+}
+
+/* Shared frame (issue #46, contract FD-01/VD-01): the 1200px frame with
+   64px outer gutters at 960px+ and 24px below; at wider viewports the
+   centered frame leaves the remaining side margin (120px at 1440). */
+.header-inner,
+.site-main,
+.footer-inner {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 960px) {
+  .header-inner,
+  .site-main,
+  .footer-inner {
+    padding-inline: 4rem;
+  }
 }
 
 .header-inner {
-  max-width: 76rem;
-  margin-inline: auto;
-  padding: 0.875rem 1.25rem;
+  padding-block: 0.875rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -59,18 +77,22 @@ body {
 
 .brand {
   display: inline-flex;
-  align-items: center;
-  gap: 0.625rem;
+  align-items: baseline;
   color: inherit;
   text-decoration: none;
 }
 
-/* A short orienting rule in the primary role: the one deliberate signal
-   in the header (brand guidance: green is intent, not decoration). */
-.brand-mark {
-  width: 0.75rem;
-  height: 1.5rem;
-  background-color: var(--primary);
+/* The approved text identity lockup (#43): Sora 400 wordmark plus the
+   quieter tracked descriptor, 12px apart (space.md). No drawn mark —
+   production masters remain an unresolved dependency. */
+.brand-lockup {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.brand-lockup-descriptor {
+  color: var(--muted-foreground);
 }
 
 .site-nav ul,
@@ -199,7 +221,7 @@ body {
 .mobile-nav nav {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-quiet);
 }
 
 .mobile-nav ul {
@@ -224,13 +246,29 @@ body {
 .site-main {
   flex: 1;
   width: 100%;
-  max-width: 76rem;
-  margin-inline: auto;
-  padding: 2rem 1.25rem 3.5rem;
+  padding-block: 2rem 3.5rem;
 }
 
 .prose {
-  max-width: 46rem;
+  /* Reading measure (contract FD-01): paragraphs cap at 65ch. */
+  max-width: 65ch;
+}
+
+/* Specimens keep the explicit specimen width (46rem), centered over the
+   narrower reading measure (issue #46: reading vs specimen widths).
+   Below ~820px the viewport is the constraint and specimens flow
+   full-width again. */
+.prose .doc-example {
+  width: 46rem;
+  max-width: none;
+  margin-inline: calc((65ch - 46rem) / 2);
+}
+
+@media (max-width: 819px) {
+  .prose .doc-example {
+    width: auto;
+    margin-inline: 0;
+  }
 }
 
 .page-title {
@@ -241,12 +279,18 @@ body {
   margin-top: 0;
 }
 
-/* Markdown-generated headings: package primary voice; sizes here are
-   docs chrome (see file header), not typography roles. */
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4 {
+/* Editorial selection stops at example previews (#44): package
+   components rendered inside .doc-example-preview are governed by the
+   package stylesheet alone, so every prose selector below that reaches
+   typography, spacing, or link chrome excludes preview content via a
+   complex :not() naming the same boundary. The exclusion argument also
+   raises these selectors' specificity, which is intentional: prose
+   rules keep winning over bare editorial elements exactly as before,
+   while classed package internals escape entirely. */
+.prose h1:not(.doc-example-preview h1):not(.page-title),
+.prose h2:not(.doc-example-preview h2),
+.prose h3:not(.doc-example-preview h3):not(.type-specimen-notes h3),
+.prose h4:not(.doc-example-preview h4) {
   font-family: var(--augur-font-primary);
   font-weight: 600;
   color: var(--foreground);
@@ -254,44 +298,54 @@ body {
   margin: 2.25em 0 0.6em;
 }
 
-.prose h1 {
+.prose h1:not(.doc-example-preview h1):not(.page-title) {
   font-size: 2rem;
   margin-top: 0.5em;
 }
 
-.prose h2 {
-  font-size: 1.5rem;
+/* h2 mirrors DESIGN.md typography.editorial-section and h3 mirrors
+   typography.heading-2: the markdown renderer cannot attach role
+   classes, so the chrome restates adopted role metrics and must stay
+   synced with the fonts fixture when DESIGN.md changes. */
+.prose h2:not(.doc-example-preview h2) {
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+  letter-spacing: -0.005em;
+  margin: 2.25em 0 0.6em;
 }
 
-.prose h3 {
-  font-size: 1.1875rem;
+.prose h3:not(.doc-example-preview h3):not(.type-specimen-notes h3) {
+  font-size: 20px;
+  line-height: 26px;
+  letter-spacing: normal;
 }
 
-.prose h4 {
+.prose h4:not(.doc-example-preview h4) {
   font-size: 1rem;
 }
 
-.prose p,
-.prose li {
+.prose p:not(.doc-example-preview p):not(.type-specimen-notes p),
+.prose li:not(.doc-example-preview li) {
   line-height: 1.65;
 }
 
-.prose ul,
-.prose ol {
+.prose ul:not(.doc-example-preview ul),
+.prose ol:not(.doc-example-preview ol) {
   padding-inline-start: 1.5rem;
 }
 
-.prose li + li {
+.prose li:not(.doc-example-preview li) + .prose li:not(.doc-example-preview li) {
   margin-top: 0.375rem;
 }
 
-.prose a {
+.prose a:not(.doc-example-preview a) {
   color: var(--primary);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
-.prose a:hover {
+.prose a:not(.doc-example-preview a):hover {
   text-decoration-thickness: 2px;
 }
 
@@ -303,13 +357,14 @@ body {
 .prose blockquote {
   margin: 1.25rem 0;
   padding: 0.25rem 0 0.25rem 1rem;
-  border-left: 2px solid var(--border);
+  /* Editorial separator (VD-06). */
+  border-left: 2px solid var(--border-quiet);
   color: var(--muted-foreground);
 }
 
 .prose hr {
   border: none;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-quiet);
   margin: 2.5rem 0;
 }
 
@@ -357,7 +412,9 @@ body {
 .prose td,
 .font-demo-provenance th,
 .font-demo-provenance td {
-  border-bottom: 1px solid var(--border);
+  /* Editorial separator (VD-06): table rules group, they are not
+     control edges. */
+  border-bottom: 1px solid var(--border-quiet);
   text-align: left;
   padding: 0.5rem 0.75rem;
   vertical-align: top;
@@ -373,81 +430,271 @@ body {
 }
 
 /* ---------------------------------------------------------------- */
-/* Home page                                                          */
+/* Home page — brand opening (issue #47, contract frame A)            */
+/*                                                                    */
+/* One green signal (the 32×2 rule); the text action stays neutral.    */
+/* Copy is locked by the visual direction contract.                    */
 /* ---------------------------------------------------------------- */
 
-.hero {
-  padding-block: 1.5rem 2.5rem;
-  max-width: 46rem;
-}
-
-.hero p {
-  font-size: 1.0625rem;
-  line-height: 1.65;
-}
-
-.status-note {
-  border: 1px solid var(--border);
-  background-color: var(--muted);
-  color: var(--muted-foreground);
-  padding: 0.875rem 1rem;
-  margin: 1.5rem 0;
-}
-
-.card-grid {
-  list-style: none;
-  margin: 2rem 0 0;
-  padding: 0;
+.opening {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1rem;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr auto;
+  gap: 1.5rem 1.5rem;
 }
 
-.card {
+@media (min-width: 960px) {
+  .opening {
+    gap: 2rem;
+    padding-top: 3rem; /* opening top inset 48px */
+    min-height: 520px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .opening {
+    /* Rail and message keep 1:2 with a 24px gap; natural height. */
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 599px) {
+  .opening {
+    /* Rail, message, then footer stack in DOM order. */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.opening-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.opening-lockup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.opening-source {
+  margin: 0;
+  max-width: 30ch;
+  color: var(--muted-foreground);
+}
+
+.opening-source a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+.opening-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Opening message gaps are 32px in both modes (contract). */
+  gap: 2rem;
+  min-width: 0;
+}
+
+.opening-signal {
+  /* The baseline orienting signal: 32px wide, 2px high, no radius;
+     Deep on light, Green on dark through --primary (VD-05). */
   display: block;
-  height: 100%;
-  background-color: var(--card);
-  color: var(--card-foreground);
-  border: 1px solid var(--border);
-  padding: 1.25rem;
+  width: 32px;
+  height: 2px;
+  flex-shrink: 0;
+  background-color: var(--primary);
+}
+
+.opening-lede {
+  margin: 0;
+}
+
+.opening-action {
+  font-family: var(--augur-font-primary);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.opening-action:hover {
+  text-decoration-thickness: 2px;
+}
+
+.opening-footer {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-quiet);
+}
+
+.opening-footer p {
+  margin: 0.25rem 0 0;
+  color: var(--muted-foreground);
+}
+
+@media (max-width: 599px) {
+  .opening-footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Route index: PDF-like alignment and rule language — open rule-led
+   rows in three purposeful columns (PDF page 5), not boxes. */
+.route-index {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 959px) {
+  .route-index {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+}
+
+.route-group ul {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.route-group li {
+  border-top: 1px solid var(--border-quiet);
+}
+
+.route-group a {
+  display: block;
+  padding: 0.75rem 0;
+  color: var(--foreground);
   text-decoration: none;
 }
 
-.card:hover {
-  /* Neutral hover surface from the theme mapping — never a green tint;
-     green stays an intent signal (primary action, focus, active). */
-  background-color: var(--accent);
-  color: var(--accent-foreground);
-}
-
-.card h2 {
-  font-family: var(--augur-font-primary);
-  font-weight: 600;
-  font-size: 1.0625rem;
-  line-height: 1.35;
-  margin: 0 0 0.5rem;
-  color: inherit;
-}
-
-.card p {
-  margin: 0;
-  color: var(--muted-foreground);
-  line-height: 1.55;
-  font-size: 0.9375rem;
+.route-group a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* ---------------------------------------------------------------- */
 /* Font and theme demonstration components                            */
 /* ---------------------------------------------------------------- */
 
-.font-demo-role {
-  padding-block: 0.75rem;
-  border-bottom: 1px solid var(--border);
-}
-
 .font-demo-role-label {
   color: var(--muted-foreground);
   margin: 0 0 0.25rem;
+}
+
+/* Type specimen (issue #48, contract frame B): 2:1 main/support grid;
+   the inverse display field is the sole large tonal field; the role
+   comparison is compact aligned rows, not a spaced single column. */
+.type-specimen-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 959px) {
+  .type-specimen-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.type-specimen-main {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.type-display-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  /* Inverse tonal field: Navy/Paper swap via the theme roles. */
+  background-color: var(--foreground);
+  color: var(--background);
+}
+
+.type-display-sample {
+  overflow-wrap: anywhere;
+}
+
+.type-spec-meta {
+  color: inherit;
+}
+
+.type-compare {
+  display: grid;
+}
+
+.type-compare-row {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 0.5rem 1.5rem;
+  align-items: baseline;
+  padding-block: 0.625rem;
+  border-top: 1px solid var(--border-quiet);
+}
+
+.type-compare-sample {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.type-compare-spec {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--muted-foreground);
+  text-align: right;
+}
+
+.type-compare-label {
+  display: block;
+  margin-bottom: 0.125rem;
+}
+
+.type-specimen-notes {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.type-specimen-notes > div {
+  border-top: 1px solid var(--border-quiet);
+  padding-top: 1rem;
+}
+
+.type-specimen-notes h3 {
+  margin: 0 0 0.5rem;
+}
+
+.type-specimen-notes p {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+/* Support headings use 20/26 regular in narrower tracks (contract
+   frame B tablet rule). */
+@media (max-width: 959px) {
+  .type-specimen-notes h3 {
+    font-size: 20px;
+    line-height: 26px;
+  }
 }
 
 .font-demo-stack {
@@ -520,15 +767,14 @@ body {
 }
 
 .site-footer {
-  border-top: 1px solid var(--border);
+  /* Editorial separator (VD-06). */
+  border-top: 1px solid var(--border-quiet);
   background-color: var(--card);
   color: var(--card-foreground);
 }
 
 .footer-inner {
-  max-width: 76rem;
-  margin-inline: auto;
-  padding: 1.25rem;
+  padding-block: 1.25rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1.5rem;
@@ -787,24 +1033,13 @@ body {
   margin: 0;
 }
 
-/* Pattern examples (#14): the PageHeader breadcrumb pairing must not be
-   repainted by the host content-link rule above — crumbs are secondary
-   in the docs site like anywhere else (one-green-signal rule). The
-   package stylesheet carries the same contract for non-prose hosts;
-   this scoped mirror only restores it where `.prose a` would win the
-   cascade tie. */
-.prose .aug-page-header-breadcrumb a {
-  color: var(--muted-foreground);
-  text-decoration: none;
-}
+/* Pattern examples (#14): the PageHeader breadcrumb pairing needs no
+   docs-side help — since the #44 scoping repair above, `.prose a` no
+   longer reaches inside example previews, and the package stylesheet
+   alone governs crumbs (quiet links, foreground current page). The
+   former scoped mirror of those rules was an override copy and is
+   removed with the leak that justified it. */
 
-.prose .aug-page-header-breadcrumb a:hover {
-  color: var(--foreground);
-  text-decoration: underline;
-}
-
-.prose .aug-page-header-breadcrumb [aria-current="page"] {
-  color: var(--foreground);
 /* Example modules: input-states and form-field-composition (issue #12).
    Scaffolding only — the controls themselves are the real package
    components; rows/canvas mirror the button-example pattern. */
@@ -851,6 +1086,8 @@ body {
   border: 1px solid var(--border);
   background-color: var(--background);
   color: var(--foreground);
+}
+
 /* Example module: palette-swatches (issue #10). Chrome only: chips and
    pairing samples paint generated --augur-color-* variables passed in
    by the example module; this stylesheet defines no colors itself. */
@@ -919,3 +1156,26 @@ body {
   padding: 0.25rem 0.625rem;
   border: 1px solid var(--border);
 }
+
+/* Review: preserve legible samples instead of squeezing them behind specs. */
+@media (min-width: 600px) and (max-width: 959px) {
+  .type-specimen-grid { gap: 24px; }
+  .type-specimen-notes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 599px) {
+  .type-compare-row { grid-template-columns: minmax(0, 1fr); }
+  .type-compare-spec { text-align: left; }
+  .type-specimen-grid { gap: 24px; }
+}
+/* FD-02: touch controls retain the desktop visual language with usable targets. */
+@media (pointer: coarse) {
+  .theme-toggle-option, .mobile-nav summary, .page-action, .opening-action {
+    box-sizing: border-box;
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Keep provenance columns readable; narrow screens scroll this named region. */
+.font-provenance-scroll { max-width: 100%; overflow-x: auto; }
+.font-provenance-scroll .font-demo-provenance { min-width: 40rem; }

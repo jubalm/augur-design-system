@@ -1,10 +1,10 @@
 /**
  * GENERATED FILE — do not edit. Regenerate: `bun run tokens:generate` in packages/design-system. Verify: `bun run tokens:check`. Policy and schema boundaries: packages/design-system/docs/token-generation.md.
  *
- * Source:  DESIGN.md (repository root), sha256 fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5
+ * Source:  DESIGN.md (repository root), sha256 26b367ad92b8b9ec955a81880240e9c5b6d76bf90e3df33fc2d04c1309a6a7a7
  * Tool:    @google/design.md@0.4.0 (exact pin in packages/design-system/package.json (0.4.0))
  * Command: design.md export DESIGN.md --format css-vars --prefix augur
- * Lint:    0 errors / 0 warnings / 3 infos at generation time
+ * Lint:    0 errors / 0 warnings / 1 infos at generation time
  *
  * Everything below this header is the pinned CLI's verbatim stdout.
  */
@@ -25,5 +25,13 @@
   --augur-color-surface-dark-2: #1d1d30;
   --augur-color-surface-dark-3: #242438;
   --augur-color-surface-dark-mist: #71728a;
+  --augur-spacing-xs: 4px;
+  --augur-spacing-sm: 8px;
+  --augur-spacing-md: 12px;
+  --augur-spacing-lg: 16px;
+  --augur-spacing-xl: 24px;
+  --augur-spacing-2xl: 32px;
+  --augur-rounded-control: 0px;
+  --augur-rounded-surface: 0px;
 }
 

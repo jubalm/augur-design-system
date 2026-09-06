@@ -1,0 +1,32 @@
+{
+  "palette": {
+    "chipCount": 15,
+    "display": "block",
+    "width": "326px",
+    "height": "40px",
+    "paintedRect": "326x40",
+    "background": "rgb(14, 14, 33)"
+  },
+  "card": {
+    "titleFontSize": "20px",
+    "titleLineHeight": "26px",
+    "titleMarginTop": "0px",
+    "titleMarginBottom": "0px",
+    "titleWeight": "600",
+    "descLineHeight": "16px",
+    "descFontSize": "12px",
+    "contentPLineHeight": "24px"
+  },
+  "pageHeader": {
+    "olPaddingInlineStart": "0px",
+    "crumbColor": "rgb(74, 75, 97)",
+    "crumbTextDecoration": "none",
+    "currentColor": "rgb(14, 14, 33)",
+    "liMarginTop": "0px",
+    "liLineHeight": "20px",
+    "titleTag": "H2",
+    "titleFontSize": "28px",
+    "titleMarginTop": "0px",
+    "descLineHeight": "24px"
+  }
+}
