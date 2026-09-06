@@ -2,11 +2,6 @@
 version: alpha
 name: Augur
 description: A clear-eyed, credible, neutral, and human visual system for asking questions and recording collective decisions.
-omitted:
-  - section: spacing
-    reason: The brand foundation defines no spacing scale and none is adopted yet; the minimal shared proposal is tracked with explicit review status in apps/docs/src/content/foundations/foundation-decisions.md and stays visibly unresolved until maintainer review.
-  - section: rounded
-    reason: The brand foundation defines no corner-radius scale and none is adopted yet; the minimal shared proposal is tracked with explicit review status in apps/docs/src/content/foundations/foundation-decisions.md and stays visibly unresolved until maintainer review.
 colors:
   primary: "#0E0E21"
   accent: "#2AE7A8"
@@ -61,6 +56,34 @@ typography:
     fontSize: 12px
     fontWeight: 400
     lineHeight: 16px
+  editorial-title:
+    fontFamily: Sora
+    fontSize: 40px
+    fontWeight: 400
+    lineHeight: 48px
+    letterSpacing: -0.01em
+  editorial-section:
+    fontFamily: Sora
+    fontSize: 28px
+    fontWeight: 400
+    lineHeight: 34px
+    letterSpacing: -0.005em
+  editorial-label:
+    fontFamily: Schibsted Grotesk
+    fontSize: 12px
+    fontWeight: 400
+    lineHeight: 16px
+    letterSpacing: 0.12em
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 12px
+  lg: 16px
+  xl: 24px
+  2xl: 32px
+rounded:
+  control: 0px
+  surface: 0px
 components:
   action-primary-light:
     backgroundColor: "{colors.accent-deep}"
@@ -149,13 +172,15 @@ Augur uses two contemporary sans-serif families with distinct roles. **Sora** is
 
 Use the restrained scale in the front matter. Size creates order and weight confirms it. Use sentence case for headings, controls, and labels. Reserve capitals for short metadata and standard abbreviations. Do not stack size, weight, color, and capitals to manufacture hierarchy; one strong distinction and one secondary distinction are enough.
 
+The three editorial roles (`editorial-title`, `editorial-section`, `editorial-label`) set the long-form editorial voice: Sora 400 titles and sections where size alone creates order, and tracked Schibsted Grotesk short labels. The seven interface roles keep their adopted 600-weight hierarchy. Mobile steps for the editorial roles (32/40 and 24/32 below 600px) are part of the adopted roles and live in the runtime typography layer; the visual direction guide records the full role definitions.
+
 Align numeric columns right, use one precision per view, and put units in a header or beside the value. For long technical strings such as addresses, truncate in the middle while preserving a recognizable prefix and suffix.
 
 ## Layout
 
 The layout rule is information order: page purpose or task first, then status, choices, and the primary action. Give each section one visible priority. Use scale and space to separate primary content from supporting detail, and move optional detail out of the main path.
 
-Light and dark layouts should have the same content order, alignment, and geometry. Surfaces organize content, but they do not imply product priority; lifting a panel is not a claim that it matters more. The brand foundation prescribes no global spacing scale and none is adopted yet: the minimal shared proposal in the foundation decision notes is pending maintainer review. Until it is adopted, keep this hierarchy through the proposal's steps under review rather than one-off values, and never treat a product's local spacing as design-system authority.
+Light and dark layouts should have the same content order, alignment, and geometry. Surfaces organize content, but they do not imply product priority; lifting a panel is not a claim that it matters more. The adopted component spacing scale is the front-matter `spacing` steps (4, 8, 12, 16, 24, 32px); the larger 48/64/80px values, the 1200px frame, outer gutters, section gaps, and the 65ch reading measure are composition roles recorded in the visual direction guide, not component tokens. Use the spacing steps for component rhythm; never treat a product's local spacing as design-system authority.
 
 For identity assets, use the horizontal lockup by default. Use the vertical lockup only when the width is genuinely constrained, and use the glyph alone only when the surrounding context already names Augur.
 
@@ -175,7 +200,7 @@ The glyph minimum is 50px high on screen, measured from arrow tip to pyramid bas
 
 The horizontal lockup is preferred wherever width allows. The vertical lockup is a fallback for narrow columns, square placements, badges, avatars, centered layouts, event backdrops, and slide covers. Two-tint Color is the default on light surfaces; two-tint Reversed is the default on dark surfaces. Single-tint Augur Navy or White is reserved for low-contrast or production-constrained cases and supporting placements.
 
-The foundation defines no global corner-radius scale and the design system adopts none yet; the minimal shared proposal in the foundation decision notes is pending maintainer review. Keep any corner treatment within that proposal under review, and do not introduce shape language that competes with the fixed identity geometry.
+Corners are square: the adopted `rounded` values are 0px for both controls and surfaces (decision FD-03), so panels, cards, dialogs, and controls have no radius. Only a circle intrinsic to a control, such as a radio, and the supplied identity artwork keep their required geometry; nothing else rounds. Do not introduce shape language that competes with the fixed identity geometry.
 
 ## Components
 

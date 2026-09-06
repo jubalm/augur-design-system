@@ -342,6 +342,8 @@ function verifyOutputs(exportsOut: ExportOutput[]): void {
   }
   const colorGroup = dtcg["color"];
   const typographyGroup = dtcg["typography"];
+  const spacingGroup = dtcg["spacing"];
+  const roundedGroup = dtcg["rounded"];
   if (
     typeof colorGroup !== "object" ||
     colorGroup === null ||
@@ -353,14 +355,29 @@ function verifyOutputs(exportsOut: ExportOutput[]): void {
       "dtcg output is missing the color or typography group; DESIGN.md front matter was not parsed into tokens.",
     );
   }
+  if (
+    typeof spacingGroup !== "object" ||
+    spacingGroup === null ||
+    typeof roundedGroup !== "object" ||
+    roundedGroup === null
+  ) {
+    return fail(
+      "degenerate-export",
+      "dtcg output is missing the spacing or rounded group; the issue 45 sections of DESIGN.md front matter were not parsed into tokens.",
+    );
+  }
   const colorCount =
     Object.keys(colorGroup).filter((k) => k !== "$type").length;
   const typographyCount =
     Object.keys(typographyGroup).filter((k) => k !== "$type").length;
-  if (colorCount < 1 || typographyCount < 1) {
+  const spacingCount =
+    Object.keys(spacingGroup).filter((k) => k !== "$type").length;
+  const roundedCount =
+    Object.keys(roundedGroup).filter((k) => k !== "$type").length;
+  if (colorCount < 1 || typographyCount < 1 || spacingCount < 1 || roundedCount < 1) {
     return fail(
       "degenerate-export",
-      `dtcg output has empty token groups (colors=${colorCount}, typography=${typographyCount}).`,
+      `dtcg output has empty token groups (colors=${colorCount}, typography=${typographyCount}, spacing=${spacingCount}, rounded=${roundedCount}).`,
     );
   }
 
@@ -368,11 +385,14 @@ function verifyOutputs(exportsOut: ExportOutput[]): void {
   if (cssVars === undefined) {
     fail("degenerate-export", "css-vars output missing.");
   }
+  // Since issue 45, DESIGN.md also adopts spacing and rounded sections,
+  // and the pinned toolchain exports them alongside colors in :root.
+  const expectedCssVarCount = colorCount + spacingCount + roundedCount;
   const cssVarCount = (cssVars.match(/^ {2}--[\w-]+:/gm) ?? []).length;
-  if (!cssVars.includes(":root") || cssVarCount !== colorCount) {
+  if (!cssVars.includes(":root") || cssVarCount !== expectedCssVarCount) {
     return fail(
       "degenerate-export",
-      `css-vars output expected ${colorCount} custom properties inside :root, found ${cssVarCount}.`,
+      `css-vars output expected ${expectedCssVarCount} custom properties inside :root (colors ${colorCount} + spacing ${spacingCount} + rounded ${roundedCount}), found ${cssVarCount}.`,
     );
   }
 
@@ -382,15 +402,21 @@ function verifyOutputs(exportsOut: ExportOutput[]): void {
   }
   const tailwindColorCount = (tailwind.match(/^ {2}--color-[\w-]+:/gm) ?? [])
     .length;
+  const tailwindSpacingCount = (tailwind.match(/^ {2}--spacing-[\w-]+:/gm) ?? [])
+    .length;
+  const tailwindRadiusCount = (tailwind.match(/^ {2}--radius-[\w-]+:/gm) ?? [])
+    .length;
   if (
     !tailwind.includes("@theme") ||
     tailwindColorCount !== colorCount ||
+    tailwindSpacingCount !== spacingCount ||
+    tailwindRadiusCount !== roundedCount ||
     !tailwind.includes("--text-") ||
     !tailwind.includes("--leading-")
   ) {
     return fail(
       "degenerate-export",
-      `css-tailwind output missing @theme block or expected token groups (colors=${tailwindColorCount}/${colorCount}).`,
+      `css-tailwind output missing @theme block or expected token groups (colors=${tailwindColorCount}/${colorCount}, spacing=${tailwindSpacingCount}/${spacingCount}, radius=${tailwindRadiusCount}/${roundedCount}).`,
     );
   }
 }
@@ -588,6 +614,11 @@ async function runProveFailure(tool: ResolvedTool): Promise<number> {
     {
       label: "malformed YAML fixture (degenerate export)",
       source: path.join(FIXTURES_DIR, "malformed-yaml", SOURCE_BASENAME),
+      expectReason: "degenerate-export",
+    },
+    {
+      label: "missing issue-45 sections fixture (degenerate export)",
+      source: path.join(FIXTURES_DIR, "missing-45-sections", SOURCE_BASENAME),
       expectReason: "degenerate-export",
     },
   ];
