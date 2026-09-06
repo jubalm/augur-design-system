@@ -5,10 +5,9 @@
  * (which references generated tokens). No raw color values, no new
  * custom properties.
  *
- * Geometry: intentional structural constants — FD-01 (spacing), FD-02
- * (control heights), and FD-03 (radius) are Proposed and pending
- * maintainer review, so no spacing/radius/sizing tokens are emitted;
- * the same pattern the FD-04 ring geometry uses in theme.css. The
+ * Geometry: FD-01 spacing and FD-03 radius consume the encoded tokens
+ * (--augur-spacing-*, --augur-rounded-control — issues #45/#51); the
+ * FD-02 control heights remain the adopted structural constants. The
  * decision record for this slice lives in ../../docs/components.md.
  */
 
@@ -18,12 +17,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px; /* FD-01 space.sm (Proposed): label-to-icon gap */
-  height: 36px; /* FD-02 control.height.md (Proposed) */
-  padding: 0 16px; /* FD-01: md control padding (Proposed) */
+  gap: var(--augur-spacing-sm); /* FD-01 space.sm (encoded): label-to-icon gap */
+  height: 36px; /* FD-02 control.height.md (adopted) */
+  padding: 0 var(--augur-spacing-lg); /* FD-01: md control padding (encoded) */
   margin: 0;
   border: 1px solid transparent; /* keeps the box equal across variants */
-  border-radius: 6px; /* FD-03 radius.control (Proposed) */
+  border-radius: var(--augur-rounded-control); /* FD-03 radius.control (encoded: 0px) */
   vertical-align: middle;
   white-space: nowrap;
   cursor: pointer;
@@ -32,15 +31,15 @@
   color: var(--primary-foreground);
 }
 
-/* Sizes: FD-01/FD-02 Proposed values as structure (sm 32/12, lg 40/24). */
+/* Sizes: FD-01/FD-02 adopted values as structure (sm 32/12, lg 40/24). */
 .aug-button--sm {
   height: 32px;
-  padding: 0 12px;
+  padding: 0 var(--augur-spacing-md);
 }
 
 .aug-button--lg {
   height: 40px;
-  padding: 0 24px;
+  padding: 0 var(--augur-spacing-xl);
 }
 
 /*
