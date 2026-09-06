@@ -906,6 +906,115 @@ console.log("\n== Specimen rendering repair (#44) ===");
   await paletteMobile.close();
 }
 
+// --- 10. Shared frame alignment (issue #46). -----------------------------
+console.log("\n== Shared frame alignment (#46) ===");
+{
+  const readFrame = (page) =>
+    page.evaluate(() => {
+      const cs = (sel, prop) => {
+        const el = document.querySelector(sel);
+        return el ? getComputedStyle(el)[prop] : null;
+      };
+      const probeCh = document.createElement("div");
+      probeCh.style.width = "65ch";
+      probeCh.style.position = "absolute";
+      probeCh.style.visibility = "hidden";
+      document.body.appendChild(probeCh);
+      const measure65 = probeCh.getBoundingClientRect().width;
+      probeCh.remove();
+      const title = getComputedStyle(document.querySelector(".page-title"));
+      const h2 = document.querySelector(".prose h2");
+      return {
+        frameMax: cs(".site-main", "maxWidth"),
+        framePad: cs(".site-main", "paddingLeft"),
+        mainX: Math.round(document.querySelector(".site-main").getBoundingClientRect().x),
+        proseMax: cs(".prose", "maxWidth"),
+        measure65: `${measure65}px`,
+        titleFont: `${title.fontFamily.split(",")[0]} ${title.fontWeight} ${title.fontSize}/${title.lineHeight} ${title.letterSpacing}`,
+        h2: h2 ? `${getComputedStyle(h2).fontSize}/${getComputedStyle(h2).lineHeight} w${getComputedStyle(h2).fontWeight}` : null,
+        wordmark: (() => {
+          const el = document.querySelector(".brand-lockup-wordmark");
+          if (!el) return null;
+          const s = getComputedStyle(el);
+          return `${s.fontFamily.split(",")[0]} ${s.fontWeight} ${s.fontSize}/${s.lineHeight}`;
+        })(),
+        descriptor: (() => {
+          const el = document.querySelector(".brand-lockup-descriptor");
+          if (!el) return null;
+          const s = getComputedStyle(el);
+          return `${s.textTransform} ${s.letterSpacing} ${s.color}`;
+        })(),
+        headerBorder: cs(".site-header", "borderBottomColor"),
+        controlEdge: cs(".theme-toggle", "borderTopColor"),
+        overflowX: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+
+  const frame1440 = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await frame1440.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+  await frame1440.evaluate(() => document.fonts.ready);
+  const light = await readFrame(frame1440);
+  ok("frame is 1200px with 64px gutters at 1440", light.frameMax === "1200px" && light.framePad === "64px", `${light.frameMax} / ${light.framePad}`);
+  ok("centered frame leaves the 120px side margin at 1440", light.mainX === 120, String(light.mainX));
+  ok(
+    "reading measure is exactly 65ch",
+    Math.abs(parseFloat(light.proseMax) - parseFloat(light.measure65)) < 0.5,
+    `${light.proseMax} vs ${light.measure65}`,
+  );
+  ok("page title renders the editorial-title role (Sora 400 40/48)", light.titleFont === "Sora 400 40px/48px -0.4px", light.titleFont);
+  ok("section headings render the editorial-section metrics (28/34, regular)", light.h2 === "28px/34px w400", String(light.h2));
+  ok("header wordmark is the ui role (Sora 400 14/20)", light.wordmark === "Sora 400 14px/20px", String(light.wordmark));
+  ok(
+    "descriptor is uppercase tracked secondary text (+0.12em)",
+    light.descriptor === "uppercase 1.44px rgb(74, 75, 97)",
+    String(light.descriptor),
+  );
+  ok(
+    "light header hairline matches the (shared) quiet separator",
+    light.headerBorder === light.controlEdge,
+    `${light.headerBorder} vs ${light.controlEdge}`,
+  );
+  ok("no horizontal overflow at 1440", light.overflowX === false);
+  await frame1440.screenshot({ path: "/tmp/augur-docs-verify/frame-1440-light.png", fullPage: true });
+
+  await frame1440.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const dark = await readFrame(frame1440);
+  ok(
+    "dark editorial separator is the quiet Surface 3 step, not the Mist control edge",
+    dark.headerBorder === "rgb(36, 36, 56)" && dark.headerBorder !== dark.controlEdge,
+    `${dark.headerBorder} vs control ${dark.controlEdge}`,
+  );
+  ok(
+    "dark descriptor flips to the dark secondary role",
+    dark.descriptor === "uppercase 1.44px rgb(161, 161, 184)",
+    String(dark.descriptor),
+  );
+  await frame1440.screenshot({ path: "/tmp/augur-docs-verify/frame-1440-dark.png", fullPage: true });
+  await frame1440.close();
+
+  for (const [label, viewport] of [
+    ["768", { width: 768, height: 1024 }],
+    ["390", { width: 390, height: 844 }],
+  ]) {
+    const p = await browser.newPage({ viewport });
+    await p.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+    const narrow = await readFrame(p);
+    ok(`frame uses 24px gutters at ${label}`, narrow.framePad === "24px", narrow.framePad);
+    ok(`no horizontal overflow at ${label}`, narrow.overflowX === false);
+    if (label === "390") {
+      ok(
+        "page title steps down to the adopted 32/40 mobile size",
+        narrow.titleFont === "Sora 400 32px/40px -0.32px",
+        narrow.titleFont,
+      );
+    }
+    await p.screenshot({ path: `/tmp/augur-docs-verify/frame-${label}-light.png`, fullPage: true });
+    await p.close();
+  }
+}
+
 await browser.close();
 server.close();
 if (serveRoot !== distDir) {

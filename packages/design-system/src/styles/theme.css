@@ -91,6 +91,11 @@
   --border: var(--augur-color-border-light);
   --input: var(--augur-color-border-light);
 
+  /* Quiet editorial separators (VD-06): grouping hairlines for shell
+     chrome, rules, and tables — distinct from the --border control
+     edge. In light both share Border; they part ways in dark. */
+  --border-quiet: var(--augur-color-border-light);
+
   /* Focus ring: Deep in light (FD-04 Proposed spec, behavior required by
      issue #4). Verified at least 3:1 against every surface it paints on. */
   --ring: var(--augur-color-accent-deep);
@@ -141,6 +146,10 @@
   --border: var(--augur-color-surface-dark-mist);
   --input: var(--augur-color-surface-dark-mist);
 
+  /* Quiet editorial separators in dark: a Surface 3 step, not Mist —
+     grouping hairlines must not glow like control edges (VD-06). */
+  --border-quiet: var(--augur-color-surface-dark-3);
+
   /* Focus ring: Green in dark (FD-04 Proposed spec). */
   --ring: var(--augur-color-accent);
 }
@@ -178,6 +187,7 @@
 
     --border: var(--augur-color-surface-dark-mist);
     --input: var(--augur-color-surface-dark-mist);
+    --border-quiet: var(--augur-color-surface-dark-3);
 
     --ring: var(--augur-color-accent);
   }
