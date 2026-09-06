@@ -16,6 +16,7 @@
       "--color-accent-foreground": "var(--accent-foreground)",
       "--color-background": "var(--background)",
       "--color-border": "var(--border)",
+      "--color-border-quiet": "var(--border-quiet)",
       "--color-card": "var(--card)",
       "--color-card-foreground": "var(--card-foreground)",
       "--color-destructive": "var(--destructive)",
@@ -51,6 +52,7 @@
       "--destructive-foreground": "var(--augur-color-surface-light-raised)",
       "--border": "var(--augur-color-border-light)",
       "--input": "var(--augur-color-border-light)",
+      "--border-quiet": "var(--augur-color-border-light)",
       "--ring": "var(--augur-color-accent-deep)"
     },
     "dark": {
@@ -72,6 +74,7 @@
       "--destructive-foreground": "var(--augur-color-primary)",
       "--border": "var(--augur-color-surface-dark-mist)",
       "--input": "var(--augur-color-surface-dark-mist)",
+      "--border-quiet": "var(--augur-color-surface-dark-3)",
       "--ring": "var(--augur-color-accent)"
     }
   },
@@ -119,6 +122,7 @@
       "--destructive-foreground": "var(--augur-color-primary)",
       "--border": "var(--augur-color-surface-dark-mist)",
       "--input": "var(--augur-color-surface-dark-mist)",
+      "--border-quiet": "var(--augur-color-surface-dark-3)",
       "--ring": "var(--augur-color-accent)"
     },
     "@media (prefers-color-scheme: dark)": {
@@ -142,6 +146,7 @@
         "--destructive-foreground": "var(--augur-color-primary)",
         "--border": "var(--augur-color-surface-dark-mist)",
         "--input": "var(--augur-color-surface-dark-mist)",
+        "--border-quiet": "var(--augur-color-surface-dark-3)",
         "--ring": "var(--augur-color-accent)"
       }
     },

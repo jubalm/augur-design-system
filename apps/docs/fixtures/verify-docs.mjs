@@ -537,7 +537,7 @@ console.log("\n== Component slice (Button/Card computed styles, both themes) =="
       titleTag: card.querySelector(".aug-card-title")?.tagName ?? null,
     };
   });
-  ok("card radius 8px (FD-03 surface structure)", cardLight.radius === "8px", cardLight.radius);
+  ok("card radius 0px (FD-03 encoded, issue #45/#50)", cardLight.radius === "0px", cardLight.radius);
   ok("card paints the --card role (light)", cardLight.background !== "rgba(0, 0, 0, 0)", cardLight.background);
   ok(
     "--card resolves to a generated token (not var())",
