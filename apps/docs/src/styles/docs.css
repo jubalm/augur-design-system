@@ -594,15 +594,105 @@ body {
 /* Font and theme demonstration components                            */
 /* ---------------------------------------------------------------- */
 
-.font-demo-role {
-  padding-block: 0.75rem;
-  /* Editorial separator (VD-06). */
-  border-bottom: 1px solid var(--border-quiet);
-}
-
 .font-demo-role-label {
   color: var(--muted-foreground);
   margin: 0 0 0.25rem;
+}
+
+/* Type specimen (issue #48, contract frame B): 2:1 main/support grid;
+   the inverse display field is the sole large tonal field; the role
+   comparison is compact aligned rows, not a spaced single column. */
+.type-specimen-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 959px) {
+  .type-specimen-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.type-specimen-main {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.type-display-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  /* Inverse tonal field: Navy/Paper swap via the theme roles. */
+  background-color: var(--foreground);
+  color: var(--background);
+}
+
+.type-display-sample {
+  overflow-wrap: anywhere;
+}
+
+.type-spec-meta {
+  color: inherit;
+}
+
+.type-compare {
+  display: grid;
+}
+
+.type-compare-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem 1.5rem;
+  align-items: baseline;
+  padding-block: 0.625rem;
+  border-top: 1px solid var(--border-quiet);
+}
+
+.type-compare-sample {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.type-compare-spec {
+  color: var(--muted-foreground);
+  text-align: right;
+}
+
+.type-compare-label {
+  display: block;
+  margin-bottom: 0.125rem;
+}
+
+.type-specimen-notes {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.type-specimen-notes > div {
+  border-top: 1px solid var(--border-quiet);
+  padding-top: 1rem;
+}
+
+.type-specimen-notes h3 {
+  margin: 0 0 0.5rem;
+}
+
+.type-specimen-notes p {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+/* Support headings use 20/26 regular in narrower tracks (contract
+   frame B tablet rule). */
+@media (max-width: 959px) {
+  .type-specimen-notes h3 {
+    font-size: 20px;
+    line-height: 26px;
+  }
 }
 
 .font-demo-stack {

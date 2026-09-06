@@ -1,50 +1,89 @@
+/**
+ * Typography specimen for the fonts page (issue #48, contract frame B).
+ *
+ * The dominant display field is the page's sole large tonal field
+ * (inverse Navy/Paper swap across themes); the role comparison is an
+ * aligned, compact two-column row list — every sample renders through
+ * its real package role class, so displayed specs cannot disagree with
+ * computed styles. The three rule-led notes sit in the support column
+ * and stack below the specimen on narrow screens.
+ */
 import { AUGUR_FONTS, AUGUR_FONT_FAMILIES } from "@augur/design-system";
 
-/**
- * Live typography demonstration for the docs (issue #7).
- *
- * This component is a real consumer of the public workspace package: it
- * imports `AUGUR_FONT_FAMILIES` and `AUGUR_FONTS` from the
- * `@augur/design-system` entry point and applies the package's typography
- * role classes from `styles.css`. Nothing here reimplements package
- * values — when starter components land (#11–#14) they will be rendered
- * through the same real-import path.
- *
- * Rendered statically (no hydration needed): everything shown is derived
- * from imported constants and package CSS.
- */
-
-const ROLES: readonly { className: string; label: string; sample: string }[] = [
-  { className: "augur-type-display", label: "display", sample: "Ask clearly" },
-  { className: "augur-type-heading-1", label: "heading-1", sample: "Record the decision" },
-  { className: "augur-type-heading-2", label: "heading-2", sample: "Keep the record scannable" },
+const ROLES: readonly { className: string; label: string; sample: string; spec: string }[] = [
+  { className: "augur-type-display", label: "display", sample: "Make it clear.", spec: "Sora 600 · 40/44 · −0.01em" },
+  { className: "augur-type-heading-1", label: "heading-1", sample: "Record the decision", spec: "Sora 600 · 28/34 · −0.005em" },
+  { className: "augur-type-heading-2", label: "heading-2", sample: "Keep the record scannable", spec: "Sora 600 · 20/26" },
   {
     className: "augur-type-body",
     label: "body",
     sample: "Body copy carries explanation and context in the supporting voice.",
+    spec: "Schibsted Grotesk 400 · 16/24",
   },
-  { className: "augur-type-control", label: "control", sample: "Record your response" },
-  { className: "augur-type-ui", label: "ui", sample: "Filter: open queries" },
-  { className: "augur-type-metadata", label: "metadata", sample: "Final · 14 responses · updated 2h ago" },
-  { className: "augur-type-editorial-title", label: "editorial-title", sample: "Make what matters clear." },
-  { className: "augur-type-editorial-section", label: "editorial-section", sample: "A quieter title" },
-  { className: "augur-type-editorial-label", label: "editorial-label", sample: "Open query" },
+  { className: "augur-type-control", label: "control", sample: "Record your response", spec: "Sora 600 · 14/20" },
+  { className: "augur-type-ui", label: "ui", sample: "Filter: open queries", spec: "Sora 400 · 14/20" },
+  { className: "augur-type-metadata", label: "metadata", sample: "Final · 14 responses · updated 2h ago", spec: "Schibsted Grotesk 400 · 12/16" },
+  { className: "augur-type-editorial-title", label: "editorial-title", sample: "Make what matters clear.", spec: "Sora 400 · 40/48 · −0.01em · 32/40 below 600px" },
+  { className: "augur-type-editorial-section", label: "editorial-section", sample: "A quieter title", spec: "Sora 400 · 28/34 · −0.005em · 24/32 below 600px" },
+  { className: "augur-type-editorial-label", label: "editorial-label", sample: "Open query", spec: "Schibsted Grotesk 400 · 12/16 · +0.12em, uppercase" },
 ] as const;
 
 export function FontRoles() {
   return (
     <div className="font-demo">
-      <div className="font-demo-roles">
-        {ROLES.map((role) => (
-          <div key={role.className} className="font-demo-role">
-            <p className="augur-type-metadata font-demo-role-label">{role.label}</p>
-            {/* The role class carries the family/size/weight; no local copies.
-                The sample is a <div>, not a <p>: as prose content a <p> would
-                take the prose line-height over the role's own value, and this
-                page must demonstrate the package values exactly (issue #45). */}
-            <div className={role.className}>{role.sample}</div>
+      <div className="type-specimen-grid">
+        <div className="type-specimen-main">
+          {/* The sole large tonal field: inverse Navy/Paper, swapped by
+              the theme contract (fixture frame B). */}
+          <div className="type-display-field">
+            <span className="augur-type-editorial-label">Sora / Display</span>
+            {/* The role class carries every value; no local copies. */}
+            <div className="type-display-sample augur-type-display">
+              Make it clear.
+              <br />
+              Remove the noise.
+            </div>
+            <span className="augur-type-metadata type-spec-meta">Sora 600 · 40/44 · −0.01em</span>
           </div>
-        ))}
+
+          {/* Compact, aligned role comparison: sample + exact spec. */}
+          <div className="type-compare">
+            {ROLES.map((role) => (
+              <div key={role.className} className="type-compare-row">
+                <div className="type-compare-sample">
+                  {/* Samples are <div>s: prose line-height must not
+                      distort the demonstrated role values (#45). */}
+                  <div className={role.className}>{role.sample}</div>
+                </div>
+                <span className="augur-type-metadata type-compare-spec">
+                  <span className="augur-type-editorial-label type-compare-label">{role.label}</span>
+                  {role.spec}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <aside className="type-specimen-notes" aria-label="Typeface roles">
+          <div>
+            <h3 className="augur-type-editorial-section">The primary voice</h3>
+            <p className="augur-type-body">
+              Sora gives identity, headings, navigation, and actions a precise voice.
+            </p>
+          </div>
+          <div>
+            <h3 className="augur-type-editorial-section">The supporting voice</h3>
+            <p className="augur-type-body">
+              Schibsted Grotesk carries paragraphs, helper text, metadata, and dense records.
+            </p>
+          </div>
+          <div>
+            <h3 className="augur-type-editorial-section">One clear priority</h3>
+            <p className="augur-type-body">
+              Alignment, space, and quiet rules reveal the reading order.
+            </p>
+          </div>
+        </aside>
       </div>
 
       <div className="font-demo-consumption">
