@@ -430,67 +430,164 @@ body {
 }
 
 /* ---------------------------------------------------------------- */
-/* Home page                                                          */
+/* Home page — brand opening (issue #47, contract frame A)            */
+/*                                                                    */
+/* One green signal (the 32×2 rule); the text action stays neutral.    */
+/* Copy is locked by the visual direction contract.                    */
 /* ---------------------------------------------------------------- */
 
-.hero {
-  padding-block: 1.5rem 2.5rem;
-  max-width: 46rem;
-}
-
-.hero p {
-  font-size: 1.0625rem;
-  line-height: 1.65;
-}
-
-.status-note {
-  border: 1px solid var(--border);
-  background-color: var(--muted);
-  color: var(--muted-foreground);
-  padding: 0.875rem 1rem;
-  margin: 1.5rem 0;
-}
-
-.card-grid {
-  list-style: none;
-  margin: 2rem 0 0;
-  padding: 0;
+.opening {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1rem;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr auto;
+  gap: 1.5rem 1.5rem;
 }
 
-.card {
+@media (min-width: 960px) {
+  .opening {
+    gap: 2rem;
+    padding-top: 3rem; /* opening top inset 48px */
+    min-height: 520px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .opening {
+    /* Rail and message keep 1:2 with a 24px gap; natural height. */
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 599px) {
+  .opening {
+    /* Rail, message, then footer stack in DOM order. */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.opening-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.opening-lockup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.opening-source {
+  margin: 0;
+  max-width: 30ch;
+  color: var(--muted-foreground);
+}
+
+.opening-source a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+.opening-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Opening message gaps are 32px in both modes (contract). */
+  gap: 2rem;
+  min-width: 0;
+}
+
+.opening-signal {
+  /* The baseline orienting signal: 32px wide, 2px high, no radius;
+     Deep on light, Green on dark through --primary (VD-05). */
   display: block;
-  height: 100%;
-  background-color: var(--card);
-  color: var(--card-foreground);
-  border: 1px solid var(--border);
-  padding: 1.25rem;
+  width: 32px;
+  height: 2px;
+  flex-shrink: 0;
+  background-color: var(--primary);
+}
+
+.opening-lede {
+  margin: 0;
+}
+
+.opening-action {
+  font-family: var(--augur-font-primary);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.opening-action:hover {
+  text-decoration-thickness: 2px;
+}
+
+.opening-footer {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-quiet);
+}
+
+.opening-footer p {
+  margin: 0.25rem 0 0;
+  color: var(--muted-foreground);
+}
+
+@media (max-width: 599px) {
+  .opening-footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Route index: PDF-like alignment and rule language — open rule-led
+   rows in three purposeful columns (PDF page 5), not boxes. */
+.route-index {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 959px) {
+  .route-index {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+}
+
+.route-group ul {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.route-group li {
+  border-top: 1px solid var(--border-quiet);
+}
+
+.route-group a {
+  display: block;
+  padding: 0.75rem 0;
+  color: var(--foreground);
   text-decoration: none;
 }
 
-.card:hover {
-  /* Neutral hover surface from the theme mapping — never a green tint;
-     green stays an intent signal (primary action, focus, active). */
-  background-color: var(--accent);
-  color: var(--accent-foreground);
-}
-
-.card h2 {
-  font-family: var(--augur-font-primary);
-  font-weight: 600;
-  font-size: 1.0625rem;
-  line-height: 1.35;
-  margin: 0 0 0.5rem;
-  color: inherit;
-}
-
-.card p {
-  margin: 0;
-  color: var(--muted-foreground);
-  line-height: 1.55;
-  font-size: 0.9375rem;
+.route-group a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* ---------------------------------------------------------------- */
