@@ -489,7 +489,7 @@ console.log("\n== Component slice (Button/Card computed styles, both themes) =="
 
   const buttonLight = await readButtonEvidence();
   ok("default button height 36px (FD-02 structure)", buttonLight.height === "36px", buttonLight.height);
-  ok("default button radius 6px (FD-03 structure)", buttonLight.radius === "6px", buttonLight.radius);
+  ok("default button radius 0px (FD-03 encoded, issue #45/#51)", buttonLight.radius === "0px", buttonLight.radius);
   ok("control typography role applies (Sora)", buttonLight.font.includes("Sora"), buttonLight.font);
   ok(
     "--primary resolves to a generated token (not var())",
