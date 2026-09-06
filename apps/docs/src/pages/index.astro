@@ -1,69 +1,111 @@
 ---
 /**
- * Docs home (issue #7). Landing chrome for the shell; substantive
- * documentation pages live under shared Markdown/MDX sources.
+ * Docs home (issue #47): the brand opening — contract frame A.
+ *
+ * Composition (visual direction, VD-01): an unboxed message with a
+ * narrow orientation rail (1:2, 32px gap), one 32×2 signal under the
+ * title, a text action, and a three-part metadata row spanning both
+ * columns. Top inset 48px and a 520px minimum height on desktop;
+ * natural height from 600–959px; the rail stacks above the message
+ * below 600px. Copy is locked by the contract; the identity lockup is
+ * the #43 text identity at opening scale. One green signal: the
+ * 32×2 rule (Deep on light, Green on dark); the text action stays
+ * neutral. No dominant status warning — honesty lives in the rail's
+ * quiet source note and the shell footer.
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/base";
+
+const routes = [
+  {
+    label: "Foundations",
+    links: [
+      { href: "/getting-started", text: "Getting started" },
+      { href: "/foundations/visual-direction", text: "Visual direction" },
+      { href: "/foundations/identity", text: "Brand identity" },
+      { href: "/foundations/decisions", text: "Foundation decisions" },
+      { href: "/foundations/fonts", text: "Fonts and typography" },
+      { href: "/foundations/theming", text: "Theming" },
+      { href: "/foundations/color", text: "Color system" },
+    ],
+  },
+  {
+    label: "Components",
+    links: [
+      { href: "/components/button", text: "Button" },
+      { href: "/components/card", text: "Card" },
+      { href: "/components/dialog", text: "Dialog" },
+      { href: "/components/input", text: "Input" },
+    ],
+  },
+  {
+    label: "Patterns and reference",
+    links: [
+      { href: "/patterns/page-header", text: "PageHeader" },
+      { href: "/patterns/form-field", text: "FormField" },
+      { href: "/patterns/empty-state", text: "EmptyState" },
+      { href: "/reference/package-entries", text: "Package entries" },
+      { href: "/reference/contributing", text: "Contributing" },
+    ],
+  },
+];
 ---
 <BaseLayout
   title="Home"
-  description="Documentation for the Augur Design System: shared design guidance, generated tokens, semantic themes, and reusable React components."
+  description="A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces."
 >
-  <div class="hero">
-    <h1 class="augur-type-display">Augur Design System</h1>
-    <p>
-      A shared interface language for Augur: maintained design guidance,
-      generated tokens, semantic light/dark themes, and reusable React
-      components — one canonical source for products, the public site, and
-      the agents that build them.
-    </p>
-    <div class="status-note augur-type-ui">
-      Early development. The foundation is real and consumable today:
-      generated tokens, semantic themes, and self-hosted fonts ship from
-      the <code>@augur/design-system</code> workspace package. The first
-      components — Button and Card — are implemented and documented; the
-      rest of the starter set has not landed, and nothing on this site
-      fakes them.
+  <section class="opening" aria-labelledby="opening-title">
+    <div class="opening-rail">
+      <p class="brand-lockup opening-lockup">
+        <span class="augur-type-editorial-title opening-wordmark">Augur</span>
+        <span class="augur-type-editorial-label brand-lockup-descriptor">Design system</span>
+      </p>
+      <p class="opening-source augur-type-metadata">
+        Early development: the foundations are real and consumable today.
+        Every adopted value is recorded in
+        <a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a>
+        and the foundation decision record.
+      </p>
     </div>
-    <p>
-      The rendered pages and their clean Markdown sources come from the
-      same files; every value the system adopts is recorded in
-      <a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a>
-      and the foundation decision record.
-    </p>
-  </div>
+    <div class="opening-message">
+      <h1 id="opening-title" class="augur-type-editorial-title">Make what<br />matters clear.</h1>
+      <span class="opening-signal" aria-hidden="true"></span>
+      <p class="opening-lede augur-type-body">
+        A shared interface language for Augur: foundations, components,
+        and guidance for clear, consistent interfaces.
+      </p>
+      <a class="opening-action" href={withBase("/getting-started")}>
+        Explore the foundations <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="opening-footer">
+      <div>
+        <span class="augur-type-editorial-label">Purpose</span>
+        <p class="augur-type-body">Ask. Vote. Reach a result.</p>
+      </div>
+      <div>
+        <span class="augur-type-editorial-label">Character</span>
+        <p class="augur-type-body">Clear-eyed, credible, neutral, human.</p>
+      </div>
+      <div>
+        <span class="augur-type-editorial-label">System</span>
+        <p class="augur-type-body">One language. Two everyday themes.</p>
+      </div>
+    </div>
+  </section>
 
-  <ul class="card-grid">
-    <li>
-      <a class="card" href={withBase("/getting-started")}>
-        <h2>Getting started</h2>
-        <p>Consume the package from a workspace app: stylesheet entry, fonts, and today's public exports.</p>
-      </a>
-    </li>
-    <li>
-      <a class="card" href={withBase("/foundations/decisions")}>
-        <h2>Foundation decisions</h2>
-        <p>The audit and review record behind the foundation — what is adopted and what is still a proposal.</p>
-      </a>
-    </li>
-    <li>
-      <a class="card" href={withBase("/foundations/fonts")}>
-        <h2>Fonts and typography</h2>
-        <p>Two voice families, seven typography roles, self-hosted delivery — rendered live from the package.</p>
-      </a>
-    </li>
-    <li>
-      <a class="card" href={withBase("/foundations/theming")}>
-        <h2>Theming</h2>
-        <p>One system, two equal everyday themes. Semantic roles, system preference, and scoped subtrees.</p>
-      </a>
-    </li>
-    <li>
-      <a class="card" href={withBase("/reference/package-entries")}>
-        <h2>Package entries</h2>
-        <p>The three public entry points of @augur/design-system — module constants and stylesheets.</p>
-      </a>
-    </li>
-  </ul>
+  <section class="route-index" aria-label="Routes into the system">
+    {routes.map((group) => (
+      <div class="route-group">
+        <span class="augur-type-editorial-label">{group.label}</span>
+        <ul>
+          {group.links.map((link) => (
+            <li>
+              <a class="augur-type-body" href={withBase(link.href)}>{link.text}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </section>
 </BaseLayout>

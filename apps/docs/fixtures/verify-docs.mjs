@@ -1015,6 +1015,86 @@ console.log("\n== Shared frame alignment (#46) ===");
   }
 }
 
+// --- 11. Brand opening (issue #47, contract frame A). -------------------
+console.log("\n== Brand opening (#47) ===");
+{
+  const readOpening = (page) =>
+    page.evaluate(() => {
+      const cs = (sel, prop) => {
+        const el = document.querySelector(sel);
+        return el ? getComputedStyle(el)[prop] : null;
+      };
+      const sig = document.querySelector(".opening-signal");
+      const r = sig.getBoundingClientRect();
+      const cols = cs(".opening", "gridTemplateColumns").split(" ").map(parseFloat);
+      return {
+        titleText: document.querySelector(".opening-message h1").textContent,
+        titleFont: (() => {
+          const s = getComputedStyle(document.querySelector(".opening-message h1"));
+          return `${s.fontWeight} ${s.fontSize}/${s.lineHeight}`;
+        })(),
+        signal: `${Math.round(r.width)}x${Math.round(r.height)}`,
+        signalColor: cs(".opening-signal", "backgroundColor"),
+        actionColor: cs(".opening-action", "color"),
+        actionText: document.querySelector(".opening-action").textContent.trim(),
+        lede: document.querySelector(".opening-lede").textContent.replace(/\s+/g, " ").trim(),
+        colRatio: cols.length === 2 ? cols[1] / cols[0] : null,
+        openingHeight: Math.round(document.querySelector(".opening").getBoundingClientRect().height),
+        tracks: document.querySelectorAll(".opening-footer > div").length,
+        wordmarkSize: cs(".opening-wordmark", "fontSize"),
+        display: cs(".opening", "display"),
+        overflowX: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+
+  const home1440 = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await home1440.goto(origin + site("/"), { waitUntil: "networkidle" });
+  await home1440.evaluate(() => document.fonts.ready);
+  const openLight = await readOpening(home1440);
+  // <br> joins without whitespace in textContent, hence "whatmatters".
+  ok(
+    "opening title is the locked message in the editorial-title role",
+    openLight.titleText.trim() === "Make whatmatters clear." && openLight.titleFont === "400 40px/48px",
+    `${openLight.titleFont} "${openLight.titleText.replace(/\s+/g, " ").trim()}"`,
+  );
+  ok("opening signal is exactly 32x2", openLight.signal === "32x2", openLight.signal);
+  ok("light signal paints Deep through --primary", openLight.signalColor === "rgb(9, 94, 66)", openLight.signalColor);
+  ok("text action stays neutral foreground (not accent)", openLight.actionColor === "rgb(14, 14, 33)" && openLight.actionText.startsWith("Explore the foundations"), `${openLight.actionColor} "${openLight.actionText}"`);
+  ok("lede is the locked shared-interface-language copy", openLight.lede.startsWith("A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces."), openLight.lede.slice(0, 60));
+  ok("rail and message hold the 1:2 opening columns", openLight.colRatio !== null && Math.abs(openLight.colRatio - 2) < 0.05, String(openLight.colRatio));
+  ok("opening meets the 520px desktop minimum height", openLight.openingHeight >= 520, String(openLight.openingHeight));
+  ok("metadata row has three equal tracks", openLight.tracks === 3, String(openLight.tracks));
+  ok("identity lockup renders at opening scale", openLight.wordmarkSize === "40px", openLight.wordmarkSize);
+  ok("no horizontal overflow at 1440", openLight.overflowX === false);
+  const routeHrefs = await home1440.evaluate(() =>
+    [...document.querySelectorAll(".route-group a")].map((a) => new URL(a.getAttribute("href"), location.href).pathname),
+  );
+  const broken = [];
+  for (const h of routeHrefs) {
+    const res = await fetch(origin + (h.endsWith("/") ? `${h}index.html` : h));
+    if (res.status !== 200) broken.push(h);
+  }
+  ok("all 16 route links resolve to built pages", routeHrefs.length === 16 && broken.length === 0, broken.join(", ") || "ok");
+  await home1440.screenshot({ path: "/tmp/augur-docs-verify/home-opening-light-1440.png", fullPage: true });
+  await home1440.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  const openDark = await readOpening(home1440);
+  ok("dark signal swaps to Green on the same node", openDark.signalColor === "rgb(42, 231, 168)", openDark.signalColor);
+  ok("dark action stays neutral foreground", openDark.actionColor === "rgb(245, 245, 248)", openDark.actionColor);
+  await home1440.screenshot({ path: "/tmp/augur-docs-verify/home-opening-dark-1440.png", fullPage: true });
+  await home1440.close();
+
+  const homeMobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await homeMobile.goto(origin + site("/"), { waitUntil: "networkidle" });
+  const openMobile = await readOpening(homeMobile);
+  ok("mobile stacks the opening (rail above message)", openMobile.display === "flex", openMobile.display);
+  ok("mobile title steps to the adopted 32/40", openMobile.titleFont === "400 32px/40px", openMobile.titleFont);
+  ok("no horizontal overflow at 390", openMobile.overflowX === false);
+  await homeMobile.screenshot({ path: "/tmp/augur-docs-verify/home-opening-light-390.png", fullPage: true });
+  await homeMobile.close();
+}
+
 await browser.close();
 server.close();
 if (serveRoot !== distDir) {
