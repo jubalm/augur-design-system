@@ -67,8 +67,10 @@ const currentPath = Astro.url.pathname;
     <header class="site-header">
       <div class="header-inner">
         <a class="brand" href={withBase("/")}>
-          <span class="brand-mark" aria-hidden="true"></span>
-          <span class="augur-type-control">Augur Design System</span>
+          <span class="brand-lockup">
+            <span class="augur-type-ui brand-lockup-wordmark">Augur</span>
+            <span class="augur-type-editorial-label brand-lockup-descriptor">Design system</span>
+          </span>
         </a>
         <nav class="site-nav" aria-label="Primary">
           <ul>
@@ -108,7 +110,7 @@ const currentPath = Astro.url.pathname;
       </div>
     </header>
     <main id="main-content" class="site-main">
-      {fromMdx ? <h1 class="augur-type-heading-1 page-title">{title}</h1> : null}
+      {fromMdx ? <h1 class="augur-type-editorial-title page-title">{title}</h1> : null}
       {
         fromMdx && props.frontmatter?.markdown ? (
           // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
