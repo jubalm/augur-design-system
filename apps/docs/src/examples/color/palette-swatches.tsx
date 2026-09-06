@@ -28,6 +28,16 @@ const GROUPS: readonly { title: string; note: string; swatches: readonly Swatch[
     ],
   },
   {
+    title: "Companions",
+    note: "Deep is the accessible green for light surfaces; Wash fills without carrying text; Graphite and Pewter are secondary voices.",
+    swatches: [
+      { token: "--augur-color-accent-deep", name: "Deep", job: "readable green on light: actions, focus, signals" },
+      { token: "--augur-color-accent-wash", name: "Wash", job: "light green fill only, never readable text" },
+      { token: "--augur-color-secondary", name: "Augur Graphite", job: "secondary text on light surfaces" },
+      { token: "--augur-color-secondary-dark", name: "Augur Pewter", job: "secondary text on dark surfaces" },
+    ],
+  },
+  {
     title: "Light surfaces",
     note: "Paper is the canvas, White creates elevation, Muted fills quiet regions, Border draws hairlines.",
     swatches: [
@@ -46,16 +56,6 @@ const GROUPS: readonly { title: string; note: string; swatches: readonly Swatch[
       { token: "--augur-color-surface-dark-2", name: "Surface 2", job: "second dark layer: popovers" },
       { token: "--augur-color-surface-dark-3", name: "Surface 3 / Raised", job: "third dark layer: raised" },
       { token: "--augur-color-surface-dark-mist", name: "Mist", job: "dark edges and rules only, never copy" },
-    ],
-  },
-  {
-    title: "Companions",
-    note: "Deep is the accessible green for light surfaces; Wash fills without carrying text; Graphite and Pewter are secondary voices.",
-    swatches: [
-      { token: "--augur-color-accent-deep", name: "Deep", job: "readable green on light: actions, focus, signals" },
-      { token: "--augur-color-accent-wash", name: "Wash", job: "light green fill only, never readable text" },
-      { token: "--augur-color-secondary", name: "Augur Graphite", job: "secondary text on light surfaces" },
-      { token: "--augur-color-secondary-dark", name: "Augur Pewter", job: "secondary text on dark surfaces" },
     ],
   },
 ] as const;

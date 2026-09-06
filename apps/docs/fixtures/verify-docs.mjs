@@ -254,10 +254,10 @@ ok(
   (await readFile(join(distDir, "getting-started/index.html"), "utf8")).includes("<strong>2 font families</strong>"),
 );
 ok(
-  "theming page exposes scoped [data-theme=dark] demo",
-  (await readFile(join(distDir, "foundations/theming/index.html"), "utf8")).includes('data-theme="dark"'),
+  "theming page exposes pinned light/dark paired records",
+  (await readFile(join(distDir, "foundations/theming/index.html"), "utf8")).includes('data-theme="dark"') &&
+    (await readFile(join(distDir, "foundations/theming/index.html"), "utf8")).includes('data-theme="light"'),
 );
-ok("theming page nav marks current page", theming.ariaCurrent.includes("Theming"), theming.ariaCurrent.join(", "));
 
 // --- 2. Theme contract behavior via keyboard. ----------------------------
 console.log("\n== Theme contract (keyboard-driven, home page) ==");
@@ -356,28 +356,57 @@ console.log("\n== Mobile layout (375x812) ==");
   await page.close();
 }
 
-// --- 4. Theming page demo. -------------------------------------------------
-console.log("\n== Theming page demo ==");
+// --- 4. Theming page demo + paired records (issue #49). -------------------
+console.log("\n== Theming page demo (#49 paired records) ==");
 {
+  const readPair = (page) =>
+    page.evaluate(() => {
+      const panels = [...document.querySelectorAll(".theme-demo-panel")];
+      const rects = panels.map((p) => p.getBoundingClientRect());
+      const texts = panels.map((p) => p.textContent.replace(/\s+/g, " ").trim());
+      return {
+        count: panels.length,
+        themes: panels.map((p) => p.dataset.theme ?? null),
+        bgs: panels.map((p) => getComputedStyle(p).backgroundColor),
+        widths: rects.map((r) => Math.round(r.width)),
+        heights: rects.map((r) => Math.round(r.height)),
+        swatches: document.querySelectorAll(".theme-swatch").length,
+        contentParity: texts[0].replace(/light|dark/g, "X") === texts[1].replace(/light|dark/g, "X"),
+      };
+    });
+
+  await auditPage(origin + site("/foundations/theming"), { expectTitleFragment: "Theming" });
   const page = await browser.newPage();
   await page.goto(origin + site("/foundations/theming"), { waitUntil: "networkidle" });
-  const demo = await page.evaluate(() => {
-    const panel = document.querySelector(".theme-demo-panel");
-    const scoped = document.querySelector('.theme-demo-panel[data-theme="dark"]');
-    return {
-      panelCount: document.querySelectorAll(".theme-demo-panel").length,
-      scopedPresent: !!scoped,
-      panelBg: panel ? getComputedStyle(panel).backgroundColor : null,
-      scopedBg: scoped ? getComputedStyle(scoped).backgroundColor : null,
-      swatches: document.querySelectorAll(".theme-swatch").length,
-    };
+  const pairLight = await readPair(page);
+  ok("paired records: two pinned panels (light + dark)", pairLight.count === 2 && pairLight.themes[0] === "light" && pairLight.themes[1] === "dark", pairLight.themes.join("/"));
+  ok("pair paints differently under light host", pairLight.bgs[0] !== pairLight.bgs[1], pairLight.bgs.join(" vs "));
+  ok("pair content/order identical (title aside)", pairLight.contentParity === true);
+  ok("pair geometry identical under light host", pairLight.widths[0] === pairLight.widths[1] && Math.abs(pairLight.heights[0] - pairLight.heights[1]) <= 1, `${pairLight.widths.join("x")} / ${pairLight.heights.join("x")}`);
+  ok("12 role swatches render across the pair", pairLight.swatches === 12, String(pairLight.swatches));
+  await page.screenshot({ path: "/tmp/augur-docs-verify/theming-paired-light.png", fullPage: true });
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
   });
-  ok("demo renders 2 panels", demo.panelCount === 2, String(demo.panelCount));
-  ok("scoped dark panel present", demo.scopedPresent === true);
-  ok("scoped dark panel paints differently from the page panel", demo.panelBg !== demo.scopedBg, `${demo.panelBg} vs ${demo.scopedBg}`);
-  ok("12 role swatches render", demo.swatches === 12, String(demo.swatches));
-  await page.screenshot({ path: "/tmp/augur-docs-verify/theming-light.png", fullPage: true });
+  const pairDark = await readPair(page);
+  ok("pair still light+dark under dark host", pairDark.bgs[0] !== pairDark.bgs[1], pairDark.bgs.join(" vs "));
+  ok("pair geometry identical under dark host", pairDark.widths[0] === pairDark.widths[1] && Math.abs(pairDark.heights[0] - pairDark.heights[1]) <= 1, `${pairDark.widths.join("x")} / ${pairDark.heights.join("x")}`);
+  ok("theming page nav marks current page", theming.ariaCurrent.includes("Theming"), theming.ariaCurrent.join(", "));
+  await page.screenshot({ path: "/tmp/augur-docs-verify/theming-paired-dark.png", fullPage: true });
   await page.close();
+
+  // Color page: core palette and companions lead, ladders follow (#49).
+  const colorPage = await browser.newPage();
+  await colorPage.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
+  const groupOrder = await colorPage.evaluate(() =>
+    [...document.querySelectorAll(".example-palette-group-title")].map((e) => e.textContent.trim()),
+  );
+  ok(
+    "palette order: anchors, companions, then surface ladders",
+    JSON.stringify(groupOrder) === JSON.stringify(["Brand anchors", "Companions", "Light surfaces", "Dark surfaces"]),
+    groupOrder.join(" | "),
+  );
+  await colorPage.close();
 }
 
 // --- 5. Copy page / View as Markdown (issue #9). ---------------------------

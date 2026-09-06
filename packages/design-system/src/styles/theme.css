@@ -45,6 +45,65 @@
 /* Light theme — default.                                              */
 /* Canvas pairing: Paper + Navy (page-canvas-light).                   */
 /* ------------------------------------------------------------------ */
+/* Pinned-light containers (issue #49): the light role set applied at
+   any [data-theme="light"] scope, so a light pin inside a dark host
+   resolves the light roles instead of silently inheriting them. The
+   mappings mirror :root exactly — one maintained light contract, two
+   selectors. */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --background: var(--augur-color-surface-light);
+  --foreground: var(--augur-color-primary);
+
+  /* Raised panel: panel-light pairing (White + Navy). */
+  --card: var(--augur-color-surface-light-raised);
+  --card-foreground: var(--augur-color-primary);
+
+  /* Floating layer sits at the raised step: White + Navy. */
+  --popover: var(--augur-color-surface-light-raised);
+  --popover-foreground: var(--augur-color-primary);
+
+  /* Primary action: Deep + White (action-primary-light). The accessible
+     green companion carries light-theme intent; Green itself is reserved
+     for dark surfaces per the brand's surface rules. */
+  --primary: var(--augur-color-accent-deep);
+  --primary-foreground: var(--augur-color-surface-light-raised);
+
+  /* Secondary control: quiet region pairing (Muted + Navy,
+     muted-region-light). */
+  --secondary: var(--augur-color-surface-light-muted);
+  --secondary-foreground: var(--augur-color-primary);
+
+  /* Quiet region with Graphite secondary text (secondary-text family). */
+  --muted: var(--augur-color-surface-light-muted);
+  --muted-foreground: var(--augur-color-secondary);
+
+  /* Hover/highlight surface: neutral Muted + Navy. Deliberately not the
+     Wash companion: green is a signal of intent (primary action, active
+     state, focus, short orienting rule), not a resting hover tint. */
+  --accent: var(--augur-color-surface-light-muted);
+  --accent-foreground: var(--augur-color-primary);
+
+  /* Schema-external slot: the brand palette defines no danger hue, so
+     destructive actions are named by label (inherited state rule) and
+     this slot maps to the strongest neutral action pairing (White +
+     Navy) rather than an invented off-brand color. */
+  --destructive: var(--augur-color-primary);
+  --destructive-foreground: var(--augur-color-surface-light-raised);
+
+  /* Hairline rules (divider-light) and input boundaries. */
+  --border: var(--augur-color-border-light);
+  --input: var(--augur-color-border-light);
+
+  /* Quiet editorial separators (VD-06): grouping hairlines for shell
+     chrome, rules, and tables — distinct from the --border control
+     edge. In light both share Border; they part ways in dark. */
+  --border-quiet: var(--augur-color-border-light);
+
+  /* Focus ring: Deep in light. */
+  --ring: var(--augur-color-accent-deep);}
+
 :root {
   color-scheme: light;
 
