@@ -40,6 +40,8 @@ import { PageHeaderCompositionExample } from "./patterns/page-header-composition
 import pageHeaderCompositionCode from "./patterns/page-header-composition.tsx?raw";
 import { PageHeaderLongContentExample } from "./patterns/page-header-long-content";
 import pageHeaderLongContentCode from "./patterns/page-header-long-content.tsx?raw";
+import { ReferenceRecordExample } from "./patterns/reference-record";
+import referenceRecordCode from "./patterns/reference-record.tsx?raw";
 import { PageHeaderNoActionsExample } from "./patterns/page-header-no-actions";
 import pageHeaderNoActionsCode from "./patterns/page-header-no-actions.tsx?raw";
 import { InputStatesExample } from "./input/input-states";
@@ -155,6 +157,13 @@ export const examples = {
       description: "A title area that stands alone; the back affordance is a quiet ghost Button, not a nav landmark.",
       Component: PageHeaderNoActionsExample,
       code: pageHeaderNoActionsCode,
+    }),
+    referenceRecord: defineExample({
+      id: "reference-record",
+      title: "The reference record (frame C)",
+      description: "A static question record assembled from package components: state rail, question, two equal choices, and a quiet recorded response — no product workflow.",
+      Component: ReferenceRecordExample,
+      code: referenceRecordCode,
     }),
     emptyStateActions: defineExample({
       id: "empty-state-actions",
