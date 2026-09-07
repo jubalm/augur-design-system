@@ -274,7 +274,7 @@ console.log("\n== Theme contract (keyboard-driven, home page) ==");
       backgroundVar: getComputedStyle(document.documentElement).getPropertyValue("--background").trim(),
       colorScheme: getComputedStyle(document.documentElement).getPropertyValue("color-scheme").trim(),
       pressed: [...document.querySelectorAll(".theme-toggle button")]
-        .map((b) => `${b.textContent}:${b.getAttribute("aria-pressed")}`)
+        .map((b) => `${b.getAttribute("aria-label") ?? b.textContent}:${b.getAttribute("aria-pressed")}`)
         .join(" "),
     }));
 
@@ -976,7 +976,7 @@ console.log("\n== Shared frame alignment (#46) ===");
           return `${s.textTransform} ${s.letterSpacing} ${s.color}`;
         })(),
         headerBorder: cs(".masthead", "borderBottomColor"),
-        controlEdge: cs(".theme-toggle", "borderTopColor"),
+        controlEdge: cs(".doc-sidebar", "borderRightColor"),
         overflowX: document.documentElement.scrollWidth > window.innerWidth,
       };
     });
@@ -1013,9 +1013,9 @@ console.log("\n== Shared frame alignment (#46) ===");
   });
   const dark = await readFrame(frame1440);
   ok(
-    "dark editorial separator is the quiet Surface 3 step, not the Mist control edge",
-    dark.headerBorder === "rgb(36, 36, 56)" && dark.headerBorder !== dark.controlEdge,
-    `${dark.headerBorder} vs control ${dark.controlEdge}`,
+    "dark editorial separator is the quiet Surface 3 step (header and sidebar hairlines share it)",
+    dark.headerBorder === "rgb(36, 36, 56)" && dark.headerBorder === dark.controlEdge,
+    `${dark.headerBorder} vs sidebar ${dark.controlEdge}`,
   );
   ok(
     "dark descriptor flips to the dark secondary role",
