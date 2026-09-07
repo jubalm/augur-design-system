@@ -141,6 +141,12 @@ body {
   text-decoration: none;
 }
 
+.masthead-repo-icon {
+  display: inline-block;
+  vertical-align: -2px;
+  margin-right: 0.3125rem;
+}
+
 .masthead-repo:hover {
   color: var(--foreground);
   text-decoration: underline;
@@ -526,11 +532,13 @@ body {
 
 .theme-toggle {
   display: inline-flex;
-  border: 1px solid var(--border);
-  background-color: var(--muted);
+  align-items: center;
+  gap: 0.125rem;
   margin: 0;
   padding: 0;
+  border: 0; /* reset the UA fieldset border */
   min-inline-size: auto;
+  min-block-size: auto;
 }
 
 .visually-hidden {
@@ -554,17 +562,33 @@ body {
   font-weight: 600;
   font-size: 0.8125rem;
   line-height: 1.25;
-  padding: 0.375rem 0.75rem;
+  padding: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   cursor: pointer;
 }
 
-.theme-toggle-option + .theme-toggle-option {
-  border-left: 1px solid var(--border);
+.theme-toggle-option:hover {
+  color: var(--foreground);
 }
 
+/* Active choice = the shell's short-rule affordance (same 2px marker
+   language as the sidebar's current-document state), theme-invariant. */
 .theme-toggle-option[aria-pressed="true"] {
-  background-color: var(--card);
   color: var(--foreground);
+}
+
+.theme-toggle-option[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 16px;
+  height: 2px;
+  background-color: var(--primary);
 }
 
 /* ---------------------------------------------------------------- */

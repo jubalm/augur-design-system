@@ -22,6 +22,7 @@
 import "@augur/design-system/styles.css";
 import "../styles/docs.css";
 import ThemeToggle from "../components/ThemeToggle";
+import { GitHubIcon } from "../components/icons";
 import NavGroups from "../components/NavGroups.astro";
 import PageActions from "../components/PageActions.astro";
 import { normalizePath, withBase } from "../lib/base";
@@ -110,7 +111,7 @@ const showRail = shell && !!toc && toc.length > 0;
           <a
             class="masthead-repo augur-type-control"
             href="https://github.com/jubalm/augur-design-system"
-          >Repository</a>
+          ><GitHubIcon className="masthead-repo-icon" size={14} />Repository</a>
         </div>
       </div>
     </header>
