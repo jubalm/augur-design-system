@@ -1,6 +1,6 @@
 ---
 /**
- * Base layout for the docs shell (issue #7).
+ * Base layout for the docs shell (issues #7 and #55).
  *
  * Consumes the real workspace package stylesheet
  * (`@augur/design-system/styles.css`) as the only style source for
@@ -11,19 +11,36 @@
  * light/dark; "system" removes the attribute so the package's
  * `prefers-color-scheme` fallback scope governs. No other theme logic
  * exists at the app level (see `src/components/ThemeToggle.tsx`).
+ *
+ * Navigation shell (#55): one derived model (`src/lib/navigation.ts`)
+ * feeds the masthead's "Browse documentation" disclosure, the grouped
+ * sidebar, the H2-derived "On this page" rail (when the page supplies
+ * headings), and previous/next links from the maintained reading order.
+ * The home page opts out of the sidebar/rail/pager with `shell={false}`:
+ * it is the landing composition, not a document.
  */
 import "@augur/design-system/styles.css";
 import "../styles/docs.css";
 import ThemeToggle from "../components/ThemeToggle";
+import NavGroups from "../components/NavGroups.astro";
 import PageActions from "../components/PageActions.astro";
-import { isActivePath, normalizePath, withBase } from "../lib/base";
-import { NAV_ITEMS } from "../lib/navigation";
+import { normalizePath, withBase } from "../lib/base";
+import { getDocsNav, pagerFor } from "../lib/navigation";
+
+interface TocHeading {
+  slug: string;
+  text: string;
+}
 
 interface Props {
   title: string;
   description?: string;
   /** Opt the page into Copy page / View as Markdown actions (#9): set when a clean `.md` endpoint exists. */
   markdown?: boolean;
+  /** H2 headings for the "On this page" rail; collection pages supply them (#55). */
+  toc?: TocHeading[];
+  /** Full document shell: sidebar, contents rail, and pager. Default true. */
+  shell?: boolean;
 }
 
 // MDX pages pass metadata through `frontmatter`; .astro pages pass props.
@@ -32,9 +49,13 @@ interface Props {
 // markup (the home page and the Markdown-rendered decisions page).
 const props = Astro.props as { frontmatter?: Props };
 const fromMdx = props.frontmatter !== undefined;
-const { title, description } = props.frontmatter ?? (Astro.props as Props);
+const { title, description, toc, shell = true } = props.frontmatter ?? (Astro.props as Props);
 const fullTitle = `${title} · Augur Design System`;
 const currentPath = Astro.url.pathname;
+
+const nav = await getDocsNav();
+const pager = shell ? pagerFor(nav, currentPath) : {};
+const showRail = shell && !!toc && toc.length > 0;
 ---
 <!doctype html>
 <html lang="en">
@@ -64,62 +85,95 @@ const currentPath = Astro.url.pathname;
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
-    <header class="site-header">
-      <div class="header-inner">
+    <header class="masthead">
+      <div class="masthead-inner">
         <a class="brand" href={withBase("/")}>
           <span class="brand-lockup">
             <span class="augur-type-ui brand-lockup-wordmark">Augur</span>
             <span class="augur-type-editorial-label brand-lockup-descriptor">Design system</span>
           </span>
         </a>
-        <nav class="site-nav" aria-label="Primary">
-          <ul>
-            {NAV_ITEMS.map((item) => (
-              <li>
-                <a
-                  class="augur-type-control"
-                  href={withBase(item.href)}
-                  aria-current={isActivePath(currentPath, item.href) ? "page" : undefined}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div class="header-spacer"></div>
-        <ThemeToggle client:load />
-        <details class="mobile-nav">
-          <summary>Menu</summary>
-          <nav aria-label="Primary">
-            <ul>
-              {NAV_ITEMS.map((item) => (
-                <li>
-                  <a
-                    class="augur-type-control"
-                    href={withBase(item.href)}
-                    aria-current={isActivePath(currentPath, item.href) ? "page" : undefined}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+        <details class="browse-docs">
+          <summary class="browse-summary">Browse documentation</summary>
+          <div class="browse-panel">
+            <nav aria-label="Documentation">
+              <NavGroups nav={nav} currentPath={currentPath} />
+            </nav>
+            <div class="browse-theme">
+              <span class="browse-theme-label augur-type-editorial-label">Theme</span>
+              <ThemeToggle client:load />
+            </div>
+          </div>
         </details>
+        <div class="masthead-actions">
+          <ThemeToggle client:load />
+          <a
+            class="masthead-repo augur-type-control"
+            href="https://github.com/jubalm/augur-design-system"
+          >Repository</a>
+        </div>
       </div>
     </header>
-    <main id="main-content" class="site-main">
-      {fromMdx ? <h1 class="augur-type-editorial-title page-title">{title}</h1> : null}
-      {
-        fromMdx && props.frontmatter?.markdown ? (
-          // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
-          // already includes the deployment base, so append `.md` directly.
-          <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
-        ) : null
-      }
-      {fromMdx ? <article class="prose"><slot /></article> : <slot />}
-    </main>
+    {
+      shell ? (
+        <div class="shell">
+          <nav class="doc-sidebar" aria-label="Documentation">
+            <NavGroups nav={nav} currentPath={currentPath} />
+          </nav>
+          <main id="main-content" class="doc-main">
+            {fromMdx ? <h1 class="augur-type-editorial-title page-title">{title}</h1> : null}
+            {fromMdx && props.frontmatter?.markdown ? (
+              // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
+              // already includes the deployment base, so append `.md` directly.
+              <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+            ) : null}
+            {fromMdx ? <article class="prose"><slot /></article> : <slot />}
+            {(pager.previous || pager.next) && (
+              <nav class="pager" aria-label="Document navigation">
+                {pager.previous ? (
+                  <a class="pager-prev" href={withBase(pager.previous.href)}>
+                    <span class="pager-direction">Previous</span>
+                    <span>{pager.previous.label}</span>
+                  </a>
+                ) : (
+                  <span />
+                )}
+                {pager.next ? (
+                  <a class="pager-next" href={withBase(pager.next.href)}>
+                    <span class="pager-direction">Next</span>
+                    <span>{pager.next.label}</span>
+                  </a>
+                ) : (
+                  <span />
+                )}
+              </nav>
+            )}
+          </main>
+          {showRail && toc && (
+            <aside class="page-contents" aria-label="On this page">
+              <span class="page-contents-label augur-type-editorial-label">On this page</span>
+              <ul>
+                {toc.map((heading) => (
+                  <li>
+                    <a href={`#${heading.slug}`}>{heading.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          )}
+        </div>
+      ) : (
+        <main id="main-content" class="site-main">
+          {fromMdx ? <h1 class="augur-type-editorial-title page-title">{title}</h1> : null}
+          {fromMdx && props.frontmatter?.markdown ? (
+            // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
+            // already includes the deployment base, so append `.md` directly.
+            <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+          ) : null}
+          {fromMdx ? <article class="prose"><slot /></article> : <slot />}
+        </main>
+      )
+    }
     <footer class="site-footer">
       <div class="footer-inner">
         <p class="augur-type-metadata" style="margin: 0;">

@@ -142,6 +142,13 @@ real imported source, failing the build otherwise.
 - Shell pages (`/`, `/getting-started`) remain app pages by convention;
   as substantive pages they are candidates to migrate into a collection
   when touched. `/foundations/*` pages are fully collection-sourced.
+- Section overview pages (#55) live at `/<kind>` (`/foundations`,
+  `/components`, `/patterns`, `/reference`) as app pages rendered by
+  `src/components/SectionPage.astro` from `src/lib/sections.ts`; their
+  destinations derive from the collections through the navigation model
+  (`src/lib/navigation.ts`) — never a hand-copied route list. The same
+  model feeds the sidebar, the mobile browse panel, previous/next links,
+  and the `llms.txt` ordering, so the surfaces cannot drift.
 
 ## Markdown parity and `llms.txt` (issue #9)
 

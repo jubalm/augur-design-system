@@ -157,7 +157,7 @@ async function openDialog(page, trigger, timeoutMs = 15_000) {
   }
 }
 
-async function auditPage(url, { expectTitleFragment } = {}) {
+async function auditPage(url, { expectTitleFragment, expectNavLinks } = {}) {
   const page = await browser.newPage();
   const consoleIssues = [];
   page.on("console", (msg) => {
@@ -187,7 +187,7 @@ async function auditPage(url, { expectTitleFragment } = {}) {
     return {
       title: document.title,
       hasSkipLink: !!document.querySelector("a.skip-link"),
-      navLinks: [...document.querySelectorAll("nav[aria-label='Primary'] a")]
+      navLinks: [...document.querySelectorAll("nav[aria-label='Documentation'] a")]
         .filter(visible)
         .map((a) => a.textContent.trim()),
       ariaCurrent: [...document.querySelectorAll("nav a[aria-current='page']")]
@@ -214,7 +214,7 @@ async function auditPage(url, { expectTitleFragment } = {}) {
     ok(`${url} title`, evidence.title.includes(expectTitleFragment), evidence.title);
   }
   ok(`${url} skip link present`, evidence.hasSkipLink);
-  ok(`${url} exactly one visible primary nav with 8 links`, evidence.navLinks.length === 8, evidence.navLinks.join(", "));
+  ok(`${url} one visible documentation nav with the expected links`, evidence.navLinks.length === (expectNavLinks ?? 23), evidence.navLinks.join(", "));
   ok(`${url} fonts registered (>=6 faces)`, evidence.faceCount >= 6, `size ${evidence.faceCount}`);
   ok(`${url} fonts.load Sora 400 resolves a face`, loadedFaces.sora400 >= 1, String(loadedFaces.sora400));
   ok(`${url} fonts.load Sora 600 resolves a face`, loadedFaces.sora600 >= 1, String(loadedFaces.sora600));
@@ -230,7 +230,7 @@ async function auditPage(url, { expectTitleFragment } = {}) {
 
 // --- 1. Every page: transport, fonts, shell structure. -------------------
 console.log(`\n== Page audits (base ${base}) ==`);
-await auditPage(origin + site("/"), { expectTitleFragment: "Augur Design System" });
+await auditPage(origin + site("/"), { expectTitleFragment: "Augur Design System", expectNavLinks: 0 });
 await auditPage(origin + site("/getting-started"), { expectTitleFragment: "Getting started" });
 await auditPage(origin + site("/foundations/decisions"), { expectTitleFragment: "Foundation decisions" });
 await auditPage(origin + site("/foundations/fonts"), { expectTitleFragment: "Fonts and typography" });
@@ -289,7 +289,7 @@ console.log("\n== Theme contract (keyboard-driven, home page) ==");
   ok("first Tab focuses the skip link", String(firstFocus).includes("skip-link"), String(firstFocus));
 
   // Reach the Dark option in the toggle via keyboard and activate with Enter.
-  const darkButton = page.getByRole("button", { name: "Dark" });
+  const darkButton = page.locator(".masthead-actions").getByRole("button", { name: "Dark" });
   await darkButton.focus();
   ok("toggle button keyboard-focusable", await darkButton.evaluate((el) => document.activeElement === el));
   await page.keyboard.press("Enter");
@@ -308,10 +308,10 @@ console.log("\n== Theme contract (keyboard-driven, home page) ==");
   ok("dark persists across reload (pre-paint script)", afterReload === "dark", String(afterReload));
 
   // Light pin, then System reset.
-  await page.getByRole("button", { name: "Light" }).click();
+  await page.locator(".masthead-actions").getByRole("button", { name: "Light" }).click();
   const afterLight = await snapshot();
   ok("light pins [data-theme=light]", afterLight.attr === "light", String(afterLight.attr));
-  await page.getByRole("button", { name: "System" }).click();
+  await page.locator(".masthead-actions").getByRole("button", { name: "System" }).click();
   const afterSystem = await snapshot();
   ok("system removes the attribute (contract default)", afterSystem.attr === null, String(afterSystem.attr));
   ok("system clears persistence", afterSystem.stored === null, String(afterSystem.stored));
@@ -323,34 +323,34 @@ console.log("\n== Theme contract (keyboard-driven, home page) ==");
 console.log("\n== Mobile layout (375x812) ==");
 {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
-  await page.goto(origin + site("/"), { waitUntil: "networkidle" });
+  await page.goto(origin + site("/foundations/fonts"), { waitUntil: "networkidle" });
   await waitForIsland(page);
   const mobile = await page.evaluate(() => ({
     overflow: document.documentElement.scrollWidth > window.innerWidth,
-    desktopNavVisible: getComputedStyle(document.querySelector(".site-nav")).display !== "none",
-    disclosureVisible: getComputedStyle(document.querySelector(".mobile-nav summary")).display !== "none",
-    disclosureOpen: document.querySelector(".mobile-nav").open,
+    sidebarVisible: getComputedStyle(document.querySelector(".doc-sidebar")).display !== "none",
+    disclosureVisible: getComputedStyle(document.querySelector(".browse-docs")).display !== "none",
+    disclosureOpen: document.querySelector(".browse-docs").open,
   }));
   ok("no horizontal overflow at 375px", mobile.overflow === false);
-  ok("desktop nav hidden on mobile", mobile.desktopNavVisible === false);
-  ok("menu disclosure visible on mobile", mobile.disclosureVisible === true);
-  ok("menu closed by default", mobile.disclosureOpen === false);
+  ok("sidebar hidden on mobile", mobile.sidebarVisible === false);
+  ok("browse disclosure visible on mobile", mobile.disclosureVisible === true);
+  ok("browse closed by default", mobile.disclosureOpen === false);
 
   // Open the disclosure via keyboard and check its links.
   await page.keyboard.press("Tab"); // skip link
-  const summary = page.locator(".mobile-nav summary");
+  const summary = page.locator(".browse-docs summary");
   await summary.focus();
   await page.keyboard.press("Enter");
   const opened = await page.evaluate(() => ({
-    open: document.querySelector(".mobile-nav").open,
-    visibleLinks: [...document.querySelectorAll(".mobile-nav nav a")].filter((a) => a.offsetParent !== null).length,
+    open: document.querySelector(".browse-docs").open,
+    visibleLinks: [...document.querySelectorAll(".browse-panel nav a")].filter((a) => a.offsetParent !== null).length,
   }));
   ok("disclosure opens via keyboard", opened.open === true);
-  ok("all 8 links visible when open", opened.visibleLinks === 8, String(opened.visibleLinks));
+  ok("all 23 links visible when open", opened.visibleLinks === 23, String(opened.visibleLinks));
   await page.screenshot({ path: "/tmp/augur-docs-verify/home-mobile-menu-open.png" });
 
   // Navigate through the disclosure to the decisions page.
-  await page.locator(".mobile-nav nav").getByRole("link", { name: "Foundation decisions" }).click();
+  await page.locator(".browse-panel nav").getByRole("link", { name: "Foundation decisions" }).click();
   await page.waitForLoadState("networkidle");
   const decisionH1 = await page.evaluate(() => document.querySelector("h1")?.textContent.trim());
   ok("mobile nav link navigates", String(decisionH1).startsWith("Foundation decisions"), String(decisionH1));
@@ -956,9 +956,9 @@ console.log("\n== Shared frame alignment (#46) ===");
       const title = getComputedStyle(document.querySelector(".page-title"));
       const h2 = document.querySelector(".prose h2");
       return {
-        frameMax: cs(".site-main", "maxWidth"),
-        framePad: cs(".site-main", "paddingLeft"),
-        mainX: Math.round(document.querySelector(".site-main").getBoundingClientRect().x),
+        frameMax: cs(".shell", "maxWidth"),
+        framePad: cs(".shell", "paddingLeft"),
+        mainX: Math.round(document.querySelector(".shell").getBoundingClientRect().x),
         proseMax: cs(".prose", "maxWidth"),
         measure65: `${measure65}px`,
         titleFont: `${title.fontFamily.split(",")[0]} ${title.fontWeight} ${title.fontSize}/${title.lineHeight} ${title.letterSpacing}`,
@@ -975,7 +975,7 @@ console.log("\n== Shared frame alignment (#46) ===");
           const s = getComputedStyle(el);
           return `${s.textTransform} ${s.letterSpacing} ${s.color}`;
         })(),
-        headerBorder: cs(".site-header", "borderBottomColor"),
+        headerBorder: cs(".masthead", "borderBottomColor"),
         controlEdge: cs(".theme-toggle", "borderTopColor"),
         overflowX: document.documentElement.scrollWidth > window.innerWidth,
       };
@@ -1360,7 +1360,7 @@ for (const theme of ['light','dark']) {
     await p.goto(origin + site(route), {waitUntil:'networkidle'});
     await p.evaluate(theme => {document.documentElement.dataset.theme = theme;}, theme);
     if (route.endsWith('dialog')) await openDialog(p, p.getByRole('button',{name:'Open dialog',exact:true}));
-    const targets = await p.locator('.aug-button,.aug-input,.aug-dialog-close,.theme-toggle-option,.page-action,.mobile-nav summary').evaluateAll(els => els.filter(e=>e.getBoundingClientRect().width).map(e=>({name:e.className,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})));
+    const targets = await p.locator('.aug-button,.aug-input,.aug-dialog-close,.theme-toggle-option,.page-action,.browse-summary').evaluateAll(els => els.filter(e=>e.getBoundingClientRect().width).map(e=>({name:e.className,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})));
     ok(`review 44px touch targets ${theme}${route}`, targets.every(t=>t.w>=44 && t.h>=44), JSON.stringify(targets.filter(t=>t.w<44 || t.h<44)));
     if (route.endsWith('dialog')) {
       const dialog = await p.locator('.aug-dialog-content').evaluate(el=>({animation:getComputedStyle(el).animationName,padding:getComputedStyle(el).paddingTop}));

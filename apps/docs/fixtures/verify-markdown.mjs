@@ -190,6 +190,8 @@ const mdFiles = allFiles
   .map((f) => f.slice(distDir.length + 1))
   .sort();
 const expectedMd = [
+  "components.md",
+  "foundations.md",
   "foundations/color.md",
   "foundations/decisions.md",
   "foundations/fonts.md",
@@ -198,6 +200,7 @@ const expectedMd = [
   "foundations/visual-direction.md",
   "foundations/theming.md",
   "getting-started.md",
+  "reference.md",
   "reference/component-conventions.md",
   "reference/contributing.md",
   "reference/package-entries.md",
@@ -205,6 +208,7 @@ const expectedMd = [
   "components/card.md",
   "components/dialog.md",
   "components/input.md",
+  "patterns.md",
   "patterns/empty-state.md",
   "patterns/form-field.md",
   "patterns/page-header.md",
@@ -312,7 +316,7 @@ console.log("\n== llms.txt ==");
   ok("llms.txt opens with the project H1", text.startsWith("# Augur Design System\n"));
   ok("llms.txt has a summary blockquote", /^> Documentation for the Augur Design System/m.test(text));
   ok("llms.txt explains the .md convention", text.includes("append `.md`"));
-  for (const heading of ["## Documentation", "## Foundations", "## Components", "## Patterns", "## Package and API reference", "## Design authority and changes"]) {
+  for (const heading of ["## Documentation", "## Foundations", "## Components", "## Patterns", "## Reference", "## Design authority and changes"]) {
     ok(`llms.txt has section ${heading.slice(3)}`, text.includes(`\n${heading}\n`));
   }
   ok(
