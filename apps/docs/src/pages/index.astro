@@ -1,18 +1,4 @@
 ---
-/**
- * Docs home (issue #47): the brand opening — contract frame A.
- *
- * Composition (visual direction, VD-01): an unboxed message with a
- * narrow orientation rail (1:2, 32px gap), one 32×2 signal under the
- * title, a text action, and a three-part metadata row spanning both
- * columns. Top inset 48px and a 520px minimum height on desktop;
- * natural height from 600–959px; the rail stacks above the message
- * below 600px. Copy is locked by the contract; the identity lockup is
- * the #43 text identity at opening scale. One green signal: the
- * 32×2 rule (Deep on light, Green on dark); the text action stays
- * neutral. No dominant status warning — honesty lives in the rail's
- * quiet source note and the shell footer.
- */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/base";
 
@@ -21,12 +7,12 @@ const routes = [
     label: "Foundations",
     links: [
       { href: "/getting-started", text: "Getting started" },
-      { href: "/foundations/visual-direction", text: "Visual direction" },
       { href: "/foundations/identity", text: "Brand identity" },
-      { href: "/foundations/decisions", text: "Foundation decisions" },
       { href: "/foundations/fonts", text: "Fonts and typography" },
-      { href: "/foundations/theming", text: "Theming" },
       { href: "/foundations/color", text: "Color system" },
+      { href: "/foundations/layout-geometry", text: "Layout and geometry" },
+      { href: "/foundations/interaction", text: "Interaction" },
+      { href: "/foundations/theming", text: "Theming" },
     ],
   },
   {
@@ -45,8 +31,8 @@ const routes = [
       { href: "/patterns/form-field", text: "FormField" },
       { href: "/patterns/empty-state", text: "EmptyState" },
       { href: "/patterns/reference-record", text: "Reference record" },
-      { href: "/proposal-review", text: "Proposal review" },
       { href: "/reference/package-entries", text: "Package entries" },
+      { href: "/reference/component-conventions", text: "Component authoring" },
       { href: "/reference/contributing", text: "Contributing" },
     ],
   },
@@ -67,7 +53,7 @@ const routes = [
         Early development: the foundations are real and consumable today.
         Adopted values are recorded in{ " " }
         <a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a>{ " " }
-        and the foundation decision record.
+        and the maintained foundation guidance.
       </p>
     </div>
     <div class="opening-message">

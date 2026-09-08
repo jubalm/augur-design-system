@@ -1,54 +1,66 @@
 ---
 title: Layout and geometry
-description: Augur's spacing, reading measure, frame, control sizing, and square geometry rules for clear, dense interface composition.
+description: Augur's spacing, reading measure, frame, control sizing, square geometry, and adaptive layout rules.
 order: 4
 ---
 
-Augur uses a restrained spatial system: clear grouping, square geometry, and enough whitespace to separate hierarchy without turning records interfaces into decorative layouts.
+Augur uses spacing and geometry to make hierarchy explicit. The system favors clear grouping, square surfaces, compact controls, and enough whitespace to separate responsibilities without turning records interfaces into decorative layouts.
 
-## Frame and measure
+## Frames and reading measure
 
-- Use a 1200px content frame for wide documentation and application compositions.
-- Use 64px outer gutters on wide screens and 24px below the large-layout threshold.
-- Keep long-form reading measure near 65 characters where prose is the primary content.
-- Use larger composition gaps to separate sections; use the local spacing scale inside components and compact groups.
+A frame belongs to the composition it serves; do not treat one page maximum as a universal product token.
 
-These values describe composition roles. Representable adopted values remain canonical in `DESIGN.md`; generated token artifacts remain derived outputs.
+- Long-form prose should stay near a 65-character reading measure.
+- The documentation reading shell uses a 1400px maximum frame so dense tables and specimens can use a wider document column while prose remains centered at 65ch.
+- At 960px and above, the docs shell uses 64px internal gutters; below that threshold it uses 24px.
+- Dense specimens and tables may use the available document column when their content requires more width than prose.
+- Product and pattern compositions should use the layout contract documented for that composition rather than copying the docs-shell maximum.
+
+The 1400px docs-shell maximum is a scoped readability decision. It supersedes the earlier 1200px shell limit without redefining every Augur composition.
 
 ## Spacing decisions
 
-Prefer spacing that communicates grouping:
+The maintained local spacing scale is 4, 8, 12, 16, 24, and 32px. Larger 48, 64, and 80px steps are composition roles for major page regions rather than extra component padding.
 
-- tighter gaps join a label to its control, title to description, or metadata pair;
-- medium gaps separate related controls or sections inside a panel;
+Use spacing to communicate grouping:
+
+- tighter gaps join a label to its control, a title to its description, or a metadata pair;
+- medium gaps separate related controls and sections inside a panel;
 - large gaps separate page regions and major editorial sections.
 
-Do not add spacing only to make a sparse composition feel more designed. In Augur, whitespace clarifies structure rather than decorating it.
+Do not add space only to make a sparse composition feel more designed. Whitespace should explain structure.
 
 ## Control sizing
 
-The standard structural control heights are 32px, 36px, and 40px. Components choose among them according to density and emphasis; touch/coarse-pointer contexts must preserve an actionable target of at least 44×44px where the control is expected to be touched directly.
+The standard structural control heights are 32px, 36px, and 40px. Components choose among them according to density and emphasis.
+
+On coarse pointers, controls expected to be touched directly must expose an actionable target of at least 44×44px. This does not require every desktop control to render at 44px.
 
 ## Shape language
 
-Augur panels, controls, and Dialog surfaces use square geometry: 0px radius. Intrinsically circular controls such as radio indicators keep their required shape, and supplied identity artwork keeps its own geometry.
+Panels, controls, and Dialog surfaces use square geometry: 0px radius. Intrinsically circular controls keep the shape required by their interaction model, and supplied identity artwork keeps its own geometry.
 
-Rounded containers, pills, and softened cards are not part of the default surface language. Do not introduce them for decoration or familiarity with another design system.
+Rounded containers, pills, and softened cards are not part of the default Augur surface language. Do not introduce them only for decoration or familiarity with another system.
 
 ## Panels and grouping
 
-Use a panel only when it creates a meaningful region. A Card is not the default wrapper for every block. Prefer open page composition when hierarchy can be expressed through spacing, typography, and quiet separators alone.
+Use a panel when it creates a meaningful region. A Card is not the default wrapper for every block.
 
-Panels use clear insets and quiet boundaries. Dense specimens and tables may exceed the prose measure when the content requires it.
+Prefer open composition when hierarchy can be expressed through spacing, typography, alignment, and quiet separators alone. Panels use clear insets and tonal or hairline boundaries rather than decorative depth effects.
 
 ## Adaptive behavior
 
 Responsive changes preserve hierarchy and reading order:
 
 - stack columns before compressing content into unreadable widths;
-- keep the primary action and primary heading discoverable after reflow;
+- keep the primary heading and primary action discoverable after reflow;
 - keep light and dark themes geometrically identical;
-- preserve control usability on coarse pointers;
-- allow dense content to span wider than prose when necessary.
+- preserve touch usability on coarse pointers;
+- let dense content use more width than prose when necessary;
+- wrap content before clipping it.
 
-Component and pattern pages document only the exceptions or specific application of these shared rules.
+Component and pattern pages document only their specific application of these shared rules or an explicit exception.
+
+## Related guidance
+
+Use [Interaction](/foundations/interaction) for focus, state, keyboard, and motion behavior; [Color system](/foundations/color) for surface and signal roles; and [Fonts and typography](/foundations/fonts) for hierarchy within the frame.
