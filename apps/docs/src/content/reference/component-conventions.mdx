@@ -1,130 +1,87 @@
 ---
-# Component conventions reference (issue #10). Route
-# /reference/component-conventions. Distills the maintained component
-# record (packages/design-system/docs/components.md) and the Button/Card
-# precedent into contributor guidance; those sources remain canonical.
-title: Component conventions
-description: How components are designed, built, documented, tested, and distributed — the conventions established by the Button and Card precedent, plus the registry contract in brief.
+title: Component authoring
+description: How Augur components are designed, documented, tested, and distributed without duplicating foundation rules.
 order: 3
 ---
 
-Every component in `@augur/design-system` follows the same conventions,
-established by the first component slice (Button and Card) and recorded
-in the package's
-[component record](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/components.md).
-This page is the contributor-facing summary; the record and the
-component pages remain canonical.
+Every component in `@augur/design-system` follows the same ownership model: Augur owns the API, styling, documentation, and verification contract even when a familiar implementation shape comes from shadcn or a primitive library.
 
-## shadcn-compatible, Augur-owned
+## Layering
 
-Stay close to shadcn conventions so the system is familiar and
-compatible with shadcn-oriented tooling — and own the result. Augur
-owns the resulting APIs, styling, tokens, documentation, and
-conventions even when an implementation pattern originates upstream.
-Deviation is allowed when a records UI argues for it (Button defaults
-to `type="button"` where upstream leaves the browser's `submit`
-default) and must be recorded with rationale. Radix or equivalent
-primitives may back behavior where native elements are not enough;
-Button needed none, Dialog will.
+Components consume semantic roles and shared foundations. They do not own system-wide color, focus, motion, spacing, or geometry rules unless a component has a concrete exception.
 
-## Theming and geometry
+```text
+Foundations → Tokens → Primitives → Components → Patterns → Products
+```
 
-- **Semantic roles only.** Every color in component CSS is a reference
-  to a role custom property (`--primary`, `--muted-foreground`, …);
-  a raw hex, rgb, or hsl value fails the test suite. Components never
-  reference generated `--augur-color-*` primitives directly — the
-  semantic layer is the interface.
-- **No new tokens while proposals are pending.** FD-01 through FD-06
-  are Proposed (see [Foundation proposals](/foundations/proposals)):
-  components emit no spacing, sizing, radius, or motion custom
-  properties. Geometry appears as structural constants aligned with the
-  recorded proposal values — Button heights 32/36/40px, padding
-  12/16/24px, radius 6px controls / 8px surfaces, Card padding 24px.
-- **Focus and motion come from the package, not the component.** The
-  shared `:focus-visible` rule paints the ring from `--ring`; the
-  package-wide reduced-motion gate collapses animation. Components add
-  no per-instance focus CSS and no duration tokens.
+Use native elements first. Introduce a primitive such as Radix only when the interaction model requires behavior that native elements do not provide cleanly.
 
-## State contracts
+## Visual contract
 
-The FD-06 interaction treatment (Proposed, structurally implemented):
+Component CSS uses semantic role custom properties rather than raw color values or generated color primitives directly. Shared layout and interaction decisions live in:
 
-- **Hover / pressed** — quiet: filled variants tint their own action
-  color toward transparency; surface variants step onto the neutral
-  `--accent` surface; nothing new becomes green.
-- **One green signal** — only the primary variant consumes the action
-  pairing (Deep on light, Green on dark). Text links stay neutral so
-  they never multiply green marks.
-- **Destructive without a danger hue** — the palette defines none, so
-  the destructive slot uses the strongest neutral pairing and the label
-  must carry the consequence.
-- **Disabled** — native `disabled`: non-interactive, reduced-contrast
-  label still present and readable in the DOM, `cursor: not-allowed`,
-  hover styles never apply.
-- **Loading** — `aria-busy="true"`, non-interactive, label keeps its
-  width (visually hidden), reduced-motion-safe spinner, visually hidden
-  status keeps the accessible name intact, action color unchanged —
-  loading is not a change of intent.
+- [Layout and geometry](/foundations/layout-geometry)
+- [Interaction](/foundations/interaction)
+- [Color](/foundations/color)
+- [Theming](/foundations/theming)
+
+Do not duplicate those rules in every component page. A component page should explain how they apply and document exceptions.
 
 ## API conventions
 
-- Public exports are PascalCase re-exported from the package entry
-  (`Button`, `Card`, `CardHeader`, …); internal file organization never
-  becomes public API.
-- Variants and sizes are string-union props with a table in the docs
-  page; a `xVariants` helper (e.g. `buttonVariants`) returns the full
-  class string for class-only and registry-path consumers.
-- Composition parts follow the shadcn part set (Card's six parts, no
-  variant matrix, no product meaning at the container). Real semantics
-  win: `CardTitle` renders an `h3`.
-- React 19 ref prop directly (no `forwardRef`); `className` is appended
-  last; `cn()` joins conditional classes.
-- The stylesheet contract fails the build on any undeclared `var()`
-  reference in delivered CSS.
+- Public exports use PascalCase and are re-exported from the package entry.
+- Internal file organization is not public API.
+- Prefer small string-union variant/size props over open-ended visual props.
+- Composition parts follow real semantic elements where possible.
+- React 19 refs are passed directly; avoid `forwardRef` unless a concrete compatibility requirement appears.
+- `className` extends the component rather than replacing its contract.
+- Product workflow, validation policy, and domain state stay outside the design-system component.
 
 ## Documentation contract
 
-Each component gets a page at `src/content/components/<slug>.mdx`
-(`apps/docs`), rendered by the shared pipeline with enforced sections:
-When to use, When not to use, Variants, Sizes, States, Accessibility,
-API, Design rationale — a missing section fails the build. Frontmatter
-declares `component` (the PascalCase export), `status`
-(`planned | draft | stable | deprecated`), and later `registry` (the
-shadcn registry item id). Pages document real exports only: live
-examples import the actual package through the docs example registry,
-and each example's displayed code sample is a `?raw` import of the same
-file, so preview and sample cannot drift. Button and Card shipped with
-`status: draft`, graduating on maintainer acceptance.
+Each component page must help a consumer make a correct decision, not merely enumerate props.
+
+Required core sections:
+
+```text
+When to use
+When not to use
+Variants
+Sizes
+States
+Accessibility
+API
+```
+
+The documentation contract may evolve toward anatomy, adaptive behavior, related components/patterns, and verification where those sections add real decision value. Sections that do not apply should be explicitly treated as not applicable rather than filled with speculative variants or states.
+
+Live examples must import the real package component. Displayed code should come from the same example source so rendering and sample text cannot drift independently.
 
 ## Testing expectations
 
-- **Package suite** (`bun test` in `packages/design-system`): class
-  contracts such as the variant matrix, entry exports.
-- **Repository harness** (`bun run test`): keyboard activation, disabled
-  and loading behavior, HTML semantics, axe findings for the full
-  variant matrix in light and dark scopes, and the stylesheet delivery
-  contract through `./styles.css`.
-- **Docs fixture** (`verify-docs.mjs`): computed-style review of
-  rendered geometry, theme-following colors, and control typography in
-  both themes.
+A component change should prove the parts relevant to its contract:
 
-## Registry distribution, in brief
+- package/unit tests for exports and class/API behavior;
+- repository interaction tests for keyboard, state, semantics, and axe findings;
+- docs/browser fixtures for rendered geometry and theme behavior when visuals change;
+- source-registry generation/consumer checks when the registry item changes;
+- maintainer visual review where issue #53 or a successor acceptance gate applies.
 
-The external path is a GitHub-hosted, shadcn-compatible **source
-registry** — not an npm package (none is published; tsup stays
-deferred). The contract (specified in #16, implementation pending #17 —
-see the
-[registry contract](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/registry-contract.md)
-for the full text):
+Passing deterministic tests does not establish visual acceptance.
 
-- One mandatory base item, `augur-theme`, carries tokens, semantic
-  roles, self-hosted fonts, and structural behavior in a single
-  install; component items are unprefixed kebab-case (`button`, `card`).
-- Item `path`s point at canonical repository sources — the registry is
-  generated, never a hand-maintained copy, and never imports
-  `@augur/design-system` or `apps/docs`.
-- npm dependencies are exact-pinned in items; registry dependencies use
-  full GitHub item addresses; consumers pin full commit SHAs, and
-  `main` is never documented as stable.
-- A ref may be published for consumer pinning only after the contract's
-  end-to-end verification gate passes on that exact tree.
+## Registry distribution
+
+The source registry is generated from canonical repository sources. Registry output must not become a hand-maintained second implementation.
+
+The base `augur-theme` item carries the shared system contract; component and pattern items compose on top of it. Consumers should pin verified refs for reproducibility.
+
+## Adding or changing a component
+
+1. Confirm the component belongs in the Components layer rather than a Pattern or product surface.
+2. Reuse the maintained foundations; do not invent local visual rules to complete the design.
+3. Define the smallest API that serves the concrete use case.
+4. Implement with native semantics or an appropriate primitive.
+5. Document when to use it, when not to use it, behavior, accessibility, and API.
+6. Add real examples and the relevant deterministic/browser verification.
+7. Verify registry output if the component is externally consumable.
+8. Escalate unresolved design decisions instead of silently creating new system rules.

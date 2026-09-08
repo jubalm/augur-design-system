@@ -1,0 +1,54 @@
+---
+title: Layout and geometry
+description: Augur's spacing, reading measure, frame, control sizing, and square geometry rules for clear, dense interface composition.
+order: 4
+---
+
+Augur uses a restrained spatial system: clear grouping, square geometry, and enough whitespace to separate hierarchy without turning records interfaces into decorative layouts.
+
+## Frame and measure
+
+- Use a 1200px content frame for wide documentation and application compositions.
+- Use 64px outer gutters on wide screens and 24px below the large-layout threshold.
+- Keep long-form reading measure near 65 characters where prose is the primary content.
+- Use larger composition gaps to separate sections; use the local spacing scale inside components and compact groups.
+
+These values describe composition roles. Representable adopted values remain canonical in `DESIGN.md`; generated token artifacts remain derived outputs.
+
+## Spacing decisions
+
+Prefer spacing that communicates grouping:
+
+- tighter gaps join a label to its control, title to description, or metadata pair;
+- medium gaps separate related controls or sections inside a panel;
+- large gaps separate page regions and major editorial sections.
+
+Do not add spacing only to make a sparse composition feel more designed. In Augur, whitespace clarifies structure rather than decorating it.
+
+## Control sizing
+
+The standard structural control heights are 32px, 36px, and 40px. Components choose among them according to density and emphasis; touch/coarse-pointer contexts must preserve an actionable target of at least 44×44px where the control is expected to be touched directly.
+
+## Shape language
+
+Augur panels, controls, and Dialog surfaces use square geometry: 0px radius. Intrinsically circular controls such as radio indicators keep their required shape, and supplied identity artwork keeps its own geometry.
+
+Rounded containers, pills, and softened cards are not part of the default surface language. Do not introduce them for decoration or familiarity with another design system.
+
+## Panels and grouping
+
+Use a panel only when it creates a meaningful region. A Card is not the default wrapper for every block. Prefer open page composition when hierarchy can be expressed through spacing, typography, and quiet separators alone.
+
+Panels use clear insets and quiet boundaries. Dense specimens and tables may exceed the prose measure when the content requires it.
+
+## Adaptive behavior
+
+Responsive changes preserve hierarchy and reading order:
+
+- stack columns before compressing content into unreadable widths;
+- keep the primary action and primary heading discoverable after reflow;
+- keep light and dark themes geometrically identical;
+- preserve control usability on coarse pointers;
+- allow dense content to span wider than prose when necessary.
+
+Component and pattern pages document only the exceptions or specific application of these shared rules.

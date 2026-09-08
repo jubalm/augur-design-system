@@ -1,136 +1,76 @@
 ---
-# Contributing reference (issue #10). Route /reference/contributing.
-# Summarizes the maintained repository documents for working agents and
-# contributors; those documents remain canonical — AGENTS.md for
-# execution rules, ARCHITECTURE.md for structure and boundaries,
-# README.md for commands and status.
 title: Contributing
-description: How to work in this repository — source authority order, dependency layering, the verification checks, the contribution workflow, and the supplied-artwork rules.
+description: How to work safely in the Augur repository — authority, boundaries, workflow, verification, and handoff.
 order: 2
 ---
 
-This page summarizes how the repository is meant to be worked in. It is
-a convenience view; the canonical documents are
-[`AGENTS.md`](https://github.com/jubalm/augur-design-system/blob/main/AGENTS.md)
-(execution and handoff rules),
-[`ARCHITECTURE.md`](https://github.com/jubalm/augur-design-system/blob/main/ARCHITECTURE.md)
-(structure, boundaries, distribution), and
-[`README.md`](https://github.com/jubalm/augur-design-system/blob/main/README.md)
-(commands and current status). Where this page and a canonical document
-disagree, the canonical document governs.
+This page is the contributor-facing working guide. Canonical repository rules remain in `AGENTS.md`, `ARCHITECTURE.md`, `DESIGN.md`, and the repository README.
 
-## Source authority
+## Authority
 
-Design decisions have a strict precedence, so an agent never has to
-guess whether an older artifact overrides the maintained system:
+Use this order when sources appear to disagree:
 
-| Rank | Source | Governs |
-| --- | --- | --- |
-| 1 | `DESIGN.md` (repository root) | Adopted design values representable by the pinned `@google/design.md` schema, plus maintained brand guidance |
-| 2 | Generated tokens and theme output | Build artifacts derived from `DESIGN.md` — never edited as independent sources |
-| 3 | Foundation documentation and component implementation | Concepts the schema cannot represent: spacing, sizing, radius, focus, motion, state semantics |
-| — | `resources/brand/augur-brand-foundation.pdf` | Upstream reference; informs the system, never silently overrides maintained decisions |
-| — | Open proposals | Carried in the [decision record](/foundations/decisions) with explicit review status; no authority until adopted |
+1. `DESIGN.md` — adopted design values representable by the pinned schema.
+2. Generated tokens/theme output — derived artifacts; never independent sources of truth.
+3. Maintained foundation guidance and implementation — concepts that do not fit the schema cleanly.
+4. Component/pattern documentation — usage and composition contracts.
+5. Upstream brand material, issues, fixtures, and history — evidence and provenance; they do not silently override maintained decisions.
 
-Working rules that follow from this order: prefer semantic tokens over
-hard-coded values; do not duplicate raw `DESIGN.md` values in theme
-maps, docs examples, or registry copies; do not import artifacts from
-the earlier OpenDesign repository as current authority; record material
-design decisions with rationale and source.
+Do not revive superseded proposal language from historical records.
 
-## Supplied artwork
-
-The brand PDF informs the system; the production identity artwork is
-not silently redrawable:
-
-- Preserve the supplied logo lockups, glyph, and REP token icon: never
-  redraw, recolor, rotate, distort, crop, stretch, or simplify them.
-- Respect the clearspace unit (one lowercase **a** of the wordmark on
-  all sides) and the minimum sizes: glyph 50px high, horizontal lockup
-  150 × 50px, vertical lockup 94 × 93px.
-- Choose variants from the background first: two-tint Color on light
-  surfaces, two-tint Reversed on dark; single-tint only for constrained
-  supporting placements.
-- Production masters for the logo family are **not in this repository**
-  (held upstream; recorded with the text-identity interim rule in
-  [`resources/brand/PROVENANCE.md`](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md)).
-  Missing masters are a documented dependency, not permission to redraw.
-
-## Dependency layering
-
-Conceptual layers flow one way:
+## Boundaries
 
 ```text
 Foundations → Tokens → Primitives → Components → Patterns → Products
 ```
 
-Enforced boundaries in this workspace:
+- `packages/design-system` is the reusable system package.
+- `apps/docs` consumes the package; the package never imports docs code.
+- Tokens do not know about components.
+- Components use semantic roles rather than raw design values.
+- Patterns compose reusable components/structure without taking on product workflow.
+- Product-specific logic stays outside the design system.
 
-- `packages/design-system` (`@augur/design-system`) is the only
-  component package; `apps/docs` is plain Astro documentation.
-- The docs app may import the package (`workspace:*`); the package must
-  never import docs code or docs-only dependencies.
-- Tokens know nothing about components; components reference semantic
-  roles, never raw values; the design system knows nothing about
-  product-specific features.
-- Product workflows stay outside this repository. npm publication,
-  Storybook, and package extraction each need concrete requirements
-  before they exist.
-- The future registry path stays independent of the npm package:
-  registry-installed source never imports `@augur/design-system`.
+## Artwork
 
-## Checks
-
-Deterministic checks are the blocking validation layer; AI design
-review is advisory. Run what applies to your change from the repository
-root:
-
-| Command | Proves |
-| --- | --- |
-| `bun install --frozen-lockfile` | The committed lockfile and manifests agree (CI's install). |
-| `bun run lint` | `DESIGN.md` validates against the pinned `@google/design.md` 0.4.0 schema. |
-| `bun run lint:code` | TypeScript/TSX passes oxlint (typescript, react, jsx-a11y). |
-| `bun run typecheck` | `tsc --noEmit` over package sources, workspace tooling, and the test harness. |
-| `bun run check:workspace` | Workspace boundaries load: package entry, `./styles.css` export, docs resolution. |
-| `bun run test` | Vitest + Testing Library + axe suite against the real package. |
-| `bun run --cwd packages/design-system tokens:check` | Regenerated tokens are byte-identical to committed artifacts. |
-| `bun run --cwd packages/design-system tokens:verify-failures` | Controlled token-generation failure paths exit nonzero and write nothing. |
-| `bun run --cwd apps/docs check` | `astro check` diagnostics for the docs app (0 errors). |
-| `bun run --cwd apps/docs build` | Static docs build; build with `DOCS_BASE_PATH=/augur-design-system` for the repository-subpath mode. |
-| `bun apps/docs/fixtures/verify-docs.mjs` | Built site in headless Chromium: fonts, theme contract, keyboard, actions. |
-| `bun apps/docs/fixtures/verify-markdown.mjs` | Clean-Markdown inventory, parity, links, and `llms.txt` in both base modes. |
-| `bun apps/docs/fixtures/verify-content-failures.mjs` | Invalid metadata and missing component sections fail the build clearly. |
-
-CI runs the first eight on every pull request and push to `main`.
-Browser coverage is not in CI yet (tracked for issue #15), so the docs
-fixtures are run locally per change. There is deliberately no `build`
-command for the package yet (tsup deferred).
+Production brand artwork may only come from verified supplied masters. Do not trace, redraw, reconstruct, recolor, or approximate missing logo assets. Follow the maintained [Brand identity](/foundations/identity) page and `resources/brand/PROVENANCE.md`.
 
 ## Workflow
 
-1. Read the issue and its dependencies; record intended scope and
-   branch in the issue before editing. Branches are
-   `issue-<number>-<short-description>`; check for an active owner or PR.
-2. Implement the issue's acceptance criteria and exclusions — no
-   absorbed prerequisites or adjacent issues.
-3. Verify with the checks above; for visual changes, inspect real
-   rendered examples in **both themes** and relevant viewport sizes,
-   including keyboard and focus behavior.
-4. Open a PR linked with `Closes #<number>`, including outcome, changed
-   surfaces, commands with observed results, and remaining limitations.
-5. Leave a handoff in the issue or PR: branch/commit, completed
-   criteria with evidence, remaining work, blockers and decisions.
+1. Read the issue, its dependencies, and current repository authority before editing.
+2. Keep the change inside the requested layer and scope.
+3. Reuse existing foundations before proposing new design rules.
+4. Implement and document the smallest coherent change.
+5. Run the checks relevant to the changed surface.
+6. For visual changes, inspect both themes and relevant viewport sizes; deterministic tests are not visual acceptance.
+7. Open a PR with outcome, affected surfaces, observed verification, and remaining limitations.
+8. Leave a handoff that makes ownership, blockers, and unresolved decisions explicit.
 
-Merge, release publication, public deployment, DNS, licensing, and
-repository transfer are explicit maintainer actions; a prepared PR is
-not a merged change, and issues are not closed on implementation claims
-alone.
+## Verification
 
-## Current status (honest)
+Use the repository scripts and package/docs checks as the executable contract. Common categories include:
 
-Early development: the foundations, tokens, themes, fonts, Button, and
-Card exist; Input, FormField, Dialog, PageHeader, and EmptyState are
-tracked issues. The shadcn-compatible registry is **specified but not
-implemented** (contract from #16; generation and validation pending
-#17). There is no published npm package, no docs deployment yet, and no
-license grant — those decisions are tracked in #20.
+- schema/design validation;
+- lint and typecheck;
+- workspace boundary checks;
+- unit/component/accessibility tests;
+- token regeneration parity;
+- docs build and Markdown endpoint verification;
+- browser/fixture checks for rendered behavior;
+- registry generation and standalone consumer verification when distribution changes.
+
+The exact commands are maintained in the repository README, package scripts, and CI workflow. Prefer those canonical executable definitions over copying command inventories into design guidance pages.
+
+## Documentation changes
+
+Documentation is part of the system contract. When changing it:
+
+- keep one primary home for each durable rule;
+- prefer moving/reworking existing guidance over adding another overlapping page;
+- remove stale project-state snapshots;
+- keep historical evidence accessible without placing it in the normal learning path;
+- preserve the single content/navigation model, clean Markdown endpoints, and `llms.txt` generation.
+
+## Maintainer boundaries
+
+Merge, release publication, public deployment, DNS, licensing, repository transfer, and final visual acceptance remain explicit maintainer actions unless authority has been delegated for the specific task.

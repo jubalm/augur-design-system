@@ -214,7 +214,7 @@ async function auditPage(url, { expectTitleFragment, expectNavLinks } = {}) {
     ok(`${url} title`, evidence.title.includes(expectTitleFragment), evidence.title);
   }
   ok(`${url} skip link present`, evidence.hasSkipLink);
-  ok(`${url} one visible documentation nav with the expected links`, evidence.navLinks.length === (expectNavLinks ?? 23), evidence.navLinks.join(", "));
+  ok(`${url} one visible documentation nav with the expected links`, evidence.navLinks.length === (expectNavLinks ?? 25), evidence.navLinks.join(", "));
   ok(`${url} fonts registered (>=6 faces)`, evidence.faceCount >= 6, `size ${evidence.faceCount}`);
   ok(`${url} fonts.load Sora 400 resolves a face`, loadedFaces.sora400 >= 1, String(loadedFaces.sora400));
   ok(`${url} fonts.load Sora 600 resolves a face`, loadedFaces.sora600 >= 1, String(loadedFaces.sora600));
@@ -240,7 +240,7 @@ await auditPage(origin + site("/foundations/proposals"), { expectTitleFragment: 
 await auditPage(origin + site("/foundations/visual-direction"), { expectTitleFragment: "Visual direction" });
 await auditPage(origin + site("/reference/package-entries"), { expectTitleFragment: "Package entries" });
 await auditPage(origin + site("/reference/contributing"), { expectTitleFragment: "Contributing" });
-await auditPage(origin + site("/reference/component-conventions"), { expectTitleFragment: "Component conventions" });
+await auditPage(origin + site("/reference/component-conventions"), { expectTitleFragment: "Component authoring" });
 await auditPage(origin + site("/components/button"), { expectTitleFragment: "Button" });
 await auditPage(origin + site("/components/card"), { expectTitleFragment: "Card" });
 await auditPage(origin + site("/components/dialog"), { expectTitleFragment: "Dialog" });
@@ -251,8 +251,9 @@ await auditPage(origin + site("/patterns/page-header"), { expectTitleFragment: "
 await auditPage(origin + site("/proposal-review"), { expectTitleFragment: "Proposal review" });
 
 ok(
-  "getting-started renders MDX-evaluated package data",
-  (await readFile(join(distDir, "getting-started/index.html"), "utf8")).includes("<strong>2 font families</strong>"),
+  "getting-started renders current consumer guidance",
+  (await readFile(join(distDir, "getting-started/index.html"), "utf8")).includes("source-first design system") &&
+    (await readFile(join(distDir, "getting-started/index.html"), "utf8")).includes("shadcn@latest"),
 );
 ok(
   "theming page exposes pinned light/dark paired records",
@@ -346,7 +347,7 @@ console.log("\n== Mobile layout (375x812) ==");
     visibleLinks: [...document.querySelectorAll(".browse-panel nav a")].filter((a) => a.offsetParent !== null).length,
   }));
   ok("disclosure opens via keyboard", opened.open === true);
-  ok("all 23 links visible when open", opened.visibleLinks === 23, String(opened.visibleLinks));
+  ok("all 25 links visible when open", opened.visibleLinks === 25, String(opened.visibleLinks));
   await page.screenshot({ path: "/tmp/augur-docs-verify/home-mobile-menu-open.png" });
 
   // Navigate through the disclosure to the decisions page.
