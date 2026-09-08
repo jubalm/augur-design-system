@@ -1,0 +1,99 @@
+<!doctype html>
+<!--
+  Docs shell frame — SHORT PAGE case (issue #55, phase 0).
+
+  Template only: review.mjs injects (1) the grouped navigation model,
+  (2) the real rendered article from the built /foundations/fonts page,
+  (3) the H2-derived contents lists, and (4) previous/next links before
+  serving. Do not hand-edit content here; re-run the fixture instead.
+-->
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fonts and typography · Augur Design System — docs shell frame</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./shell.css" />
+    <script>
+      // Theme contract mirror: explicit choice wins; ?theme= drives
+      // deterministic captures; no attribute would mean system preference.
+      (() => {
+        const q = new URLSearchParams(location.search).get("theme");
+        let theme = q === "dark" || q === "light" ? q : null;
+        if (!theme) {
+          try {
+            theme = localStorage.getItem("augur-theme");
+          } catch {}
+        }
+        if (theme === "dark" || theme === "light") {
+          document.documentElement.dataset.theme = theme;
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a class="brand" href="/">
+          <span class="brand-lockup">
+            <span class="augur-type-ui brand-lockup-wordmark">Augur</span>
+            <span class="augur-type-editorial-label brand-lockup-descriptor">Design system</span>
+          </span>
+        </a>
+        <details class="browse-docs">
+          <summary class="augur-type-control">Browse documentation</summary>
+          <nav class="browse-panel" aria-label="Documentation" data-slot="nav"></nav>
+        </details>
+        <div class="masthead-actions">
+          <button type="button" id="theme" class="theme-control"></button>
+          <a class="augur-type-control" href="https://github.com/jubalm/augur-design-system">Repository</a>
+        </div>
+      </div>
+    </header>
+    <div class="shell">
+      <nav class="doc-sidebar" aria-label="Documentation" data-slot="nav"></nav>
+      <main id="main-content" class="doc-main">
+        <!-- slot:opening -->
+        <details class="onthispage-collapse">
+          <summary class="augur-type-control">On this page</summary>
+          <ul data-slot="collapse-list"></ul>
+        </details>
+        <!-- slot:body -->
+        <nav class="pager" aria-label="Document navigation" data-slot="pager"></nav>
+      </main>
+      <aside class="page-contents" aria-label="On this page" data-slot="rail"></aside>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p class="augur-type-metadata" style="margin: 0">
+          Early development. Foundations, components, and patterns are available; final visual acceptance and release are
+          pending.
+        </p>
+        <nav aria-label="Repository">
+          <ul class="augur-type-metadata">
+            <li><a href="https://github.com/jubalm/augur-design-system">Repository</a></li>
+            <li><a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a></li>
+            <li><a href="https://github.com/jubalm/augur-design-system/issues">Issues</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+    <script>
+      const themeButton = document.querySelector("#theme");
+      function labelTheme() {
+        const dark = document.documentElement.dataset.theme === "dark";
+        themeButton.textContent = dark ? "Theme: Light" : "Theme: Dark";
+      }
+      labelTheme();
+      themeButton.addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("augur-theme", next);
+        } catch {}
+        labelTheme();
+      });
+    </script>
+  </body>
+</html>

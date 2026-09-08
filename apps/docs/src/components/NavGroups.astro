@@ -1,0 +1,54 @@
+---
+/**
+ * The grouped documentation navigation (issue #55).
+ *
+ * One markup for both desktop surfaces of the same model: the
+ * persistent sidebar (>=960px) and the mobile "Browse documentation"
+ * panel. Active-document state is an exact route match plus the
+ * restrained text-and-short-rule treatment (docs.css).
+ */
+import type { DocsNav } from "../lib/navigation";
+import { withBase } from "../lib/base";
+
+interface Props {
+  nav: DocsNav;
+  currentPath: string;
+}
+
+const { nav, currentPath } = Astro.props;
+const isActive = (href: string) => currentPath === withBase(href);
+---
+<div class="nav-group nav-lead-in">
+  <ul>
+    <li>
+      <a
+        class="nav-link"
+        href={withBase(nav.leadIn.href)}
+        aria-current={isActive(nav.leadIn.href) ? "page" : undefined}
+      >{nav.leadIn.label}</a>
+    </li>
+  </ul>
+</div>
+{nav.groups.map((group) => (
+  <div class="nav-group">
+    <span class="nav-group-label augur-type-editorial-label">{group.label}</span>
+    <ul>
+      <li>
+        <a
+          class="nav-link"
+          href={withBase(group.href)}
+          aria-current={isActive(group.href) ? "page" : undefined}
+        >Overview</a>
+      </li>
+      {group.pages.map((page) => (
+        <li>
+          <a
+            class="nav-link"
+            href={withBase(page.href)}
+            aria-current={isActive(page.href) ? "page" : undefined}
+          >{page.label}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+))}

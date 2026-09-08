@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { MonitorIcon, MoonIcon, SunIcon } from "./icons";
 
 /**
  * Theme selection control for the docs shell (issue #7).
@@ -26,10 +27,10 @@ type ThemeChoice = "system" | "light" | "dark";
 const STORAGE_KEY = "augur-theme";
 const CHANGE_EVENT = "augur-theme-change";
 
-const CHOICES: readonly { value: ThemeChoice; label: string }[] = [
-  { value: "system", label: "System" },
-  { value: "light", label: "Light" },
-  { value: "dark", label: "Dark" },
+const CHOICES: readonly { value: ThemeChoice; label: string; Icon: (props: { size?: number }) => JSX.Element }[] = [
+  { value: "system", label: "System", Icon: MonitorIcon },
+  { value: "light", label: "Light", Icon: SunIcon },
+  { value: "dark", label: "Dark", Icon: MoonIcon },
 ] as const;
 
 function subscribe(onStoreChange: () => void): () => void {
@@ -90,9 +91,11 @@ export function ThemeToggle() {
           type="button"
           className="theme-toggle-option"
           aria-pressed={choice === option.value}
+          aria-label={option.label}
+          title={option.label}
           onClick={() => select(option.value)}
         >
-          {option.label}
+          <option.Icon size={16} />
         </button>
       ))}
     </fieldset>

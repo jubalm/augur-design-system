@@ -28,6 +28,10 @@ const outDir = process.argv[2] || "/tmp/augur-acceptance-matrix";
 const ROUTES = [
   "/",
   "/getting-started",
+  "/foundations",
+  "/components",
+  "/patterns",
+  "/reference",
   "/foundations/decisions",
   "/foundations/fonts",
   "/foundations/identity",

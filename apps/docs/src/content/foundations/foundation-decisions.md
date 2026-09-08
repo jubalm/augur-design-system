@@ -1,7 +1,7 @@
 ---
 title: Foundation decisions
 description: Inherited brand facts, the original foundation audit, and the adopted visual direction that supersedes the initial proposals.
-order: 3
+order: 6
 ---
 
 ## Current decision status

@@ -54,7 +54,11 @@ blank field fails the build with a clear message):
   body headings at `##`.
 - `description` — one sentence; rendered as the page lede and used as
   the HTML meta description.
-- `order` — optional integer sort key for future nav/index generation.
+- `order` — the page's position in its section's reading order. Values are
+  unique per section and narrative (issue #55): the sidebar, section overviews,
+  previous/next links, and the `llms.txt` ordering all derive from this one key,
+  so they cannot drift. Assign the next free position when adding a page; do not
+  reuse or reorder existing positions without recording the reading-order change.
 - `draft: true` — validated but excluded from routes.
 
 Component pages additionally require `component` (the PascalCase public
@@ -138,6 +142,13 @@ real imported source, failing the build otherwise.
 - Shell pages (`/`, `/getting-started`) remain app pages by convention;
   as substantive pages they are candidates to migrate into a collection
   when touched. `/foundations/*` pages are fully collection-sourced.
+- Section overview pages (#55) live at `/<kind>` (`/foundations`,
+  `/components`, `/patterns`, `/reference`) as app pages rendered by
+  `src/components/SectionPage.astro` from `src/lib/sections.ts`; their
+  destinations derive from the collections through the navigation model
+  (`src/lib/navigation.ts`) — never a hand-copied route list. The same
+  model feeds the sidebar, the mobile browse panel, previous/next links,
+  and the `llms.txt` ordering, so the surfaces cannot drift.
 
 ## Markdown parity and `llms.txt` (issue #9)
 

@@ -21,6 +21,7 @@
 import { getCollection } from "astro:content";
 import gettingStartedRaw from "../pages/getting-started.mdx?raw";
 import { PROPOSAL_REVIEW } from "./proposal-review";
+import { getSectionOverview } from "./sections";
 import { withBase } from "./base";
 import { mdxPageSource } from "./markdown";
 
@@ -28,17 +29,26 @@ const REPO_URL = "https://github.com/jubalm/augur-design-system";
 
 type DocKind = "foundations" | "components" | "patterns" | "reference";
 
-/** Markdown links (to the `.md` representation) for one collection. */
+/**
+ * Markdown links (to the `.md` representation) for one section: the
+ * section overview first (#55), then the collection pages in the
+ * maintained reading order (`order` then title, draft excluded).
+ */
 async function kindLinks(kind: DocKind): Promise<string[]> {
+  const overview = await getSectionOverview(kind);
   const entries = await getCollection(kind, ({ data }) => !data.draft);
   const ordered = [...entries].sort(
     (a, b) =>
       (a.data.order ?? Number.MAX_SAFE_INTEGER) - (b.data.order ?? Number.MAX_SAFE_INTEGER) ||
       a.data.title.localeCompare(b.data.title),
   );
-  return ordered.map(
-    (entry) => `- [${entry.data.title}](${withBase(`/${kind}/${entry.id}.md`)}): ${entry.data.description}`,
-  );
+  return [
+    `- [${overview.title} overview](${withBase(`/${kind}.md`)}): ${overview.description}`,
+    ...ordered.map(
+      (entry) =>
+        `- [${entry.data.title}](${withBase(`/${kind}/${entry.id}.md`)}): ${entry.data.description}`,
+    ),
+  ];
 }
 
 function section(heading: string, lines: string[]): string[] {
@@ -99,7 +109,8 @@ export async function buildLlmsTxt(): Promise<string> {
     ),
   );
 
-  lines.push(...section("Package and API reference", reference));
+  // #55: the reference group heading matches the sidebar/overview label.
+  lines.push(...section("Reference", reference));
 
   lines.push(...section("Design authority and changes", [
     `- [DESIGN.md](${REPO_URL}/blob/main/DESIGN.md): canonical adopted design values (Google design.md ` +

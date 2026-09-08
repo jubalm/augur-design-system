@@ -1,0 +1,42 @@
+---
+/**
+ * Shared renderer for the four section overview pages (issue #55).
+ *
+ * /foundations, /components, /patterns, and /reference render the same
+ * shape: the section title as H1, the description lede, Copy page /
+ * View as Markdown actions (clean `.md` at /<kind>.md), the authored
+ * orientation paragraph, and the section's intended reading order with
+ * one line per page. Destinations come from the content collections
+ * through getSectionOverview() — never a hand-copied route list — so
+ * the page, its Markdown representation, and llms.txt cannot drift.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageActions from "./PageActions.astro";
+import { withBase } from "../lib/base";
+import { getSectionOverview, type SectionOverview } from "../lib/sections";
+import type { DocKind } from "../lib/navigation";
+
+interface Props {
+  kind: DocKind;
+}
+
+const { kind } = Astro.props;
+const overview: SectionOverview = await getSectionOverview(kind);
+---
+<BaseLayout title={overview.title} description={overview.description}>
+  <article class="prose doc-page section-page">
+    <h1 class="augur-type-editorial-title page-title">{overview.title}</h1>
+    <p class="doc-page-lede augur-type-body">{overview.description}</p>
+    <PageActions mdHref={withBase(`/${kind}.md`)} />
+    <p>{overview.intro}</p>
+    <h2>Reading order</h2>
+    <ul class="section-index">
+      {overview.items.map((item) => (
+        <li>
+          <a class="section-index-link" href={withBase(item.href)}>{item.label}</a>
+          <span class="section-index-description">{item.description}</span>
+        </li>
+      ))}
+    </ul>
+  </article>
+</BaseLayout>
