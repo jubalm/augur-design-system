@@ -15,21 +15,24 @@ The repository publishes generated registry items under `/r/`, including the bas
 
 Start with the `augur-theme` item, then add the components or patterns your application needs. Pin a verified repository ref for reproducible consumption rather than treating `main` as a release channel.
 
+Once you have the resolved URL for a registry item, install it with the standard shadcn source-install command:
+
+```sh
+npx shadcn@latest add "$REGISTRY_ITEM_URL"
+```
+
+The URL should point at the generated item you intend to consume; the design-system repository remains the authority for which items and refs are valid.
+
 ### Workspace package
 
 Applications in this workspace can import from `@augur/design-system` directly.
 
 ```tsx
 import { Button, Card, Input } from "@augur/design-system";
+import "@augur/design-system/styles.css";
 ```
 
-Load the aggregated stylesheet once:
-
-```css
-@import "@augur/design-system/styles.css";
-```
-
-It delivers self-hosted fonts, generated tokens, semantic light/dark roles, typography roles, shared focus behavior, and the system's structural styling.
+The aggregated stylesheet delivers self-hosted fonts, generated tokens, semantic light/dark roles, typography roles, shared focus behavior, and the system's structural styling.
 
 ## Theme behavior
 
