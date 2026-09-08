@@ -985,8 +985,8 @@ console.log("\n== Shared frame alignment (#46) ===");
   await frame1440.goto(origin + site("/foundations/color"), { waitUntil: "networkidle" });
   await frame1440.evaluate(() => document.fonts.ready);
   const light = await readFrame(frame1440);
-  ok("frame is 1200px with 64px gutters at 1440", light.frameMax === "1200px" && light.framePad === "64px", `${light.frameMax} / ${light.framePad}`);
-  ok("centered frame leaves the 120px side margin at 1440", light.mainX === 120, String(light.mainX));
+  ok("frame is 1400px with 64px gutters at 1440", light.frameMax === "1400px" && light.framePad === "64px", `${light.frameMax} / ${light.framePad}`);
+  ok("centered frame leaves the 20px side margin at 1440", light.mainX === 20, String(light.mainX));
   ok(
     "reading measure is exactly 65ch",
     Math.abs(parseFloat(light.proseMax) - parseFloat(light.measure65)) < 0.5,
