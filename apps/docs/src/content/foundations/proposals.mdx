@@ -1,39 +1,20 @@
 ---
-title: Foundation adoption
-description: The initial FD-01 through FD-06 proposals have been resolved by the delegated visual direction; canonical runtime migration and final human acceptance are separate steps.
-order: 7
+title: Foundation adoption history
+description: Historical transition from the original foundation proposals to the maintained Augur foundations. Current guidance lives in the foundation pages, not here.
+order: 98
 ---
 
-## From proposals to decisions
+This page is retained temporarily for link continuity while the documentation is consolidated.
 
-The original issue 2 proposals are preserved in the
-[foundation decision history](/foundations/decisions). Their unresolved status was
-not settled by issue closure. On 2026-09-06, the maintainer delegated the exact
-visual choices to the Astra visual director through the
-[issue 42 authority record](https://github.com/jubalm/augur-design-system/issues/42#issuecomment-5556190059).
-The [visual direction contract](/foundations/visual-direction) is the selected
-implementation direction; final human visual acceptance remains pending in issue 53.
+The original spacing, sizing, radius, focus, motion, and state proposals have been superseded by the maintained system. Do not use this page as current design guidance.
 
-## Selected foundation direction
+Current destinations:
 
-| Concept | Selected direction |
-| --- | --- |
-| Spacing | Local 4/8/12/16/24/32px steps; explicit 48/64/80px composition roles; 1200px frame, 64/24px minimum gutters and 80/48px section gaps |
-| Sizing | Desktop 32/36/40px controls, 16/20px icons; at least 44×44px actionable targets on coarse pointers |
-| Radius | Square 0px panels, controls, and Dialog; reject old 8/6px proposal |
-| Focus | 2px ring with 2px offset, Deep on light and Green on dark, honoring focus-visible heuristics |
-| Motion | Immediate 0ms feedback; no decorative motion; retain reduced-motion protection during migration |
-| States | Explicit inherited state names; neutral hover/selection and labeled disabled/loading treatment |
+- [Layout and geometry](/foundations/layout-geometry) — frame, spacing, sizing, and square geometry.
+- [Interaction](/foundations/interaction) — focus, hover, pressed, disabled, loading, invalid, keyboard, motion, and pointer targets.
+- [Color](/foundations/color) — palette, signal hierarchy, surfaces, and semantic color intent.
+- [Typography](/foundations/fonts) — type roles and hierarchy.
+- [Theming](/foundations/theming) — light/dark role resolution and scoping.
+- [Foundation decisions](/foundations/decisions) — provenance and decision history.
 
-## Migration and acceptance
-
-Issue 42 confines its new geometry and border relationships to a non-shipping
-reference fixture. Issue 45 encodes representable adopted values in `DESIGN.md`,
-regenerates the package outputs, and documents schema-external relationships.
-Assigned component and docs work then consumes those maintained foundations.
-Do not hand-edit generated files or treat a product's local tokens as authority.
-
-Use the complete [type, layout, interaction, signal, and border contract](/foundations/visual-direction)
-for exact values and breakpoint behavior. The prior blanket statement that every
-proposal is unadopted is historical. Final human acceptance and release approval
-remain distinct from the adopted implementation direction.
+Once all inbound references are migrated, this route can be removed without losing any current guidance.
