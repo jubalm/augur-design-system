@@ -14,7 +14,7 @@ The package exposes three public package entry points:
 | --- | --- |
 | `@augur/design-system` | Public React components/patterns, component types/helpers, and font provenance constants/types |
 | `@augur/design-system/styles.css` | Aggregated font faces, generated tokens, semantic themes, typography roles, shared focus behavior, and component/pattern styles |
-| `@augur/design-system/fonts.css` | Font faces and voice-family custom properties only |
+| `@augur/design-system/fonts.css` | Voice-family custom properties and fallback stacks only; it does not load font files |
 
 Internal source paths are not public API.
 
@@ -34,17 +34,17 @@ Most consumers should load the full stylesheet once:
 import "@augur/design-system/styles.css";
 ```
 
-This is the shared visual contract for package consumers: fonts, generated design values, semantic role mapping, typography, focus behavior, and component/pattern styling.
+This is the shared visual contract for package consumers: self-hosted font faces, generated design values, semantic role mapping, typography, focus behavior, and component/pattern styling.
 
 ## Fonts-only stylesheet
 
-Consumers that only need the font delivery and voice stacks can import:
+Consumers that deliver font files by another route but still want Augur's family stacks can import:
 
 ```ts
 import "@augur/design-system/fonts.css";
 ```
 
-This provides the maintained Sora and Schibsted Grotesk delivery plus `--augur-font-primary` and `--augur-font-secondary`.
+This defines `--augur-font-primary` and `--augur-font-secondary` with their maintained fallback stacks. It intentionally contains no `@fontsource` imports; self-hosted font-face delivery comes from the aggregated stylesheet.
 
 ## Source registry
 
