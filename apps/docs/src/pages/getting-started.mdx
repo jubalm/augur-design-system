@@ -1,73 +1,60 @@
 ---
-# Getting started (issue #7). MDX on purpose: this page proves the
-# MDX pipeline and a real import from the workspace package inside
-# shared documentation content (evaluated in the prose below).
 title: Getting started
-description: How applications consume @augur/design-system today — the stylesheet entry, self-hosted fonts, and the current public exports.
-markdown: true # substantive shell page with a clean .md representation (#9)
+description: Consume Augur through the source registry or workspace package, load the shared styles, and start with the real exported components.
+markdown: true
 layout: ../layouts/BaseLayout.astro
 ---
-import { AUGUR_FONTS } from "@augur/design-system";
 
-The design system ships as the workspace package
-`@augur/design-system`. It is source-based on purpose: applications in
-this repository consume it directly, and the future external path is a
-GitHub-hosted, shadcn-compatible source registry — not an npm install.
-The package currently provides three public entries:
+Augur is a source-first design system. The near-term external consumption path is the generated, shadcn-compatible source registry; applications inside this repository may consume the workspace package directly.
 
-```text
-@augur/design-system            → public entry module (constants and types)
-@augur/design-system/styles.css → aggregated stylesheet (fonts, tokens, themes, roles)
-@augur/design-system/fonts.css  → font-family custom properties only
+## Choose a consumption path
+
+### Source registry
+
+The repository publishes generated registry items under `/r/`, including the base theme and current components/patterns. Registry items are generated from canonical package sources rather than maintained as parallel copies.
+
+Start with the `augur-theme` item, then add the components or patterns your application needs. Pin a verified repository ref for reproducible consumption rather than treating `main` as a release channel.
+
+### Workspace package
+
+Applications in this workspace can import from `@augur/design-system` directly.
+
+```tsx
+import { Button, Card, Input } from "@augur/design-system";
 ```
 
-## Stylesheet entry
-
-One import delivers everything: self-hosted font faces, the generated
-base tokens, the semantic light/dark role mapping, and the typography
-role classes.
+Load the aggregated stylesheet once:
 
 ```css
-import "@augur/design-system/styles.css";
+@import "@augur/design-system/styles.css";
 ```
 
-No consumer boilerplate is required: the canvas pairing applies to
-`body` automatically, keyboard focus rings and the reduced-motion gate
-are included, and the theme follows the system preference until you
-select one explicitly.
+It delivers self-hosted fonts, generated tokens, semantic light/dark roles, typography roles, shared focus behavior, and the system's structural styling.
 
-## What exists today
+## Theme behavior
 
-The package entry module exports machine-readable constants for the
-delivered fonts. This page imports them directly, so the number below
-is computed from the real package, not copied:
+Light and dark are equal everyday themes. With no explicit theme, the system preference governs. Pin a theme with `data-theme="light"` or `data-theme="dark"` on the document or a subtree.
 
-This site renders **{AUGUR_FONTS.length} font families** from the real
-`AUGUR_FONTS` export — see [Fonts and typography](/foundations/fonts)
-for the live role samples and the provenance table they produce. The
-[Package entries](/reference/package-entries) reference page documents
-all three public entry points.
+See [Theming](/foundations/theming) for the selection and scoping contract.
 
-Tokens and semantic roles are CSS-first: generated `--augur-color-*`
-primitives feed a shadcn-compatible role layer
-(`--background`, `--card`, `--primary`, `--ring`, …). See
-[Theming](/foundations/theming) for the contract and a live demo.
+## Start with decisions, not components
 
-## What does not exist yet
+Before composing a page, use the foundations to understand Augur's hierarchy and interaction language:
 
-Components land incrementally and are documented only once they exist:
-[Button](/components/button) and [Card](/components/card) are
-implemented, exported from the same entry point, and rendered live on
-their pages. The rest of the starter set (Input, Dialog, PageHeader,
-EmptyState) is still ahead; this site deliberately contains no private
-copies or mockups of components that do not exist.
+- [Typography](/foundations/fonts)
+- [Color](/foundations/color)
+- [Layout and geometry](/foundations/layout-geometry)
+- [Interaction](/foundations/interaction)
+- [Theming](/foundations/theming)
 
-## Where the source of truth lives
+Then choose components and patterns by their documented `When to use` / `When not to use` guidance rather than by visual resemblance.
 
-- [DESIGN.md](https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md) —
-  canonical adopted design values.
-- [Foundation decisions](/foundations/decisions) — the audit and review
-  record; proposals stay visibly unresolved until a maintainer adopts them.
-- The
-  [repository README](https://github.com/jubalm/augur-design-system/blob/main/README.md)
-  documents verified workspace commands.
+## Current starter set
+
+The current documented starter set includes Button, Card, Input, Dialog, FormField, PageHeader, and EmptyState. Reference Record remains a source-grounded composition under review as either a reusable pattern or a retained reference specimen.
+
+## Sources of truth
+
+`DESIGN.md` owns adopted design values representable by the pinned schema. Generated token outputs are derived artifacts. Foundation documentation owns maintained design guidance that does not fit the schema cleanly, while component and pattern pages own usage and composition decisions.
+
+For package/export details, see [Package entries](/reference/package-entries). For contribution rules and verification, see [Contributing](/reference/contributing).
