@@ -1,0 +1,56 @@
+---
+title: Interaction
+description: Shared Augur interaction contracts for focus, hover, pressed, disabled, loading, invalid, keyboard, motion, and pointer targets.
+order: 5
+---
+
+Interaction behavior is a system concern first and a component concern second. Components inherit the shared rules below unless their page documents an explicit exception.
+
+## Focus
+
+Keyboard focus uses `:focus-visible` browser heuristics and is never suppressed when required for orientation. The shared package rule paints a 2px ring with a 2px offset using the semantic `--ring` role.
+
+Do not add component-local focus colors or duplicate focus CSS unless the component has a real behavioral need that the shared contract cannot express.
+
+## Hover and pressed
+
+State feedback is immediate and quiet. Hover and pressed treatments should clarify interactivity without introducing decorative motion or additional green signals.
+
+- filled actions may tint their existing action color;
+- neutral/surface actions step onto the semantic highlight surface;
+- disabled controls do not receive hover treatment;
+- green remains reserved for primary intent, focus, or short orientation signals rather than generic hover decoration.
+
+## Disabled
+
+Disabled controls remain visibly present but non-interactive. Prefer native disabled semantics when the underlying element supports them. Do not use color alone to communicate why an action is unavailable.
+
+## Loading and pending
+
+Loading is not a change of intent. Keep action geometry stable, preserve useful labels or accessible status, and expose busy state to assistive technology where appropriate.
+
+Avoid layout shifts caused by swapping a label for a spinner. Reduced-motion preferences must not make loading state illegible.
+
+## Invalid and error
+
+Invalid state must be named by text, semantics, or both; border color alone is insufficient. Use native/ARIA invalid semantics as appropriate and connect error copy to the affected control.
+
+Augur defines no decorative danger palette that substitutes for clear language. Consequence and correction should be explicit in copy.
+
+## Motion
+
+Immediate state feedback is the default. Do not add decorative transitions merely to make an interface feel polished. Existing legacy motion should respect reduced-motion preferences and may be removed when it no longer serves a structural purpose.
+
+## Keyboard behavior
+
+Prefer native element behavior first. Components backed by primitives may add containment, restoration, roving focus, or dismissal behavior where the interaction model requires it.
+
+Do not recreate browser or primitive behavior with custom key handlers without a concrete requirement.
+
+## Pointer targets
+
+Dense desktop controls may use the system's compact structural sizes, but controls expected to be touched directly on coarse pointers should expose an actionable target of at least 44×44px.
+
+## Component responsibility
+
+Component documentation should explain how these shared rules apply to that component and document exceptions. It should not restate the full system contract on every page.
