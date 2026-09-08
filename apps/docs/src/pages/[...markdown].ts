@@ -9,6 +9,8 @@
  *   /components/<slug>.md    ← src/content/components/<slug>.md(x)
  *   /patterns/<slug>.md      ← src/content/patterns/<slug>.md(x)
  *   /reference/<slug>.md     ← src/content/reference/<slug>.md(x)
+ *   /foundations.md          ← section overview (issue #55), and the
+ *   /components.md             other three kinds likewise
  *   /getting-started.md      ← src/pages/getting-started.mdx (?raw)
  *
  * Draft entries are excluded here exactly as the page routes exclude
@@ -24,6 +26,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import type { APIRoute } from "astro";
 import gettingStartedRaw from "./getting-started.mdx?raw";
 import { cleanPageMarkdown, mdxPageSource } from "../lib/markdown";
+import { getSectionOverview } from "../lib/sections";
 
 type DocKind = "foundations" | "components" | "patterns" | "reference";
 type DocEntry = CollectionEntry<DocKind>;
@@ -48,6 +51,24 @@ export async function getStaticPaths() {
   const paths: { params: { markdown: string }; props: { markdown: string } }[] = [];
 
   for (const kind of KINDS) {
+    // Section overview (#55): authored intro plus the collection-derived
+    // reading order, from the same getSectionOverview() the page uses.
+    const overview = await getSectionOverview(kind);
+    const list = overview.items
+      .map((item) => `- [${item.label}](${item.href}): ${item.description}`)
+      .join("\n");
+    paths.push({
+      params: { markdown: `${kind}.md` },
+      props: {
+        markdown: cleanPageMarkdown({
+          source: `${kind}/overview`,
+          title: overview.title,
+          description: overview.description,
+          body: `${overview.intro}\n\n## Reading order\n\n${list}`,
+        }),
+      },
+    });
+
     const entries = await getCollection(kind, ({ data }) => !data.draft);
     for (const entry of entries) {
       paths.push({

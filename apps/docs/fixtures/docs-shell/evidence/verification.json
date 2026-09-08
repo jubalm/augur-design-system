@@ -1,0 +1,352 @@
+{
+  "sourceCommit": "e3b991c85aafb7f046c2e08dc581e757ff2c31fe",
+  "fixtureSha256": {
+    "shell.css": "c0d44413934ea4c90664eb8aea99822e654b46e7c0a50b928a44c3eb59cac0b8",
+    "short.html": "72b20b6971203924a53c3dbe606abc70f68236b620ae4a64957b5225f88c26df",
+    "dense.html": "36ba85f74d6e0b9fd32dff897baa717067deb5c4a288c6fe66512642c55a21b9",
+    "review.mjs": "930a8637b2ff767a5763825df9e18f8903412b852fd84c44c903486a963d2a10"
+  },
+  "captures": [
+    {
+      "page": "short",
+      "viewport": "1440x1000",
+      "theme": "light",
+      "file": "short-light-1440x1000.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": false,
+        "browseHidden": true,
+        "collapseHidden": true,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(9, 94, 66)",
+        "activeColor": "rgb(14, 14, 33)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": false,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.81,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "short",
+      "viewport": "1440x1000",
+      "theme": "dark",
+      "file": "short-dark-1440x1000.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": false,
+        "browseHidden": true,
+        "collapseHidden": true,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(42, 231, 168)",
+        "activeColor": "rgb(245, 245, 248)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": false,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.53,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "short",
+      "viewport": "768x1024",
+      "theme": "light",
+      "file": "short-light-768x1024.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": true,
+        "browseHidden": false,
+        "collapseHidden": false,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(9, 94, 66)",
+        "activeColor": "rgb(14, 14, 33)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": true,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.81,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "short",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "file": "short-dark-768x1024.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": true,
+        "browseHidden": false,
+        "collapseHidden": false,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(42, 231, 168)",
+        "activeColor": "rgb(245, 245, 248)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": true,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.53,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "short",
+      "viewport": "390x844",
+      "theme": "light",
+      "file": "short-light-390x844.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": true,
+        "browseHidden": false,
+        "collapseHidden": false,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(9, 94, 66)",
+        "activeColor": "rgb(14, 14, 33)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": true,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.81,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "short",
+      "viewport": "390x844",
+      "theme": "dark",
+      "file": "short-dark-390x844.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": true,
+        "browseHidden": false,
+        "collapseHidden": false,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(42, 231, 168)",
+        "activeColor": "rgb(245, 245, 248)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": true,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.53,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "dense",
+      "viewport": "1440x1000",
+      "theme": "light",
+      "file": "dense-light-1440x1000.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": false,
+        "browseHidden": true,
+        "collapseHidden": true,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(9, 94, 66)",
+        "activeColor": "rgb(14, 14, 33)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": false,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.81,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "dense",
+      "viewport": "1440x1000",
+      "theme": "dark",
+      "file": "dense-dark-1440x1000.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": false,
+        "browseHidden": true,
+        "collapseHidden": true,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(42, 231, 168)",
+        "activeColor": "rgb(245, 245, 248)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": false,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.53,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "dense",
+      "viewport": "768x1024",
+      "theme": "light",
+      "file": "dense-light-768x1024.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": true,
+        "browseHidden": false,
+        "collapseHidden": false,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(9, 94, 66)",
+        "activeColor": "rgb(14, 14, 33)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": true,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.81,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "dense",
+      "viewport": "768x1024",
+      "theme": "dark",
+      "file": "dense-dark-768x1024.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": true,
+        "browseHidden": false,
+        "collapseHidden": false,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(42, 231, 168)",
+        "activeColor": "rgb(245, 245, 248)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": true,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.53,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "dense",
+      "viewport": "390x844",
+      "theme": "light",
+      "file": "dense-light-390x844.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": true,
+        "browseHidden": false,
+        "collapseHidden": false,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(9, 94, 66)",
+        "activeColor": "rgb(14, 14, 33)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": true,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.81,
+        "active": 17.49
+      },
+      "errors": []
+    },
+    {
+      "page": "dense",
+      "viewport": "390x844",
+      "theme": "dark",
+      "file": "dense-dark-390x844.png",
+      "nav": {
+        "sidebarLinks": 23,
+        "sidebarHidden": true,
+        "browseHidden": false,
+        "collapseHidden": false,
+        "activeAriaCurrent": true,
+        "activeRuleWidth": "24px",
+        "activeRuleHeight": "2px",
+        "activeRuleColor": "rgb(42, 231, 168)",
+        "activeColor": "rgb(245, 245, 248)"
+      },
+      "toc": {
+        "h2Count": 5,
+        "railLinkCount": 5,
+        "railHidden": true,
+        "collapseLinkCount": 5
+      },
+      "contrast": {
+        "nav": 7.53,
+        "active": 17.49
+      },
+      "errors": []
+    }
+  ],
+  "limitations": [
+    "Phase 0 frames only: overview routes (/foundations, /components, /patterns, /reference) are part of the proposed model and do not exist in the app yet.",
+    "Final human visual acceptance remains pending; #53 consumes this shell.",
+    "Theme toggle and browse disclosure work; Copy page buttons are inert previews by design."
+  ]
+}
