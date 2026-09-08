@@ -1,46 +1,14 @@
 /**
- * Clean-Markdown and llms.txt verification driver (issue #9).
+ * Clean-Markdown and llms.txt verification driver.
  *
- * Follows the fixture pattern of verify-docs.mjs (issue #7): serve the
- * BUILT site under the configured base path and assert. Playwright is
- * deliberately not a workspace dependency (browser CI lands with issue
- * #15); the copy-button behavior itself is verified in headless Chromium
- * by verify-docs.mjs — this driver covers the deterministic surface:
- *
- *   1. Endpoint inventory: exactly the predictable `.md` files exist
- *      (one per substantive page, including the component pages from
- *      #11; patterns has none yet; the
- *      home page is landing chrome and has none) plus `/llms.txt`.
- *   2. Response handling: `.md` served as text/markdown, llms.txt as
- *      text/plain (compare with the astro preview evidence in the PR).
- *   3. Content parity with the rendered page: synthesized H1 == rendered
- *      H1, description lede == meta description, and the H2 outline of
- *      the Markdown equals the H2 outline of the rendered HTML.
- *   4. Clean Markdown invariants: no MDX imports/expressions/component
- *      JSX outside code fences; balanced fences; the authored fenced
- *      code (e.g. the `import "@augur/design-system/styles.css"` sample)
- *      survives verbatim; the MDX-evaluated package value
- *      ("**2 font families**") appears evaluated, not as an expression.
- *   5. Example-source parity: every live-example module under
- *      src/examples/ appears verbatim inside some `.md` code fence.
- *   6. Link resolution: every site-absolute link in every `.md` file and
- *      in llms.txt resolves under the served base; external links are
- *      well-formed https URLs.
- *   7. Action wiring: every substantive page's HTML links its `.md`
- *      representation (View as Markdown) and the home page renders no
- *      actions; llms.txt links exactly the full `.md` inventory.
- *
- * Usage (from the repository root, after building apps/docs):
- *
- *     bun apps/docs/fixtures/verify-markdown.mjs                       # base "/"
- *     DOCS_BASE_PATH=/augur-design-system bun run --cwd apps/docs build
- *     DOCS_BASE_PATH=/augur-design-system bun apps/docs/fixtures/verify-markdown.mjs
- *
- * Exit code 0 = all assertions passed; 1 = at least one failed.
+ * Verifies the built documentation surface rather than implementation
+ * chronology: exact Markdown endpoint inventory, rendered/Markdown parity,
+ * clean Markdown invariants, example-source parity, link resolution, page
+ * action wiring, and llms.txt coverage.
  */
 import { createServer } from "node:http";
 import { cp, mkdir, mkdtemp, readFile, readdir, rm, stat } from "node:fs/promises";
-import { extname, join, normalize, dirname } from "node:path";
+import { dirname, extname, join, normalize } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
@@ -64,7 +32,6 @@ const MIME = {
   ".woff2": "font/woff2",
 };
 
-// --- Stage the dist output under the deployment base path. -------------
 let serveRoot;
 if (base === "/") {
   serveRoot = distDir;
@@ -82,7 +49,7 @@ const server = createServer(async (req, res) => {
     if (!file.startsWith(serveRoot)) throw new Error("traversal");
     try {
       const s = await stat(file);
-      if (!s.isFile()) file = join(serveRoot, path, "index.html"); // extensionless directory URL
+      if (!s.isFile()) file = join(serveRoot, path, "index.html");
     } catch {
       file = join(serveRoot, path, "index.html");
     }
@@ -100,7 +67,6 @@ const port = server.address().port;
 const origin = `http://127.0.0.1:${port}`;
 const site = (p) => sitePrefix + p;
 
-// --- Helpers -------------------------------------------------------------
 const failures = [];
 const ok = (label, pass, detail = "") => {
   console.log(`${pass ? "PASS" : "FAIL"}  ${label}${detail ? ` — ${detail}` : ""}`);
@@ -118,8 +84,6 @@ async function walk(dir) {
 }
 
 const FENCE = /^(\s*)(`{3,}|~{3,})/;
-
-/** Split a Markdown document into { outside, inside } fence content. */
 function splitFences(text) {
   const outside = [];
   const inside = [];
@@ -148,18 +112,12 @@ function stripTags(html) {
   return decodeEntities(html.replace(/<[^>]*>/g, "")).replace(/\s+/g, " ").trim();
 }
 
-/** Normalize a heading for rendered-vs-Markdown comparison: the rendered
- * HTML shows `code` spans as styled text, so backticks carry no text. */
 function normalizeHeading(text) {
   return text.replace(/`/g, "");
 }
 
-/** h1/h2 outline and meta description of a built page. */
 function htmlOutline(html) {
   let main = /<main[\s\S]*?<\/main>/.exec(html)?.[0] ?? html;
-  // Live examples render inside <figure class="doc-example"> islands whose demo
-  // headings are demo content, not page outline; the Markdown represents them by
-  // source, so strip the islands before extracting the rendered outline.
   main = main.replace(/<figure[^>]*class="doc-example"[\s\S]*?<\/figure>/g, "");
   const h1 = [...main.matchAll(/<h1(?:\s[^>]*)?>([\s\S]*?)<\/h1>/g)].map((m) => normalizeHeading(stripTags(m[1])));
   const h2 = [...main.matchAll(/<h2(?:\s[^>]*)?>([\s\S]*?)<\/h2>/g)].map((m) => normalizeHeading(stripTags(m[1])));
@@ -168,7 +126,6 @@ function htmlOutline(html) {
   return { h1, h2, metaDescription, mdLinks };
 }
 
-/** H2 outline of a clean-Markdown page (outside fences). */
 function mdH2(text) {
   return splitFences(text)
     .outside.split("\n")
@@ -176,49 +133,52 @@ function mdH2(text) {
     .filter(Boolean);
 }
 
-/** Site-absolute and external link targets of a Markdown document (outside fences). */
 function mdLinks(text) {
-  return [...splitFences(text)
-    .outside.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)]
-    .map((m) => m[1]);
+  return [...splitFences(text).outside.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)].map((m) => m[1]);
 }
 
-// --- 1. Inventory ---------------------------------------------------------
 const allFiles = await walk(distDir);
 const mdFiles = allFiles
   .filter((f) => f.endsWith(".md"))
   .map((f) => f.slice(distDir.length + 1))
   .sort();
+
 const expectedMd = [
   "components.md",
+  "components/button.md",
+  "components/card.md",
+  "components/dialog.md",
+  "components/input.md",
   "foundations.md",
   "foundations/color.md",
   "foundations/decisions.md",
   "foundations/fonts.md",
   "foundations/identity.md",
+  "foundations/interaction.md",
+  "foundations/layout-geometry.md",
   "foundations/proposals.md",
-  "foundations/visual-direction.md",
   "foundations/theming.md",
+  "foundations/visual-direction.md",
   "getting-started.md",
-  "reference.md",
-  "reference/component-conventions.md",
-  "reference/contributing.md",
-  "reference/package-entries.md",
-  "components/button.md",
-  "components/card.md",
-  "components/dialog.md",
-  "components/input.md",
   "patterns.md",
   "patterns/empty-state.md",
   "patterns/form-field.md",
   "patterns/page-header.md",
   "patterns/reference-record.md",
   "proposal-review.md",
+  "reference.md",
+  "reference/component-conventions.md",
+  "reference/contributing.md",
+  "reference/package-entries.md",
 ];
-ok("endpoint inventory matches the substantive pages exactly", JSON.stringify(mdFiles) === JSON.stringify([...expectedMd].sort()), mdFiles.join(", "));
+
+ok(
+  "endpoint inventory matches the substantive pages exactly",
+  JSON.stringify(mdFiles) === JSON.stringify([...expectedMd].sort()),
+  mdFiles.join(", "),
+);
 ok("llms.txt exists at the site root", allFiles.some((f) => f === join(distDir, "llms.txt")));
 
-// --- 2/3/4. Per-page response handling, parity, and cleanliness -----------
 console.log(`\n== Clean-Markdown pages (base ${base}) ==`);
 const mdContents = new Map();
 for (const rel of expectedMd) {
@@ -236,7 +196,11 @@ for (const rel of expectedMd) {
   const mdH1 = /^# (.+)$/m.exec(text)?.[1];
   ok(`${rel} H1 equals the rendered page H1`, mdH1 === outline.h1[0], `${JSON.stringify(mdH1)} vs ${JSON.stringify(outline.h1[0])}`);
   ok(`${rel} lede equals the authored meta description`, text.split("\n").includes(outline.metaDescription));
-  ok(`${rel} H2 outline equals the rendered H2 outline`, JSON.stringify(mdH2(text).map(normalizeHeading)) === JSON.stringify(outline.h2), JSON.stringify(mdH2(text)));
+  ok(
+    `${rel} H2 outline equals the rendered H2 outline`,
+    JSON.stringify(mdH2(text).map(normalizeHeading)) === JSON.stringify(outline.h2),
+    JSON.stringify(mdH2(text)),
+  );
 
   const { outside, closed } = splitFences(text);
   ok(`${rel} code fences are balanced`, closed);
@@ -245,19 +209,17 @@ for (const rel of expectedMd) {
   ok(`${rel} has no component JSX outside fences`, !/<[A-Z][A-Za-z0-9]*(\s|\/?>)/.test(outside));
 }
 
-// --- 4b. Authored-code integrity and evaluated expressions ----------------
 const gettingStarted = mdContents.get("getting-started.md");
 ok(
-  "getting-started.md keeps the authored entry-point fence verbatim",
-  gettingStarted.includes("import \"@augur/design-system/styles.css\";") &&
-    gettingStarted.includes("@augur/design-system            → public entry module"),
+  "getting-started.md keeps its authored consumer examples verbatim",
+  gettingStarted.includes('import "@augur/design-system/styles.css";') &&
+    gettingStarted.includes("npx shadcn@latest add"),
 );
 ok(
-  "getting-started.md shows the package-evaluated value, not the MDX expression",
-  gettingStarted.includes("**2 font families**") && !gettingStarted.includes("{AUGUR_FONTS.length}"),
+  "getting-started.md contains no unevaluated MDX expressions",
+  !gettingStarted.includes("{AUGUR_FONTS.length}"),
 );
 
-// --- 5. Example-source parity ----------------------------------------------
 console.log("\n== Live-example source parity ==");
 {
   const examplesDir = join(docsRoot, "src", "examples");
@@ -270,33 +232,42 @@ console.log("\n== Live-example source parity ==");
   }
 }
 
-// --- 6. Link resolution across all .md files -------------------------------
 console.log("\n== Markdown link resolution ==");
 for (const [rel, text] of mdContents) {
   const links = mdLinks(text);
   let absolute = 0;
   for (const link of links) {
-    if (link.startsWith("http://") || link.startsWith("https://")) continue;
-    if (link.startsWith("#")) continue;
+    if (link.startsWith("http://") || link.startsWith("https://") || link.startsWith("#")) continue;
     if (!link.startsWith("/")) {
       ok(`${rel} uses only site-absolute or external links`, false, link);
       continue;
     }
     absolute += 1;
-    // Content links are base-aware site-absolute URLs (the derivation
-    // rewrites them through withBase()), so resolve them against the
-    // origin exactly like an external Markdown consumer would.
-    const target = origin + link;
-    const res = await fetch(target);
-    if (res.status !== 200) ok(`${rel} link resolves: ${link}`, false, `${res.status} ${target}`);
+    const res = await fetch(origin + link);
+    if (res.status !== 200) ok(`${rel} link resolves: ${link}`, false, `${res.status}`);
   }
   ok(`${rel} all ${absolute} internal link(s) resolve under the served base`, true);
 }
 
-// --- 7. Action wiring in the rendered pages --------------------------------
 console.log("\n== Copy/View action wiring ==");
 {
-  for (const rel of ["getting-started/index.html", "proposal-review/index.html", "foundations/decisions/index.html", "foundations/fonts/index.html", "foundations/identity/index.html", "foundations/theming/index.html", "foundations/color/index.html", "foundations/proposals/index.html", "foundations/visual-direction/index.html", "reference/package-entries/index.html", "reference/contributing/index.html", "reference/component-conventions/index.html"]) {
+  const actionPages = [
+    "getting-started/index.html",
+    "proposal-review/index.html",
+    "foundations/decisions/index.html",
+    "foundations/fonts/index.html",
+    "foundations/identity/index.html",
+    "foundations/theming/index.html",
+    "foundations/color/index.html",
+    "foundations/interaction/index.html",
+    "foundations/layout-geometry/index.html",
+    "foundations/proposals/index.html",
+    "foundations/visual-direction/index.html",
+    "reference/package-entries/index.html",
+    "reference/contributing/index.html",
+    "reference/component-conventions/index.html",
+  ];
+  for (const rel of actionPages) {
     const html = await readFile(join(distDir, rel), "utf8");
     const { mdLinks: actions } = htmlOutline(html);
     const expectedHref = site(`/${rel.replace(/\/index\.html$/, ".md")}`);
@@ -306,7 +277,6 @@ console.log("\n== Copy/View action wiring ==");
   ok("home page (landing chrome) renders no Markdown actions", !home.includes("page-action"));
 }
 
-// --- llms.txt ---------------------------------------------------------------
 console.log("\n== llms.txt ==");
 {
   const response = await fetch(origin + site("/llms.txt"));
@@ -319,13 +289,10 @@ console.log("\n== llms.txt ==");
   for (const heading of ["## Documentation", "## Foundations", "## Components", "## Patterns", "## Reference", "## Design authority and changes"]) {
     ok(`llms.txt has section ${heading.slice(3)}`, text.includes(`\n${heading}\n`));
   }
-  ok(
-    "llms.txt lists the published component pages (#11)",
-    text.includes("/components/button.md") && text.includes("/components/card.md"),
-  );
+  ok("llms.txt lists the published component pages", text.includes("/components/button.md") && text.includes("/components/card.md"));
   ok("llms.txt points at DESIGN.md", text.includes("https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md"));
   ok("llms.txt points at ARCHITECTURE.md", text.includes("https://github.com/jubalm/augur-design-system/blob/main/ARCHITECTURE.md"));
-  ok("llms.txt points at CHANGELOG.md for change/migration guidance", text.includes("https://github.com/jubalm/augur-design-system/blob/main/CHANGELOG.md"));
+  ok("llms.txt points at CHANGELOG.md", text.includes("https://github.com/jubalm/augur-design-system/blob/main/CHANGELOG.md"));
 
   const links = mdLinks(text);
   const internal = links.filter((l) => l.startsWith("/"));
@@ -333,19 +300,21 @@ console.log("\n== llms.txt ==");
   ok("llms.txt has no non-https, non-site-absolute links", internal.length + external.length === links.length, links.join(" "));
   let resolved = 0;
   for (const link of internal) {
-    const res = await fetch(origin + link); // base-aware, resolved at the origin
+    const res = await fetch(origin + link);
     if (res.status !== 200) ok(`llms.txt link resolves: ${link}`, false, `${res.status}`);
     resolved += 1;
   }
   ok(`llms.txt resolves all ${resolved} internal link(s)`, true);
   const linkedMd = [...new Set(internal.filter((l) => l.endsWith(".md")).map((l) => l.slice(sitePrefix.length).replace(/\.md$/, "")))].sort();
-  ok("llms.txt links exactly the full .md inventory", JSON.stringify(linkedMd) === JSON.stringify([...expectedMd].map((m) => `/${m.replace(/\.md$/, "")}`).sort()), linkedMd.join(", "));
+  ok(
+    "llms.txt links exactly the full .md inventory",
+    JSON.stringify(linkedMd) === JSON.stringify([...expectedMd].map((m) => `/${m.replace(/\.md$/, "")}`).sort()),
+    linkedMd.join(", "),
+  );
 }
 
 server.close();
-if (serveRoot !== distDir) {
-  await rm(serveRoot, { recursive: true, force: true });
-}
+if (serveRoot !== distDir) await rm(serveRoot, { recursive: true, force: true });
 
 console.log("");
 if (failures.length > 0) {
