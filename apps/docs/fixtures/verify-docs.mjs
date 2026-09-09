@@ -1504,6 +1504,57 @@ console.log("\n== Standalone consumer (#53) ===");
   consumerServer.close();
 }
 
+// --- 15. Page-opening alignment parity (issue #65). ---------------------
+console.log("\n== Page-opening alignment parity (issue #65) ==");
+{
+  // /getting-started renders through the BaseLayout MDX path while section
+  // pages render through SectionPage.astro. Their page openings must land
+  // on the same centered reading column so the H1 and the Copy page
+  // control cannot drift between renderer paths again (issue #65).
+  const readOpening = (page) =>
+    page.evaluate(() => {
+      const rect = (sel) => {
+        const el = document.querySelector(sel);
+        return el ? el.getBoundingClientRect() : null;
+      };
+      return {
+        titleX: rect(".page-title")?.x ?? null,
+        actionsRight: rect(".doc-page-head .page-actions")?.right ?? null,
+        overflowX: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+
+  for (const viewport of [
+    { width: 1440, height: 1000 },
+    { width: 375, height: 812 },
+  ]) {
+    const getting = await browser.newPage({ viewport });
+    const section = await browser.newPage({ viewport });
+    await getting.goto(origin + site("/getting-started"), { waitUntil: "networkidle" });
+    await section.goto(origin + site("/foundations"), { waitUntil: "networkidle" });
+    await getting.evaluate(() => document.fonts.ready);
+    await section.evaluate(() => document.fonts.ready);
+    const started = await readOpening(getting);
+    const sectioned = await readOpening(section);
+    const vp = `${viewport.width}px viewport`;
+    ok(
+      `${vp} Getting started H1 left edge matches the Foundations section page`,
+      started.titleX !== null && sectioned.titleX !== null && Math.abs(started.titleX - sectioned.titleX) <= 1,
+      `getting-started ${started.titleX} vs foundations ${sectioned.titleX}`,
+    );
+    ok(
+      `${vp} Copy page control right edge matches the section page header pattern`,
+      started.actionsRight !== null && sectioned.actionsRight !== null && Math.abs(started.actionsRight - sectioned.actionsRight) <= 1,
+      `getting-started ${started.actionsRight} vs foundations ${sectioned.actionsRight}`,
+    );
+    ok(`${vp} no horizontal overflow on either page`, !started.overflowX && !sectioned.overflowX, `${started.overflowX} / ${sectioned.overflowX}`);
+    await getting.screenshot({ path: `/tmp/augur-docs-verify/getting-started-${viewport.width}.png` });
+    await section.screenshot({ path: `/tmp/augur-docs-verify/foundations-${viewport.width}.png` });
+    await getting.close();
+    await section.close();
+  }
+}
+
 await browser.close();
 server.close();
 if (serveRoot !== distDir) {
