@@ -45,9 +45,11 @@ interface Props {
 }
 
 // MDX pages pass metadata through `frontmatter`; .astro pages pass props.
-// MDX pages get their page title rendered as an accessible h1 and their
-// content wrapped in the prose container; .astro pages control their own
-// markup (the home page and the Markdown-rendered decisions page).
+// MDX pages render the same shared page opening as DocPage (#65): the
+// accessible h1 and page actions sit inside the `prose doc-page` article,
+// so the title aligns to the centered reading column like every other
+// documented page instead of the unconstrained main area. .astro pages
+// control their own markup (the home page and section renderers).
 const props = Astro.props as { frontmatter?: Props };
 const fromMdx = props.frontmatter !== undefined;
 const { title, description, toc, shell = true } = props.frontmatter ?? (Astro.props as Props);
@@ -123,16 +125,20 @@ const showRail = shell && !!toc && toc.length > 0;
           </nav>
           <main id="main-content" class="doc-main">
             {fromMdx ? (
-              <div class="doc-page-head">
-                <h1 class="augur-type-editorial-title page-title">{title}</h1>
-                {props.frontmatter?.markdown ? (
-                  // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
-                  // already includes the deployment base, so append `.md` directly.
-                  <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
-                ) : null}
-              </div>
-            ) : null}
-            {fromMdx ? <article class="prose"><slot /></article> : <slot />}
+              <article class="prose doc-page">
+                <div class="doc-page-head">
+                  <h1 class="augur-type-editorial-title page-title">{title}</h1>
+                  {props.frontmatter?.markdown ? (
+                    // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
+                    // already includes the deployment base, so append `.md` directly.
+                    <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+                  ) : null}
+                </div>
+                <slot />
+              </article>
+            ) : (
+              <slot />
+            )}
             {(pager.previous || pager.next) && (
               <nav class="pager" aria-label="Document navigation">
                 {pager.previous ? (
@@ -170,16 +176,20 @@ const showRail = shell && !!toc && toc.length > 0;
       ) : (
         <main id="main-content" class="site-main">
           {fromMdx ? (
-            <div class="doc-page-head">
-              <h1 class="augur-type-editorial-title page-title">{title}</h1>
-              {props.frontmatter?.markdown ? (
-                // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
-                // already includes the deployment base, so append `.md` directly.
-                <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
-              ) : null}
-            </div>
-          ) : null}
-          {fromMdx ? <article class="prose"><slot /></article> : <slot />}
+            <article class="prose doc-page">
+              <div class="doc-page-head">
+                <h1 class="augur-type-editorial-title page-title">{title}</h1>
+                {props.frontmatter?.markdown ? (
+                  // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
+                  // already includes the deployment base, so append `.md` directly.
+                  <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+                ) : null}
+              </div>
+              <slot />
+            </article>
+          ) : (
+            <slot />
+          )}
         </main>
       )
     }
