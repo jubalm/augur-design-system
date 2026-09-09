@@ -1,125 +1,90 @@
 ---
-# Color system (issue #10 — foundation reference). Rendered through the
-# #8 content pipeline (src/content/foundations/, route
-# /foundations/color). The palette is never restated as hex values here:
-# the live example paints the generated --augur-color-* primitives, and
-# contrast figures are cited as the values DESIGN.md records.
 title: Color system
-description: The Augur palette, surface roles, and semantic color mapping, with the contrast pairings DESIGN.md records — painted live from the generated package tokens.
-order: 2
+description: The Augur palette, surface roles, semantic color mapping, signal hierarchy, and maintained contrast pairings.
+order: 3
 ---
 import { DocExample } from "../../components/DocExample";
 import { examples } from "../../examples/registry";
 
-The palette is built around Augur Navy and Augur Green with a
-restrained set of paper, graphite, and pewter companions. Navy anchors
-dark UI and is the brand anchor; Green is a signal of intent — the
-primary action, active state, focus, or a short orienting rule — never
-a decorative wash. All fifteen color values are adopted facts recorded
-in the `DESIGN.md` front matter; the package generates them into
-`--augur-color-*` primitives, and this page paints those generated
-values. No hex value is retyped anywhere on it.
+Augur's palette is built around Navy and Green with restrained paper, graphite, pewter, and tonal surface companions. Navy anchors the system. Green is a signal of intent, not a decorative wash.
+
+All adopted color values live in `DESIGN.md` and are generated into package tokens. This page explains how to use those values rather than duplicating the raw palette as another source of truth.
 
 ## The palette, rendered live
 
-Each chip paints a generated `--augur-color-*` variable from
-`@augur/design-system/styles.css`; group labels follow the
-companion-versus-role naming rules of the
-[decision record](/foundations/decisions). When `DESIGN.md` changes and
-tokens regenerate, this palette re-renders with the new values.
+Each chip paints a generated `--augur-color-*` variable from `@augur/design-system/styles.css`.
 
 <DocExample example={examples.color.palette} />
 
 ## Companions and roles
 
-Some values deliberately carry two names in two contexts: **brand
-companion names describe colors; surface role names describe jobs.**
-The tokens and this page keep the distinction visible:
+Brand companion names describe colors; semantic role names describe jobs.
 
-| Name | Kind | Allowed use |
+| Name | Kind | Intended use |
 | --- | --- | --- |
-| Augur Navy (`primary` token) | Brand companion | Brand anchor, dark canvas, primary text on light surfaces. Never replaced by pure black. |
-| Augur Green (`accent` token) | Brand companion | Intent signal on dark surfaces; never decoration. |
-| Deep | Brand companion (Green family) | The accessible green on light surfaces: primary actions, focus, signals. |
-| Wash | Brand companion (Green family) | Light green fill only; never readable green text. |
-| Augur Graphite (`secondary` token) | Brand companion | Secondary text and supporting information on light surfaces. |
-| Augur Pewter (`secondary-dark` token) | Brand companion | Secondary text on dark surfaces. |
-| Mist | Brand companion (Navy family) | Dark edges, rules, and quiet marks only; never readable copy; not the light quiet region. |
-| Raised (role) | Runtime surface role (light) | The elevated light panel job, filled by White. |
-| Muted (role) | Runtime surface role (light) | Quiet light regions. |
-| Surface 1 / 2 / 3 | Runtime surface roles (dark) | Stepped dark layers for panels, controls, and selected regions. |
+| Augur Navy | Brand anchor | Dark canvas and primary text on light surfaces |
+| Augur Green | Brand accent | Intent and orientation signal on dark surfaces |
+| Deep | Green companion | Accessible primary intent and focus signal on light surfaces |
+| Wash | Green companion | Light green fill; not readable green text |
+| Graphite | Supporting neutral | Secondary text on light surfaces |
+| Pewter | Supporting neutral | Secondary text on dark surfaces |
+| Mist | Navy companion | Dark edges, rules, and quiet marks; not readable copy |
+| Muted | Light surface role | Quiet light regions |
+| Surface 1 / 2 / 3 | Dark surface roles | Stepped tonal layers for panels, controls, and selected regions |
 
-## Surfaces and elevation
+Do not substitute a companion name for a runtime job or vice versa. Components consume semantic roles rather than raw color tokens.
 
-Depth is tonal, not ornamental. Light surfaces use Paper as the canvas,
-White for raised panels, Muted for quiet regions, and Border for
-hairlines. Dark surfaces use Navy as the canvas, then Surface 1, Surface
-2, and Surface 3 as stepped layers for panels, controls, and selected
-regions. There are no decorative shadows, glows, bevels, gradients, or
-textures, and the elevation logic is identical in both themes. Border
-and Mist are rule colors — never text colors and never replacements for
-a surface.
+## Surfaces and depth
 
-## Semantic roles, not raw values
+Depth is tonal, not ornamental.
 
-Components and pages consume the shadcn-compatible semantic role layer
-(`--background`, `--card`, `--primary`, `--muted`, `--border`, `--ring`,
-and the rest) delivered by the package stylesheet. Roles reference
-generated tokens and never raw color values; the full mapping and its
-selection model live on [Theming](/foundations/theming). Two mapping
-decisions matter most when reading the palette:
+Light UI uses Paper as the canvas, White for raised panels, Muted for quiet regions, and Border for hairlines. Dark UI uses Navy as the canvas, then Surface 1, Surface 2, and Surface 3 as stepped layers.
 
-- The action slot `--primary` resolves to **Deep on light** and
-  **Green on dark** surfaces, so light-theme intent stays within
-  contrast rules while dark surfaces carry the brighter brand signal.
-  (`--augur-color-primary` remains the Navy companion — the name
-  collision is deliberate and documented.)
-- `--accent` is a **neutral** hover/highlight surface (Muted in light,
-  Surface 2 in dark). Green is a signal, not a resting hover tint, and
-  hover never multiplies green marks in a view.
+There are no decorative shadows, glows, bevels, gradients, or textures in the default system.
 
-The brand palette defines no danger hue: `--destructive` maps to the
-strongest neutral action pairing, and destructive meaning must be
-legible in the label.
+## Semantic roles
+
+Components and pages consume the shadcn-compatible semantic role layer: `--background`, `--foreground`, `--card`, `--primary`, `--muted`, `--border`, `--ring`, and related roles.
+
+Two relationships are especially important:
+
+- `--primary` resolves to Deep on light surfaces and Green on dark surfaces so primary intent remains readable in both themes.
+- `--accent` is a neutral hover/highlight surface, not the brand-green accent color. Generic hover should not multiply green signals.
+
+The brand palette defines no dedicated danger hue. Destructive meaning must be explicit in the label and surrounding copy; color may reinforce it but cannot carry it alone.
+
+See [Theming](/foundations/theming) for the full role-selection and scoping model.
+
+## Signal hierarchy
+
+Green should have a reason to be present.
+
+- Usually choose one dominant green carrier per coherent task area.
+- The primary action is the default carrier.
+- Keyboard focus and a short orientation signal are justified additional uses.
+- Do not add a green rule, success dot, or accent fill to every section.
+- On light surfaces, use Deep for readable green intent; raw Augur Green is reserved for dark-surface signal use.
 
 ## Contrast pairings
 
-`DESIGN.md` records these reference pairings; the package test suite
-recomputes every one from the generated values and asserts the recorded
-ratio reproduces exactly. The live table above paints the same pairs.
+The package verifies the maintained pairings from generated values. Reference pairings include:
 
-| Pairing | Recorded ratio | Where it applies |
+| Pairing | Recorded ratio | Typical use |
 | --- | --- | --- |
 | Navy on Paper | 17.49:1 | Primary copy on the light canvas |
 | Graphite on Paper | 7.81:1 | Secondary text on the light canvas |
-| Deep on Paper | 7.17:1 | Readable green on light surfaces |
-| Paper on Navy | 17.49:1 | Copy on the dark canvas |
+| Deep on Paper | 7.17:1 | Readable green intent on light surfaces |
+| Paper on Navy | 17.49:1 | Primary copy on the dark canvas |
 | Pewter on Navy | 7.53:1 | Secondary text on the dark canvas |
-| Pewter on Surface 3 | 6.00:1 | Secondary text on the raised dark step |
-| Green on Navy | 11.87:1 | Green signals on dark surfaces |
+| Pewter on Surface 3 | 6.00:1 | Secondary text on a raised dark step |
+| Green on Navy | 11.87:1 | Green signal on dark surfaces |
 
-Pairings introduced by the semantic role layer (White on Deep 7.80:1,
-Navy on Green 11.87:1, Navy on Wash 17.15:1, Paper on Surface 2 15.19:1,
-Navy on Muted 16.17:1, Graphite on Muted 7.22:1, Pewter on Surface 1
-7.03:1) are recorded with their evidence in the package's
-[semantic themes documentation](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/semantic-themes.md).
-Rules that travel with these numbers: keep every new pairing at WCAG AA
-or better and recheck it before shipping; hairline borders claim no 3:1
-minimum and never carry meaning alone; use the words open, closed,
-pending, and final to name state, and let color only reinforce them.
+New text pairings should meet WCAG AA or better. Meaningful non-text control boundaries and focus indicators must remain perceivable against adjacent surfaces. Hairline editorial separators should not be used as the sole carrier of meaning.
 
 ## Using color well
 
-- Usually one green signal per view; the primary action is the default
-  carrier (Deep on light, Green on dark).
-- On light backgrounds, raw Augur Green fails contrast for readable
-  text or marks — use Deep instead. On dark backgrounds, Green carries
-  the signal against Navy.
-- Graphite and Pewter support the system; they do not replace primary
-  copy. Wash never replaces Deep for readable green.
-- Never hide meaning in color alone; state is named in words first.
-
-The foundation proposals that sit alongside color — spacing, sizing,
-radius, focus, and motion — are tracked separately in
-[Foundation proposals](/foundations/proposals) and remain pending
-maintainer review.
+- Name state in words first; let color reinforce it.
+- Keep primary copy stronger than supporting Graphite/Pewter text.
+- Use Wash as a fill, not as a readable green foreground.
+- Use surface steps to group content before inventing another border or shadow treatment.
+- Treat green as a scarce intent/orientation signal rather than a general brand decoration.

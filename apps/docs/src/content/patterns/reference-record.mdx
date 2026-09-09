@@ -1,84 +1,45 @@
 ---
-# Reference record (issue #52 — contract frame C). A static,
-# source-grounded composition of package components demonstrating the
-# record language: the question leads, choices are equal, state and
-# response are explicit and quiet. No product workflow lives here or in
-# the package.
 title: Reference record
-description: The approved record composition — state, question, two equal choices, and a quiet response — assembled from real package components with no product workflow.
+description: A source-grounded static record composition used to demonstrate Augur's record hierarchy without defining a product workflow.
 components: [button]
-order: 4
+order: 90
 ---
-
 import { DocExample } from "../../components/DocExample";
 import { examples } from "../../examples/registry";
 
-The reference record realizes the approved frame C with package
-components and static fixture content: a lifted square panel inside a
-quiet outer field, a 32×2 state signal, the question as the first
-substantive focal point, two choices with equal structure and
-emphasis, and an explicit, quiet response. The rendered pair pins one
-light and one dark panel — identical content, order, and geometry
-under either host theme. All content is illustrative static data; this
-pattern owns no product submission workflow, and neither does the
-package.
+Reference Record is a **reference composition**, not a default product workflow. It demonstrates how Augur handles a dense record when state, question, equal choices, response, and timing metadata must remain legible together.
 
-## When to use
+Use it as evidence for record-language decisions. Do not copy its fixture content or submission semantics into a product unless a product-specific pattern has been designed for that workflow.
 
-- For read-only records that lead with a question or decision and its
-  current state — anywhere the reader inspects rather than submits.
-- When the state must be explicit and quiet: a short signal, a named
-  state, and a labeled response, never color alone.
+## What it demonstrates
 
-## When not to use
-
-- For live voting or submission flows; this pattern records, it does
-  not collect.
-- When a question is not the first substantive element — use
-  [PageHeader](/patterns/page-header) for page wayfinding instead.
+- explicit state before color;
+- the question as the first substantive focal point;
+- two choices with equal visual structure when neither should outrank the other;
+- response and timing metadata kept quiet but readable;
+- one short orientation signal rather than repeated accent decoration;
+- identical content order and geometry across light and dark themes.
 
 ## The record, rendered live
 
-The example is rendered live from a real module that composes the
-package [Button](/components/button); the code sample is that same
-module's source. The state signal paints `--primary` (Deep on light,
-Green on dark) at exactly 32×2; the choices share one variant so
-neither outranks the other. Both are `aria-disabled` because this static
-example does not collect a response; neither is preselected.
+The example composes real package components with static fixture data. Its choice Buttons are unavailable and have no handlers because this page does not collect a response.
 
 <DocExample example={examples.patterns.referenceRecord} />
 
-The source imports `reference-record.css` alongside the component. Copy that
-composition stylesheet with the example; it contains only record layout and
-semantic/token references. It does not style package component internals.
+The example's composition stylesheet owns record layout only and uses semantic/token references; it does not restyle package component internals.
 
-## Anatomy and rules
+## When this reference is useful
 
-- **State rail first**: the 32×2 signal plus the explicit state label
-  ("Open query") and identifier ("LQ-042") open the panel — the record's orientation, quiet by design.
-- **Question leads**: the first substantive element is the question
-  (heading-2 role, 20/26 as in the approved frame), larger than every label around it.
-- **Equal choices**: both choices share geometry, variant, and
-  emphasis; neither is selected. The explicit response is "Not submitted".
-- **Quiet metadata**: response and query identity sit in the body and
-  metadata roles; separators and insets follow the encoded spacing
-  tokens (24px panel insets and choice gap; 16px below 600px).
-  Status, response, and closing time ("14:32 UTC") pair left labels with
-  right-aligned values. The question is "Did the proposal pass before 30 June?".
-- **True theme pair**: the light and dark panels pin their themes, so
-  the pair stays honest under either host theme.
+Consult it when designing read-only review/history records or when checking whether a new record composition preserves question priority, state clarity, equal choice treatment, and quiet metadata.
+
+For page-level wayfinding and operations, use [PageHeader](/patterns/page-header). For a live voting/submission workflow, define a product pattern rather than treating this reference specimen as an interactive contract.
 
 ## Accessibility
 
-The state label and response are real text; the signal is
-`aria-hidden`. Choices remain real package buttons, explicitly `aria-disabled` and
-without handlers. They do not suggest a recorded selection or working voting. Contrast follows the recorded
-pairings — labels clear 4.5:1 against their fills in both themes.
+State and response are real text. The short signal is decorative. Static choices remain real Buttons but are explicitly unavailable and do not announce a fabricated selection.
 
-## Design rationale
+Contrast and focus behavior come from the maintained package roles and shared interaction contract.
 
-Frame C preserves the source records (PDF pages 20, 23, and 25): the
-question, equal choices, state, and response stay readable in both
-themes; the signal is short and separate from choice emphasis. The
-comparison against those pages is retained in
-`apps/docs/fixtures/reference-record/`.
+## Provenance
+
+This composition is retained from the source-grounded record review because it provides useful evidence for Augur's dense-record language. The detailed historical comparison remains in repository fixtures; current design decisions live in the maintained foundations.

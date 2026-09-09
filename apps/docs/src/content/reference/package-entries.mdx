@@ -1,62 +1,59 @@
 ---
-# Package entries reference (issue #8 representative reference content).
-# Route /reference/package-entries. Everything documented here exists in
-# the package today; the example renders live package data and its code
-# sample is derived from the same module (src/content/README.md).
 title: Package entries
-description: The three public entry points of @augur/design-system — the module constants and the aggregated and fonts-only stylesheets.
+description: The public @augur/design-system package entry points and the generated source-registry distribution path.
 order: 1
 ---
 import { DocExample } from "../../components/DocExample";
 import { examples } from "../../examples/registry";
 
-`@augur/design-system` is source-based: workspace apps consume it
-directly, and the future external path is a GitHub-hosted,
-shadcn-compatible source registry (see the
-[registry contract](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/registry-contract.md);
-specified but not yet implemented, summarized in
-[Component conventions](/reference/component-conventions)),
-not an npm install. The package exposes exactly three public entries:
+`@augur/design-system` is source-based. Workspace applications can import it directly; external consumers can install generated source through the shadcn-compatible registry.
+
+The package exposes three public package entry points:
 
 | Entry | What it delivers |
 | --- | --- |
-| `@augur/design-system` | Entry module: constants and types (`AUGUR_FONT_FAMILIES`, `AUGUR_FONTS`, `AugurFontProvenance`). |
-| `@augur/design-system/styles.css` | Aggregated stylesheet: font faces, generated tokens, semantic light/dark roles, typography role classes. |
-| `@augur/design-system/fonts.css` | Fonts only: the voice-named font-family custom properties. |
+| `@augur/design-system` | Public React components/patterns, component types/helpers, and font provenance constants/types |
+| `@augur/design-system/styles.css` | Aggregated font faces, generated tokens, semantic themes, typography roles, shared focus behavior, and component/pattern styles |
+| `@augur/design-system/fonts.css` | Voice-family custom properties and fallback stacks only; it does not load font files |
 
-Internal file organization is not public API; import only these entries.
+Internal source paths are not public API.
 
-## Entry module
+## Root module
 
-The module's exports are machine-readable data, so consumers can render
-correct values without copying them. The example below renders the
-`AUGUR_FONTS` provenance export live; the code sample is that example
-module's actual source.
+The root module exports the maintained starter components and patterns, including Button, Card, Input, Dialog, PageHeader, EmptyState, and FormField, together with their public types/helpers where applicable.
+
+It also exports machine-readable font provenance data:
 
 <DocExample example={examples.fonts.provenance} />
 
-## Stylesheet entry
+## Aggregated stylesheet
 
-One import delivers everything — self-hosted font faces, the generated
-`--augur-color-*` primitives, the shadcn-compatible semantic role layer,
-and the ten typography role classes. No consumer boilerplate is
-required; see [Getting started](/getting-started) and
-[Theming](/foundations/theming).
+Most consumers should load the full stylesheet once:
 
-```css
+```ts
 import "@augur/design-system/styles.css";
 ```
 
-## Fonts-only entry
+This is the shared visual contract for package consumers: self-hosted font faces, generated design values, semantic role mapping, typography, focus behavior, and component/pattern styling.
 
-Consumers that only need the family stacks (for example, to map them in
-their own stylesheet) import the fonts entry instead:
+## Fonts-only stylesheet
 
-```css
+Consumers that deliver font files by another route but still want Augur's family stacks can import:
+
+```ts
 import "@augur/design-system/fonts.css";
 ```
 
-It defines `--augur-font-primary` (Sora) and `--augur-font-secondary`
-(Schibsted Grotesk) with fallback stacks; the provenance behind those
-families is demonstrated above and recorded in
-[resources/brand/PROVENANCE.md](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md).
+This defines `--augur-font-primary` and `--augur-font-secondary` with their maintained fallback stacks. It intentionally contains no `@fontsource` imports; self-hosted font-face delivery comes from the aggregated stylesheet.
+
+## Source registry
+
+The registry is a distribution channel, not a second implementation. Generated items are derived from canonical package sources and published under `/r/`.
+
+Start external consumption with `augur-theme`, then install the required component/pattern items. Pin a verified repository ref for reproducibility.
+
+See [Getting started](/getting-started) for the source-install flow. Registry generation and validation are checked in the repository so committed output cannot drift silently from package sources.
+
+## Provenance
+
+Font licenses and source details are recorded in [resources/brand/PROVENANCE.md](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md). Design-value authority remains in `DESIGN.md`; generated entries are derived outputs.

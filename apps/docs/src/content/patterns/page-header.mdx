@@ -1,82 +1,60 @@
 ---
 title: PageHeader
-description: A reusable page-title composition — wayfinding, title, supporting description, and an actions slot — assembled from the real components, with no product meaning of its own.
+description: Page-level wayfinding, title, supporting copy, and actions arranged as one reusable hierarchy.
 components: [button]
 order: 1
 ---
-
 import { DocExample } from "../../components/DocExample";
 import { examples } from "../../examples/registry";
 
-`PageHeader` is the first pattern in the patterns layer: it composes the
-existing [Button](/components/button) component with layout and
-typography roles into the top of a page. It owns structure only — the
-copy, links, and actions come entirely from the consumer, so the same
-pattern serves every product surface without product assumptions.
+`PageHeader` establishes the top-level hierarchy of a page: optional wayfinding, the page title, supporting description, and page-level actions. It owns structure; consumers own the words, links, and commands.
 
 ## When to use
 
-- At the top of a page (or a full-page panel) that needs a title, an
-  optional supporting line, and the page's primary operations.
-- When wayfinding belongs with the title: breadcrumbs in the named nav
-  slot, or a quiet back Button as the first child for a single-step
-  return.
-- When exactly one primary action should be visible at the top of the
-  page — the first Button in the default variant is the view's one green
-  signal, and `PageHeaderActions` positions it at the right edge.
+- At the top of a page or full-page panel that needs a clear title and optional supporting line.
+- When wayfinding belongs with the title through breadcrumbs or a quiet back action.
+- When page-level operations should sit beside the title without becoming a separate toolbar.
+- When there is one clear primary action and supporting actions need a consistent place.
 
 <DocExample example={examples.patterns.composition} />
 
 ## When not to use
 
-- Inside cards or compact panels: that is what
-  [Card](/components/card) and its footer are for.
-- For grouping content mid-page; a header titles a page, it does not
-  group records.
-- When the actions belong to a form's data flow — use real form
-  controls and submit semantics instead of a header action row.
-- With more than one primary action. If two filled Buttons compete, the
-  page has no clear priority; demote all but one to quiet variants.
+- Do not use PageHeader inside Cards or compact record panels.
+- Do not use it as a generic mid-page grouping header.
+- Do not put form submission policy into the header when the action belongs to a specific form region.
+- Do not present multiple primary actions with equal emphasis.
 
-## Examples
+## Anatomy
 
-The default composition pairs the breadcrumb slot with a title,
-description, and one primary action:
+| Part | Responsibility |
+| --- | --- |
+| `PageHeader` | Page-title region |
+| `PageHeaderBreadcrumb` | Named wayfinding navigation |
+| `PageHeaderContent` | Title/description and action layout |
+| `PageHeaderTitle` | Page heading |
+| `PageHeaderDescription` | Supporting explanation |
+| `PageHeaderActions` | Page-level action row |
 
-<DocExample example={examples.patterns.composition} />
+## Behavior and adaptive layout
 
-Long titles and descriptions wrap inside the title column while the
-actions hold the right edge — the pattern stays usable when copy is
-outside anyone's control:
+Long titles and descriptions wrap inside the title column. Actions stay aligned to the title region on wider layouts and move below the title content at narrow widths.
+
+The pattern changes layout without changing DOM priority: primary content remains first and the first primary action remains first among actions.
 
 <DocExample example={examples.patterns.longContent} />
 
-Without actions, the title area stands alone; a back affordance is a
-quiet Button, not a nav landmark:
+Without actions, the title region stands alone:
 
 <DocExample example={examples.patterns.noActions} />
 
 ## Accessibility
 
-- Real elements, no invented ARIA: a `header` container, a real
-  heading, a `p` description, a named `nav` for breadcrumbs, and a
-  `div` action row.
-- **Heading-level discipline:** `PageHeaderTitle` renders an `h1` by
-  default because a page header titles the page. When the pattern sits
-  below the page level, pass `headingLevel` (1–6) to emit the element
-  the document outline needs; the heading-1 typography voice is kept by
-  default so the visual hierarchy stays stable. Never skip levels
-  between the page's `h1` and the sections beneath it.
-- `PageHeaderBreadcrumb` requires an `aria-label` (typically
-  "Breadcrumb") — a nav landmark without a name is an accessibility
-  finding. A single back Button needs no nav landmark; place it
-  directly inside `PageHeader` with its own clear label.
-- Actions are real Buttons with keyboard behavior from the
-  [Button](/components/button) contract; DOM order equals priority
-  order, so narrow viewports that wrap the actions below the titles
-  still meet the primary action first.
-- The compositions pass axe in both theme scopes in the repository test
-  harness (`tests/page-header-empty-state.test.tsx`).
+- `PageHeader` renders a real `header` region.
+- `PageHeaderTitle` renders `h1` by default; use `headingLevel` when the pattern is intentionally nested below page level.
+- Breadcrumbs use a named `nav`; consumers provide the list and link markup.
+- A simple back Button does not need a nav landmark if it is a single command-like affordance.
+- Action order in the DOM should match visual priority.
 
 ## API
 
@@ -91,35 +69,16 @@ import {
 } from "@augur/design-system";
 ```
 
-| Part | Element | Voice and surface | Purpose |
-| --- | --- | --- | --- |
-| `PageHeader` | `header` | layout only | Page-title area |
-| `PageHeaderBreadcrumb` | `nav` (named) | ui voice | Wayfinding slot; render the `ol`/links yourself |
-| `PageHeaderContent` | `div` | layout only | Title area row: titles left, actions right |
-| `PageHeaderTitle` | `h1` (default) | heading-1 typography role | Page title; `headingLevel` moves the outline |
-| `PageHeaderDescription` | `p` | body voice, `--muted-foreground` | Supporting line under the title |
-| `PageHeaderActions` | `div` | layout only | Actions slot; Buttons composed by the consumer |
+`PageHeaderTitle` accepts `headingLevel` from 1–6. Every part accepts native attributes for its element, `className`, and a React 19 ref prop.
 
-Every part accepts the native attributes of its element, `className`
-(merged after the component classes), and a React 19 `ref` prop. Layout
-is responsive by structure: below 640px the content row collapses to
-one column and actions wrap under the titles.
+## Related components and patterns
+
+Use [Button](/components/button) for page actions. Use [Card](/components/card) for local grouped regions below the header. For a page with no actions, keep the same header structure rather than inventing a different title treatment.
+
+## Verification
+
+Repository tests cover heading semantics, breadcrumb naming, action composition, long-content wrapping, theme behavior, responsive reflow, and axe findings.
 
 ## Design rationale
 
-- **Pure composition, no product meaning.** The pattern owns order,
-  hierarchy, and placement; consumers own every word, link, and
-  action. Nothing in the part names or styles assumes a domain.
-- **Patterns compose components.** The actions slot takes real Buttons
-  (ARCHITECTURE.md §4); the pattern adds no control of its own.
-- **Theme pairing only.** Copy inherits the foreground; the
-  description and breadcrumb links use `--muted-foreground`; nothing
-  invents a color. The one green signal on a page header is the
-  consumer's primary Button — never the container.
-- **Structural geometry.** Gaps and the breakpoint use FD-01 spacing
-  steps (4/8/12/24px, Proposed — pending maintainer review); no tokens
-  are emitted and no raw values appear.
-- **Title as a real heading** with an explicit, documented level
-  contract, because heading navigation is one of the primary ways
-  assistive technology users move through a page.
-- **Status: draft**, graduating on maintainer acceptance.
+The page hierarchy remains visible through typography, spacing, and alignment rather than a container or decorative hero treatment. PageHeader supplies one stable place for page-level responsibility without introducing product-specific workflow.
