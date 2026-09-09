@@ -181,10 +181,14 @@ representations cannot drift.
   build naming the entry.
 - **New demo components must register a Markdown representation** in
   `src/lib/markdown.ts` in the same change that uses them in content.
-- **Copy page / View as Markdown** (`src/components/PageActions.astro`,
+- **Copy page split action** (`src/components/PageActions.astro`,
   rendered by the page renderer): `Copy page` fetches the page's `.md`
-  endpoint and copies exactly those bytes; `View as Markdown` opens the
-  direct `.md` representation. Shell MDX pages opt in with
+  endpoint and copies exactly those bytes; its disclosure menu holds
+  `View as Markdown` (opens the direct `.md` representation) and — only
+  when the build configures a site — `Open in ChatGPT` / `Open in
+  Claude`, which hand the assistant the page's absolute `.md` URL, never
+  the document body. A `<noscript>` fallback keeps `View as Markdown`
+  reachable without client script. Shell MDX pages opt in with
   `markdown: true` in frontmatter.
 - **`/llms.txt`** (`src/pages/llms.txt.ts` + `src/lib/llms.ts`): a
   concise navigational index generated from these same collections, so

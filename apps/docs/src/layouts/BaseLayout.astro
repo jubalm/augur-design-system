@@ -122,11 +122,15 @@ const showRail = shell && !!toc && toc.length > 0;
             <NavGroups nav={nav} currentPath={currentPath} />
           </nav>
           <main id="main-content" class="doc-main">
-            {fromMdx ? <h1 class="augur-type-editorial-title page-title">{title}</h1> : null}
-            {fromMdx && props.frontmatter?.markdown ? (
-              // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
-              // already includes the deployment base, so append `.md` directly.
-              <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+            {fromMdx ? (
+              <div class="doc-page-head">
+                <h1 class="augur-type-editorial-title page-title">{title}</h1>
+                {props.frontmatter?.markdown ? (
+                  // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
+                  // already includes the deployment base, so append `.md` directly.
+                  <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+                ) : null}
+              </div>
             ) : null}
             {fromMdx ? <article class="prose"><slot /></article> : <slot />}
             {(pager.previous || pager.next) && (
@@ -165,11 +169,15 @@ const showRail = shell && !!toc && toc.length > 0;
         </div>
       ) : (
         <main id="main-content" class="site-main">
-          {fromMdx ? <h1 class="augur-type-editorial-title page-title">{title}</h1> : null}
-          {fromMdx && props.frontmatter?.markdown ? (
-            // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
-            // already includes the deployment base, so append `.md` directly.
-            <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+          {fromMdx ? (
+            <div class="doc-page-head">
+              <h1 class="augur-type-editorial-title page-title">{title}</h1>
+              {props.frontmatter?.markdown ? (
+                // Shell MDX pages opted into Markdown parity (#9): Astro.url.pathname
+                // already includes the deployment base, so append `.md` directly.
+                <PageActions mdHref={`${normalizePath(currentPath)}.md`} />
+              ) : null}
+            </div>
           ) : null}
           {fromMdx ? <article class="prose"><slot /></article> : <slot />}
         </main>

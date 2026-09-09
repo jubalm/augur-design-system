@@ -167,11 +167,24 @@ function pagerHtml(activeHref) {
 
 /** Split the real article into page opening and body at the page-actions boundary. */
 function splitArticle(articleHtml) {
-  const marker = articleHtml.indexOf('<div class="page-actions">');
-  assert.notEqual(marker, -1, "article must contain the page actions");
-  const close = articleHtml.indexOf("</div>", marker);
-  assert.notEqual(close, -1);
-  const split = close + "</div>".length;
+  // Issue #62 moved the actions beside the title inside .doc-page-head, so
+  // the boundary is the head's matching close when present; walk depth to
+  // find it instead of taking the first </div>.
+  const headMarker = articleHtml.indexOf('<div class="doc-page-head">');
+  const marker = headMarker !== -1 ? headMarker : articleHtml.indexOf('<div class="page-actions">');
+  assert.notEqual(marker, -1, "article must contain the page-opening head or actions");
+  let depth = 0;
+  let split = -1;
+  const token = /<\/?div\b[^>]*>/g;
+  token.lastIndex = marker;
+  for (let match; (match = token.exec(articleHtml)) !== null; ) {
+    depth += match[0].startsWith("</") ? -1 : 1;
+    if (depth === 0) {
+      split = match.index + match[0].length;
+      break;
+    }
+  }
+  assert.notEqual(split, -1, "page opening must close");
   return { opening: articleHtml.slice(0, split), body: articleHtml.slice(split) };
 }
 

@@ -53,7 +53,10 @@ if (entry.collection === "components") {
 ---
 <BaseLayout title={title} description={description} toc={toc}>
   <article class="prose doc-page">
-    <h1 class="augur-type-editorial-title page-title">{title}</h1>
+    <div class="doc-page-head">
+      <h1 class="augur-type-editorial-title page-title">{title}</h1>
+      <PageActions mdHref={mdHref} />
+    </div>
     <p class="doc-page-lede augur-type-body">{description}</p>
     {
       entry.collection === "components" && (
@@ -64,7 +67,6 @@ if (entry.collection === "components") {
         </p>
       )
     }
-    <PageActions mdHref={mdHref} />
     {
       toc.length > 0 && (
         <details class="onthispage-collapse">
