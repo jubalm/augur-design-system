@@ -12,6 +12,14 @@
  *     bun apps/docs/fixtures/verify-docs.mjs                       # base "/"
  *     DOCS_BASE_PATH=/augur-design-system \
  *       bun apps/docs/fixtures/verify-docs.mjs                     # subpath build
+ *     DOCS_VERIFY_SITE=<the build's --site origin> \
+ *       bun apps/docs/fixtures/verify-docs.mjs                     # also verify the AI entries (#62)
+ *
+ * DOCS_VERIFY_SITE (#62) is optional: when set to the same origin the
+ * build passed as --site, the Copy page split-action section also
+ * verifies the ChatGPT/Claude entries; when unset it asserts those
+ * entries are omitted. The origin is a build/verification-time input
+ * and is never committed.
  *
  * The script stages `apps/docs/dist` under the configured base path (as
  * the deployment would), then verifies for both base modes:
@@ -411,9 +419,10 @@ console.log("\n== Theming page demo (#49 paired records) ==");
   await colorPage.close();
 }
 
-// --- 5. Copy page / View as Markdown (issue #9). ---------------------------
-console.log("\n== Copy page / View as Markdown (issue #9) ==");
+// --- 5. Copy page split action (issues #9 and #62). ------------------------
+console.log("\n== Copy page split action (issues #9 and #62) ==");
 {
+  const verifySite = process.env.DOCS_VERIFY_SITE?.trim() || undefined;
   const context = await browser.newContext();
   await context.grantPermissions(["clipboard-read", "clipboard-write"], { origin });
   const page = await context.newPage();
@@ -425,13 +434,71 @@ console.log("\n== Copy page / View as Markdown (issue #9) ==");
   for (const route of [site("/foundations/fonts"), site("/getting-started")]) {
     await page.goto(origin + route, { waitUntil: "networkidle" });
 
+    // The noscript fallback keeps View as Markdown reachable without JS.
+    const rawHtml = await (await fetch(origin + route)).text();
+    ok(`${route} noscript fallback exposes View as Markdown`, /<noscript>\s*<a class="page-action page-action-noscript" href="[^"]+\.md">View as Markdown<\/a>/.test(rawHtml), "noscript link");
+
+    // Open the menu by keyboard via the disclosure trigger.
+    const trigger = page.getByRole("button", { name: "More page actions" });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    const expanded = await trigger.getAttribute("aria-expanded");
+    ok(`${route} trigger opens the menu (aria-expanded)`, expanded === "true", String(expanded));
+
+    const menuItems = page.locator(".page-action-menu-item");
+    const itemCount = await menuItems.count();
+    const expectedItems = verifySite ? 3 : 1;
+    ok(`${route} menu carries exactly ${expectedItems} entr${expectedItems === 1 ? "y" : "ies"} (site ${verifySite ? "configured" : "absent"})`, itemCount === expectedItems, String(itemCount));
+
     // View as Markdown links the direct .md representation; fetching it
     // yields the same document the copy action will put on the clipboard.
-    const viewHref = await page.getAttribute("a.page-action", "href");
+    const viewHref = await menuItems.first().getAttribute("href");
     ok(`${route} View as Markdown links the .md representation`, typeof viewHref === "string" && viewHref.endsWith(".md"), String(viewHref));
     const response = await fetch(origin + viewHref);
     const expected = await response.text();
     ok(`${route} .md representation is served and starts with the H1`, response.status === 200 && expected.startsWith("# "), `${response.status}, ${expected.length} chars`);
+
+    // AI entries (#62): only with a configured site, each opening a new
+    // tab on the assistant's documented query-prefill URL carrying the
+    // page's ABSOLUTE .md URL (never the document body).
+    for (const label of ["Open in ChatGPT", "Open in Claude"]) {
+      const link = page.locator(".page-action-menu-item", { hasText: label });
+      if (!verifySite) {
+        const rendered = await link.count();
+        ok(`${route} ${label} omitted without a configured site`, rendered === 0, `${rendered} rendered`);
+        continue;
+      }
+      const href = await link.getAttribute("href");
+      const rel = await link.getAttribute("rel");
+      const targetAttr = await link.getAttribute("target");
+      let pass = false;
+      let detail = String(href);
+      if (href && targetAttr === "_blank" && (rel ?? "").includes("noopener") && (rel ?? "").includes("noreferrer")) {
+        try {
+          const target = new URL(href);
+          const prompt = target.searchParams.get("q") ?? "";
+          const expectedUrl = new URL(viewHref ?? "", verifySite).href;
+          const expectedPrompt = `Read this Augur Design System documentation page and use it as context:\n${expectedUrl}`;
+          pass = prompt === expectedPrompt;
+          detail = prompt.split("\n").at(-1) ?? "(empty prompt)";
+        } catch (error) {
+          detail = String(error);
+        }
+      }
+      ok(`${route} ${label} opens the absolute .md URL prompt in a new tab`, pass, detail);
+    }
+
+    // Escape closes and returns focus to the trigger.
+    await page.keyboard.press("Escape");
+    const closedByEscape = (await trigger.getAttribute("aria-expanded")) === "false" && !(await page.locator(".page-action-menu").isVisible());
+    const focusReturned = await page.evaluate(() => document.activeElement instanceof HTMLElement && document.activeElement.hasAttribute("data-action-trigger"));
+    ok(`${route} Escape closes the menu and returns focus to the trigger`, closedByEscape && focusReturned, `closed=${closedByEscape} focus=${focusReturned}`);
+
+    // Outside click closes.
+    await trigger.click();
+    await page.locator("h1").first().click();
+    const closedByOutside = (await trigger.getAttribute("aria-expanded")) === "false" && !(await page.locator(".page-action-menu").isVisible());
+    ok(`${route} outside click closes the menu`, closedByOutside, String(closedByOutside));
 
     // Copy page via keyboard, then compare the clipboard byte-for-byte.
     const copyButton = page.getByRole("button", { name: "Copy page" });
@@ -1361,7 +1428,10 @@ for (const theme of ['light','dark']) {
     await p.goto(origin + site(route), {waitUntil:'networkidle'});
     await p.evaluate(theme => {document.documentElement.dataset.theme = theme;}, theme);
     if (route.endsWith('dialog')) await openDialog(p, p.getByRole('button',{name:'Open dialog',exact:true}));
-    const targets = await p.locator('.aug-button,.aug-input,.aug-dialog-close,.theme-toggle-option,.page-action,.browse-summary').evaluateAll(els => els.filter(e=>e.getBoundingClientRect().width).map(e=>({name:e.className,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})));
+    // Open the page-actions menu so its items measure into the sweep (#62).
+    const splitTrigger = p.getByRole('button',{name:'More page actions'});
+    if (await splitTrigger.count()) await splitTrigger.click();
+    const targets = await p.locator('.aug-button,.aug-input,.aug-dialog-close,.theme-toggle-option,.page-action,.page-action-menu-item,.browse-summary').evaluateAll(els => els.filter(e=>e.getBoundingClientRect().width).map(e=>({name:e.className,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})));
     ok(`review 44px touch targets ${theme}${route}`, targets.every(t=>t.w>=44 && t.h>=44), JSON.stringify(targets.filter(t=>t.w<44 || t.h<44)));
     if (route.endsWith('dialog')) {
       const dialog = await p.locator('.aug-dialog-content').evaluate(el=>({animation:getComputedStyle(el).animationName,padding:getComputedStyle(el).paddingTop}));

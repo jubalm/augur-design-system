@@ -25,9 +25,11 @@ const overview: SectionOverview = await getSectionOverview(kind);
 ---
 <BaseLayout title={overview.title} description={overview.description}>
   <article class="prose doc-page section-page">
-    <h1 class="augur-type-editorial-title page-title">{overview.title}</h1>
+    <div class="doc-page-head">
+      <h1 class="augur-type-editorial-title page-title">{overview.title}</h1>
+      <PageActions mdHref={withBase(`/${kind}.md`)} />
+    </div>
     <p class="doc-page-lede augur-type-body">{overview.description}</p>
-    <PageActions mdHref={withBase(`/${kind}.md`)} />
     <p>{overview.intro}</p>
     <h2>Reading order</h2>
     <ul class="section-index">
