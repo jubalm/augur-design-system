@@ -19,7 +19,7 @@ only after the frames are accepted on the issue.
 | Page | Frame pages | Purpose |
 | --- | --- | --- |
 | `short.html` | `/foundations/fonts` content | Short-page case: rail, reading measure, specimens at the column |
-| `dense.html` | `/foundations/decisions` content | Dense stress case: decision tables on the wider document region |
+| `dense.html` | `/foundations/color` content | Dense stress case: color tables on the wider document region |
 
 Each page renders the full shell: masthead (text identity lockup, theme
 access, repository access), grouped sidebar (Getting started lead-in,

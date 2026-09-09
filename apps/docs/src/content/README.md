@@ -66,10 +66,6 @@ export name from `@augur/design-system`) and accept `status`
 (`planned | draft | stable | deprecated`, default `planned`) and
 `registry` (shadcn registry item id, #16/#17).
 
-One deliberate exception to "filename = slug": `foundations/foundation-decisions.md`
-keeps its filename (DESIGN.md references that exact path) and maps to
-route `/foundations/decisions` via `generateId` in `content.config.ts`.
-
 ## Component-page sections
 
 Every `components/` page must cover these H2 sections, in this

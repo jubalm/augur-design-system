@@ -119,9 +119,6 @@ export async function buildLlmsTxt(): Promise<string> {
       "documentation delivery contract (rendered pages plus clean Markdown for every substantive page).",
     `- [CHANGELOG.md](${REPO_URL}/blob/main/CHANGELOG.md): package and documentation changes; migration ` +
       "guidance accompanies versioned releases.",
-    `- [Foundation decisions](${withBase("/foundations/decisions.md")}): the review record behind the ` +
-      "foundations. Proposals marked Proposed are unadopted until a maintainer records review; do not " +
-      "treat them as settled values.",
     `- [Repository](${REPO_URL}): source of truth for the package and this documentation.`,
   ]));
 

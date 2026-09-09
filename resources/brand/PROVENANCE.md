@@ -7,8 +7,8 @@
 
 - Issue: [jubalm/augur-design-system#5](https://github.com/jubalm/augur-design-system/issues/5)
 - Branch at time of record: `issue-5-font-assets-provenance`
-- Sources inspected: `DESIGN.md`, `ARCHITECTURE.md`,
-  `apps/docs/src/content/foundations/foundation-decisions.md`, and the
+- Sources inspected: `DESIGN.md`, `ARCHITECTURE.md`, the then-current
+  foundation decision record (since superseded; retained in Git history), and the
   supplied PDF itself (`pdftotext` extraction, no visual recreation)
 
 ## 1. Authority: upstream reference vs maintained runtime tokens
@@ -152,7 +152,7 @@ this work — `document.fonts.check()` returns `true` even when **zero** font
 faces exist (nothing to load ⇒ text silently renders in fallbacks). The
 driver therefore also asserts faces are registered and loaded, and
 registers network listeners before navigation. Docs-app-level typography
-checks remain pending issue #7.
+is covered by the docs verification fixtures.
 
 ## 5. Maintenance rules
 
