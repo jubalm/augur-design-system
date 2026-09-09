@@ -5,10 +5,10 @@
  * (which references generated tokens). No raw color values, no new
  * custom properties.
  *
- * Geometry: panel padding consumes the encoded FD-01 spacing tokens
+ * Geometry: panel padding consumes the generated spacing tokens
  * (24px steps to 16px below 600px, per the contract's panel rule); the
- * surface radius consumes the encoded FD-03 token
- * (`--augur-rounded-surface`, 0px — issues #45/#50). Decision record:
+ * surface radius consumes the generated rounded token
+ * (`--augur-rounded-surface`, 0px — issues #45/#50). Component contract:
  * ../../docs/components.md.
  */
 
@@ -19,7 +19,7 @@
   background-color: var(--card);
   color: var(--card-foreground);
   border: 1px solid var(--border);
-  border-radius: var(--augur-rounded-surface); /* FD-03, encoded: 0px */
+  border-radius: var(--augur-rounded-surface); /* encoded: 0px */
 }
 
 /*
@@ -30,8 +30,8 @@
 .aug-card-header {
   display: flex;
   flex-direction: column;
-  gap: var(--augur-spacing-sm); /* FD-01 space.sm (encoded): title-to-description gap */
-  padding: var(--augur-spacing-xl); /* FD-01 space.xl (encoded): contract panel padding */
+  gap: var(--augur-spacing-sm); /* space.sm: title-to-description gap */
+  padding: var(--augur-spacing-xl); /* space.xl: contract panel padding */
 }
 
 .aug-card-content {
@@ -51,7 +51,7 @@
   padding-block-start: var(--augur-spacing-xl);
 }
 
-/* Contract panel padding steps to 16px below 600px (FD-01 composition
+/* Contract panel padding steps to 16px below 600px (composition
    rule for record fields and panels, encoded direction). */
 @media (max-width: 599px) {
   .aug-card-header,

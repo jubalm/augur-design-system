@@ -2,7 +2,6 @@
 
 How `packages/design-system` turns the repository-root `DESIGN.md` into
 machine-readable base tokens using the pinned `@google/design.md` toolchain.
-Implemented for [issue #3](https://github.com/jubalm/augur-design-system/issues/3).
 
 ## Authority chain
 
@@ -12,7 +11,7 @@ Per `ARCHITECTURE.md` ("Theme mapping", "Authority and source precedence"):
 DESIGN.md (repository root — canonical for schema-representable values)
    ↓  pinned @google/design.md lint + export
 generated base tokens (packages/design-system/src/tokens — derived artifacts, never edited)
-   ↓  semantic theme mapping (issue #4, light/dark)
+   ↓  semantic theme mapping (light/dark)
 CSS variables / component consumption
 ```
 
@@ -126,15 +125,9 @@ diff -r /tmp/run-a /tmp/run-b   # → no differences
 diff -r /tmp/run-a src/tokens   # → no differences (committed == regenerated)
 ```
 
-Evidence recorded for this implementation (tool `@google/design.md@0.4.0`,
-`DESIGN.md` sha256 `fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5`):
-
-```text
-4f9733de850a5a952bbfc003485b05817328a336c857827d6609180bec56ddc6  manifest.json
-ce1367992ad40384985e63d3292a071a94752532b0b77361c2ada43721f6dea7  tokens.css
-0f77d94e650c4d31dda9c75cae604286cd816920b40d0b84ac9afb19e8467a41  tokens.dtcg.json
-159c51e72f0527e68201723419d84b25d32e5c03ab39aeb6d3d5da5c4b11c330  tokens.tailwind.css
-```
+`manifest.json` is the machine-readable record of per-artifact hashes and the
+source `DESIGN.md` sha256; `bun run tokens:check` fails on any drift, so hash
+values are not duplicated in prose.
 
 ## Supported schema boundaries (pinned toolchain 0.4.0)
 
@@ -142,23 +135,23 @@ What the pinned toolchain supports, and therefore what this generator emits:
 
 - **Exported as base tokens:** the `colors`, `typography`, `spacing`, and
   `rounded` front-matter groups (the toolchain's exportable groups). Since
-  issue 45 the spacing scale (xs–2xl = 4/8/12/16/24/32px) and the 0px
-  control/surface radius (FD-03) are adopted and emitted. This is the
+  the spacing scale (xs–2xl = 4/8/12/16/24/32px) and the 0px
+  control/surface radius are adopted and emitted. This is the
   complete emitted surface — no more, no less.
 - **Validated but not exported:** the `components` section (pairings such as
   `action-primary-light`). The linter checks its `{references}`; no 0.4.0
   export format emits it. Pairings remain a `DESIGN.md` concern and are
-  expected to inform the semantic theme mapping (#4), which must reference
+  expected to inform the semantic theme mapping, which must reference
   generated base tokens rather than restate raw values.
-- **Not representable by the schema → no tokens:** control sizing (FD-02),
-  focus treatment (FD-04), motion/reduced motion (FD-05), and interaction-state
-  treatment (FD-06) have no schema sections and stay owned by foundation
+- **Not representable by the schema → no tokens:** control sizing, focus
+  treatment, motion/reduced motion, and interaction-state treatment have no
+  schema sections and stay owned by foundation
   documentation and component implementation per `ARCHITECTURE.md`. The
   generator cannot emit them without inventing semantics, and does not.
 
 Consequence: any token concept not produced by the pinned CLI's export does not
 exist as a base token. Do not add hand-written token files to `src/tokens`;
-extend `DESIGN.md` within the schema, or resolve a foundation proposal through
+extend `DESIGN.md` within the schema, or resolve a foundation decision through
 maintainer review first.
 
 ## Upgrade procedure (exact)
@@ -182,30 +175,21 @@ such:
    Record the migration (rationale + diff highlights) in the PR and, after
    merge, in the changelog.
 
-## Intended CI integration (owned by issue #6 — documented, not implemented)
+## CI integration
 
-This slice intentionally leaves root scripts and GitHub workflows untouched.
-When #6 wires CI, the deterministic gate is:
+`.github/workflows/ci.yml` runs the deterministic gates on every pull request
+and push to `main`:
 
-```yaml
-# suggested steps for the PR workflow (owner: #6)
-- run: bun install --frozen-lockfile
-  name: Install (frozen)
-- run: bun run tokens:lint        # in packages/design-system (or `bun --cwd` / workspace filter)
-  name: Lint DESIGN.md
-- run: bun run tokens:check       # drift gate: regeneration must equal committed artifacts
-  name: Verify generated tokens
-- run: bun run tokens:verify-failures
-  name: Verify token failure paths
-```
+- `bun run lint` — `DESIGN.md` validity under the pinned schema.
+- `bun run --cwd packages/design-system tokens:check` — drift gate:
+  regeneration must equal the committed artifacts.
+- `bun run --cwd packages/design-system tokens:verify-failures` — the
+  controlled generation failure paths exit nonzero and write no artifacts.
 
-`tokens:check` is the drift check required by the issue's acceptance criteria
-("CI verifies drift if generated files are committed" — they are committed, so
-drift checking applies). #6 may hoist these into root scripts; the package
-scripts above are the stable contract.
+The package scripts are the stable contract; CI invokes them directly.
 
 ## Toolchain version history
 
 | Version | Status | Notes |
 | --- | --- | --- |
-| `0.4.0` | **current** | Initial pin (issue #3). Exports: `css-vars`, `css-tailwind`, `json-tailwind`, `dtcg`. Colors + typography exported; `components` validated only. `lint --format text` still emits JSON (tool quirk, harmless). |
+| `0.4.0` | **current** | Initial pin. Exports: `css-vars`, `css-tailwind`, `json-tailwind`, `dtcg`. Colors, typography, spacing, and rounded values exported; `components` validated only. `lint --format text` still emits JSON (tool quirk, harmless). |

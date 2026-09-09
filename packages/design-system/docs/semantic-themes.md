@@ -1,21 +1,20 @@
 # Semantic themes (`DESIGN.md` → generated tokens → shadcn-compatible roles)
 
-Status: implemented by issue #4. This file is the maintained record of the
-semantic theme mapping in
+This document records the semantic theme mapping in
 [`src/styles/theme.css`](../src/styles/theme.css), the public
 [`src/styles/styles.css`](../src/styles/styles.css) entry, and the decisions
-behind it. Run the executable evidence with `bun test` in this package.
+behind them. Run the executable evidence with `bun test` in this package.
 
 ## Authority chain
 
-Per `ARCHITECTURE.md` §7 ("Theme mapping"), the layering is:
+Per `ARCHITECTURE.md` ("Theme mapping"), the layering is:
 
 ```text
 DESIGN.md                          (canonical for schema-representable values)
-   ↓  pinned toolchain, issue #3
+   ↓  pinned @google/design.md toolchain
 src/tokens/tokens.css              (generated --augur-color-* primitives)
-   ↓  issue #4, this mapping
-src/styles/theme.css               (semantic roles; references generated variables only)
+   ↓  this mapping
+src/styles/theme.css               (semantic color roles; references generated variables only)
    ↓
 import "@augur/design-system/styles.css"   (public entry; aggregates everything)
 ```
@@ -24,10 +23,11 @@ Rules held by this layer (enforced by `test/semantic-theme.test.ts`):
 
 - **No raw color values.** `theme.css` contains only `var(--augur-color-*)`
   references; a literal hex/rgb/hsl value fails the tests. Raw values live
-  exclusively in generated output (issue #3 policy).
-- **No proposed-foundation tokens.** FD-01 (spacing), FD-02 (control
-  sizing), FD-03 (radius), and FD-05 (motion durations) are *Proposed —
-  pending review* in the foundation decision record; none is emitted here.
+  exclusively in generated output.
+- **Color roles only.** `theme.css` maps color roles. Spacing and corner
+  radius are generated `--augur-spacing-*` / `--augur-rounded-*` primitives
+  consumed directly by component CSS; control sizing, focus geometry, and
+  motion are structural CSS, not theme roles.
 - **Themes swap color roles only.** Typography roles (`typography.css`),
   the focus rule, the reduced-motion gate, and the canvas application are
   each defined exactly once outside the theme scopes, so light and dark
@@ -53,9 +53,8 @@ shadcn role names describe **jobs**, not colors. Two name collisions with
 brand companion names are deliberate and documented:
 
 - shadcn `--primary` (the main action slot) is **Deep** in light and
-  **Green** in dark (issue #4 requirement); `--augur-color-primary`
-  remains the Navy companion and fills the dark canvas and the light text
-  role.
+  **Green** in dark; `--augur-color-primary` remains the Navy companion and
+  fills the dark canvas and the light text role.
 - shadcn `--accent` (the hover/highlight surface slot) is a neutral step,
   not the Green companion (see decision D2).
 
@@ -72,7 +71,7 @@ brand companion names are deliberate and documented:
 | `--accent-foreground` / `--accent` | `primary` on `surface-light-muted` | muted-region-light (inherited) | 16.17:1 |
 | `--destructive-foreground` / `--destructive` | `surface-light-raised` on `primary` | decision D1 | 19.03:1 (recomputed) |
 | `--border`, `--input` | `border-light` | divider-light (inherited) | hairline (see D5) |
-| `--ring` | `accent-deep` | FD-04 Proposed spec | ≥ 6.63:1 on all role surfaces |
+| `--ring` | `accent-deep` | focus-ring role | ≥ 6.63:1 on all role surfaces |
 
 ### Dark theme (`[data-theme="dark"]` and system fallback)
 
@@ -87,7 +86,7 @@ brand companion names are deliberate and documented:
 | `--accent-foreground` / `--accent` | `surface-light` on `surface-dark-2` | panel-dark-2 (inherited) | 15.19:1 |
 | `--destructive-foreground` / `--destructive` | `primary` on `secondary-dark` | decision D1 | 7.53:1 (reversed documented pair) |
 | `--border`, `--input` | `surface-dark-mist` | divider-dark (inherited) | hairline (see D5) |
-| `--ring` | `accent` | FD-04 Proposed spec | ≥ 10.31:1 on all role surfaces |
+| `--ring` | `accent` | focus-ring role | ≥ 10.31:1 on all role surfaces |
 
 "Recomputed" ratios are calculated with the WCAG 2.x relative-luminance
 formula in `test/semantic-theme.test.ts` from the *generated* values at
@@ -110,9 +109,9 @@ using Deep would mint a second green signal. Because the inherited state
 rule already carries meaning in words ("never hide meaning in color
 alone"), destructive actions are named by label and the slot is filled
 with the strongest neutral action pairing: White on Navy in light
-(19.03:1), Navy on Pewter in dark (7.53:1). Component work (#11+) must
-pair this slot with explicit destructive labeling. Revisit if the brand
-ever defines a danger companion.
+(19.03:1), Navy on Pewter in dark (7.53:1). Component work must pair this
+slot with explicit destructive labeling. Revisit if the brand ever defines
+a danger companion.
 
 ### D2 — `--accent` is a neutral hover/highlight surface, not Green or Wash
 
@@ -151,36 +150,32 @@ surface in both themes.
 
 ### D6 — Deliberate omissions
 
-- **No `--radius`.** FD-03 is Proposed, not adopted; emitting it would
-  front-run review. shadcn components that expect `--radius` wait for
-  #11+ and FD-03 adoption.
-- **No `--chart-*`, `--sidebar-*` roles.** No requirement in the current
-  scope; extend the mapping only with a documented need.
-- **No hover/pressed/disabled/loading tokens.** FD-06's interaction
-  treatment is Proposed; states are component contracts (#11–#14), not
-  theme tokens.
+- **No shadcn `--radius` role.** Components consume the generated
+  `--augur-rounded-control` / `--augur-rounded-surface` primitives (0px)
+  directly; the theme maps color roles only.
+- **No `--chart-*`, `--sidebar-*` roles.** No current requirement; extend
+  the mapping only with a documented need.
+- **No hover/pressed/disabled/loading tokens.** States are component
+  contracts, not theme tokens.
 
 ## Focus and reduced motion (required behavior, structural form)
 
 - **Focus:** one shared rule paints a 2px ring with a 2px offset for
   `:focus-visible` only, colored by the theme's `--ring` (Deep light,
-  Green dark — the FD-04 Proposed spec). Keyboard focus only; never
-  suppressed. The 2px/2px geometry is intentional CSS structure, not an
-  emitted token, while FD-04 is pending review.
+  Green dark). Keyboard focus only; never suppressed. The 2px/2px geometry
+  is intentional CSS structure, not an emitted token.
 - **Reduced motion:** one shared `@media (prefers-reduced-motion: reduce)`
   gate collapses transition/animation durations to the canonical 0.01ms,
   stops looping animations, and disables smooth scrolling — in both themes,
-  including for consumer-authored motion. No duration tokens are adopted
-  or emitted (FD-05 remains Proposed); the treatment is structural, as
-  issue #4 requires.
+  including for consumer-authored motion. No duration tokens are emitted;
+  the treatment is structural.
 
 ## Verification
 
 ```bash
 cd packages/design-system
-bun install                 # frozen lockfile install (workspace root)
-bun test                    # 22 tests / 168 assertions: references, switching,
-                            # contrast, structure, package consumption
+bun test                    # references, switching, contrast, structure,
+                            # package consumption
 bun run tokens:check        # generated tokens still match DESIGN.md
 ```
 

@@ -5,11 +5,10 @@
  * (which references generated tokens). No raw color values, no new
  * custom properties.
  *
- * Geometry: intentional structural constants from the FD-01 proposal
- * (adopted, encoded): spacing-token gaps between the stacked
- * parts, a 4px step between the label and its required marker. The
- * control's own visuals (height, radius, states) come from Input; this
- * sheet only lays the composition out. The decision record for this
+ * Geometry: intentional structural constants: spacing-token gaps between
+ * the stacked parts, a 4px step between the label and its required marker.
+ * The control's own visuals (height, radius, states) come from Input; this
+ * sheet only lays the composition out. The component contract for this
  * slice lives in ../../docs/components.md.
  */
 
@@ -17,7 +16,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--augur-spacing-sm); /* FD-01 space.sm (encoded) */
+  gap: var(--augur-spacing-sm); /* space.sm */
   margin: 0;
   min-width: 0; /* let the full-width control shrink inside grids */
 }
@@ -31,7 +30,7 @@
  * The error message is text in the theme's danger slot. Where that
  * slot equals the foreground (light), the explicit message text carries
  * the meaning; the aria-invalid border and role="alert" reinforce it.
- * Never color alone (theme decision D1).
+ * Never color alone.
  */
 .aug-form-field-error {
   margin: 0;
@@ -41,6 +40,6 @@
 /* Visible required marker next to the label text; aria-hidden — the
    native required attribute carries the semantics. */
 .aug-form-field-required {
-  margin-left: var(--augur-spacing-xs); /* FD-01 space.xs (encoded) */
+  margin-left: var(--augur-spacing-xs); /* space.xs */
   color: inherit;
 }

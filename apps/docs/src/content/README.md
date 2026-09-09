@@ -1,32 +1,18 @@
-# Documentation content conventions (issue #8)
+# Documentation content conventions
 
 This directory is the **single content location** for Augur design
 system documentation. Every substantive page of the four documented
 kinds is authored here — as shared Markdown/MDX — and rendered by one
 shared renderer, so the rendered site and any derived representation
-(e.g. the clean `.md` endpoints, issue #9) come from the same source
-and cannot drift. This file is the normative convention; future pages
-(#9, #10, component pages) follow it.
+(e.g. the clean `.md` endpoints) come from the same source and cannot
+drift. This file is the normative convention; new pages follow it.
 
-## Content location: `apps/docs/src/content/` (decided)
+## Content location: `apps/docs/src/content/`
 
-ARCHITECTURE.md shows two trees. Section 12 ("Documentation Website",
-the "preferred direction") puts content under `apps/docs/src/content/`;
-the earlier repository sketch in section 5 shows `content/` as a
-sibling of `src/` under `apps/docs/`. **The canonical location is
-`apps/docs/src/content/<kind>/`** — the section 12 preferred direction —
-reconciled as follows:
-
-- Astro's own content-collection convention is `src/content/`, with the
-  schema in `src/content.config.ts`. Keeping it there means standard
-  Astro tooling works unmodified.
-- The section 5 sketch predates #7's implementation and its `content/`
-  entry is the same concept one level up; treat it as satisfied by the
-  `src/content/` location, not as a second, parallel home for content.
-- Precedent inside this repo: the foundation decisions record already
-  lived at `src/content/foundations/` (referenced by `DESIGN.md` by that
-  exact path). Moving it would have broken a canonical reference for no
-  gain.
+The canonical location is `apps/docs/src/content/<kind>/`, matching
+Astro's own content-collection convention (`src/content/`, with the
+schema in `src/content.config.ts`). Standard Astro tooling works
+unmodified.
 
 Nothing outside `apps/docs/src/content/` is documentation content.
 Docs-only code (renderer, example modules, styles) stays inside this
@@ -49,13 +35,13 @@ Shared required metadata (zod-validated at build time; a missing or
 blank field fails the build with a clear message):
 
 - `title` — page title. **The H1 is synthesized from it** by the page
-  renderer (`src/components/DocPage.astro`) and, later, by the Markdown
-  endpoint (#9). **Bodies must not repeat the title as an H1**; start
+  renderer (`src/components/DocPage.astro`) and by the Markdown
+  endpoint. **Bodies must not repeat the title as an H1**; start
   body headings at `##`.
 - `description` — one sentence; rendered as the page lede and used as
   the HTML meta description.
 - `order` — the page's position in its section's reading order. Values are
-  unique per section and narrative (issue #55): the sidebar, section overviews,
+  unique per section and narrative: the sidebar, section overviews,
   previous/next links, and the `llms.txt` ordering all derive from this one key,
   so they cannot drift. Assign the next free position when adding a page; do not
   reuse or reorder existing positions without recording the reading-order change.
@@ -64,11 +50,7 @@ blank field fails the build with a clear message):
 Component pages additionally require `component` (the PascalCase public
 export name from `@augur/design-system`) and accept `status`
 (`planned | draft | stable | deprecated`, default `planned`) and
-`registry` (shadcn registry item id, #16/#17).
-
-One deliberate exception to "filename = slug": `foundations/foundation-decisions.md`
-keeps its filename (DESIGN.md references that exact path) and maps to
-route `/foundations/decisions` via `generateId` in `content.config.ts`.
+`registry` (shadcn registry item id).
 
 ## Component-page sections
 
@@ -102,8 +84,7 @@ Examples render what consumers actually receive, from real workspace
 exports — never hand-duplicated values:
 
 1. **Write the example as a real module** under `src/examples/<area>/<name>.tsx`.
-   It imports from `@augur/design-system` (entry constants today;
-   components as they land in #11–#14) and renders statically.
+   It imports from `@augur/design-system` and renders statically.
 2. **Register it** in `src/examples/registry.ts`, importing the module
    once as a component and once with `?raw` for its own source:
 
@@ -142,7 +123,7 @@ real imported source, failing the build otherwise.
 - Shell pages (`/`, `/getting-started`) remain app pages by convention;
   as substantive pages they are candidates to migrate into a collection
   when touched. `/foundations/*` pages are fully collection-sourced.
-- Section overview pages (#55) live at `/<kind>` (`/foundations`,
+- Section overview pages live at `/<kind>` (`/foundations`,
   `/components`, `/patterns`, `/reference`) as app pages rendered by
   `src/components/SectionPage.astro` from `src/lib/sections.ts`; their
   destinations derive from the collections through the navigation model
@@ -150,7 +131,7 @@ real imported source, failing the build otherwise.
   model feeds the sidebar, the mobile browse panel, previous/next links,
   and the `llms.txt` ordering, so the surfaces cannot drift.
 
-## Markdown parity and `llms.txt` (issue #9)
+## Markdown parity and `llms.txt`
 
 Every substantive page has a clean `.md` representation derived from the
 same entry as the rendered page — metadata (`title`/`description`),
@@ -197,4 +178,4 @@ representations cannot drift.
   `CHANGELOG.md` live (repository canonical locations), and says so
   explicitly when a kind has no pages yet. It guides retrieval; it does
   not restate design rules. A canonical docs origin (for absolute URLs)
-  is a deployment decision (#19/#20).
+  is a deployment decision.

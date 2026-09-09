@@ -1,4 +1,11 @@
-# Docs navigation and reading shell frames — issue #55 (phase 0)
+# Docs navigation and reading shell frames — historical #55 phase-0 checkpoint
+
+> **Historical — superseded.** The #55 navigation and reading shell shipped;
+> `apps/docs/fixtures/verify-docs.mjs` owns the shipping shell contract. This
+> fixture is retained as phase-0 design evidence and is **not maintained
+> against the current app**: it extracts live page content and its assertions
+> predate the shipped shell, so it no longer passes standalone. Do not treat
+> it as current verification.
 
 This non-shipping fixture holds the **design checkpoint frames** for the
 scalable documentation navigation and reading shell (#55): the quiet
@@ -9,17 +16,16 @@ and fonts, real rendered page content, loopback-only serving, and
 retained evidence — no shipping route changes before maintainer
 acceptance of these frames.
 
-**Status: awaiting maintainer frame review.** Phase 1 (implementation in
-`BaseLayout.astro` / `DocPage.astro` / `docs.css`, section overviews,
-previous/next, `llms.txt` and Markdown parity, acceptance matrix) starts
-only after the frames are accepted on the issue.
+**Status: historical evidence.** Phase 1 shipped in `BaseLayout.astro` /
+`DocPage.astro` / `docs.css`, section overviews, previous/next, `llms.txt`
+and Markdown parity; `verify-docs` owns that contract.
 
 ## What the frames show
 
 | Page | Frame pages | Purpose |
 | --- | --- | --- |
 | `short.html` | `/foundations/fonts` content | Short-page case: rail, reading measure, specimens at the column |
-| `dense.html` | `/foundations/decisions` content | Dense stress case: decision tables on the wider document region |
+| `dense.html` | dense decision tables (pre-IA `/foundations/decisions` page) | Dense stress case: decision tables on the wider document region |
 
 Each page renders the full shell: masthead (text identity lockup, theme
 access, repository access), grouped sidebar (Getting started lead-in,
@@ -38,34 +44,25 @@ drift from it.
 ## Content provenance
 
 The article content is **not** hand-copied: `review.mjs` extracts the
-rendered `<article>` of the two pages from a current `apps/docs/dist`
-build at run time and splits it into page opening and body so the
-collapsed contents control sits at its true DOM position. Frames
-therefore cannot drift from the app's real rendered content.
+rendered `<article>` of the two pages from an `apps/docs/dist` build at
+run time and splits it into page opening and body so the collapsed
+contents control sits at its true DOM position. That extraction targets
+the pre-IA tree — including the since-removed `/foundations/decisions`
+page — so it no longer reproduces against current `main`.
 
-## Reproduce
+## Reproduce (historical)
 
-From the repository root:
+The captured frames in `evidence/` are the retained record. To rebuild
+the fixture as captured, check out the phase-0 checkpoint commit in
+`evidence/verification.json` (its `source commit` field), install, build
+the docs app at that commit, and run:
 
 ```sh
-bun install --frozen-lockfile
-bun run --cwd apps/docs build
 bun apps/docs/fixtures/docs-shell/review.mjs
 ```
 
-The command bundles `shell.css` (package styles + the app's real
-`docs.css` + prototype shell chrome), assembles the two frame pages,
-starts a loopback-only server, verifies and captures both themes at
-1440×1000, 768×1024, and 390×844, and writes `evidence/`. To inspect
-interactively:
-
-```sh
-bun apps/docs/fixtures/docs-shell/review.mjs --serve
-```
-
-Open the printed URL (`/short.html`, `/dense.html`), optionally adding
-`?theme=dark`. The theme button mirrors the app's `augur-theme`
-localStorage contract.
+Do not run it against current `main`: the extraction depends on routes
+that the repository-IA cleanup removed.
 
 ## Retained evidence
 
@@ -103,4 +100,4 @@ These are the checkpoint's "record the choice, don't improvise" items
 - The On-this-page rail does not scroll-spy in the prototype (active
   H2 tracking is phase-1 behavior); links work.
 - Frames are a reviewed composition reference, not the shipping docs
-  redesign; final human visual acceptance remains #53.
+  redesign.

@@ -7,9 +7,8 @@
  * follows, enforced by the stylesheet contract test in the repository
  * harness.
  *
- * Geometry: intentional structural constants aligned with the FD-01
- * spacing and FD-03 radius proposals (Proposed — pending maintainer
- * review); no spacing/radius tokens are emitted. Steps used: 4/8/12/24px.
+ * Geometry: intentional structural constants (spacing, radius); no
+ * spacing/radius tokens are emitted. Steps used: 4/8/12/24px.
  *
  * Layout model:
  *   header (flex column, 12px between rows)
@@ -22,7 +21,7 @@
 .aug-page-header {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* FD-01 space.md (Proposed) */
+  gap: 12px; /* space.md */
   margin: 0;
   min-width: 0;
   text-align: start;
@@ -42,7 +41,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 4px 8px; /* FD-01 space.xs / space.sm (Proposed) */
+  gap: 4px 8px; /* space.xs / space.sm */
   margin: 0;
   padding: 0;
   list-style: none;
@@ -70,8 +69,8 @@
 .aug-page-header-content {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: 24px; /* FD-01 space.lg (Proposed) */
-  row-gap: 4px; /* FD-01 space.xs (Proposed) */
+  column-gap: 24px; /* space.lg */
+  row-gap: 4px; /* space.xs */
   align-items: start;
 }
 
@@ -100,7 +99,7 @@
   flex-wrap: wrap;
   align-items: start;
   justify-content: flex-end;
-  gap: 8px; /* FD-01 space.sm (Proposed) */
+  gap: 8px; /* space.sm */
 }
 
 /* Narrow viewports: one column; actions wrap under the titles, still a

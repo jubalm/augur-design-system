@@ -1,8 +1,11 @@
-# Deployment Guide — GitHub Pages (prepared by #19, activated by maintainers)
+# Docs deployment — GitHub Pages
 
-This repository is **prepared** for GitHub Pages deployment but **not activated**.
-Activation is an explicit maintainer decision (issue #20). Nothing in this
-repository changes DNS, CNAME records, or repository settings.
+This document covers GitHub Pages deployment for the docs application and its
+registry artifact. Deployment is **prepared but not activated**; activation is an
+explicit maintainer decision. Nothing in this repository changes DNS, CNAME
+records, or repository settings.
+
+Paths are repository-root-relative; the commands run from the repository root.
 
 ## What exists
 
@@ -131,4 +134,4 @@ also exercised in the deployment workflow itself.
 
 - No DNS/CNAME changes; no repository settings changed by this preparation.
 - The workflow is `workflow_dispatch`-only; no push/PR trigger can deploy.
-- Activation of the public site is a separate maintainer decision (#20).
+- Activation of the public site is a separate maintainer decision.

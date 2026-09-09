@@ -6,7 +6,7 @@
  * pairing (`--card` / `--card-foreground`). Card carries no record
  * states, no actions, and no product semantics: it groups, and the
  * content inside speaks (DESIGN.md: state is named by labels, never
- * implied by a container). See `./card.css` and the decision record in
+ * implied by a container). See `./card.css` and the component contract in
  * `docs/components.md`.
  */
 import type { ComponentProps } from "react";

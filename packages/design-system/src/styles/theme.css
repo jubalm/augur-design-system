@@ -1,10 +1,10 @@
 /*
- * Semantic light/dark theme mapping for @augur/design-system (issue #4).
+ * Semantic light/dark theme mapping for @augur/design-system.
  *
- * Authority chain (ARCHITECTURE.md §7 "Theme mapping"):
+ * Authority chain (ARCHITECTURE.md, "Theme mapping"):
  *
  *   DESIGN.md  (canonical for schema-representable values)
- *      ↓  pinned toolchain, issue #3
+ *      ↓  pinned toolchain
  *   ../tokens/tokens.css  (generated --augur-color-* primitives; do not edit)
  *      ↓  this file: relationships and semantic roles only
  *   shadcn-compatible CSS custom properties
@@ -23,19 +23,20 @@
  *     handling are each defined exactly once, outside the theme scopes:
  *     the themes swap color roles only, so light and dark are equivalent
  *     by construction (same selectors, same structure, different tokens).
- *   - No spacing, radius, sizing, or motion tokens are emitted:
- *     FD-01/FD-02/FD-03/FD-05 (foundation decision record) are Proposed,
- *     not adopted. Focus and reduced motion are implemented structurally:
- *     the FD-04 ring colors flow through the `--ring` role, and the FD-05
- *     collapse is a media-query gate over transition/animation properties,
- *     not a duration token.
+ *   - This file maps color roles only. Spacing and corner radius are
+ *     generated `--augur-spacing-*` / `--augur-rounded-*` primitives
+ *     consumed directly by component CSS; control sizing, focus geometry,
+ *     and motion are structural CSS. Focus and reduced motion are
+ *     implemented here structurally: the ring colors flow through the
+ *     `--ring` role, and the reduced-motion collapse is a media-query gate
+ *     over transition/animation properties, not a duration token.
  *
- * Companion-name fidelity (foundation decision record §4): mappings
+ * Companion-name fidelity (`DESIGN.md`): mappings
  * reference brand companions by companion name (Navy, Green, Deep, Wash,
  * Paper, Graphite, Pewter, Mist) and runtime surfaces by role name (canvas,
  * raised, muted, surface steps). shadcn role names describe jobs, not
  * colors: the shadcn `--primary` slot is filled by the Deep companion in
- * light and the Green companion in dark (issue #4 decision), while
+ * light and the Green companion in dark, while
  * `--augur-color-primary` remains the Navy companion. This collision is
  * deliberate and documented; see docs/semantic-themes.md for the full
  * pairing table, contrast evidence, and schema-external decisions.
@@ -45,7 +46,7 @@
 /* Light theme — default.                                              */
 /* Canvas pairing: Paper + Navy (page-canvas-light).                   */
 /* ------------------------------------------------------------------ */
-/* Pinned-light containers (issue #49): the light role set applied at
+/* Pinned-light containers: the light role set applied at
    any [data-theme="light"] scope, so a light pin inside a dark host
    resolves the light roles instead of silently inheriting them. The
    mappings mirror :root exactly — one maintained light contract, two
@@ -96,7 +97,7 @@
   --border: var(--augur-color-border-light);
   --input: var(--augur-color-secondary);
 
-  /* Quiet editorial separators (VD-06): grouping hairlines for shell
+  /* Quiet editorial separators: grouping hairlines for shell
      chrome, rules, and tables — distinct from the --border control
      edge. In light both share Border; they part ways in dark. */
   --border-quiet: var(--augur-color-border-light);
@@ -150,13 +151,13 @@
   --border: var(--augur-color-border-light);
   --input: var(--augur-color-secondary);
 
-  /* Quiet editorial separators (VD-06): grouping hairlines for shell
+  /* Quiet editorial separators: grouping hairlines for shell
      chrome, rules, and tables — distinct from the --border control
      edge. In light both share Border; they part ways in dark. */
   --border-quiet: var(--augur-color-border-light);
 
-  /* Focus ring: Deep in light (FD-04 Proposed spec, behavior required by
-     issue #4). Verified at least 3:1 against every surface it paints on. */
+  /* Focus ring: Deep in light. Verified at least 3:1 against every
+     surface it paints on. */
   --ring: var(--augur-color-accent-deep);
 }
 
@@ -206,10 +207,10 @@
   --input: var(--augur-color-surface-dark-mist);
 
   /* Quiet editorial separators in dark: a Surface 3 step, not Mist —
-     grouping hairlines must not glow like control edges (VD-06). */
+     grouping hairlines must not glow like control edges. */
   --border-quiet: var(--augur-color-surface-dark-3);
 
-  /* Focus ring: Green in dark (FD-04 Proposed spec). */
+  /* Focus ring: Green in dark. */
   --ring: var(--augur-color-accent);
 }
 
@@ -266,16 +267,16 @@ body {
 /* Focus: painted for keyboard focus only (focus-visible), as a 2px ring
    with a 2px offset in the theme's ring color. Structural rule shared by
    both themes; the color changes with the theme, nothing else does. The
-   2px/2px geometry follows the FD-04 proposal (pending review) and is
-   intentionally not emitted as a token. */
+   2px/2px geometry is structural and intentionally not emitted as a
+   token. */
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
 /* Reduced motion: structural media-query gate over transition and
-   animation properties (the FD-05 collapse behavior, required by this
-   issue's theme contract). No duration tokens are adopted or emitted;
+   animation properties (the reduced-motion collapse required by the
+   theme contract). No duration tokens are adopted or emitted;
    the canonical collapse constant is inlined here and applies equally
    in both themes, including to consumer-authored motion. */
 @media (prefers-reduced-motion: reduce) {

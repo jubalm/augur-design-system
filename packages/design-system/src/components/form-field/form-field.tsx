@@ -210,7 +210,7 @@ export type FormFieldErrorProps = ComponentProps<"p">;
  * The error message. Rendered automatically from the `error` prop with
  * `role="alert"` so its appearance is announced; exported for custom
  * compositions. The text — never color alone — names the problem
- * (theme decision D1: the brand defines no danger hue).
+ * (the brand defines no danger hue).
  */
 export function FormFieldError({
   className,

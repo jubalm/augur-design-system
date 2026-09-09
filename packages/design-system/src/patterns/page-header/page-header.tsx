@@ -38,8 +38,7 @@
  *
  * Styling: `./page-header.css` references semantic role custom properties
  * only (no raw values, no new tokens). Geometry uses structural constants
- * aligned with the FD-01 spacing and FD-03 radius proposals, which remain
- * Proposed — pending maintainer review.
+ * aligned with the spacing and radius structural constants.
  */
 import type { ComponentProps, ReactNode } from "react";
 import { cx } from "../../internal/cx";

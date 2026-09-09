@@ -1,15 +1,15 @@
-# shadcn registry and consumer installation contract (issue #16)
+# shadcn registry and consumer installation contract
 
-Status: **specified by issue #16; implemented by issue #17.** This document is
-the contract the Augur registry must satisfy. It defines item naming, file
-targets, dependency rules, CSS/theme/font delivery, import-alias
-expectations, version-pinned installation URLs, and the local predeployment
-test path. It is backed by upstream evidence (schemas and docs fetched
-2026-09-04) and by an end-to-end empirical run of the pinned CLI recorded in
-§12. The fixture proving schema validation lives in
+Status: **implemented.** This document is the contract the Augur registry
+satisfies. It defines item naming, file targets, dependency rules,
+CSS/theme/font delivery, import-alias expectations, version-pinned
+installation URLs, and the local predeployment test path. It is backed by
+upstream evidence (schemas and docs) and by the §12 verification procedure,
+whose executable evidence is the consumer/acceptance smoke. The fixture
+proving schema validation lives in
 [`../fixtures/registry/`](../fixtures/registry/README.md). The executable
-consumer proof of this contract (issue #18) and versioned-artifact pinning
-are documented in [`consumer-install.md`](consumer-install.md).
+consumer proof and versioned-artifact pinning are documented in
+[`consumer-install.md`](consumer-install.md).
 
 This is a distribution contract for source-installed components. It does not
 introduce an npm package, a bundler layer, or framework promises beyond the
@@ -19,8 +19,8 @@ verified path (§10, §14).
 
 ## 1. Upstream baseline and pinned tooling
 
-Everything in this contract is checked against the current official shadcn
-sources, fetched 2026-09-04:
+Everything in this contract is checked against the official shadcn
+sources captured 2026-09-04:
 
 | Source | Reference | Evidence |
 | --- | --- | --- |
@@ -46,10 +46,9 @@ upgrading is a deliberate, reviewed migration that re-runs every check in
 
 ## 2. Distribution model
 
-Per `ARCHITECTURE.md` ("Package Build Strategy", "Initial Technical
-Direction"), distribution is **GitHub-first source installation** through
-shadcn-compatible conventions. Two delivery channels exist; the first is
-primary:
+Per `ARCHITECTURE.md` ("Package Build Strategy", "Distribution"), distribution
+is **GitHub-first source installation** through shadcn-compatible conventions.
+Two delivery channels exist; the first is primary:
 
 1. **GitHub-native registry** (upstream "GitHub Registries"): the CLI reads
    the repository's root `registry.json`, resolves refs, and installs source
@@ -57,8 +56,8 @@ primary:
    `jubalm/augur-design-system/<item>` with an optional `#<ref>`.
 2. **Built static JSON** (upstream "Getting Started", Option A): `shadcn
    build` emits flattened per-item JSON into `public/r/`, served as static
-   files — the form the GitHub Pages docs deployment (#19) will expose and
-   that namespace/URL installs consume.
+   files — the form the GitHub Pages docs deployment exposes and that
+   namespace/URL installs consume.
 
 Both channels carry the same contract. `shadcn build` is the bridge: it
 compiles the root registry (resolving `include`) into the per-item JSON that
@@ -67,8 +66,7 @@ channel 2 serves.
 **Requirements the GitHub-native path imposes on the repository** (upstream
 "Requirements"): a `registry.json` **at the repository root**, valid
 schemas, and referenced source files that exist. The root `registry.json`
-required by #17 therefore lives at the repository root — not under
-`apps/` or `packages/`.
+therefore lives at the repository root — not under `apps/` or `packages/`.
 
 ---
 
@@ -77,14 +75,12 @@ required by #17 therefore lives at the repository root — not under
 - The root `registry.json` and all item definitions are **generated from
   canonical sources** (component source under `packages/design-system/src`,
   token/theme output under `src/tokens` and `src/styles`), never
-  hand-maintained in parallel (issue #17: "Generate and validate the starter
-  source registry"; token-generation.md: "never hand-maintain copies of raw
-  values").
+  hand-maintained in parallel (token-generation.md: "never hand-maintain
+  copies of raw values").
 - The registry must not import from or reference `apps/docs` (dependency
   direction, `ARCHITECTURE.md` §12).
 - Generated registry artifacts follow the same policy as generated tokens:
-  deterministic output, provenance recorded, drift-checked (issue #17
-  acceptance criteria).
+  deterministic output, provenance recorded, drift-checked.
 
 ---
 
@@ -167,7 +163,7 @@ bare names, namespaced names, or URLs.
 Augur contract:
 
 1. **npm dependencies are exact-pinned in every item**
-   (`"@fontsource/sora@5.3.0"`). Empirically verified (§12): the consumer's
+   (`"@fontsource/sora@5.3.0"`). Verified by the §12 procedure: the consumer's
    `package.json` receives the exact version. Component runtime dependencies
    come from the verified upstream scaffold: the single `radix-ui` package,
    `clsx` + `tailwind-merge` (via `utils`), `class-variance-authority` for
@@ -190,7 +186,7 @@ Augur contract:
 ## 7. Import alias expectations
 
 Consumers are expected to have the standard shadcn alias set (the CLI
-`init` default, verified in §12):
+`init` default, verified by the §12 procedure):
 
 ```json
 {
@@ -234,7 +230,7 @@ Contract:
   selectors/at-rules — "CSS definitions to be added to the project's CSS
   file. Supports at-rules, selectors, nested rules, utilities, layers."
 
-### Augur delivery (all mechanics empirically verified, §12)
+### Augur delivery (mechanics verified by the §12 procedure)
 
 The `augur-theme` item carries the complete Augur look in one install:
 
@@ -267,10 +263,10 @@ The `augur-theme` item carries the complete Augur look in one install:
    definition, and all compiled `dark:` utilities resolve through the
    `data-theme` selectors.
 
-Not delivered (deliberate, per the #4 decision record D6): `--radius`,
-`--chart-*`, `--sidebar-*`. FD-03 (radius) is Proposed, not adopted;
-components that require `--radius` wait for adoption. The consumer's
-init-scaffold values for those roles remain.
+Not delivered (deliberate, per `semantic-themes.md` D6): `--radius`,
+`--chart-*`, `--sidebar-*`. Components consume the generated
+`--augur-rounded-*` primitives directly; the consumer's init-scaffold values
+for those roles remain.
 
 **Relationship to the package entries:** `@augur/design-system`'s
 `./styles.css` and `./fonts.css` exports (used by the workspace docs app)
@@ -291,7 +287,7 @@ Next.js-specific mechanics and third-party hosting assumptions, contradicting
 `resources/brand/PROVENANCE.md` §4 (self-hosted OFL Fontsource packages
 only, exact pins, no third-party CDN at runtime) and framework neutrality.
 
-**Verified delivery instead** (§12): the `augur-theme` item
+**Verified delivery instead** (via the §12 procedure): the `augur-theme` item
 
 1. declares `dependencies: ["@fontsource/sora@5.3.0",
    "@fontsource/schibsted-grotesk@5.3.0"]` — the consumer receives the
@@ -314,7 +310,7 @@ adding weights requires a `DESIGN.md` change first.
 
 ## 10. Consumer expectations and verified stack
 
-The verified consumer path (§12): a fresh **Vite + React 19 + Tailwind CSS
+The verified consumer path (§12 procedure): a fresh **Vite + React 19 + Tailwind CSS
 v4** project produced by `bunx shadcn@4.20.1 init -t vite -b radix -p nova`,
 with `components.json` exactly as generated (`style` set by the chosen
 base/preset, `tailwind.css: "src/index.css"`, `tailwind.cssVariables: true`,
@@ -326,12 +322,11 @@ verified against that stack and nothing more:
 - CSS-variable theming (`tailwind.cssVariables: true`) is assumed; the
   `--no-css-variables` path is not supported;
 - other upstream templates (Next.js, Astro, React Router, Laravel) are
-  expected to work by upstream design but are **not verified**; docs-app
-  verification arrives with #7. Do not document them as supported until
-  tested.
+  expected to work by upstream design but are **not verified**. Do not
+  document them as supported until tested.
 
-Namespace configuration (optional, for `@augur/…` installs once the built
-JSON channel exists, #19):
+Namespace configuration (optional, for `@augur/…` installs from the built
+JSON channel):
 
 ```json
 {
@@ -363,59 +358,43 @@ existence of a bundled npm package." This contract operationalizes that:
 4. **Update model.** Components are updated by re-running `add` with
    `--overwrite` against a pinned ref; the consumer's lockfile pins the
    exact npm dependencies the items declare. tsup/bundled output stays
-   deferred (root README); if it ever lands, it cannot become a hidden
+   deferred by architecture; if it ever lands, it cannot become a hidden
    dependency of registry installs.
 5. **Reverse isolation.** The registry (and the package) must not import
    from `apps/docs` (§3).
 
 ---
 
-## 12. Local predeployment test path (verified 2026-09-04)
+## 12. Local predeployment test path
 
-Every registry change is verified end-to-end locally before a ref is
-published for consumers. Recorded transcript, run in this branch's
-verification (all commands with the pinned CLI; fresh consumer in
-`/tmp/augur-consumer`):
+Every registry change is verified end-to-end before a ref is published for
+consumers. The path below is the contract; executable evidence lives in the
+fixtures and consumer smoke rather than in this document.
 
-```text
-1. Schema validation (fixture + real registry, §13)
-   bunx shadcn@4.20.1 registry validate ./registry.json
-   → ✔ Registry is valid. ✔ Checked 1 registry file and 1 item.  (exit 0)
+1. **Validate** the fixture and the real registry against the vendored schemas
+   (§13): `bunx shadcn@4.20.1 registry validate ./registry.json`.
+2. **Build** the static JSON: `bunx shadcn@4.20.1 build` emits per-item
+   `registry-item` JSON into `public/r/`.
+3. **Serve** `public/` over any static file server.
+4. **Install** into a fresh consumer (`bunx shadcn@4.20.1 init -t vite -b radix
+   -p nova`), then `bunx shadcn@4.20.1 add … -y` from either delivery channel.
+5. **Verify the consumer**: the build succeeds; self-hosted `woff2` assets and
+   `@font-face` rules are emitted with no third-party requests; theme behavior
+   (light/dark scopes, `prefers-color-scheme` fallback, `:focus-visible`,
+   reduced-motion) is applied; and exact-pinned npm dependencies install.
+   `apps/docs/fixtures/acceptance/verify-consumer.mjs` checks rendered values
+   after a fresh source install.
 
-2. Build static JSON
-   bunx shadcn@4.20.1 build
-   → ✔ Building augur-theme… ✔ Building registry.  (exit 0)
-   → public/r/augur-theme.json (registry-item form, $schema registry-item.json)
+The install applies exact-pinned npm dependencies, merges `cssVars.theme` into
+`@theme inline` (`--font-sans` becomes `var(--augur-font-primary)`), writes
+`cssVars.light`/`dark` into `:root`/`.dark`, appends `css` selectors (including
+the nested `@media` fallback, `body`, `:focus-visible`, and reduced-motion
+rules) after hoisting `@import` lines above all rules, and honors the
+`@custom-variant dark` redefinition in the Tailwind build.
 
-3. Serve statically (any static file server)
-   cd public && python3 -m http.server 4173
-
-4. Install into a fresh consumer (created once via
-   bunx shadcn@4.20.1 init -t vite -b radix -p nova -n augur-consumer)
-   bunx shadcn@4.20.1 add "http://127.0.0.1:4173/r/augur-theme.json" -y
-   → ✔ Installing dependencies. ✔ Updating src/index.css.  (exit 0)
-
-5. Verify the consumer build
-   bun x vite build                                   → exit 0
-   grep -c '@font-face'     dist/assets/*.css         → 11
-   grep -o 'data-theme=dark' dist/assets/*.css | wc -l → present (dark blocks + variant)
-   ls dist/assets | grep -c 'sora\|schibsted'          → 12 (self-hosted woff2)
-   grep '@fontsource' package.json                     → exact pins 5.3.0
-```
-
-Observed delivery mechanics this transcript proves: exact-pinned npm
-dependencies installed; `cssVars.theme` merged into `@theme inline`
-(`--font-sans` switched from the init font to `var(--augur-font-primary)`);
-`cssVars.light`/`dark` overwrote the scaffold values in `:root`/`.dark`;
-`css` selectors (including the nested `@media` fallback, `body`,
-`:focus-visible`, reduced-motion) appended; `@import` lines hoisted above
-all rules; `@custom-variant dark` redefinition honored by the Tailwind
-build.
-
-For GitHub-native verification (`add jubalm/augur-design-system/<item>#<ref>`
-against this repository), the same steps apply once the root `registry.json`
-exists (#17); the upstream CLI resolves refs via `git ls-remote` and reads
-public repos anonymously.
+For GitHub-native verification (`add jubalm/augur-design-system/<item>#<ref>`),
+the same steps apply against the committed root `registry.json`; the upstream
+CLI resolves refs via `git ls-remote`.
 
 **Gate:** a ref may be published for consumer pinning only after steps 1–5
 pass on that exact tree.
@@ -425,8 +404,8 @@ pass on that exact tree.
 ## 13. Contract fixture and schema validation
 
 Fixture: [`../fixtures/registry/registry.fixture.json`](../fixtures/registry/registry.fixture.json)
-— one `augur-theme` item, inline payload (the exact object installed in
-§12), plus its built-item form
+— one `augur-theme` item, inline payload (the exact object installed by
+the §12 procedure), plus its built-item form
 [`registry-item.fixture.json`](../fixtures/registry/registry-item.fixture.json)
 (byte-for-byte the `shadcn build` output). Schemas are vendored verbatim
 (§1). Validation (ajv pinned `8.20.0`; setup and recorded output in the
@@ -482,19 +461,18 @@ Consumer-facing pinning policy:
    bunx shadcn@4.20.1 add "jubalm/augur-design-system/augur-theme#<full-sha>"
    ```
 
-2. **Release tags name the human-friendly pins.** #17 introduces the tag
-   scheme for registry snapshots (aligned with the repository versioning in
-   `ARCHITECTURE.md` §19); a tag must pass the §12 gate before it is
-   documented as installable.
+2. **Release tags name the human-friendly pins.** A tag must pass the §12
+   gate before it is documented as installable (aligned with repository
+   versioning in `ARCHITECTURE.md`).
 3. **`main` is the development channel.** Unpinned installs
    (`jubalm/augur-design-system/augur-theme`) resolve to the default branch
    and are never documented as stable.
-4. **Built-JSON channel** (post-#19): `https://<docs-host>/r/<item>.json`
-   served from GitHub Pages, refreshed by the release flow; namespace
-   config in §10. Tag-scoped raw URLs
+4. **Built-JSON channel:** `https://<docs-host>/r/<item>.json` served from
+   GitHub Pages, refreshed by the release flow; namespace config in §10.
+   Tag-scoped raw URLs
    (`https://raw.githubusercontent.com/jubalm/augur-design-system/<ref>/…`)
    remain available for tools that want URL-shaped access to committed
-   artifacts, if #17 commits them.
+   artifacts.
 5. All documented consumer commands pin the CLI (`bunx shadcn@4.20.1`), not
    `@latest`.
 
@@ -503,16 +481,13 @@ Consumer-facing pinning policy:
 ## 15. Out of scope
 
 - npm publication of `@augur/design-system`, or any bundled package output
-  (deferred by architecture; tsup decision recorded in the root README).
-- The registry implementation itself, item generation, CI wiring, tag
-  scheme, and GitHub Pages serving — issue #17 (generation/validation),
-  #19 (deployment), #6-owned CI extends as needed.
+  (deferred by architecture; tsup decision recorded in `ARCHITECTURE.md`).
 - Framework support beyond the verified Vite + React + Tailwind v4 path
-  (§10), MCP server / `open in v0` integrations, private-registry
-  authentication, and consumer framework documentation (#7).
-- Component item definitions (components land with #12–#14 first).
+  (§10), MCP server / `open in v0` integrations, and private-registry
+  authentication.
+- Component item definitions beyond the committed starter set.
 
-## 16. Decision log (this issue)
+## 16. Decision log
 
 | # | Decision | Source of necessity |
 | --- | --- | --- |
@@ -520,8 +495,8 @@ Consumer-facing pinning policy:
 | D2 | Root `registry.json` at repository root | Upstream GitHub registry requirement |
 | D3 | `registryDependencies` use full GitHub item addresses, never bare names | Upstream same-repo dependency rule; bare names would resolve against the default shadcn registry |
 | D4 | `registry:font` rejected; fonts via exact-pinned `@fontsource` dependencies + hoisted `@import` CSS | Schema (`provider: ["google"]`, `next/font/google` coupling) vs PROVENANCE.md self-hosting + framework neutrality |
-| D5 | Theme via `cssVars` (light/dark/theme) + `css` selectors delivering Augur's `data-theme` model, `.dark` co-delivery, system fallback, `@custom-variant` override | Empirical §12 run; #4 `theme.css` selector model |
-| D6 | No `--radius`/`--chart-*`/`--sidebar-*` delivery | semantic-themes.md D6; FD-03 Proposed, not adopted |
+| D5 | Theme via `cssVars` (light/dark/theme) + `css` selectors delivering Augur's `data-theme` model, `.dark` co-delivery, system fallback, `@custom-variant` override | §12 procedure; consumer/acceptance smoke; `theme.css` selector model |
+| D6 | No `--radius`/`--chart-*`/`--sidebar-*` delivery | semantic-themes.md D6 |
 | D7 | Component items unprefixed kebab-case; `augur-` prefix reserved for foundational items | Upstream naming conventions; namespace/address provenance |
 | D8 | Fixture validation via ajv `8.20.0`, linked node_modules, verbatim vendored schemas registered by URL key | ajv v8 id-key mismatch + `$ref`-by-URL; repo fixture precedent (font fixture) |
-| D9 | Consumers pin full commit SHAs (strongest), tags after #17 defines them; `main` never stable | Upstream ref resolution semantics |
+| D9 | Consumers pin full commit SHAs (strongest), tags when defined; `main` never stable | Upstream ref resolution semantics |

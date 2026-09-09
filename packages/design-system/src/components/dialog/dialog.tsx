@@ -1,5 +1,5 @@
 /**
- * Dialog (issue #13) — the first primitive-backed Augur component.
+ * Dialog (issue #13) — a primitive-backed Augur component.
  *
  * Behavior (modal focus containment and restoration, Escape and
  * outside-press dismissal, tab looping, scroll locking) comes from the
@@ -12,7 +12,7 @@
  * exclusively through the semantic role custom properties delivered by
  * `@augur/design-system/styles.css` (see `./dialog.css`).
  *
- * Contracts (consumer view: docs "Dialog" page; decision record:
+ * Contracts (consumer view: docs "Dialog" page; component contract:
  * `docs/components.md` in this package):
  *
  *   - Controlled AND uncontrolled: `open` / `onOpenChange` /
@@ -41,7 +41,7 @@ import { Dialog as DialogPrimitive } from "radix-ui";
 import * as React from "react";
 import { cx } from "../../internal/cx";
 
-/** Visual width of the dialog panel (FD-02-adjacent structural steps). */
+/** Visual width of the dialog panel (structural steps). */
 export type DialogSize = "sm" | "md" | "lg";
 
 /** Root: owns open state (controlled or uncontrolled) and modal mode. */

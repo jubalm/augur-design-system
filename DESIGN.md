@@ -141,11 +141,11 @@ Augur provides a shared way to ask questions and record collective decisions. Th
 
 The core idea is **make what matters clear**. Lead with the page purpose, primary message, or next action. Keep secondary detail available without letting it compete. The experience should feel clear-eyed, credible, neutral, and human: exact language, consistent feedback, equal structure for every choice, and calm direction.
 
-This is a focused brand translation for coding agents, not a replacement for supplied artwork or product tokens. Preserve the production logo, glyph, REP token icon, and implementation token libraries. When the source does not define a value, extend the underlying logic and keep the decision visible rather than creating an arbitrary one-off.
+This is a focused brand translation for coding agents, not a replacement for supplied artwork or product tokens. Preserve the production logo, glyph, REP token icon, and implementation token libraries when they are supplied. Production identity masters are not currently supplied to this repository; until they are, the system uses text identity (`resources/brand/PROVENANCE.md`). When the source does not define a value, extend the underlying logic and keep the decision visible rather than creating an arbitrary one-off.
 
 ## Foundation authority and status
 
-DESIGN.md is canonical for adopted values representable by the pinned schema, including spacing and corner radius. Control sizing, focus, motion, and interaction policies are recorded in the [foundation decision notes](apps/docs/src/content/foundations/foundation-decisions.md) and [visual direction contract](apps/docs/src/content/foundations/visual-direction.mdx). These directions were adopted for implementation on 2026-09-06; final human visual acceptance remains pending in issue #53. No product's local tokens hold foundation authority.
+DESIGN.md is canonical for adopted values representable by the pinned schema, including spacing and corner radius. Control sizing, focus, motion, and interaction policies live in the [visual direction contract](apps/docs/src/content/foundations/visual-direction.mdx). No product's local tokens hold foundation authority.
 
 ## Colors
 
@@ -164,7 +164,7 @@ Light surfaces use Paper as the canvas, White for raised panels, Muted (#ECECF2)
 
 The light and dark themes are equal everyday expressions of one system. Keep content, order, spacing, alignment, and geometry the same in both themes. Use the words open, closed, pending, and final to name state; color only reinforces those words.
 
-Keep text and controls at WCAG AA or better. The foundation records these reference pairings: Navy on Paper 17.49:1, Graphite on Paper 7.81:1, Deep on Paper 7.17:1, Paper on Navy 17.49:1, Pewter on Navy 7.53:1, Pewter on Surface 3 6.00:1, and Green on Navy 11.87:1. Recheck every new color-on-background pairing before shipping.
+Keep text and controls at WCAG AA or better. Reference pairings: Navy on Paper 17.49:1, Graphite on Paper 7.81:1, Deep on Paper 7.17:1, Paper on Navy 17.49:1, Pewter on Navy 7.53:1, Pewter on Surface 3 6.00:1, and Green on Navy 11.87:1. Recheck every new color-on-background pairing before shipping.
 
 ## Typography
 
@@ -192,15 +192,15 @@ Do not use decorative shadows, glows, bevels, gradients, textures, or a parallel
 
 ## Shapes
 
-The logo family consists of the horizontal lockup, vertical lockup, standalone glyph, and canonical REP token icon. Start from the supplied SVG or PNG master. Preserve geometry, proportions, color relationships, clearspace, and the REP icon's circular navy field; never redraw, recolor, crop, stretch, or simplify production artwork.
+The logo family consists of the horizontal lockup, vertical lockup, standalone glyph, and canonical REP token icon. When a production master is supplied, start from it. Preserve geometry, proportions, color relationships, clearspace, and the REP icon's circular navy field; never redraw, recolor, crop, stretch, or simplify production artwork.
 
-Use the lowercase **a** in the supplied wordmark as the clearspace unit, written as **1a**. Keep at least one a-width on the left and right and one a-height above and below. No ink, edge, fold, page trim, card boundary, column rule, photograph, or neighboring logo may enter that zone. For a standalone glyph, preserve the same clearspace proportion relative to adjacent elements.
+Use the lowercase **a** in the production wordmark as the clearspace unit, written as **1a**. Keep at least one a-width on the left and right and one a-height above and below. No ink, edge, fold, page trim, card boundary, column rule, photograph, or neighboring logo may enter that zone. For a standalone glyph, preserve the same clearspace proportion relative to adjacent elements.
 
-The glyph minimum is 50px high on screen, measured from arrow tip to pyramid base; its controlling pyramid must remain at least 24px. The supplied horizontal lockup minimum is 150 x 50px, and the vertical lockup minimum is 94 x 93px. Below those thresholds, give the mark more room or use the glyph only where context already identifies Augur. There is no approved redraw or small-size simplification.
+The glyph minimum is 50px high on screen, measured from arrow tip to pyramid base; its controlling pyramid must remain at least 24px. The production horizontal lockup minimum is 150 x 50px, and the vertical lockup minimum is 94 x 93px. Below those thresholds, give the mark more room or use the glyph only where context already identifies Augur. There is no approved redraw or small-size simplification.
 
 The horizontal lockup is preferred wherever width allows. The vertical lockup is a fallback for narrow columns, square placements, badges, avatars, centered layouts, event backdrops, and slide covers. Two-tint Color is the default on light surfaces; two-tint Reversed is the default on dark surfaces. Single-tint Augur Navy or White is reserved for low-contrast or production-constrained cases and supporting placements.
 
-Corners are square: the adopted `rounded` values are 0px for both controls and surfaces (decision FD-03), so panels, cards, dialogs, and controls have no radius. Only a circle intrinsic to a control, such as a radio, and the supplied identity artwork keep their required geometry; nothing else rounds. Do not introduce shape language that competes with the fixed identity geometry.
+Corners are square: the adopted `rounded` values are 0px for both controls and surfaces, so panels, cards, dialogs, and controls have no radius. Only a circle intrinsic to a control, such as a radio, and the production identity artwork keep their required geometry; nothing else rounds. Do not introduce shape language that competes with the fixed identity geometry.
 
 ## Components
 
@@ -210,7 +210,7 @@ Primary actions use Deep on light surfaces and Green on dark surfaces, with a re
 
 Query and decision records should lead with the query or primary message, followed by status, choices, and the participant's current response. Use explicit state labels such as Open, Closed, Pending, and Final. Keep labels, metadata, tables, and technical strings visually secondary through typography and contrast, never by hiding meaning in color alone.
 
-For a logo on a controlled brand surface, use Color on Paper or White and Reversed on Navy, Raised, or another dark surface. If the partner or press surface is uncontrolled, place the supplied mark on a solid Augur brand field first rather than putting it directly over photography or pattern.
+For a logo on a controlled brand surface, use Color on Paper or White and Reversed on Navy, Raised, or another dark surface. If the partner or press surface is uncontrolled, place the production mark on a solid Augur brand field first rather than putting it directly over photography or pattern.
 
 ## Do's and Don'ts
 

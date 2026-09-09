@@ -30,8 +30,7 @@
  *
  * Styling: `./empty-state.css` references semantic role custom
  * properties only (no raw values, no new tokens). Geometry uses
- * structural constants aligned with the FD-01 spacing, FD-02 icon, and
- * FD-03 radius proposals, which remain Proposed — pending review.
+ * structural constants (spacing, icon, radius).
  */
 import type { ComponentProps, ReactNode } from "react";
 import type { HeadingLevel } from "../page-header/page-header";

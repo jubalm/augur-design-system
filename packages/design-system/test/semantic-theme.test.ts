@@ -17,7 +17,7 @@
  *      required Deep-light / Green-dark primary actions.
  *   3. CSS output — the emitted foreground/background pairs meet WCAG AA
  *      (the pairings DESIGN.md records must reproduce exactly; new
- *      pairings pass the AA thresholds), and no FD-01…FD-05 token
+ *      pairings pass the AA thresholds), and no non-color token
  *      families (spacing/radius/sizing/motion) or raw color literals are
  *      emitted.
  *   4. Package-level style consumption — resolving the package's
@@ -326,7 +326,7 @@ describe("no duplicate raw values", () => {
     expect(body).not.toMatch(/\bhsla?\(/);
   });
 
-  test("no proposed-foundation token families are emitted (FD-01/02/03/05)", () => {
+  test("no non-color token families are emitted by the theme mapping", () => {
     const body = stripComments(themeCss) + stripComments(stylesCss);
     expect(body).not.toMatch(
       /--augur-(space|radius|size|sizing|motion|duration|easing)[\w-]*\s*:/,

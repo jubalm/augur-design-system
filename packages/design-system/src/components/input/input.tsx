@@ -7,7 +7,7 @@
  * style: a plain function component; `ref` forwards through props (no
  * forwardRef).
  *
- * Contracts (consumer view: docs "Input" page; decision record:
+ * Contracts (consumer view: docs "Input" page; component contract:
  * `docs/components.md` in this package):
  *
  *   - Input is independent of FormField: it never imports from the
@@ -15,11 +15,11 @@
  *     (`<label htmlFor>`). The FormField pattern (issue #12) composes
  *     this component; the dependency points one way only.
  *   - Invalid (`invalid`): sets `aria-invalid="true"` and paints the
- *     danger-role border. The brand defines no danger hue (theme
- *     decision D1), so the error MESSAGE text — not the border color —
+ *     danger-role border. The brand defines no danger hue, so the error
+ *     MESSAGE text — not the border color —
  *     carries the meaning; never color alone.
  *   - Disabled: native `disabled`, reduced-contrast value, `cursor:
- *     not-allowed` (the FD-06 Proposed treatment, same as Button).
+ *     not-allowed` (the disabled treatment, same as Button).
  *   - Read-only: native `readOnly`. Deliberately NOT styled like
  *     disabled: the field stays focusable and its value selectable and
  *     copyable; a quiet surface signals "displayed, not edited".
