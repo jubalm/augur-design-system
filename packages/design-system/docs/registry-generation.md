@@ -1,4 +1,4 @@
-# Registry generation policy (issue #17)
+# Registry generation policy
 
 The root `registry.json` and all per-item registry JSON are **generated
 artifacts**, like the token output (`src/tokens/`). They are never edited by
@@ -6,7 +6,7 @@ hand. Authority chain (contract: [`registry-contract.md`](registry-contract.md)
 §3, `token-generation.md`):
 
 ```
-DESIGN.md → tokens.css (issue #3 toolchain)
+DESIGN.md → tokens.css (pinned toolchain)
 src/styles/theme.css, fonts.css, styles.css   (canonical relationships)
 src/components/*, src/patterns/*              (canonical component source)
         ↓  bun run registry:generate   (this policy)
@@ -23,10 +23,10 @@ packages/design-system/registry-src/utils.ts   — committed
 | `bun run registry:check` | Regenerates in-memory and fails on any drift (mirrors `tokens:check`). |
 | `bun run registry:validate` | `bunx shadcn@4.20.1 registry validate registry.json` from the repo root (pinned CLI, contract §1). |
 
-CI (#6) can run the same three scripts; no root `package.json` changes were
-needed. Schema-level validation with the vendored schemas (ajv `8.20.0`,
-fail-closed positives + mutations) lives in
-`fixtures/registry/validate-registry-fixtures.mjs` (issue #16); the generator
+The registry scripts are not part of the default CI workflow; run them
+locally or in release preparation. Schema-level validation with the vendored
+schemas (ajv `8.20.0`, fail-closed positives + mutations) lives in
+`fixtures/registry/validate-registry-fixtures.mjs`; the generator
 additionally runs internal completeness checks (every referenced file exists,
 every `registryDependencies` resolves inside the registry, every npm
 dependency is exact-pinned, no `devDependencies`, theme+utils required on
@@ -36,7 +36,7 @@ every component item).
 
 - **Base tokens**: parsed from the generated `src/tokens/tokens.css`
   (`--augur-color-*`, uppercased hex) — the curated delivery subset mirrors
-  the #16 fixture (D5).
+  the registry fixture (D5).
 - **Semantic roles**: parsed from `src/styles/theme.css` `:root` (light) and
   `[data-theme="dark"] {` (dark) blocks; the generator hard-fails if the
   system-preference fallback block differs from the explicit dark block.
@@ -61,7 +61,7 @@ every component item).
      output.
 
 The generated `augur-theme` item is verified equal (css byte-identical,
-cssVars key/value identical) to the pinned #16 fixture
+cssVars key/value identical) to the pinned registry fixture
 `fixtures/registry/registry-item.fixture.json` — the empirical §12 evidence.
 
 ## Item catalog (starter set, contract §4)
@@ -86,9 +86,8 @@ full GitHub addresses (`jubalm/augur-design-system/<item>`, contract §6.2).
 - Output is deterministic; `registry:check` fails CI on drift.
 - `registryDependencies` are committed **without** a ref (resolve to the
   default branch). `AUGUR_REGISTRY_SHA=<40-char sha>` stamps `#<sha>` pins at
-  release time (#19 flow, contract §14); consumer installs should pin full
-  SHAs.
-- `public/r/` is the GitHub-Pages-compatible built channel (#19); the root
+  release time (contract §14); consumer installs should pin full SHAs.
+- `public/r/` is the GitHub-Pages-compatible built channel; the root
   `registry.json` is the GitHub source-registry index consumed directly by
   the CLI for `jubalm/augur-design-system/<item>` installs.
 
@@ -99,7 +98,7 @@ Recorded 2026-09-04 (Bun 1.4.0, shadcn CLI 4.20.1, ajv 8.20.0):
 - `bunx shadcn@4.20.1 registry validate registry.json` →
   "✔ Registry is valid. ✔ Checked 1 registry file and 9 items." (exit 0)
 - ajv (vendored schemas): root + 9 index items + 9 built items valid;
-  theme `css` byte-identical to the #16 fixture.
+  theme `css` byte-identical to the registry fixture.
 - End-to-end: fresh `bunx shadcn@4.20.1 init -t vite -b radix -p nova`
   consumer, all 9 items installed over HTTP (registryDependencies resolved),
   `bun x vite build` exit 0; dist CSS carries 11 `@font-face` rules, 12

@@ -1,7 +1,7 @@
 /**
  * GENERATED FILE — do not edit. Regenerate: `bun run tokens:generate` in packages/design-system. Verify: `bun run tokens:check`. Policy and schema boundaries: packages/design-system/docs/token-generation.md.
  *
- * Source:  DESIGN.md (repository root), sha256 26b367ad92b8b9ec955a81880240e9c5b6d76bf90e3df33fc2d04c1309a6a7a7
+ * Source:  DESIGN.md (repository root), sha256 4258f70babf9bb408a55aa3bdb43a050684fe0df8a5f27c03083cc4152b0fd92
  * Tool:    @google/design.md@0.4.0 (exact pin in packages/design-system/package.json (0.4.0))
  * Command: design.md export DESIGN.md --format css-vars --prefix augur
  * Lint:    0 errors / 0 warnings / 1 infos at generation time
