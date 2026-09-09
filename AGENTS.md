@@ -6,15 +6,15 @@
 2. Inspect current files, Git status, related issues/PRs, and existing checks. Planned paths and commands are not evidence of implemented behavior.
 3. Check every native blocking issue and the issue's dependency section. Choose an unblocked, bounded slice; do not absorb prerequisites or adjacent issues silently.
 
-GitHub issues/PRs own execution details and evidence. The [Project](https://github.com/users/jubalm/projects/6) owns priority, readiness, and live status. `ROADMAP.md` is a navigation map, not a duplicate live task tracker.
+GitHub issues/PRs own execution details and evidence. The [Project](https://github.com/users/jubalm/projects/6) owns priority, readiness, and live status. Live planning is not mirrored in repository Markdown.
 
 ## Source authority
 
 - `ARCHITECTURE.md` governs structure, tooling direction, distribution, and boundaries.
 - `DESIGN.md` is canonical for adopted values representable by its pinned schema. Generated outputs are derived artifacts, never independent editable sources.
 - Current component code and maintained documentation govern concepts outside that schema.
-- `resources/brand/augur-brand-foundation.pdf` informs the system; it does not silently override current maintained decisions.
-- The current DESIGN.md has unresolved spacing/radius and product-ownership language. Resolve this through issue #2 before establishing shared scales. Do not import old OpenDesign artifacts or memory as current authority.
+- `resources/brand/augur-brand-foundation.pdf` informs the system; it does not override current maintained decisions. Production identity masters are not supplied; `resources/brand/PROVENANCE.md` records asset and license provenance.
+- Do not import old OpenDesign artifacts or memory as current authority.
 
 ## Boundaries
 
@@ -36,11 +36,11 @@ GitHub issues/PRs own execution details and evidence. The [Project](https://gith
 
 ## Verify and review
 
-Run relevant repository checks once they exist: frozen install, types, lint, pinned design lint/export, deterministic generation, builds, Vitest/Testing Library/axe, and Playwright where browser behavior matters. Deterministic CI (`.github/workflows/ci.yml`) currently runs: frozen install, `designmd` design lint, oxlint code lint, typecheck, token drift + controlled-failure checks (`tokens:check`, `tokens:verify-failures`), the workspace smoke check, and the unit/accessibility suite. Browser coverage lands with #15. Never claim missing commands passed.
+Run the checks defined in `.github/workflows/ci.yml`: frozen install, `designmd` design lint, oxlint code lint, typecheck, token drift and controlled-failure checks (`tokens:check`, `tokens:verify-failures`), the workspace smoke check, and the unit/accessibility suite. Browser and docs verification run through the `apps/docs` fixtures against a built docs app. Never claim missing commands passed.
 
 For visual changes, inspect real rendered examples in both themes and relevant viewport sizes. Verify font loading with computed styles, `document.fonts.check()`, and console/network evidence. Check keyboard/focus behavior and actual contrast pairings; automated accessibility is not a substitute for interaction review.
 
-Review the diff against DESIGN.md, affected docs, existing components, semantic token consistency, shadcn/API conventions, accessibility intent, and product boundaries. Deterministic CI is the blocking validation layer once implemented; AI design review starts as advisory.
+Review the diff against DESIGN.md, affected docs, existing components, semantic token consistency, shadcn/API conventions, accessibility intent, and product boundaries. Deterministic CI is the blocking validation layer; AI design review is advisory.
 
 ## Hand off and finish
 
@@ -53,4 +53,4 @@ Before stopping, leave a concise handoff in the issue or PR:
 - Remaining work and exact next action.
 - Blockers or decisions needed.
 
-Do not mark work Done or close issues without acceptance evidence. A prepared PR is not a merged change. Leave merge, release publication, public deployment, DNS changes, licensing decisions, and repository transfer to explicit maintainer direction. When a prerequisite completes, reassess its dependents and update readiness; project fields are not automatically maintained by this bootstrap.
+Do not mark work Done or close issues without acceptance evidence. A prepared PR is not a merged change. Leave merge, release publication, public deployment, DNS changes, licensing decisions, and repository transfer to explicit maintainer direction. When a prerequisite completes, reassess its dependents and update readiness; Project fields are maintained by contributors, not automatically.
