@@ -7,7 +7,7 @@
  * disabled/loading contracts, HTML semantics, and axe behavior run in
  * the repository Vitest harness (`tests/button-card.test.tsx` via
  * `bun run test` at the root), which owns the jsdom + Testing Library
- * + axe tooling from #6.
+ * + axe tooling.
  */
 import { describe, expect, test } from "bun:test";
 import { buttonVariants } from "../src/components/button/button-variants";

@@ -5,7 +5,7 @@
  * One renderer for the foundations, components, patterns, and reference
  * collections: it applies the shell layout, synthesizes the page H1
  * from the entry metadata (bodies must not repeat the title as an H1 —
- * the future Markdown endpoint, #9, synthesizes the same H1 for the
+ * the Markdown endpoint synthesizes the same H1 for the
  * clean `.md` representation), renders the description as the page
  * lede, and enforces the component-page section contract at build time.
  *
@@ -13,7 +13,7 @@
  * decided, so every documented page renders identically and future
  * pages (including component pages) are shared-source by default.
  *
- * Since #9 each page also renders the Copy page / View as Markdown
+ * Each page also renders the Copy page / View as Markdown
  * actions (src/components/PageActions.astro), pointing at the clean
  * `.md` representation generated from this same entry by
  * src/pages/[...markdown].ts.

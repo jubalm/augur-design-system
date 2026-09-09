@@ -6,7 +6,7 @@
  *
  *   - Root `registry.json` at the repository root (index form, D2).
  *   - Per-item registry-item JSON under `public/r/<name>.json`
- *     (built-item form, GitHub-Pages-compatible layout for #19).
+ *     (built-item form, GitHub-Pages-compatible layout).
  *   - `registry-src/utils.ts` — generated canonical `cn()`/`cx()` helper
  *     for the `utils` registry item (the package keeps runtime deps at
  *     the font packages, so no canonical cn() exists; this file is a
