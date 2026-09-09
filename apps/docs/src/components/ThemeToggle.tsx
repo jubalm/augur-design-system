@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 import { MonitorIcon, MoonIcon, SunIcon } from "./icons";
 
 /**
- * Theme selection control for the docs shell (issue #7).
+ * Theme selection control for the docs shell.
  *
  * Honors the `@augur/design-system` theme contract exactly
  * (`packages/design-system/src/styles/theme.css`):

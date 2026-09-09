@@ -1,5 +1,5 @@
 /**
- * Interactive example: Dialog behavior (issue #13).
+ * Interactive example: Dialog behavior.
  *
  * This module is rendered as a client island (`client:visible`) on the
  * Dialog page — a dialog is inherently interactive, so the live

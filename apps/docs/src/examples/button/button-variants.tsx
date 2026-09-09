@@ -1,5 +1,5 @@
 /**
- * Live example: Button variants in both themes (issue #11).
+ * Live example: Button variants in both themes.
  *
  * Real exports from @augur/design-system; the second row pins
  * data-theme="dark" to show the same API under the dark theme — the

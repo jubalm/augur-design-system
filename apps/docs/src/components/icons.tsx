@@ -1,7 +1,7 @@
 import type { JSX } from "react";
 
 /**
- * Inline stroke icons for the docs shell masthead (issue #55).
+ * Inline stroke icons for the docs shell masthead.
  *
  * Deliberately minimal: Feather-style 24×24 stroke geometry rendered at
  * 16px, `currentColor` throughout so the icons inherit the semantic

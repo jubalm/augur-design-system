@@ -1,5 +1,5 @@
 /**
- * Live example: EmptyState without actions (issue #14).
+ * Live example: EmptyState without actions.
  *
  * A quiet region that only names the empty state: glyph, title, and
  * description. No actions slot is rendered when there is no way out to

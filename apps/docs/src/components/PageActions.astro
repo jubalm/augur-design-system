@@ -1,20 +1,20 @@
 ---
 /**
- * Page actions: Copy page split control (issue #62, evolving #9).
+ * Page actions: Copy page split control.
  *
  * Required by ARCHITECTURE.md ("Documentation Delivery for Humans and
  * LLMs") and delivered as one compact split action: the Copy page
  * primary plus a disclosure menu holding View as Markdown, Open in
  * ChatGPT, and Open in Claude.
  *
- * Single-source discipline (unchanged from #9): `Copy page` FETCHES the
+ * Single-source discipline: `Copy page` FETCHES the
  * page's `.md` endpoint and copies exactly those bytes, so the clipboard
  * can never drift from what `View as Markdown` (and an assistant fetching
  * the URL) receives. The endpoints are statically generated from the same
  * authored sources as the rendered pages (src/pages/[...markdown].ts).
  * Nothing here generates or reconstructs Markdown.
  *
- * AI entries (issue #62): the assistants receive the ABSOLUTE canonical
+ * AI entries: the assistants receive the ABSOLUTE canonical
  * `.md` URL via their documented query-prefill conventions — never the
  * document body, so URL-length limits never bite and the assistant reads
  * the same published representation View as Markdown exposes. Those
@@ -40,7 +40,7 @@ interface Props {
 
 const { mdHref } = Astro.props;
 
-/** Assistant entry points: label + documented query-prefill endpoint (#62). */
+/** Assistant entry points: label + documented query-prefill endpoint. */
 const AI_ASSISTANTS = [
   { label: "Open in ChatGPT", endpoint: "https://chatgpt.com/?q=" },
   { label: "Open in Claude", endpoint: "https://claude.ai/new?q=" },

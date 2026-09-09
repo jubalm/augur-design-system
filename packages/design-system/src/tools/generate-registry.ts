@@ -1,12 +1,12 @@
 /**
- * Registry generator (issue #17).
+ * Registry generator.
  *
  * Generates the shadcn source registry for the Augur starter set from
  * canonical sources only (contract: docs/registry-contract.md §3):
  *
  *   - Root `registry.json` at the repository root (index form, D2).
  *   - Per-item registry-item JSON under `public/r/<name>.json`
- *     (built-item form, GitHub-Pages-compatible layout for #19).
+ *     (built-item form, GitHub-Pages-compatible layout).
  *   - `registry-src/utils.ts` — generated canonical `cn()`/`cx()` helper
  *     for the `utils` registry item (the package keeps runtime deps at
  *     the font packages, so no canonical cn() exists; this file is a
@@ -44,7 +44,7 @@
  *
  * Optional: AUGUR_REGISTRY_SHA=<full 40-char sha> stamps `#<sha>` onto
  * every `registryDependencies` address (contract §14). By default no ref
- * is embedded (resolves to the default branch); release flow (#19) pins.
+ * is embedded (resolves to the default branch); release flow pins.
  */
 
 import { join } from "node:path";

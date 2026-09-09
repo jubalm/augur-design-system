@@ -1,5 +1,5 @@
 /**
- * Example registry (issue #8).
+ * Example registry.
  *
  * Each entry pairs an example module with its own source via `?raw` —
  * the two imports name the SAME file, so the rendered preview and the

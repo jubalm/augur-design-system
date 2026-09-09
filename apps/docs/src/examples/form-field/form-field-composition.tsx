@@ -1,5 +1,5 @@
 /**
- * Live example: FormField composition (issue #12).
+ * Live example: FormField composition.
  *
  * The pattern wires label, control, helper text, and error message;
  * the composition only declares `label`/`description`/`error`/

@@ -1,5 +1,5 @@
 /**
- * Live example: PageHeader with long content (issue #14).
+ * Live example: PageHeader with long content.
  *
  * A long title and a long description wrap inside the title column —
  * `minmax(0, 1fr)` keeps them from pushing the actions out — while the

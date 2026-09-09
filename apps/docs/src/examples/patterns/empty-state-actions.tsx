@@ -1,5 +1,5 @@
 /**
- * Live example: EmptyState with actions (issue #14).
+ * Live example: EmptyState with actions.
  *
  * The full part set — a decorative glyph in the icon slot, a heading
  * title, a description, and an actions row composed from the real

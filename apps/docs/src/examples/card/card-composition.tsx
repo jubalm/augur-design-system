@@ -1,5 +1,5 @@
 /**
- * Live example: Card composition (issue #11).
+ * Live example: Card composition.
  *
  * The part set renders a grouped panel; the second card pins
  * data-theme="dark" so the same composition is visible under both

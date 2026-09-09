@@ -1,5 +1,5 @@
 /**
- * Live theming demonstration for the docs (issue #49): a true paired
+ * Live theming demonstration for the docs: a true paired
  * record — one light panel and one dark panel, identical content, order,
  * and geometry, under EITHER host theme.
  *

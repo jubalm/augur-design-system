@@ -1,9 +1,9 @@
 /**
- * Component-page section contract (issue #8).
+ * Component-page section contract.
  *
  * Every page in the `components` collection must cover the sections
  * below as H2 headings in its body, mirroring the component page
- * outline in ARCHITECTURE.md ("Documentation Website") and the issue #8
+ * outline in ARCHITECTURE.md ("Documentation Website") and the
  * acceptance criteria. The page renderer enforces this at build time so
  * an incomplete component page fails the build with a clear message
  * instead of silently publishing gaps.
