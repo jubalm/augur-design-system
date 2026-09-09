@@ -18,8 +18,8 @@ verified path (§10, §14).
 
 ## 1. Upstream baseline and pinned tooling
 
-Everything in this contract is checked against the current official shadcn
-sources, fetched 2026-09-04:
+Everything in this contract is checked against the official shadcn
+sources captured 2026-09-04:
 
 | Source | Reference | Evidence |
 | --- | --- | --- |
@@ -45,10 +45,9 @@ upgrading is a deliberate, reviewed migration that re-runs every check in
 
 ## 2. Distribution model
 
-Per `ARCHITECTURE.md` ("Package Build Strategy", "Initial Technical
-Direction"), distribution is **GitHub-first source installation** through
-shadcn-compatible conventions. Two delivery channels exist; the first is
-primary:
+Per `ARCHITECTURE.md` ("Package Build Strategy", "Distribution"), distribution
+is **GitHub-first source installation** through shadcn-compatible conventions.
+Two delivery channels exist; the first is primary:
 
 1. **GitHub-native registry** (upstream "GitHub Registries"): the CLI reads
    the repository's root `registry.json`, resolves refs, and installs source
@@ -365,52 +364,36 @@ existence of a bundled npm package." This contract operationalizes that:
 
 ---
 
-## 12. Local predeployment test path (verified 2026-09-04)
+## 12. Local predeployment test path
 
-Every registry change is verified end-to-end locally before a ref is
-published for consumers. Recorded transcript, run in this branch's
-verification (all commands with the pinned CLI; fresh consumer in
-`/tmp/augur-consumer`):
+Every registry change is verified end-to-end before a ref is published for
+consumers. The path below is the contract; executable evidence lives in the
+fixtures and consumer smoke rather than in this document.
 
-```text
-1. Schema validation (fixture + real registry, §13)
-   bunx shadcn@4.20.1 registry validate ./registry.json
-   → ✔ Registry is valid. ✔ Checked 1 registry file and 1 item.  (exit 0)
+1. **Validate** the fixture and the real registry against the vendored schemas
+   (§13): `bunx shadcn@4.20.1 registry validate ./registry.json`.
+2. **Build** the static JSON: `bunx shadcn@4.20.1 build` emits per-item
+   `registry-item` JSON into `public/r/`.
+3. **Serve** `public/` over any static file server.
+4. **Install** into a fresh consumer (`bunx shadcn@4.20.1 init -t vite -b radix
+   -p nova`), then `bunx shadcn@4.20.1 add … -y` from either delivery channel.
+5. **Verify the consumer**: the build succeeds; self-hosted `woff2` assets and
+   `@font-face` rules are emitted with no third-party requests; theme behavior
+   (light/dark scopes, `prefers-color-scheme` fallback, `:focus-visible`,
+   reduced-motion) is applied; and exact-pinned npm dependencies install.
+   `apps/docs/fixtures/acceptance/verify-consumer.mjs` checks rendered values
+   after a fresh source install.
 
-2. Build static JSON
-   bunx shadcn@4.20.1 build
-   → ✔ Building augur-theme… ✔ Building registry.  (exit 0)
-   → public/r/augur-theme.json (registry-item form, $schema registry-item.json)
+The install applies exact-pinned npm dependencies, merges `cssVars.theme` into
+`@theme inline` (`--font-sans` becomes `var(--augur-font-primary)`), writes
+`cssVars.light`/`dark` into `:root`/`.dark`, appends `css` selectors (including
+the nested `@media` fallback, `body`, `:focus-visible`, and reduced-motion
+rules) after hoisting `@import` lines above all rules, and honors the
+`@custom-variant dark` redefinition in the Tailwind build.
 
-3. Serve statically (any static file server)
-   cd public && python3 -m http.server 4173
-
-4. Install into a fresh consumer (created once via
-   bunx shadcn@4.20.1 init -t vite -b radix -p nova -n augur-consumer)
-   bunx shadcn@4.20.1 add "http://127.0.0.1:4173/r/augur-theme.json" -y
-   → ✔ Installing dependencies. ✔ Updating src/index.css.  (exit 0)
-
-5. Verify the consumer build
-   bun x vite build                                   → exit 0
-   grep -c '@font-face'     dist/assets/*.css         → 11
-   grep -o 'data-theme=dark' dist/assets/*.css | wc -l → present (dark blocks + variant)
-   ls dist/assets | grep -c 'sora\|schibsted'          → 12 (self-hosted woff2)
-   grep '@fontsource' package.json                     → exact pins 5.3.0
-```
-
-Observed delivery mechanics this transcript proves: exact-pinned npm
-dependencies installed; `cssVars.theme` merged into `@theme inline`
-(`--font-sans` switched from the init font to `var(--augur-font-primary)`);
-`cssVars.light`/`dark` overwrote the scaffold values in `:root`/`.dark`;
-`css` selectors (including the nested `@media` fallback, `body`,
-`:focus-visible`, reduced-motion) appended; `@import` lines hoisted above
-all rules; `@custom-variant dark` redefinition honored by the Tailwind
-build.
-
-For GitHub-native verification (`add jubalm/augur-design-system/<item>#<ref>`
-against this repository), the same steps apply against the committed root
-`registry.json`; the upstream CLI resolves refs via `git ls-remote` and reads
-public repos anonymously.
+For GitHub-native verification (`add jubalm/augur-design-system/<item>#<ref>`),
+the same steps apply against the committed root `registry.json`; the upstream
+CLI resolves refs via `git ls-remote`.
 
 **Gate:** a ref may be published for consumer pinning only after steps 1–5
 pass on that exact tree.

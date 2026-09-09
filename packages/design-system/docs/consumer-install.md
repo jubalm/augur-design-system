@@ -85,14 +85,15 @@ Update/overwrite expectations (what consumers should know):
 ## 4. GitHub-native installs (public repo or HTTPS/gh auth required)
 
 The pinned CLI resolves `owner/repo/<item>#<ref>` GitHub addresses through
-`git ls-remote` / raw fetch over **HTTPS**. Against this private repo that path
-requires HTTPS/gh credentials in the consumer environment; in an SSH-only
-setup git falls back to the OS keychain and pops an interactive credential
-prompt, so the local-artifact harness above is the reproducible proof path and
-GitHub-native installs are documented here rather than executed in CI.
+`git ls-remote` / raw fetch over **HTTPS**. Public repositories can be fetched
+anonymously; when the repository is private, the consumer environment must
+provide HTTPS/gh credentials. In an SSH-only setup git falls back to the OS
+keychain and pops an interactive credential prompt, so the local-artifact
+harness above is the reproducible proof path and GitHub-native installs are
+documented here rather than executed in CI.
 
-Once the repository is public (or the consumer exports HTTPS/gh auth), the
-same smoke applies with full-SHA pins:
+The same smoke applies to a public repository (or a consumer with HTTPS/gh
+auth) with full-SHA pins:
 
 ```sh
 bunx shadcn@4.20.1 add "jubalm/augur-design-system/augur-theme#<full-sha>"
