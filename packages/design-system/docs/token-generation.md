@@ -125,15 +125,9 @@ diff -r /tmp/run-a /tmp/run-b   # → no differences
 diff -r /tmp/run-a src/tokens   # → no differences (committed == regenerated)
 ```
 
-Evidence recorded for this implementation (tool `@google/design.md@0.4.0`,
-`DESIGN.md` sha256 `fa8ab25a7a08e9a3d8bd2a915f45be8c53dd1c1ee9a28ce3c250cdcc5a8904a5`):
-
-```text
-4f9733de850a5a952bbfc003485b05817328a336c857827d6609180bec56ddc6  manifest.json
-ce1367992ad40384985e63d3292a071a94752532b0b77361c2ada43721f6dea7  tokens.css
-0f77d94e650c4d31dda9c75cae604286cd816920b40d0b84ac9afb19e8467a41  tokens.dtcg.json
-159c51e72f0527e68201723419d84b25d32e5c03ab39aeb6d3d5da5c4b11c330  tokens.tailwind.css
-```
+`manifest.json` is the machine-readable record of per-artifact hashes and the
+source `DESIGN.md` sha256; `bun run tokens:check` fails on any drift, so hash
+values are not duplicated in prose.
 
 ## Supported schema boundaries (pinned toolchain 0.4.0)
 

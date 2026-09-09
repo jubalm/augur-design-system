@@ -91,22 +91,7 @@ full GitHub addresses (`jubalm/augur-design-system/<item>`, contract §6.2).
   `registry.json` is the GitHub source-registry index consumed directly by
   the CLI for `jubalm/augur-design-system/<item>` installs.
 
-## Provenance
-
-Recorded 2026-09-04 (Bun 1.4.0, shadcn CLI 4.20.1, ajv 8.20.0):
-
-- `bunx shadcn@4.20.1 registry validate registry.json` →
-  "✔ Registry is valid. ✔ Checked 1 registry file and 9 items." (exit 0)
-- ajv (vendored schemas): root + 9 index items + 9 built items valid;
-  theme `css` byte-identical to the registry fixture.
-- End-to-end: fresh `bunx shadcn@4.20.1 init -t vite -b radix -p nova`
-  consumer, all 9 items installed over HTTP (registryDependencies resolved),
-  `bun x vite build` exit 0; dist CSS carries 11 `@font-face` rules, 12
-  self-hosted woff2 assets, dark `data-theme` blocks, the
-  `prefers-color-scheme` fallback, `:focus-visible` and reduced-motion rules,
-  inlined generated token values, and zero `@augur/design-system` imports.
-
-## Visual alignment delivery correction (2026-09-07)
+## Theme item and visual parity
 
 The theme item exports every generated color, spacing, and rounded variable,
 the maintained typography stylesheet as `src/styles/augur-typography.css`,

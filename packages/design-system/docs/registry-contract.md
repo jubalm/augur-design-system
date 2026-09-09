@@ -322,9 +322,8 @@ verified against that stack and nothing more:
 - CSS-variable theming (`tailwind.cssVariables: true`) is assumed; the
   `--no-css-variables` path is not supported;
 - other upstream templates (Next.js, Astro, React Router, Laravel) are
-  expected to work by upstream design but are **not verified**; docs-app
-  verification arrives with #7. Do not document them as supported until
-  tested.
+  expected to work by upstream design but are **not verified**. Do not
+  document them as supported until tested.
 
 Namespace configuration (optional, for `@augur/…` installs from the built
 JSON channel):

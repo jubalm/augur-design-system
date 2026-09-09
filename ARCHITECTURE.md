@@ -412,13 +412,16 @@ AI review covers coherence and judgment that would otherwise require brittle cus
 ## 15. Versioning
 
 Released design-system artifacts must be explicitly versioned; the concrete
-pre-1.0 policy is defined separately. Documentation may deploy more frequently
-than package releases.
+pre-1.0 policy is defined separately. Documentation deployment is an explicit
+maintainer action, independent of package releases.
 
 ```text
 merge to main
-├── test/build the design system
-└── deploy the latest documentation
+├── verify the design system (lint, typecheck, tests, build)
+└── no automatic deployment
+
+maintainer action
+└── deploy the documentation site (manual workflow dispatch)
 
 release
 ├── version the design system

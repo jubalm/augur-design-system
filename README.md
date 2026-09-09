@@ -19,8 +19,6 @@ One lightweight Bun workspace contains `packages/design-system` (`@augur/design-
 
 The external distribution path is a GitHub-hosted shadcn-compatible source registry. The docs provide rendered pages, clean Markdown equivalents, and `llms.txt`, deployed as a static site. Architectural detail and decisions live in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-No package has been published and no public docs deployment is active.
-
 ## Development
 
 Requires [Bun](https://bun.com) **1.4.0**, pinned through `packageManager`. The workspace consumes `@augur/design-system` through `workspace:*`.

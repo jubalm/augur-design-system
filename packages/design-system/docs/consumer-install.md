@@ -54,12 +54,9 @@ The script:
 can ever block on an interactive credential prompt; stdin is closed for the
 same reason.
 
-Recorded results (this branch):
-
-| Mode | Command | Result |
-| --- | --- | --- |
-| Working tree | `bun run scripts/consumer-smoke.ts` | PASS — all checks |
-| Versioned artifact | `bun run scripts/consumer-smoke.ts --ref 0a2c84d9…` | PASS — all checks |
+The smoke runs in two modes — working-tree artifacts and a pinned versioned
+artifact (`--ref <full-40-char-sha>`) — and asserts the same consumer
+guarantees in each.
 
 ## 3. Versioned artifact installs and the update/overwrite model
 
@@ -85,7 +82,7 @@ Update/overwrite expectations (what consumers should know):
   installed `button.tsx`, re-runs `add --overwrite`, and fails if the drift
   survives.
 
-## 4. GitHub-native installs (post-merge; public repo or HTTPS/gh auth required)
+## 4. GitHub-native installs (public repo or HTTPS/gh auth required)
 
 The pinned CLI resolves `owner/repo/<item>#<ref>` GitHub addresses through
 `git ls-remote` / raw fetch over **HTTPS**. Against this private repo that path
