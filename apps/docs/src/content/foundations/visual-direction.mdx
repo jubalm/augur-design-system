@@ -1,208 +1,94 @@
 ---
 title: Visual direction
-description: Three source-grounded compositions and the adopted web direction for Augur, with final human visual acceptance reserved for issue 53.
-order: 4
+description: The durable visual principles that translate Augur's brand foundation into responsive interface decisions, with provenance kept separate from current guidance.
+order: 7
 ---
 
-## Authority and acceptance
+Augur's visual direction is a maintained system of decisions, not a collection of isolated page treatments. It translates recurring structures in the brand foundation into reusable interface behavior: clear priority, restrained signals, square geometry, tonal depth, and equal light/dark treatment.
 
-The maintainer delegated exact visual choices for this run to the Astra visual
-director. The [issue 42 authority record](https://github.com/jubalm/augur-design-system/issues/42#issuecomment-5556190059)
-records that delegation. This contract adopts the implementation direction on
-2026-09-06; **final human visual acceptance remains pending in
-[issue 53](https://github.com/jubalm/augur-design-system/issues/53)**. Adoption here
-allows the explicitly assigned downstream work to use one coherent direction.
-It does not claim that the maintainer has personally inspected these frames,
-that the package has changed, or that a release is approved.
+## What the system should communicate
 
-`ARCHITECTURE.md` retains technical authority. `DESIGN.md` remains canonical for
-adopted values representable by its pinned schema. The representable values
-below were encoded in `DESIGN.md` and regenerated into the token artifacts on
-2026-09-06 (issue 45), so runtime consumers now read the encoded foundations.
-Concepts outside that schema remain in maintained foundation documentation and
-component code.
+Augur should make the important question, state, or next action easy to find without making every region compete for attention.
 
-## Locate the source and the evidence
+The recurring principles are:
 
-Use physical PDF page numbers, starting at 1. The
-[pinned brand foundation PDF](https://github.com/jubalm/augur-design-system/blob/88a6ccf46b201b921344bfa1411ed41b1ec17ba0/resources/brand/augur-brand-foundation.pdf)
-has SHA-256 `65acce8b247ddda10834d0c068e84bc315f7afc118f5570d1d90386de8ed9c0c`.
-A different hash requires a new source review. No old OpenDesign output is authority.
+- one clear focal point per task area;
+- open composition before unnecessary containers;
+- quiet supporting information around explicit primary content;
+- square, precise geometry;
+- tonal separation instead of decorative depth;
+- green used as an intent or orientation signal, not as decoration;
+- equal structure and behavior in light and dark themes;
+- concise copy that names state and consequence directly.
 
-The [reference fixture and retained evidence](https://github.com/jubalm/augur-design-system/tree/main/apps/docs/fixtures/visual-alignment)
-include rendered source pages, six full-page web captures, computed font and
-geometry evidence, and commands for reproduction. The fixtures are outside Astro's
-shipping routes and use the real workspace package stylesheet and self-hosted
-fonts. Their geometry and border relationships are visibly confined to the fixture.
+These principles guide new work even when a page does not resemble one of the original reference compositions.
 
-| Physical pages | Observed composition | Web translation and intentional difference |
-| --- | --- | --- |
-| 1, 3 | Navy canvas, generous opening space, a regular-looking title, a short rule, a separate metadata rail | A uses an unboxed message, a narrow orientation rail, one short signal, and a lower three-part metadata row. Mobile moves the rail above the message. The regular 400 weight is a web decision; visual observation is not a measured PDF token. |
-| 5 | Three purposeful columns, aligned beginnings, hairline-separated supporting entries | Retain visible column relationships and shared baselines; stack in reading order on narrow screens. Avoid one card per paragraph. |
-| 18 | Square swatch fields; two unequal inventories with shared alignment; navy explanation strip | B uses square specimen fields and open supporting notes. Tonal fields identify specimens; they do not enclose every explanation. |
-| 20 | Equal light/dark query records, quiet outer field and lifted inner panel, explicit status | C preserves the question, equal choices, status, response, and closing time in both themes. Deep replaces the PDF's bright light-surface signal for meaningful small marks. |
-| 22, 23 | Distinct regular/light specimens and semibold display hierarchy; short tracked labels | Editorial titles get a named 400 role. Display and component headings keep their adopted 600 roles. Body remains readable 16/24. No Sora Light font is needed. |
-| 25 | An expressive public message beside a compact record; flat choice controls; restrained signal | A and C differ in pacing and density while retaining the same palette, font roles, and geometry rules. The reference has no product submission workflow. |
+## Composition
 
-## The selected composition contract
+Lead with the page purpose, primary message, or decision. Secondary context should remain available without competing at the same visual level.
 
-A frame is the maximum content width, including its internal columns. It is
-`min(1400px, viewport width minus two outer gutters)`. At widths of 960px and
-above, gutters are 64px and section gaps are 80px. Below 960px, gutters are 24px
-and section gaps are 48px. At 1440px the centered 1400px frame therefore has 20px
-actual side margins; 64px is the minimum gutter, not an instruction to stretch
-the frame. Reading paragraphs use a maximum measure of 65ch.
+Use alignment, spacing, and reading measure to create grouping before adding another panel. Long-form prose stays near 65ch. Dense records, specimens, and tables may use a wider content region when the information would otherwise become difficult to scan.
 
-Local grid gaps are 32px at 960px and above and 24px below. The opening footer retains a 32px column gap on tablet and uses 24px when stacked on mobile. The local spacing
-scale is 4, 8, 12, 16, 24, 32px, with 48, 64, 80px as composition roles rather
-than arbitrary extra component padding. The compact choice gap is 24px desktop
-and 16px below 600px. Record field and panel padding are 24px, becoming 16px below
-600px. Opening message gaps are 32px in both modes.
+The documentation shell has its own 1400px maximum frame for dense reference content; that is a scoped reading-shell decision, not a universal application width. See [Layout and geometry](/foundations/layout-geometry).
 
-| Frame | Desktop at 960px and above | Tablet at 600–959px | Mobile below 600px |
-| --- | --- | --- | --- |
-| A — Brand opening | Rail/message columns 1:2 with 32px gap. Message contains title, signal, support, then text action. Footer spans both columns in three equal tracks. Opening top inset 48px; minimum composition height 520px. | Rail/message remain 1:2 with 24px gap; footer remains three tracks. Natural height replaces the desktop minimum. | Rail, message, then the three footer entries stack in DOM order. Remove the rail's repeated sentence; keep its label and source note. No fixed height or top inset. |
-| B — Editorial specimen | Primary specimen/support columns 2:1. Main column: display field, editorial section specimen, component heading specimen. Support: three rule-led explanations. | Main specimen first; three supporting explanations follow in equal columns. Support headings use 20/26 regular to fit the narrower tracks. | Everything stacks: display, editorial section, component heading, then the three explanations. Preserve 40/44 display size; wrap the deliberate sentence lines naturally. |
-| C — Compact record | Record/support columns 2:1. Record leads with state rail and question, then two equal choices, then status/response/time. | Record first, explanation below; retain two equal choices. | Same order. Keep choices side by side; allow question and response values to wrap, never clip. Labels remain left and values right. |
+## Typography
 
-Theme changes only colors. Content order, typography, dimensions, wrapping rules,
-focus geometry, and interactive behavior remain equal. The reference's top review
-controls and bottom adoption note are evidence furniture, not a proposed docs hero.
+Sora carries identity, editorial titles, interface headings, controls, and primary navigation. Schibsted Grotesk carries paragraphs, helper text, metadata, tables, and dense records.
 
-## Type roles and exact specimen copy
+Editorial titles and sections use regular-weight Sora where size is sufficient to establish hierarchy. Interface headings and controls retain their stronger roles. Do not stack large size, heavy weight, uppercase, and green on the same message to manufacture importance.
 
-These are complete role definitions. Tracking is explicit; no role relies on a
-browser heading default. The opening title supplies the page H1; section and
-component titles retain semantic heading order regardless of visual size.
+See [Fonts and typography](/foundations/fonts) for the maintained role definitions.
 
-| Role | Family / weight | Desktop size / line / tracking | Mobile behavior | Exact specimen copy |
-| --- | --- | --- | --- | --- |
-| editorial-title | Sora 400 | 40px / 48px / −0.01em | 32/40 below 600px; same tracking | A: “Make what” then “matters clear.” (the complete headline is “Make what matters clear.”) B: “Two voices. Clear roles.” C: “Keep the record clear.” |
-| editorial-section | Sora 400 | 28px / 34px / −0.005em | 24/32 below 600px; supporting specimen notes use 20/26 below 960px | “A quieter title”; “The primary voice”; “The supporting voice”; “One clear priority”; “A compact rhythm” |
-| display — inherited | Sora 600 | 40px / 44px / −0.01em | Preserved; content wraps without clipping | “Make it clear.” then “Remove the noise.” |
-| heading-1 — inherited | Sora 600 | 28px / 34px / −0.005em | Preserved | “Vote on this query” (existing component role; not substituted for editorial titles) |
-| heading-2 — inherited | Sora 600 | 20px / 26px / 0 | Preserved | “Available choices”; “Did the proposal pass before 30 June?” |
-| body — inherited | Schibsted Grotesk 400 | 16px / 24px / 0 | Preserved | “A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces.” |
-| control — inherited | Sora 600 | 14px / 20px / 0 | Preserved | “Explore the foundations”; “Yes”; “No” |
-| ui — inherited | Sora 400 | 14px / 20px / 0 | Preserved | “Query ID LQ-042” (existing UI role) |
-| metadata — inherited | Schibsted Grotesk 400 | 12px / 16px / 0 | Preserved | “LQ-042”; “14:32 UTC” |
-| editorial-label — new | Schibsted Grotesk 400 | 12px / 16px / 0.12em | Preserved; allow line wrapping | “Open query”; “Purpose”; “Character”; “System” displayed as short uppercase labels |
+## Color and signal
 
-Size creates order; weight confirms it. Do not globally lower heading weights.
-Use sentence case except short metadata labels. Do not stack large size, 600
-weight, uppercase, and green for the same headline. Supporting prose stays
-Schibsted Grotesk; font alternation is never decoration.
+Navy and Paper establish the primary canvases. Green is reserved for intent and orientation: the primary action, focus, active state where appropriate, or a short signal rule.
 
-## Shape, control, and interaction decisions
+A coherent task area should usually have one dominant green carrier. Do not add a green stripe, success dot, or accent treatment to every card or section.
 
-Panels, specimen fields, Card, Dialog, Button, Input, and triggers use **0px
-radius**. The old 8px surface / 6px control proposal and its subtraction rule are
-rejected. The fixture shows the 6px control beside the selected 0px control once.
-That comparison is decision evidence, not a supported runtime variant.
+On light surfaces, Deep carries readable green intent. On dark surfaces, Augur Green carries the brighter signal. See [Color system](/foundations/color) for semantic roles and contrast constraints.
 
-Official artwork remains untouched. A supplied circular REP icon keeps its
-circular geometry; a circle intrinsic to a radio control may remain circular
-when needed to communicate its interaction. Neither is a general pill or rounded
-panel exception. No new rounded brand container or redrawn identity is authorized.
-The maintainer-approved interim replacement — the text identity — is
-specified in [Brand identity](/foundations/identity).
+## Surfaces and borders
 
-Retain desktop control heights 32px small, 36px default, and 40px large, and
-16px inline / 20px standalone icons. On a coarse pointer, actionable targets are
-at least 44px high and wide; text controls may be wider. The fixture previews the
-default size and raises it to 44px under `pointer: coarse`. This policy does not
-make noninteractive labels pretend to be controls.
+Depth is tonal rather than ornamental. Light UI steps from Paper to White and Muted; dark UI steps from Navy through Surface 1, Surface 2, and Surface 3.
 
-Keyboard focus uses a 2px solid ring with a 2px offset: Deep on light, Green on
-dark. Use `:focus-visible` and preserve browser heuristics; do not suppress focus
-on text inputs merely because a pointer initiated it. Keep focus clear of clipped
-containers. The explicit label and normal interaction affordance remain visible.
+Use quiet separators for editorial grouping and more perceivable edges for interactive controls. Meaningful boundaries must remain visually distinguishable; quiet rules must not be asked to carry state or interaction meaning by themselves.
 
-Adopt immediate state feedback with **no decorative motion**. New controls and
-Dialog transitions default to 0ms. Reject the unreviewed universal 150/250ms
-proposal; a future functional animation requires a specific reason and review.
-Reduced motion must remove transforms, loops, and smooth scrolling; retained
-legacy durations collapse to at most 0.01ms during migration.
+No decorative shadows, glows, gradients, bevels, or textures are part of the default system.
 
-Name record states Open, Closed, Pending, and Final. Hover uses an existing
-neutral surface step; pressed or selected choices may use a strong neutral
-inversion plus `aria-pressed` and an explicit response label. Disabled controls
-remain labeled and noninteractive; do not rely solely on opacity. Loading keeps
-width stable, exposes `aria-busy`, and states what is happening. No new state color
-palette or green success dot is introduced.
+## Shape
 
-## Signal and border hierarchy
+Panels, controls, Dialog surfaces, specimen fields, and standard triggers use 0px radius. Circular geometry is reserved for controls whose interaction model requires it and for verified supplied artwork.
 
-The baseline orienting signal is **32px wide and 2px high**, with no radius.
-It marks the start of the principal message or a record's state rail. Use Deep
-on light and Green on dark through the existing primary semantic relationship.
-Choose one main signal per coherent task area: this rule **or** a primary action.
-Keyboard focus and official artwork are justified additional green instances.
-Do not add a stripe to every card or every section, and never stretch this rule
-across the frame. B has no green rule because its specimen hierarchy already
-supplies the priority. A's text action stays neutral.
+Square geometry is a system rule, not a page-specific styling choice.
 
-| Relationship | Light | Dark | Meaning |
-| --- | --- | --- | --- |
-| Editorial separator | Border, 1px | Surface 3 / Raised, 1px | Quiet grouping reinforced by headings, alignment, and spacing; not an interactive boundary. This dark relationship is new and fixture-local pending issue 45 migration. |
-| Control edge | Graphite, 1px | Mist, 1px | Perceivable boundary against the adjacent canvas, panel, and neutral control fill. Distinct from the editorial separator. |
-| Record field / panel | Muted / White | Surface 1 / Surface 2 | Tonal grouping, square geometry, no shadow; panel separator may remain quiet because text/order also define the record. |
-| Focus / short signal | Deep | Green | High-contrast attention cue; focus adds its 2px offset and never replaces the label. |
+## Interaction
 
-These relationships reference existing generated color values; no new raw color,
-opacity trick, charcoal palette, shadow, gradient, or glow is permitted. Quiet
-rules do not need to imply a control; meaningful control edges must clear 3:1
-against adjacent fills. Text must clear 4.5:1, including secondary metadata.
-The fixture evidence records recomputed pairings and the actual rendered colors.
+State feedback is immediate. New components do not add decorative transitions simply to make an interface feel polished.
 
-## Decision and migration table
+Keyboard focus uses the shared 2px `:focus-visible` ring with a 2px offset. Disabled, loading, invalid, selected, and record states must be explicit in semantics or copy rather than communicated by color alone.
 
-“Adopted direction” means selected under the recorded delegation. “Inherited”
-means already maintained in `DESIGN.md`. Neither means final human acceptance.
+See [Interaction](/foundations/interaction) for the complete shared contract.
 
-| ID | Kind and evidence | Decision | Status and downstream obligation |
-| --- | --- | --- | --- |
-| VD-01 | Observed PDF composition, pages 1/3/5/18/20/22/23/25 | A/B/C compositions and responsive order above | Adopted direction. Implementation remains bounded by its assigned issue. |
-| FD-01 / VD-02 | New web dimensions; source defines no scale | Local 4/8/12/16/24/32; composition 48/64/80; 1200 frame; 64/24 gutters; 80/48 section gaps; 65ch reading measure | Adopted direction; component steps encoded as `spacing` tokens (issue 45); composition roles stay in this contract. |
-| VD-03 | Inherited roles plus new editorial distinction | Preserve all seven adopted roles; add editorial-title, editorial-section, editorial-label exactly as above | Adopted direction; encoded as `DESIGN.md` roles and runtime classes with the mobile steps (issue 45). No Sora 300 dependency. |
-| FD-03 / VD-04 | Observed square source panels and new shared decision | 0px panels, controls, Dialog; intrinsic radio/official artwork exceptions only | Adopted direction; 0px encoded as `rounded` tokens (issue 45). Component geometry migrates with the affected component issues. |
-| FD-02 | New interaction sizing choice | 32/36/40 desktop; 44px coarse-pointer target minimum; 16/20 icons | Adopted direction; component migration and touch verification required. |
-| FD-04 | Inherited color logic, new geometry | 2px ring / 2px offset; Deep/Green; focus-visible heuristics | Adopted direction; verify actual adjacent pairs and clipping during implementation. |
-| FD-05 | New motion choice | Immediate 0ms; no decorative motion; reduced-motion safety retained | Adopted direction; old generic 150/250 proposal rejected. |
-| FD-06 | Inherited states and new interaction treatment | Explicit states; neutral hover/selection; labeled disabled/loading behavior | Labels inherited; treatment adopted direction. Do not import a product workflow. |
-| VD-05 | Source signal logic; new web length | 32×2px; one main signal per task area | Adopted direction; no universal stripe component. |
-| VD-06 | Source tonal depth; new semantic separation | Quiet editorial rules versus perceivable control edges as above | Adopted direction; relationships and contrast evidence recorded (issue 45); runtime semantic border roles land with the consuming frame work (issue 46). |
-| Acceptance | Maintainer review of actual rendered work | Final human visual acceptance of all resulting surfaces | Unresolved in issue 53; blocks final visual acceptance and closure of that gate. It does not turn this contract into an unreviewed bag of options. |
+## Theme and adaptive behavior
 
-The [foundation decision record](/foundations/decisions) preserves the original
-audit and identifies these supersessions. Closed issue 2 did not itself adopt
-its earlier proposals. Future execution still requires explicit assignment.
+Light and dark are two expressions of one system. Theme changes color roles only; content order, spacing, dimensions, hierarchy, and interaction behavior stay equivalent.
 
-## Good and poor translations
+Responsive layouts preserve the same priority order. Columns may stack and supporting information may move below the primary content, but the page should not acquire a different meaning or action hierarchy at another viewport.
 
-| Do | Don't | Source and consequence |
-| --- | --- | --- |
-| Compose whitespace around a message and a deliberate rail | Leave a huge empty side area caused by a generic narrow content column | Pages 1/3: negative space belongs to the composition; the 1400px frame and 1:2 opening make its structure explicit. |
-| Use open columns and quiet rules for editorial explanation | Put every paragraph in a rounded card | Pages 5/18/22: alignment and hierarchy carry the page, with fields reserved for actual specimens. |
-| Lead with a concise identity message | Turn installation state, build status, or package internals into the hero | Pages 1/25: the opening explains purpose. Technical information belongs in reference sections. |
-| Show the actual question, choices, state, and response | Replace a record with a generic explanatory card | Pages 20/23/25: the reader can inspect the record rather than read about it. |
-| Keep the display specimen 600 and editorial titles 400 | Make every heading semibold or every heading regular | Pages 22/23: each type role has a job; use the table above. |
-| Use Deep for a meaningful light-surface signal | Copy bright Green from a printed light example without contrast review | Page 20 plus current DESIGN.md: the web translation honors accessibility and source intent. |
-| Reserve stronger edges for controls | Draw a bright Mist grid around all dark editorial content | Pages 18/20/25: surfaces and hairlines organize; controls remain perceivable. |
+## Reference compositions
 
-## Review and reproduction
+Three source-grounded compositions remain useful as review evidence:
 
-Run the fixture command documented in its README to reproduce light and dark at
-1440×1000, 768×1024, and 390×844. Inspect each full-page capture alongside its
-named PDF sources. Check focal point, shared left edges, role weights, surface
-hierarchy, signal purpose, and the intentional stacking changes described above.
-The evidence includes a focus close-up and a verification report recording font
-files, computed family/weight/size/line-height, font readiness, zero failed local
-requests, keyboard behavior, theme geometry parity, overflow, and contrast.
+- **Brand opening:** an unboxed message, orientation rail, one short signal, and supporting metadata.
+- **Editorial specimen:** open columns and tonal specimen fields with supporting explanation outside unnecessary cards.
+- **Compact record:** explicit state, question, equal choices, response, and quiet metadata in a dense record composition.
 
-The shared MDX source produces `/foundations/visual-direction` and its clean
-Markdown equivalent `/foundations/visual-direction.md` through the existing
-pipeline. Durable source images and screenshots are retained with the fixture;
-no `/tmp` path is required for the handoff. Captures establish what was rendered;
-the annotated comparisons and explicit acceptance gate establish what has and
-has not been accepted.
+They demonstrate the principles above. They are references, not templates that every page must reproduce.
+
+## Provenance and acceptance
+
+The visual direction was derived from the pinned Augur brand foundation PDF and the recorded foundation review. Adopted values that fit the pinned `DESIGN.md` schema are canonical there; maintained guidance on this site owns the decisions that do not fit the schema cleanly.
+
+The detailed source-page comparisons, review captures, and historical selection record remain available in the repository and linked issues. [Foundation decisions](/foundations/decisions) summarizes the decision provenance without requiring contributors to treat migration history as current guidance.
+
+Final human visual acceptance remains tracked in [issue 53](https://github.com/jubalm/augur-design-system/issues/53). Passing deterministic tests establishes implementation consistency, not aesthetic acceptance.

@@ -1,31 +1,29 @@
 ---
 title: Getting started
-description: Consume Augur through the source registry or workspace package, load the shared styles, and start with the real exported components.
+description: Choose the Augur consumption path, load the shared styles, and make design decisions from the maintained foundations before composing components.
 markdown: true
 layout: ../layouts/BaseLayout.astro
 ---
 
-Augur is a source-first design system. The near-term external consumption path is the generated, shadcn-compatible source registry; applications inside this repository may consume the workspace package directly.
+Augur is a source-first design system. External consumers use the generated, shadcn-compatible source registry; applications in this repository may consume the workspace package directly.
 
 ## Choose a consumption path
 
 ### Source registry
 
-The repository publishes generated registry items under `/r/`, including the base theme and current components/patterns. Registry items are generated from canonical package sources rather than maintained as parallel copies.
+Registry items are generated from canonical package sources and published under `/r/`. Start with `augur-theme`, then add the components or patterns the application needs. Pin a verified repository ref for reproducible consumption rather than treating `main` as a release channel.
 
-Start with the `augur-theme` item, then add the components or patterns your application needs. Pin a verified repository ref for reproducible consumption rather than treating `main` as a release channel.
-
-Once you have the resolved URL for a registry item, install it with the standard shadcn source-install command:
+Once you have the resolved item URL, use the standard shadcn source-install command:
 
 ```sh
 npx shadcn@latest add "$REGISTRY_ITEM_URL"
 ```
 
-The URL should point at the generated item you intend to consume; the design-system repository remains the authority for which items and refs are valid.
+The design-system repository remains the authority for which registry items and refs are valid.
 
 ### Workspace package
 
-Applications in this workspace can import from `@augur/design-system` directly.
+Applications in this workspace can import the package directly:
 
 ```tsx
 import { Button, Card, Input } from "@augur/design-system";
@@ -40,24 +38,27 @@ Light and dark are equal everyday themes. With no explicit theme, the system pre
 
 See [Theming](/foundations/theming) for the selection and scoping contract.
 
-## Start with decisions, not components
+## Make design decisions before assembling UI
 
-Before composing a page, use the foundations to understand Augur's hierarchy and interaction language:
+Use the foundations to establish hierarchy and behavior before choosing a component by appearance:
 
-- [Typography](/foundations/fonts)
-- [Color](/foundations/color)
+- [Brand identity](/foundations/identity)
+- [Fonts and typography](/foundations/fonts)
+- [Color system](/foundations/color)
 - [Layout and geometry](/foundations/layout-geometry)
 - [Interaction](/foundations/interaction)
 - [Theming](/foundations/theming)
 
-Then choose components and patterns by their documented `When to use` / `When not to use` guidance rather than by visual resemblance.
+Then use component and pattern pages for their documented `When to use` and `When not to use` guidance.
 
 ## Current starter set
 
-The current documented starter set includes Button, Card, Input, Dialog, FormField, PageHeader, and EmptyState. Reference Record remains a source-grounded composition under review as either a reusable pattern or a retained reference specimen.
+The documented component starter set is Button, Card, Input, and Dialog. Reusable compositions include FormField, PageHeader, and EmptyState.
+
+Reference Record is retained as a source-grounded reference composition. Treat it as evidence for record-language decisions, not as a default product workflow.
 
 ## Sources of truth
 
-`DESIGN.md` owns adopted design values representable by the pinned schema. Generated token outputs are derived artifacts. Foundation documentation owns maintained design guidance that does not fit the schema cleanly, while component and pattern pages own usage and composition decisions.
+`DESIGN.md` owns adopted design values representable by the pinned schema. Generated token outputs are derived artifacts. Foundation documentation owns maintained design guidance that does not fit the schema cleanly, while component and pattern pages own usage, behavior, and composition decisions.
 
-For package/export details, see [Package entries](/reference/package-entries). For contribution rules and verification, see [Contributing](/reference/contributing).
+For package and export details, see [Package entries](/reference/package-entries). For contribution and verification rules, see [Contributing](/reference/contributing). For how the current foundations were selected and superseded, see [Foundation decisions](/foundations/decisions).

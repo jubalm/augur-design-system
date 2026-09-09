@@ -14,34 +14,37 @@ Components consume semantic roles and shared foundations. They do not own system
 Foundations → Tokens → Primitives → Components → Patterns → Products
 ```
 
-Use native elements first. Introduce a primitive such as Radix only when the interaction model requires behavior that native elements do not provide cleanly.
+Use native elements first. Introduce a primitive such as Radix when the interaction model requires behavior native elements do not provide cleanly.
 
 ## Visual contract
 
-Component CSS uses semantic role custom properties rather than raw color values or generated color primitives directly. Shared layout and interaction decisions live in:
+Component CSS uses semantic role custom properties rather than raw color values or generated color primitives directly.
+
+Shared decisions live in:
 
 - [Layout and geometry](/foundations/layout-geometry)
 - [Interaction](/foundations/interaction)
-- [Color](/foundations/color)
+- [Color system](/foundations/color)
 - [Theming](/foundations/theming)
+- [Fonts and typography](/foundations/fonts)
 
-Do not duplicate those rules in every component page. A component page should explain how they apply and document exceptions.
+A component page explains how those rules apply and documents exceptions; it should not restate a second foundation system.
 
 ## API conventions
 
-- Public exports use PascalCase and are re-exported from the package entry.
+- Public exports use PascalCase and are re-exported from the package root.
 - Internal file organization is not public API.
 - Prefer small string-union variant/size props over open-ended visual props.
-- Composition parts follow real semantic elements where possible.
-- React 19 refs are passed directly; avoid `forwardRef` unless a concrete compatibility requirement appears.
+- Composition parts use real semantic elements where possible.
+- React 19 refs pass directly; avoid `forwardRef` without a compatibility requirement.
 - `className` extends the component rather than replacing its contract.
 - Product workflow, validation policy, and domain state stay outside the design-system component.
 
 ## Documentation contract
 
-Each component page must help a consumer make a correct decision, not merely enumerate props.
+Every component page must help a consumer make a correct decision, not merely enumerate props.
 
-Required core sections:
+The current build-time required sections are:
 
 ```text
 When to use
@@ -51,9 +54,19 @@ Sizes
 States
 Accessibility
 API
+Design rationale
 ```
 
-The documentation contract may evolve toward anatomy, adaptive behavior, related components/patterns, and verification where those sections add real decision value. Sections that do not apply should be explicitly treated as not applicable rather than filled with speculative variants or states.
+Use `not applicable` honestly rather than inventing speculative variants or states to fill the outline.
+
+Where they add decision value, also document:
+
+```text
+Anatomy
+Adaptive behavior
+Related components / patterns
+Verification
+```
 
 Live examples must import the real package component. Displayed code should come from the same example source so rendering and sample text cannot drift independently.
 
@@ -61,11 +74,11 @@ Live examples must import the real package component. Displayed code should come
 
 A component change should prove the parts relevant to its contract:
 
-- package/unit tests for exports and class/API behavior;
-- repository interaction tests for keyboard, state, semantics, and axe findings;
+- package/unit tests for exports and API behavior;
+- interaction/accessibility tests for keyboard, state, semantics, and axe findings;
 - docs/browser fixtures for rendered geometry and theme behavior when visuals change;
-- source-registry generation/consumer checks when the registry item changes;
-- maintainer visual review where issue #53 or a successor acceptance gate applies.
+- source-registry generation/consumer checks when distribution changes;
+- maintainer visual review where the current acceptance gate applies.
 
 Passing deterministic tests does not establish visual acceptance.
 
@@ -77,11 +90,11 @@ The base `augur-theme` item carries the shared system contract; component and pa
 
 ## Adding or changing a component
 
-1. Confirm the component belongs in the Components layer rather than a Pattern or product surface.
-2. Reuse the maintained foundations; do not invent local visual rules to complete the design.
+1. Confirm the component belongs in Components rather than Patterns or a product surface.
+2. Reuse maintained foundations instead of inventing local visual rules.
 3. Define the smallest API that serves the concrete use case.
 4. Implement with native semantics or an appropriate primitive.
-5. Document when to use it, when not to use it, behavior, accessibility, and API.
-6. Add real examples and the relevant deterministic/browser verification.
+5. Document selection, behavior, accessibility, and API.
+6. Add real examples and relevant deterministic/browser verification.
 7. Verify registry output if the component is externally consumable.
-8. Escalate unresolved design decisions instead of silently creating new system rules.
+8. Escalate unresolved system decisions instead of silently creating a local exception.
