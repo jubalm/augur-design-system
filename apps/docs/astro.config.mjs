@@ -4,7 +4,7 @@
  * Plain Astro with React and MDX integrations — deliberately no Starlight
  * or other docs framework layer (ARCHITECTURE.md, "Documentation Website").
  *
- * Deployment base (acceptance: repository subpaths AND a future
+ * Deployment base (acceptance criteria: repository subpaths AND a future
  * custom-domain root):
  *
  *   - Default build uses base "/" — a custom-domain root deployment.

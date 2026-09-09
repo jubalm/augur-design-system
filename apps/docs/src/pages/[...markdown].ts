@@ -9,7 +9,7 @@
  *   /components/<slug>.md    ← src/content/components/<slug>.md(x)
  *   /patterns/<slug>.md      ← src/content/patterns/<slug>.md(x)
  *   /reference/<slug>.md     ← src/content/reference/<slug>.md(x)
- * /foundations.md ← section overview, and the
+ *   /foundations.md          ← section overview, and the
  *   /components.md             other three kinds likewise
  *   /getting-started.md      ← src/pages/getting-started.mdx (?raw)
  *

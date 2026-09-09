@@ -1,5 +1,5 @@
 /**
- * Typography specimen for the fonts page.
+ * Typography specimen for the fonts page (contract frame B).
  *
  * The dominant display field is the page's sole large tonal field
  * (inverse Navy/Paper swap across themes); the role comparison is an

@@ -32,7 +32,8 @@
  * generations from the same DESIGN.md are byte-identical.
  *
  * Scripts and configuration for token generation live entirely inside
- * packages/design-system; root scripts/workflows are owned by.
+ * packages/design-system; root scripts and workflows live at the
+ * repository root.
  */
 
 import { spawnSync } from "node:child_process";

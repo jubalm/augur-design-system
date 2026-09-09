@@ -8,10 +8,9 @@
  * from the same source as the rendered example, so the two cannot drift.
  * See `src/content/README.md` ("Live examples").
  *
- * Nothing here fakes exports that do not exist: today's examples use the
- * font constants and the theme contract. When starter components land
- *, their examples import `Button`, `Card`, … through the same
- * path — no mock components, no duplicated implementations.
+ * Nothing here fakes exports that do not exist: examples import the real
+ * `@augur/design-system` exports through the same path consumers use — no
+ * mock components, no duplicated implementations.
  */
 import type { ReactNode } from "react";
 

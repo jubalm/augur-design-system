@@ -7,25 +7,25 @@
  *   1. Self-hosted font faces from the pinned OFL `@fontsource` packages
  *      (see `src/fonts.ts` and `resources/brand/PROVENANCE.md` for exact
  *      provenance). The bare-specifier `@import`s below are resolved at
- * bundle time by Vite/Astro (the documented consumer); they
+ *      bundle time by Vite/Astro (the documented consumer); they
  *      are not resolved by the browser.
- * 2. Generated base tokens: `--augur-color-*` custom
+ *   2. Generated base tokens: `--augur-color-*` custom
  *      properties derived from `DESIGN.md` by the pinned toolchain
  *      (`../tokens/tokens.css` — generated output, never hand-edited).
  *   3. Font-family custom properties with fallback stacks (`./fonts.css`).
  *   4. Typography role classes mirroring the `DESIGN.md` front-matter
  *      `typography` block one-to-one (`./typography.css`).
- * 5. Semantic light/dark theme mapping: shadcn-compatible
+ *   5. Semantic light/dark theme mapping: shadcn-compatible
  *      role custom properties referencing the generated tokens only
  *      (`./theme.css`), plus the shared focus and reduced-motion behavior.
- * 6. Starter component styles: Button, Card, and
- * Dialog, styled through the semantic roles only (no
+ *   6. Starter component styles: Button, Card, and
+ *      Dialog, styled through the semantic roles only (no
  *      raw values, no new tokens).
- * 6. Starter component styles: Button and Card,
+ *   6. Starter component styles: Button and Card,
  *      styled through the semantic roles only (no raw values, no new
  *      tokens).
- * 6. Starter component styles: Button and Card,
- * then Input and the FormField pattern, styled
+ *   6. Starter component styles: Button and Card,
+ *      then Input and the FormField pattern, styled
  *      through the semantic roles only (no raw values, no new tokens).
  *
  * Color roles must reference generated variables — raw `DESIGN.md` color
