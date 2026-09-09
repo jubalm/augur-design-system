@@ -1,5 +1,5 @@
 /**
- * Deployment-base helper for the docs app (issue #7).
+ * Deployment-base helper for the docs app.
  *
  * `import.meta.env.BASE_URL` reflects Astro's configured `base`
  * (see `astro.config.mjs`): "/" for a custom-domain root deployment, or a

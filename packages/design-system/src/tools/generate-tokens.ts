@@ -1,5 +1,5 @@
 /**
- * Base token generator for @augur/design-system (issue #3).
+ * Base token generator for @augur/design-system.
  *
  * Generates machine-readable base tokens from the repository-root `DESIGN.md`
  * using the exact-pinned `@google/design.md` toolchain. Generated artifacts
@@ -23,7 +23,7 @@
  *   generate (default)   lint-gate, export, verify, write artifacts + manifest
  *   --out <dir>          write artifacts to <dir> instead of src/tokens
  *   --check              regenerate in memory and byte-compare with committed
- *                        artifacts; exit 1 on any drift (CI drift gate for #6)
+ *                        artifacts; exit 1 on any drift (CI drift gate)
  *   --prove-failure      run the real pipeline against controlled invalid
  *                        inputs and assert every failure path exits nonzero
  *
@@ -32,7 +32,8 @@
  * generations from the same DESIGN.md are byte-identical.
  *
  * Scripts and configuration for token generation live entirely inside
- * packages/design-system; root scripts/workflows are owned by issue #6.
+ * packages/design-system; root scripts and workflows live at the
+ * repository root.
  */
 
 import { spawnSync } from "node:child_process";
@@ -363,7 +364,7 @@ function verifyOutputs(exportsOut: ExportOutput[]): void {
   ) {
     return fail(
       "degenerate-export",
-      "dtcg output is missing the spacing or rounded group; the issue 45 sections of DESIGN.md front matter were not parsed into tokens.",
+      "dtcg output is missing the spacing or rounded group; the corresponding DESIGN.md front-matter sections were not parsed into tokens.",
     );
   }
   const colorCount =
@@ -385,7 +386,7 @@ function verifyOutputs(exportsOut: ExportOutput[]): void {
   if (cssVars === undefined) {
     fail("degenerate-export", "css-vars output missing.");
   }
-  // Since issue 45, DESIGN.md also adopts spacing and rounded sections,
+  // DESIGN.md also adopts spacing and rounded sections,
   // and the pinned toolchain exports them alongside colors in :root.
   const expectedCssVarCount = colorCount + spacingCount + roundedCount;
   const cssVarCount = (cssVars.match(/^ {2}--[\w-]+:/gm) ?? []).length;

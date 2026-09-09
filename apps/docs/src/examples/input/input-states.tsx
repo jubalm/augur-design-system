@@ -1,5 +1,5 @@
 /**
- * Live example: Input states (issue #12).
+ * Live example: Input states.
  *
  * A bare `Input` with consumer-owned labeling — Input is independent
  * of FormField, and this is the manual wiring a one-off consumer

@@ -1,5 +1,5 @@
 /**
- * The single navigation model for the docs (issue #55).
+ * The single navigation model for the docs.
  *
  * One derived source feeds every navigation surface — the grouped
  * sidebar, the mobile "Browse documentation" panel, previous/next

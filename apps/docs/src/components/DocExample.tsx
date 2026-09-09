@@ -1,7 +1,7 @@
 import type { ExampleDefinition } from "../lib/examples";
 
 /**
- * Example block for documentation content (issue #8).
+ * Example block for documentation content.
  *
  * Renders a live example and the source of the exact module that is
  * rendered, taken from the example's `?raw` import — the sample and the

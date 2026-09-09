@@ -1,5 +1,5 @@
 /**
- * Live example: Dialog composition (issue #13).
+ * Live example: Dialog composition.
  *
  * Statically rendered preview (no hydration): the docs example pipeline
  * renders without client JavaScript, and a Radix portal mounts nothing
