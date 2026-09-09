@@ -411,7 +411,9 @@ AI review covers coherence and judgment that would otherwise require brittle cus
 
 ## 15. Versioning
 
-The design system is explicitly versioned, and documentation may deploy more frequently than package releases.
+Released design-system artifacts must be explicitly versioned; the concrete
+pre-1.0 policy is defined separately. Documentation may deploy more frequently
+than package releases.
 
 ```text
 merge to main

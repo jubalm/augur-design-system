@@ -12,10 +12,9 @@
  *
  * Classes resolve color exclusively through the semantic role custom
  * properties in `src/styles/theme.css`. Geometry values in
- * `button.css` are structural constants aligned with the FD-01, FD-02,
- * and FD-03 foundation proposals (Proposed — pending maintainer
- * review), not emitted tokens; see `docs/components.md` in this
- * package for the decision record.
+ * `button.css` are structural constants (spacing, control heights,
+ * radius), not emitted tokens; see `docs/components.md` in this
+ * package for the component contract.
  */
 
 /** Visual intent of the button. shadcn-compatible set, Augur-owned. */
@@ -27,7 +26,7 @@ export type ButtonVariant =
   | "ghost"
   | "link";
 
-/** Control size. Heights follow the FD-02 proposal (Proposed). */
+/** Control size. */
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonVariantsProps {

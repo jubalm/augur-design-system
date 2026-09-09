@@ -200,7 +200,7 @@ The glyph minimum is 50px high on screen, measured from arrow tip to pyramid bas
 
 The horizontal lockup is preferred wherever width allows. The vertical lockup is a fallback for narrow columns, square placements, badges, avatars, centered layouts, event backdrops, and slide covers. Two-tint Color is the default on light surfaces; two-tint Reversed is the default on dark surfaces. Single-tint Augur Navy or White is reserved for low-contrast or production-constrained cases and supporting placements.
 
-Corners are square: the adopted `rounded` values are 0px for both controls and surfaces (decision FD-03), so panels, cards, dialogs, and controls have no radius. Only a circle intrinsic to a control, such as a radio, and the production identity artwork keep their required geometry; nothing else rounds. Do not introduce shape language that competes with the fixed identity geometry.
+Corners are square: the adopted `rounded` values are 0px for both controls and surfaces, so panels, cards, dialogs, and controls have no radius. Only a circle intrinsic to a control, such as a radio, and the production identity artwork keep their required geometry; nothing else rounds. Do not introduce shape language that competes with the fixed identity geometry.
 
 ## Components
 

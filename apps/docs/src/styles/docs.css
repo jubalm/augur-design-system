@@ -10,14 +10,13 @@
  *   - Fonts: family via the package's voice custom properties
  *     (--augur-font-primary/secondary); markup that this app controls
  *     uses the package typography role classes directly.
- *   - Shape/depth: no border-radius and no shadows anywhere — corner
- *     radius is FD-03 "Proposed, pending review" and the brand rules out
- *     decorative shadows; grouping is expressed with hairlines (var
- *     (--border)) and surface steps only.
- *   - Spacing/layout: the shared spacing scale is FD-01 "Proposed,
- *     pending review", so the dimensions below (max widths, paddings,
- *     prose sizes) are docs-app chrome chosen for readability. They are
- *     not design-system tokens and must not be read as adopted values.
+ *   - Shape/depth: no border-radius and no shadows anywhere — the shape
+ *     rule is square corners and the brand rules out decorative shadows;
+ *     grouping is expressed with hairlines (var (--border)) and surface
+ *     steps only.
+ *   - Spacing/layout: the dimensions below (max widths, paddings, prose
+ *     sizes) are docs-app chrome chosen for readability. They are not
+ *     design-system tokens and must not be read as adopted values.
  */
 
 /* ---------------------------------------------------------------- */
@@ -47,11 +46,11 @@ body {
   z-index: 5;
   background-color: var(--card);
   color: var(--card-foreground);
-  /* Editorial separator, not a control edge (VD-06). */
+  /* Editorial separator, not a control edge. */
   border-bottom: 1px solid var(--border-quiet);
 }
 
-/* Shared frame (issue #46, contract FD-01/VD-01; raised from 1200px so the
+/* Shared frame (issue #46, layout contract; raised from 1200px so the
    shell's document column can hold dense tables at desktop widths — see the
    table-release fix): the 1400px frame with 64px outer gutters at 960px+ and
    24px below; at wider viewports the centered frame leaves the remaining
@@ -264,7 +263,7 @@ body {
 }
 
 /* Every entry reserves the marker slot so the active rule never shifts
-   the column; the rule appears only for the current document (VD-05). */
+   the column; the rule appears only for the current document. */
 .nav-link::before {
   content: "";
   display: block;
@@ -625,7 +624,7 @@ body {
 }
 
 .prose {
-  /* Reading measure (contract FD-01): paragraphs cap at 65ch. Centered in
+  /* Reading measure: paragraphs cap at 65ch. Centered in
      the document column — the dense-page table release computes symmetric
      negative margins from the measure, which only lands on the column when
      the measure itself is centered (otherwise released tables slide left
@@ -769,7 +768,7 @@ body {
 .prose blockquote {
   margin: 1.25rem 0;
   padding: 0.25rem 0 0.25rem 1rem;
-  /* Editorial separator (VD-06). */
+  /* Editorial separator. */
   border-left: 2px solid var(--border-quiet);
   color: var(--muted-foreground);
 }
@@ -828,7 +827,7 @@ body {
 .prose td,
 .font-demo-provenance th,
 .font-demo-provenance td {
-  /* Editorial separator (VD-06): table rules group, they are not
+  /* Editorial separator: table rules group, they are not
      control edges. */
   border-bottom: 1px solid var(--border-quiet);
   text-align: left;
@@ -836,8 +835,8 @@ body {
   vertical-align: top;
   /* Break at word boundaries; only a token wider than the whole column
      splits mid-word (and the table scrolls before that matters). The
-     previous `anywhere` let auto table layout shred tokens like
-     "proposal" and "FD-01" whenever columns ran tight. */
+     previous `anywhere` let auto table layout shred long tokens like
+     "proposal" and "configuration" whenever columns ran tight. */
   overflow-wrap: break-word;
 }
 
@@ -923,7 +922,7 @@ body {
 
 .opening-signal {
   /* The baseline orienting signal: 32px wide, 2px high, no radius;
-     Deep on light, Green on dark through --primary (VD-05). */
+     Deep on light, Green on dark through --primary. */
   display: block;
   width: 32px;
   height: 2px;
@@ -1185,7 +1184,7 @@ body {
 }
 
 .site-footer {
-  /* Editorial separator (VD-06). */
+  /* Editorial separator. */
   border-top: 1px solid var(--border-quiet);
   background-color: var(--card);
   color: var(--card-foreground);
@@ -1651,7 +1650,7 @@ body {
   .type-compare-spec { text-align: left; }
   .type-specimen-grid { gap: 24px; }
 }
-/* FD-02: touch controls retain the desktop visual language with usable targets. */
+/* Touch controls retain the desktop visual language with usable targets. */
 @media (pointer: coarse) {
   .theme-toggle-option, .browse-summary, .onthispage-summary, .page-action, .page-action-menu-item, .opening-action {
     box-sizing: border-box;

@@ -31,7 +31,7 @@ const INTROS: Record<string, { description: string; intro: string }> = {
     description:
       "The adopted foundations of the Augur interface language — the two type voices, color, themes, and the records that govern them.",
     intro:
-      "Start with the type voices and the palette, then see how they compose into themes. The visual direction, brand identity, and decision records explain what was adopted, from where, and what remains open.",
+      "Start with the type voices and the palette, then see how they compose into themes. The visual direction and brand identity explain what was adopted, from where, and what remains open.",
   },
   components: {
     description:

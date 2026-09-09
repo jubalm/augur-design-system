@@ -7,14 +7,14 @@
  * React 19 style: a plain function component; `ref` forwards through
  * props (no forwardRef).
  *
- * Contracts (consumer view: docs "Button" page; decision record:
+ * Contracts (consumer view: docs "Button" page; component contract:
  * `docs/components.md` in this package):
  *
  *   - `type` defaults to "button" — a deliberate deviation from
  *     upstream shadcn, which leaves the browser's "submit" default.
  *     Forms opt into submission explicitly.
  *   - Disabled: native `disabled`, reduced-contrast but present label,
- *     `cursor: not-allowed` (the FD-06 Proposed treatment).
+ *     `cursor: not-allowed` (the disabled treatment).
  *   - Loading (`loading`): non-interactive, `aria-busy="true"`, label
  *     kept in the DOM but hidden from eyes and assistive technology so
  *     the button keeps its width; a reduced-motion-safe spinner and a
@@ -35,7 +35,7 @@ export { buttonVariants } from "./button-variants";
 export type ButtonProps = ComponentProps<"button"> & {
   /** Visual intent. The default variant is the view's one green signal. */
   variant?: ButtonVariant;
-  /** Control size (FD-02 Proposed heights). Default "md". */
+  /** Control size. Default "md". */
   size?: ButtonSize;
   /** Pending state: non-interactive, width-preserving, aria-busy. */
   loading?: boolean;

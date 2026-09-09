@@ -5,7 +5,7 @@
  * Assembles the two frame pages from the committed templates plus:
  *   - the grouped navigation model (single source in this file),
  *   - the REAL rendered article from the built docs app
- *     (/foundations/fonts as the short case, /foundations/color as
+ *     (/foundations/fonts as the short case, /foundations/decisions as
  *     the dense stress case), split into page opening and body so the
  *     collapsed "On this page" control sits at the true DOM position,
  *   - the H2-derived contents lists, and
@@ -61,6 +61,8 @@ const GROUPS = [
       { label: "Theming", href: "/foundations/theming" },
       { label: "Visual direction", href: "/foundations/visual-direction" },
       { label: "Brand identity", href: "/foundations/identity" },
+      { label: "Foundation decisions", href: "/foundations/decisions" },
+      { label: "Foundation adoption", href: "/foundations/proposals" },
     ],
   },
   {
@@ -108,8 +110,8 @@ const PAGES = {
   },
   dense: {
     template: "dense.html",
-    dist: "foundations/color/index.html",
-    active: "/foundations/color",
+    dist: "foundations/decisions/index.html",
+    active: "/foundations/decisions",
     title: "dense page",
   },
 };

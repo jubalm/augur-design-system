@@ -97,7 +97,7 @@
   --border: var(--augur-color-border-light);
   --input: var(--augur-color-secondary);
 
-  /* Quiet editorial separators (VD-06): grouping hairlines for shell
+  /* Quiet editorial separators: grouping hairlines for shell
      chrome, rules, and tables — distinct from the --border control
      edge. In light both share Border; they part ways in dark. */
   --border-quiet: var(--augur-color-border-light);
@@ -151,7 +151,7 @@
   --border: var(--augur-color-border-light);
   --input: var(--augur-color-secondary);
 
-  /* Quiet editorial separators (VD-06): grouping hairlines for shell
+  /* Quiet editorial separators: grouping hairlines for shell
      chrome, rules, and tables — distinct from the --border control
      edge. In light both share Border; they part ways in dark. */
   --border-quiet: var(--augur-color-border-light);
@@ -207,7 +207,7 @@
   --input: var(--augur-color-surface-dark-mist);
 
   /* Quiet editorial separators in dark: a Surface 3 step, not Mist —
-     grouping hairlines must not glow like control edges (VD-06). */
+     grouping hairlines must not glow like control edges. */
   --border-quiet: var(--augur-color-surface-dark-3);
 
   /* Focus ring: Green in dark. */

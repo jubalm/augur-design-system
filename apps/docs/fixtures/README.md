@@ -143,4 +143,5 @@ so the result cannot depend on a previous regular build or a crashed
 prior run, and `dist` is removed at the end (the failing builds may
 have partially overwritten it). This is the
 docs-side analogue of `tokens:verify-failures` and the registry
-invalid fixtures. It is not part of the default CI workflow.
+invalid fixtures. It runs as the final step of the `docs-verification` CI
+job, after the build, `verify-markdown`, and `verify-docs`.

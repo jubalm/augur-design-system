@@ -9,18 +9,17 @@
  * rule): muted tile, muted description, inherited foreground title; the
  * only action color comes from the consumer's primary Button.
  *
- * Geometry: intentional structural constants aligned with the FD-01
- * spacing, FD-02 icon, and FD-03 radius proposals (Proposed — pending
- * maintainer review); no tokens are emitted. Steps used: 8/16/24/32px
- * gaps/padding, 40px icon tile, 8px tile radius.
+ * Geometry: intentional structural constants (spacing, icon, radius);
+ * no tokens are emitted. Steps used: 8/16/24/32px gaps/padding, 40px
+ * icon tile, 8px tile radius.
  */
 .aug-empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 8px; /* FD-01 space.sm (Proposed) */
-  padding: 32px 24px; /* FD-01 space.2xl / space.lg (Proposed) */
+  gap: 8px; /* space.sm */
+  padding: 32px 24px; /* space.2xl / space.lg */
   min-width: 0;
 }
 
@@ -30,9 +29,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px; /* FD-02 icon lg (Proposed) */
+  width: 40px; /* icon lg */
   height: 40px;
-  border-radius: var(--augur-rounded-surface); /* FD-03 adopted square surface */
+  border-radius: var(--augur-rounded-surface); /* adopted square surface */
   background-color: var(--muted);
   color: var(--muted-foreground);
 }
@@ -54,6 +53,6 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px; /* FD-01 space.sm (Proposed) */
-  margin-top: 8px; /* FD-01 space.sm (Proposed): one extra beat before actions */
+  gap: 8px; /* space.sm */
+  margin-top: 8px; /* space.sm: one extra beat before actions */
 }
