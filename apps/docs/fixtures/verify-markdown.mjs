@@ -122,7 +122,11 @@ function htmlOutline(html) {
   const h1 = [...main.matchAll(/<h1(?:\s[^>]*)?>([\s\S]*?)<\/h1>/g)].map((m) => normalizeHeading(stripTags(m[1])));
   const h2 = [...main.matchAll(/<h2(?:\s[^>]*)?>([\s\S]*?)<\/h2>/g)].map((m) => normalizeHeading(stripTags(m[1])));
   const metaDescription = decodeEntities(/<meta name="description" content="([^"]*)"/.exec(html)?.[1] ?? "");
-  const mdLinks = [...main.matchAll(/<a[^>]*class="page-action"[^>]*href="([^"]*)"/g)].map((m) => m[1]);
+  // Page-action anchors (#62 split control): the menu's View item plus
+  // the noscript fallback, matched by class prefix. Default (no-site)
+  // builds add no AI anchors, so every match must be the page's own .md
+  // href. --site builds are verified by verify-docs + DOCS_VERIFY_SITE.
+  const mdLinks = [...main.matchAll(/<a[^>]*class="page-action[^"]*"[^>]*href="([^"]*)"/g)].map((m) => m[1]);
   return { h1, h2, metaDescription, mdLinks };
 }
 
@@ -271,7 +275,9 @@ console.log("\n== Copy/View action wiring ==");
     const html = await readFile(join(distDir, rel), "utf8");
     const { mdLinks: actions } = htmlOutline(html);
     const expectedHref = site(`/${rel.replace(/\/index\.html$/, ".md")}`);
-    ok(`${rel} links exactly its .md representation`, actions.length === 1 && actions[0] === expectedHref, actions.join(", ") || "none");
+    // #62: the View entry appears twice in raw HTML (menu item + noscript
+    // fallback); both must be the page's own .md representation.
+    ok(`${rel} links exactly its .md representation`, actions.length === 2 && actions.every((href) => href === expectedHref), actions.join(", ") || "none");
   }
   const home = await readFile(join(distDir, "index.html"), "utf8");
   ok("home page (landing chrome) renders no Markdown actions", !home.includes("page-action"));

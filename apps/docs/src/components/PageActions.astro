@@ -1,22 +1,37 @@
 ---
 /**
- * Copy page / View as Markdown actions (issue #9).
+ * Page actions: Copy page split control (issue #62, evolving #9).
  *
  * Required by ARCHITECTURE.md ("Documentation Delivery for Humans and
- * LLMs"): `Copy page` copies the clean Markdown representation — not the
- * rendered HTML or navigation chrome — and `View as Markdown` opens the
- * direct `.md` representation.
+ * LLMs") and delivered as one compact split action: the Copy page
+ * primary plus a disclosure menu holding View as Markdown, Open in
+ * ChatGPT, and Open in Claude.
  *
- * Single-source discipline: `Copy page` FETCHES the page's `.md`
- * endpoint and copies exactly those bytes, so the clipboard can never
- * drift from what `View as Markdown` (and an LLM fetching the URL)
- * receives. The endpoints are statically generated from the same
- * authored sources as the rendered pages (src/lib/markdown.ts).
+ * Single-source discipline (unchanged from #9): `Copy page` FETCHES the
+ * page's `.md` endpoint and copies exactly those bytes, so the clipboard
+ * can never drift from what `View as Markdown` (and an assistant fetching
+ * the URL) receives. The endpoints are statically generated from the same
+ * authored sources as the rendered pages (src/pages/[...markdown].ts).
+ * Nothing here generates or reconstructs Markdown.
  *
- * Progressive enhancement: both controls work without client script
- * (the link navigates natively); the copy button is a real `<button>`
- * operated by keyboard, reporting through a polite live region. Chrome
- * only — colors/fonts come from package semantic roles (see docs.css).
+ * AI entries (issue #62): the assistants receive the ABSOLUTE canonical
+ * `.md` URL via their documented query-prefill conventions — never the
+ * document body, so URL-length limits never bite and the assistant reads
+ * the same published representation View as Markdown exposes. Those
+ * query-prefill URLs are external integration conventions, not part of
+ * Augur's API contract, and live only in the AI_ASSISTANTS constant below.
+ * An absolute URL requires a configured site: builds that pass `--site`
+ * render the AI entries; builds without one (astro dev, default builds)
+ * omit them entirely rather than emit dead links. The review origin is a
+ * build-time value and is deliberately not recorded in the repository.
+ *
+ * Progressive enhancement: View as Markdown is reachable without client
+ * script through the <noscript> fallback; the copy button is a real
+ * `<button>` operated by keyboard — success briefly swaps its label to
+ * Copied (failure: Copy failed) and a visually-hidden polite live region
+ * announces the result, so the surrounding layout never shifts. Chrome
+ * only — colors and fonts come from semantic roles (see docs.css); the
+ * chevron is decorative and every control keeps a visible text label.
  */
 interface Props {
   /** Base-aware URL of this page's clean `.md` representation. */
@@ -24,45 +39,177 @@ interface Props {
 }
 
 const { mdHref } = Astro.props;
+
+/** Assistant entry points: label + documented query-prefill endpoint (#62). */
+const AI_ASSISTANTS = [
+  { label: "Open in ChatGPT", endpoint: "https://chatgpt.com/?q=" },
+  { label: "Open in Claude", endpoint: "https://claude.ai/new?q=" },
+] as const;
+
+/** The prompt every assistant receives: instruction + canonical URL. */
+function assistantPrompt(mdUrl: string): string {
+  return `Read this Augur Design System documentation page and use it as context:\n${mdUrl}`;
+}
+
+// mdHref is already base-aware (DocPage applies withBase()), so pairing it
+// with the configured site yields the published absolute URL. Undefined
+// when the build has no site — the AI entries are omitted in that case.
+const mdUrl = Astro.site ? new URL(mdHref, Astro.site).href : undefined;
+
+const menuId = "page-actions-menu";
 ---
 <div class="page-actions">
-  <button type="button" class="page-action" data-copy-markdown={mdHref}>Copy page</button>
-  <a class="page-action" href={mdHref}>View as Markdown</a>
-  <span class="page-action-status augur-type-metadata" role="status" data-copy-status></span>
+  <div class="page-action-group">
+    <button type="button" class="page-action page-action-copy" data-copy-markdown={mdHref}>Copy page</button>
+    <button
+      type="button"
+      class="page-action page-action-trigger"
+      aria-expanded="false"
+      aria-controls={menuId}
+      aria-label="More page actions"
+      data-action-trigger
+    >
+      <svg
+        class="page-action-chevron"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+    <ul class="page-action-menu" id={menuId} hidden data-action-menu>
+      <li>
+        <a class="page-action-menu-item" href={mdHref}>View as Markdown</a>
+      </li>
+      {
+        mdUrl &&
+        AI_ASSISTANTS.map((assistant) => (
+          <li>
+            <a
+              class="page-action-menu-item"
+              href={`${assistant.endpoint}${encodeURIComponent(assistantPrompt(mdUrl))}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {assistant.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <noscript>
+    <a class="page-action page-action-noscript" href={mdHref}>View as Markdown</a>
+  </noscript>
+  <span class="visually-hidden" role="status" data-copy-status></span>
 </div>
 <script>
-  // One delegated listener per page: static markup stays server-rendered.
-  const statusTimers = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>();
+  // One delegated listener pair per page: static markup stays server-rendered.
+  // Copy feedback swaps the primary label (Copied / Copy failed) and
+  // announces the result through the visually-hidden polite live region,
+  // so the surrounding layout never shifts while state is visible.
+  const feedbackTimers = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>();
+  const COPY_LABEL = "Copy page";
 
-  function showStatus(status: HTMLElement | null, message: string): void {
-    if (!status) return;
-    status.textContent = message;
-    const previous = statusTimers.get(status);
+  function showCopyResult(button: HTMLElement, status: HTMLElement | null, label: string, announcement: string): void {
+    button.textContent = label;
+    if (status) status.textContent = announcement;
+    const previous = feedbackTimers.get(button);
     if (previous) clearTimeout(previous);
-    statusTimers.set(
-      status,
+    feedbackTimers.set(
+      button,
       setTimeout(() => {
-        status.textContent = "";
+        button.textContent = COPY_LABEL;
+        if (status) status.textContent = "";
       }, 4_000),
     );
   }
 
-  document.addEventListener("click", (event) => {
-    const target = event.target instanceof Element ? event.target.closest("[data-copy-markdown]") : null;
-    if (!(target instanceof HTMLElement)) return;
-    const href = target.dataset.copyMarkdown;
-    if (!href) return;
-    const status = target.closest(".page-actions")?.querySelector<HTMLElement>("[data-copy-status]") ?? null;
-    event.preventDefault();
-    void (async () => {
-      try {
-        const response = await fetch(href);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        await navigator.clipboard.writeText(await response.text());
-        showStatus(status, "Copied");
-      } catch {
-        showStatus(status, "Copy failed — open “View as Markdown” to copy the Markdown directly.");
+  function menus(): { menu: HTMLElement; trigger: HTMLElement | null }[] {
+    return [...document.querySelectorAll<HTMLElement>("[data-action-menu]")].map((menu) => ({
+      menu,
+      trigger: menu.closest(".page-action-group")?.querySelector<HTMLElement>("[data-action-trigger]") ?? null,
+    }));
+  }
+
+  function setMenuOpen(entry: { menu: HTMLElement; trigger: HTMLElement | null }, open: boolean): void {
+    entry.menu.hidden = !open;
+    entry.trigger?.setAttribute("aria-expanded", String(open));
+    if (open) {
+      // The menu is right-anchored to the trigger group (flush with the
+      // wrapper's right prose margin); if that anchoring pushes its left
+      // edge outside the viewport, anchor the left edges instead.
+      entry.menu.style.left = "";
+      entry.menu.style.right = "";
+      if (entry.menu.getBoundingClientRect().left < 0) {
+        entry.menu.style.left = "0";
+        entry.menu.style.right = "auto";
       }
-    })();
+    }
+  }
+
+  function closeAll(except?: HTMLElement): void {
+    for (const entry of menus()) {
+      if (entry.menu !== except && !entry.menu.hidden) setMenuOpen(entry, false);
+    }
+  }
+
+  document.addEventListener("click", (event) => {
+    const element = event.target instanceof Element ? event.target : null;
+    if (!element) return;
+
+    const trigger = element.closest<HTMLElement>("[data-action-trigger]");
+    if (trigger) {
+      const entry = menus().find((candidate) => candidate.trigger === trigger);
+      if (entry) {
+        closeAll(entry.menu);
+        setMenuOpen(entry, entry.menu.hidden);
+      }
+      return;
+    }
+
+    // Selecting a menu item closes the menu (View navigates; AI opens a tab).
+    if (element.closest(".page-action-menu-item")) {
+      closeAll();
+      return;
+    }
+
+    const copyTarget = element.closest<HTMLElement>("[data-copy-markdown]");
+    if (copyTarget) {
+      const href = copyTarget.dataset.copyMarkdown;
+      if (!href) return;
+      const status = copyTarget.closest(".page-actions")?.querySelector<HTMLElement>("[data-copy-status]") ?? null;
+      event.preventDefault();
+      void (async () => {
+        try {
+          const response = await fetch(href);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          await navigator.clipboard.writeText(await response.text());
+          showCopyResult(copyTarget, status, "Copied", "Copied");
+        } catch {
+          showCopyResult(copyTarget, status, "Copy failed", "Copy failed — open “View as Markdown” to copy the Markdown directly.");
+        }
+      })();
+      return;
+    }
+
+    // A click anywhere outside the group closes an open menu.
+    if (!element.closest(".page-action-group")) closeAll();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    const entry = menus().find((candidate) => !candidate.menu.hidden);
+    if (!entry) return;
+    setMenuOpen(entry, false);
+    entry.trigger?.focus();
   });
 </script>
