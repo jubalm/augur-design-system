@@ -15,8 +15,9 @@
  *     ├── breadcrumb / back row (any first child; nav slot part below)
  *     └── content row (two-column grid)
  *           ├── col 1: title, description (grow, wrap)
- *           └── col 2: actions (right edge, wrap; below 640px it drops
- *               under the titles — responsive by structure, no consumer CSS)
+ *           └── col 2: actions (right edge, wrap; when the containing block
+ *               is <=640px it drops under the titles — responsive by
+ *               structure, no consumer CSS)
  */
 .aug-page-header {
   display: flex;
@@ -25,6 +26,10 @@
   margin: 0;
   min-width: 0;
   text-align: start;
+  /* Descendants can respond to the header's containing block, not only to
+     the viewport. This keeps the pattern usable in narrow specimen cards
+     and other constrained consumers. */
+  container-type: inline-size;
 }
 
 /*
@@ -103,8 +108,23 @@
 }
 
 /* Narrow viewports: one column; actions wrap under the titles, still a
-   single action priority (primary first in DOM order). */
+   single action priority (primary first in DOM order). Keep this viewport
+   fallback for browsers without container-query support. */
 @media (max-width: 640px) {
+  .aug-page-header-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aug-page-header-actions {
+    grid-column: 1;
+    grid-row: auto;
+    justify-content: flex-start;
+  }
+}
+
+/* Narrow containers: the same structure applies when a PageHeader is
+   rendered inside a constrained consumer at a wide viewport. */
+@container (max-width: 640px) {
   .aug-page-header-content {
     grid-template-columns: minmax(0, 1fr);
   }

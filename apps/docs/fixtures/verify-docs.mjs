@@ -828,6 +828,51 @@ console.log("\n== Starter components in real browsers (issue #15) ==");
     await p.close();
   }
 
+  // PageHeader must respond to its containing block, not only to the
+  // viewport. The docs show action-bearing headers in two narrow cards at
+  // desktop and tablet widths; before the container query those title and
+  // description columns collapsed to one-character lines.
+  for (const viewport of [
+    { width: 1440, height: 1000 },
+    { width: 768, height: 1024 },
+  ]) {
+    const p = await browser.newPage({ viewport });
+    await p.goto(origin + site("/patterns/page-header"), { waitUntil: "networkidle" });
+    const metrics = await p.locator(".example-card-grid > .aug-page-header").evaluateAll((headers) =>
+      headers
+        .filter((header) => header.querySelector(".aug-page-header-actions"))
+        .map((header) => {
+          const title = header.querySelector(".aug-page-header-title");
+          const description = header.querySelector(".aug-page-header-description");
+          const actions = header.querySelector(".aug-page-header-actions");
+          const rect = (element) => element?.getBoundingClientRect();
+          const titleRect = rect(title);
+          const descriptionRect = rect(description);
+          const actionsRect = rect(actions);
+          return {
+            titleWidth: titleRect?.width ?? 0,
+            descriptionWidth: descriptionRect?.width ?? 0,
+            descriptionBottom: descriptionRect?.bottom ?? 0,
+            actionsTop: actionsRect?.top ?? 0,
+          };
+        }),
+    );
+    const readable =
+      metrics.length > 0 &&
+      metrics.every(
+        ({ titleWidth, descriptionWidth, descriptionBottom, actionsTop }) =>
+          titleWidth >= 120 &&
+          descriptionWidth >= 120 &&
+          actionsTop >= descriptionBottom,
+      );
+    ok(
+      `PageHeader narrow-container layout at ${viewport.width}px`,
+      readable,
+      JSON.stringify(metrics),
+    );
+    await p.close();
+  }
+
   // --- Button keyboard activation: focus-visible and Enter/Space firing.
   const btnPage = await browser.newPage();
   await btnPage.goto(origin + site("/components/button"), { waitUntil: "networkidle" });
@@ -927,6 +972,30 @@ console.log("\n== Specimen rendering repair (#44) ===");
   await barePage.evaluate(() => document.fonts.ready);
   const bareMetrics = await barePage.evaluate(componentMetrics);
   await barePage.screenshot({ path: "/tmp/augur-docs-verify/bare-hosts.png", fullPage: true });
+  const bareNarrowPageHeader = await barePage.evaluate(() => {
+    const header = document.querySelector("#page-header-host .aug-page-header");
+    if (!header) return null;
+    header.style.width = "290px";
+    const title = header.querySelector(".aug-page-header-title")?.getBoundingClientRect();
+    const description = header.querySelector(".aug-page-header-description")?.getBoundingClientRect();
+    const actions = header.querySelector(".aug-page-header-actions")?.getBoundingClientRect();
+    return {
+      containerType: getComputedStyle(header).containerType,
+      titleWidth: title?.width ?? 0,
+      descriptionWidth: description?.width ?? 0,
+      descriptionBottom: description?.bottom ?? 0,
+      actionsTop: actions?.top ?? 0,
+    };
+  });
+  ok(
+    "standalone PageHeader responds to a narrow containing block",
+    bareNarrowPageHeader != null &&
+      bareNarrowPageHeader.containerType === "inline-size" &&
+      bareNarrowPageHeader.titleWidth >= 120 &&
+      bareNarrowPageHeader.descriptionWidth >= 120 &&
+      bareNarrowPageHeader.actionsTop >= bareNarrowPageHeader.descriptionBottom,
+    JSON.stringify(bareNarrowPageHeader),
+  );
   await barePage.close();
   bareServer.close();
 
