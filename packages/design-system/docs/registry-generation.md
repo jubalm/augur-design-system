@@ -62,7 +62,8 @@ every component item).
 
 The generated `augur-theme` item is verified equal (css byte-identical,
 cssVars key/value identical) to the pinned registry fixture
-`fixtures/registry/registry-item.fixture.json` — the empirical §12 evidence.
+`fixtures/registry/registry-item.fixture.json` — the executable evidence for
+§12's build check.
 
 ## Item catalog (starter set, contract §4)
 

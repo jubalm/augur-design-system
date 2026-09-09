@@ -4,8 +4,9 @@ Status: **implemented.** This document is the contract the Augur registry
 satisfies. It defines item naming, file targets, dependency rules,
 CSS/theme/font delivery, import-alias expectations, version-pinned
 installation URLs, and the local predeployment test path. It is backed by
-upstream evidence (schemas and docs) and by an end-to-end empirical run of
-the pinned CLI recorded in §12. The fixture proving schema validation lives in
+upstream evidence (schemas and docs) and by the §12 verification procedure,
+whose executable evidence is the consumer/acceptance smoke. The fixture
+proving schema validation lives in
 [`../fixtures/registry/`](../fixtures/registry/README.md). The executable
 consumer proof and versioned-artifact pinning are documented in
 [`consumer-install.md`](consumer-install.md).
@@ -162,7 +163,7 @@ bare names, namespaced names, or URLs.
 Augur contract:
 
 1. **npm dependencies are exact-pinned in every item**
-   (`"@fontsource/sora@5.3.0"`). Empirically verified (§12): the consumer's
+   (`"@fontsource/sora@5.3.0"`). Verified by the §12 procedure: the consumer's
    `package.json` receives the exact version. Component runtime dependencies
    come from the verified upstream scaffold: the single `radix-ui` package,
    `clsx` + `tailwind-merge` (via `utils`), `class-variance-authority` for
@@ -185,7 +186,7 @@ Augur contract:
 ## 7. Import alias expectations
 
 Consumers are expected to have the standard shadcn alias set (the CLI
-`init` default, verified in §12):
+`init` default, verified by the §12 procedure):
 
 ```json
 {
@@ -229,7 +230,7 @@ Contract:
   selectors/at-rules — "CSS definitions to be added to the project's CSS
   file. Supports at-rules, selectors, nested rules, utilities, layers."
 
-### Augur delivery (all mechanics empirically verified, §12)
+### Augur delivery (mechanics verified by the §12 procedure)
 
 The `augur-theme` item carries the complete Augur look in one install:
 
@@ -286,7 +287,7 @@ Next.js-specific mechanics and third-party hosting assumptions, contradicting
 `resources/brand/PROVENANCE.md` §4 (self-hosted OFL Fontsource packages
 only, exact pins, no third-party CDN at runtime) and framework neutrality.
 
-**Verified delivery instead** (§12): the `augur-theme` item
+**Verified delivery instead** (via the §12 procedure): the `augur-theme` item
 
 1. declares `dependencies: ["@fontsource/sora@5.3.0",
    "@fontsource/schibsted-grotesk@5.3.0"]` — the consumer receives the
@@ -309,7 +310,7 @@ adding weights requires a `DESIGN.md` change first.
 
 ## 10. Consumer expectations and verified stack
 
-The verified consumer path (§12): a fresh **Vite + React 19 + Tailwind CSS
+The verified consumer path (§12 procedure): a fresh **Vite + React 19 + Tailwind CSS
 v4** project produced by `bunx shadcn@4.20.1 init -t vite -b radix -p nova`,
 with `components.json` exactly as generated (`style` set by the chosen
 base/preset, `tailwind.css: "src/index.css"`, `tailwind.cssVariables: true`,
@@ -403,8 +404,8 @@ pass on that exact tree.
 ## 13. Contract fixture and schema validation
 
 Fixture: [`../fixtures/registry/registry.fixture.json`](../fixtures/registry/registry.fixture.json)
-— one `augur-theme` item, inline payload (the exact object installed in
-§12), plus its built-item form
+— one `augur-theme` item, inline payload (the exact object installed by
+the §12 procedure), plus its built-item form
 [`registry-item.fixture.json`](../fixtures/registry/registry-item.fixture.json)
 (byte-for-byte the `shadcn build` output). Schemas are vendored verbatim
 (§1). Validation (ajv pinned `8.20.0`; setup and recorded output in the
@@ -494,7 +495,7 @@ Consumer-facing pinning policy:
 | D2 | Root `registry.json` at repository root | Upstream GitHub registry requirement |
 | D3 | `registryDependencies` use full GitHub item addresses, never bare names | Upstream same-repo dependency rule; bare names would resolve against the default shadcn registry |
 | D4 | `registry:font` rejected; fonts via exact-pinned `@fontsource` dependencies + hoisted `@import` CSS | Schema (`provider: ["google"]`, `next/font/google` coupling) vs PROVENANCE.md self-hosting + framework neutrality |
-| D5 | Theme via `cssVars` (light/dark/theme) + `css` selectors delivering Augur's `data-theme` model, `.dark` co-delivery, system fallback, `@custom-variant` override | Empirical §12 run; `theme.css` selector model |
+| D5 | Theme via `cssVars` (light/dark/theme) + `css` selectors delivering Augur's `data-theme` model, `.dark` co-delivery, system fallback, `@custom-variant` override | §12 procedure; consumer/acceptance smoke; `theme.css` selector model |
 | D6 | No `--radius`/`--chart-*`/`--sidebar-*` delivery | semantic-themes.md D6 |
 | D7 | Component items unprefixed kebab-case; `augur-` prefix reserved for foundational items | Upstream naming conventions; namespace/address provenance |
 | D8 | Fixture validation via ajv `8.20.0`, linked node_modules, verbatim vendored schemas registered by URL key | ajv v8 id-key mismatch + `$ref`-by-URL; repo fixture precedent (font fixture) |
