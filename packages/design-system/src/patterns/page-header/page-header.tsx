@@ -20,8 +20,8 @@
  *     place a quiet Button as the first child of `PageHeader` instead.
  *   - `PageHeaderContent` is the title area row: titles/description grow
  *     in the first column, `PageHeaderActions` holds the right edge and
- *     wraps below on narrow viewports (responsive by structure, not by
- *     consumer CSS).
+ *     wraps below when its containing block is narrow (responsive by
+ *     structure, not by consumer CSS).
  *   - `PageHeaderTitle` is an `h1` by default — a page header titles the
  *     page. When the pattern is used below the page level, pass
  *     `headingLevel` to emit the element the document outline needs; the
