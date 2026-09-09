@@ -1,5 +1,5 @@
 /**
- * Clean-Markdown derivation for documentation pages (issue #9).
+ * Clean-Markdown derivation for documentation pages.
  *
  * Every substantive docs page has a predictable `.md` representation
  * derived from the SAME authored source that renders the page — the

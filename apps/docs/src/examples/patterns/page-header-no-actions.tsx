@@ -1,6 +1,6 @@
 /**
  * Live example: PageHeader without actions, with a back affordance
- * (issue #14).
+ *.
  *
  * No actions slot: the title area stands alone. The back affordance is
  * a quiet ghost Button placed as the first child of `PageHeader` — a

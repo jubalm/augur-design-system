@@ -1,5 +1,5 @@
 /**
- * Pure-surface contracts for the Input and FormField slice (issue #12),
+ * Pure-surface contracts for the Input and FormField slice,
  * executable with Bun's built-in runner (`bun test` in this package).
  *
  * Scope here is the exported surface, mirroring the #11 precedent:

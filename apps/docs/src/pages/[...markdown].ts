@@ -1,5 +1,5 @@
 /**
- * Clean-Markdown endpoints (issue #9).
+ * Clean-Markdown endpoints.
  *
  * One static endpoint generates the predictable `.md` representation for
  * every substantive docs page, from the same sources the rendered routes
@@ -9,7 +9,7 @@
  *   /components/<slug>.md    ← src/content/components/<slug>.md(x)
  *   /patterns/<slug>.md      ← src/content/patterns/<slug>.md(x)
  *   /reference/<slug>.md     ← src/content/reference/<slug>.md(x)
- *   /foundations.md          ← section overview (issue #55), and the
+ * /foundations.md ← section overview, and the
  *   /components.md             other three kinds likewise
  *   /getting-started.md      ← src/pages/getting-started.mdx (?raw)
  *
@@ -51,7 +51,7 @@ export async function getStaticPaths() {
   const paths: { params: { markdown: string }; props: { markdown: string } }[] = [];
 
   for (const kind of KINDS) {
-    // Section overview (#55): authored intro plus the collection-derived
+    // Section overview: authored intro plus the collection-derived
     // reading order, from the same getSectionOverview() the page uses.
     const overview = await getSectionOverview(kind);
     const list = overview.items

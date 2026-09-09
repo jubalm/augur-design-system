@@ -1,5 +1,5 @@
 /**
- * Typography specimen for the fonts page (issue #48, contract frame B).
+ * Typography specimen for the fonts page.
  *
  * The dominant display field is the page's sole large tonal field
  * (inverse Navy/Paper swap across themes); the role comparison is an
@@ -52,7 +52,7 @@ export function FontRoles() {
               <div key={role.className} className="type-compare-row">
                 <div className="type-compare-sample">
                   {/* Samples are <div>s: prose line-height must not
-                      distort the demonstrated role values (#45). */}
+                      distort the demonstrated role values. */}
                   <div className={role.className}>{role.sample}</div>
                 </div>
                 <span className="augur-type-metadata type-compare-spec">

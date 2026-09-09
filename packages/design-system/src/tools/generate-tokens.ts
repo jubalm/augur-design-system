@@ -1,5 +1,5 @@
 /**
- * Base token generator for @augur/design-system (issue #3).
+ * Base token generator for @augur/design-system.
  *
  * Generates machine-readable base tokens from the repository-root `DESIGN.md`
  * using the exact-pinned `@google/design.md` toolchain. Generated artifacts
@@ -32,7 +32,7 @@
  * generations from the same DESIGN.md are byte-identical.
  *
  * Scripts and configuration for token generation live entirely inside
- * packages/design-system; root scripts/workflows are owned by issue #6.
+ * packages/design-system; root scripts/workflows are owned by.
  */
 
 import { spawnSync } from "node:child_process";

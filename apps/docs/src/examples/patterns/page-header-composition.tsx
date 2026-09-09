@@ -1,5 +1,5 @@
 /**
- * Live example: PageHeader composition (issue #14).
+ * Live example: PageHeader composition.
  *
  * The full part set — breadcrumb slot, title, description, and an
  * actions slot whose first Button is the primary (the view's one green

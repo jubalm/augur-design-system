@@ -1,5 +1,5 @@
 /**
- * Component contracts for the first component slice (issue #11),
+ * Component contracts for the first component slice,
  * executable with Bun's built-in runner (`bun test` in this package).
  *
  * Scope here is the pure surface: the exported variant/size class

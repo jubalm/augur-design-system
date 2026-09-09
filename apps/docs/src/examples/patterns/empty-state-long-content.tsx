@@ -1,5 +1,5 @@
 /**
- * Live example: EmptyState with long content (issue #14).
+ * Live example: EmptyState with long content.
  *
  * A long description wraps inside the width-capped description slot
  * while the region stays centered — long copy reads instead of

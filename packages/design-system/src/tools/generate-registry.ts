@@ -1,5 +1,5 @@
 /**
- * Registry generator (issue #17).
+ * Registry generator.
  *
  * Generates the shadcn source registry for the Augur starter set from
  * canonical sources only (contract: docs/registry-contract.md §3):
@@ -44,7 +44,7 @@
  *
  * Optional: AUGUR_REGISTRY_SHA=<full 40-char sha> stamps `#<sha>` onto
  * every `registryDependencies` address (contract §14). By default no ref
- * is embedded (resolves to the default branch); release flow (#19) pins.
+ * is embedded (resolves to the default branch); release flow pins.
  */
 
 import { join } from "node:path";

@@ -1,10 +1,10 @@
 /**
- * Astro configuration for the Augur design system documentation (issue #7).
+ * Astro configuration for the Augur design system documentation.
  *
  * Plain Astro with React and MDX integrations — deliberately no Starlight
  * or other docs framework layer (ARCHITECTURE.md, "Documentation Website").
  *
- * Deployment base (issue #7 acceptance: repository subpaths AND a future
+ * Deployment base (acceptance: repository subpaths AND a future
  * custom-domain root):
  *
  *   - Default build uses base "/" — a custom-domain root deployment.
@@ -15,7 +15,7 @@
  *
  * All internal links and public-asset references go through
  * `src/lib/base.ts#withBase()` so both modes work without source changes.
- * Hosting activation itself is out of scope (#19/#20).
+ * Hosting activation itself is out of scope.
  */
 import mdx from "@astrojs/mdx";
 import { satteri } from "@astrojs/markdown-satteri";
@@ -48,7 +48,7 @@ export default defineConfig({
   // Sätteri (Astro 7's Markdown/MDX processor) drives both content
   // collections and MDX pages, so rendered HTML body links are base-prefixed
   // under a repository subpath. The .md representations intentionally keep
-  // site-absolute links (llms.txt convention, issue #9) and are synthesized
+  // site-absolute links (llms.txt convention) and are synthesized
   // from source, not through this processor.
   markdown: {
     processor: satteri({ mdastPlugins: [baseLinkMdastPlugin(base === "/" ? "" : base)] }),

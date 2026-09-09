@@ -1,6 +1,6 @@
 ---
 /**
- * Shared page renderer for collection-sourced documentation (issue #8).
+ * Shared page renderer for collection-sourced documentation.
  *
  * One renderer for the foundations, components, patterns, and reference
  * collections: it applies the shell layout, synthesizes the page H1
@@ -11,7 +11,7 @@
  *
  * The H1/lede/status markup is the single place where page chrome is
  * decided, so every documented page renders identically and future
- * pages (#10, component pages) are shared-source by default.
+ * pages are shared-source by default.
  *
  * Since #9 each page also renders the Copy page / View as Markdown
  * actions (src/components/PageActions.astro), pointing at the clean
@@ -33,10 +33,10 @@ interface Props {
 
 const { entry } = Astro.props;
 const { title, description } = entry.data;
-// Clean-Markdown representation generated from this same entry (#9).
+// Clean-Markdown representation generated from this same entry.
 const mdHref = withBase(`/${entry.collection}/${entry.id}.md`);
 
-// H2-derived "On this page" data (#55): the rail and the collapsed
+// H2-derived "On this page" data: the rail and the collapsed
 // control below the page opening render from the same real headings.
 const rendered = await render(entry);
 const { Content } = rendered;
@@ -44,7 +44,7 @@ const toc = (rendered.headings ?? [])
   .filter((heading) => heading.depth === 2)
   .map((heading) => ({ slug: heading.slug, text: heading.text }));
 
-// Build-time section enforcement for component pages (issue #8):
+// Build-time section enforcement for component pages:
 // missing "When to use", "Variants", etc. fail the build with a clear,
 // actionable error (proven by fixtures/verify-content-failures.mjs).
 if (entry.collection === "components") {

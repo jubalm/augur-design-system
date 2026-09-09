@@ -1,6 +1,6 @@
 /**
  * Live example: Button sizes and the disabled/loading contracts
- * (issue #11). Disabled keeps its label at reduced contrast; loading
+ *. Disabled keeps its label at reduced contrast; loading
  * keeps its width and switches to a spinner with a visually hidden
  * "Loading" status. Static render: the states shown are the real
  * component props, not mockups.
