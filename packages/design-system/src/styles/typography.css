@@ -11,7 +11,7 @@
  * Families come from `./fonts.css` custom properties; font files are
  * delivered via `styles.css`. Weights rely on faces loaded by the pinned
  * `@fontsource` packages (Sora 400/600, Schibsted Grotesk 400) — the
- * editorial roles (issue 45, contract decision VD-03) deliberately reuse
+ * editorial roles (issue 45) deliberately reuse
  * the 400 faces; no Sora Light dependency exists.
  */
 
@@ -80,7 +80,7 @@ body {
 }
 
 /* DESIGN.md `typography.editorial-title` — Sora 400, 40/48, -0.01em.
-   The editorial voice (VD-03): long-form titles set regular so size
+   The editorial voice: long-form titles set regular so size
    alone creates order. The 32/40 step below 600px is part of the
    adopted role, per the visual direction contract. */
 .augur-type-editorial-title {
@@ -113,7 +113,7 @@ body {
 }
 
 /* Adopted mobile steps for the editorial roles (visual direction
-   contract, VD-03). The seven inherited roles have no mobile steps. */
+   contract). The seven inherited roles have no mobile steps. */
 @media (max-width: 599px) {
   .augur-type-editorial-title {
     font-size: 32px;

@@ -6,7 +6,7 @@
  * pinned `@google/design.md` toolchain (issue #3). Nothing here restates
  * a hex value; when `DESIGN.md` changes and tokens regenerate, this
  * palette re-renders with the new values. Grouping follows the
- * companion-vs-role naming rules of the foundation decision record (§4):
+ * companion-vs-role naming rules of the foundation color system (§4):
  * brand companions are named, runtime surfaces are described by job.
  *
  * The pairing table renders the contrast pairings `DESIGN.md` records,

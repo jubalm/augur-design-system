@@ -222,7 +222,7 @@ async function auditPage(url, { expectTitleFragment, expectNavLinks } = {}) {
     ok(`${url} title`, evidence.title.includes(expectTitleFragment), evidence.title);
   }
   ok(`${url} skip link present`, evidence.hasSkipLink);
-  ok(`${url} one visible documentation nav with the expected links`, evidence.navLinks.length === (expectNavLinks ?? 25), evidence.navLinks.join(", "));
+  ok(`${url} one visible documentation nav with the expected links`, evidence.navLinks.length === (expectNavLinks ?? 23), evidence.navLinks.join(", "));
   ok(`${url} fonts registered (>=6 faces)`, evidence.faceCount >= 6, `size ${evidence.faceCount}`);
   ok(`${url} fonts.load Sora 400 resolves a face`, loadedFaces.sora400 >= 1, String(loadedFaces.sora400));
   ok(`${url} fonts.load Sora 600 resolves a face`, loadedFaces.sora600 >= 1, String(loadedFaces.sora600));
@@ -240,11 +240,9 @@ async function auditPage(url, { expectTitleFragment, expectNavLinks } = {}) {
 console.log(`\n== Page audits (base ${base}) ==`);
 await auditPage(origin + site("/"), { expectTitleFragment: "Augur Design System", expectNavLinks: 0 });
 await auditPage(origin + site("/getting-started"), { expectTitleFragment: "Getting started" });
-await auditPage(origin + site("/foundations/decisions"), { expectTitleFragment: "Foundation decisions" });
 await auditPage(origin + site("/foundations/fonts"), { expectTitleFragment: "Fonts and typography" });
 const theming = await auditPage(origin + site("/foundations/theming"), { expectTitleFragment: "Theming" });
 await auditPage(origin + site("/foundations/color"), { expectTitleFragment: "Color system" });
-await auditPage(origin + site("/foundations/proposals"), { expectTitleFragment: "Foundation adoption" });
 await auditPage(origin + site("/foundations/visual-direction"), { expectTitleFragment: "Visual direction" });
 await auditPage(origin + site("/reference/package-entries"), { expectTitleFragment: "Package entries" });
 await auditPage(origin + site("/reference/contributing"), { expectTitleFragment: "Contributing" });
@@ -355,14 +353,14 @@ console.log("\n== Mobile layout (375x812) ==");
     visibleLinks: [...document.querySelectorAll(".browse-panel nav a")].filter((a) => a.offsetParent !== null).length,
   }));
   ok("disclosure opens via keyboard", opened.open === true);
-  ok("all 25 links visible when open", opened.visibleLinks === 25, String(opened.visibleLinks));
+  ok("all 23 links visible when open", opened.visibleLinks === 23, String(opened.visibleLinks));
   await page.screenshot({ path: "/tmp/augur-docs-verify/home-mobile-menu-open.png" });
 
-  // Navigate through the disclosure to the decisions page.
-  await page.locator(".browse-panel nav").getByRole("link", { name: "Foundation decisions" }).click();
+  // Navigate through the disclosure to the color page.
+  await page.locator(".browse-panel nav").getByRole("link", { name: "Color system" }).click();
   await page.waitForLoadState("networkidle");
   const decisionH1 = await page.evaluate(() => document.querySelector("h1")?.textContent.trim());
-  ok("mobile nav link navigates", String(decisionH1).startsWith("Foundation decisions"), String(decisionH1));
+  ok("mobile nav link navigates", String(decisionH1).startsWith("Color system"), String(decisionH1));
   await page.close();
 }
 

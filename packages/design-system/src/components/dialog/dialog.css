@@ -6,15 +6,15 @@
  * custom properties. The panel consumes the theme's floating-layer
  * pairing (`--popover` / `--popover-foreground`): White on light, and
  * the stepped Surface 2 on dark — one step above cards, because the
- * dialog floats over everything (theme decision D3).
+ * dialog floats over everything.
  *
- * Geometry and motion: panel padding and gaps consume the encoded
- * FD-01 spacing tokens (24px/8px), the radius consumes the encoded
- * FD-03 token (0px, issues #45/#50), and the transition durations
- * follow the FD-05 adopted direction (0ms). The package's
- * reduced-motion gate collapses the open/close transitions.
+ * Geometry and motion: panel padding and gaps consume the generated
+ * spacing tokens (24px/8px), the radius consumes the generated rounded
+ * token (0px, issues #45/#50), and transitions use the adopted 0ms
+ * duration. The package's reduced-motion gate collapses the open/close
+ * transitions.
  *
- * Decision record: ../../docs/components.md.
+ * Component contract: ../../docs/components.md.
  */
 
 /*
@@ -25,7 +25,7 @@
  * the theme contract's system-fallback scope. Light theme: a Navy veil
  * (standard dark scrim). Dark theme: a light Paper mist — the palette
  * defines no darker-than-canvas neutral, so the scrim separates the
- * floating layer by lifting instead (decision D10 in
+ * floating layer by lifting instead (the floating-layer rule in
  * ../../docs/components.md).
  */
 .aug-dialog-overlay {
@@ -52,12 +52,12 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: var(--augur-spacing-xl); /* FD-01 space.2xl (Proposed) */
+  padding: var(--augur-spacing-xl); /* space.2xl */
   border: 1px solid var(--border);
-  border-radius: var(--augur-rounded-surface); /* FD-03, encoded: 0px */
+  border-radius: var(--augur-rounded-surface); /* encoded: 0px */
   background-color: var(--popover);
   color: var(--popover-foreground);
-  max-height: calc(100vh - 32px); /* 2x the FD-01 edge gutter (Proposed) */
+  max-height: calc(100vh - 32px); /* 2x the edge gutter */
   max-height: calc(100dvh - 32px);
 }
 
@@ -82,8 +82,8 @@
 .aug-dialog-header {
   display: flex;
   flex-direction: column;
-  gap: var(--augur-spacing-sm); /* FD-01 space.sm (Proposed): title-to-description gap */
-  margin-bottom: 16px; /* FD-01 space.md (Proposed): header-to-body gap */
+  gap: var(--augur-spacing-sm); /* space.sm: title-to-description gap */
+  margin-bottom: 16px; /* space.md: header-to-body gap */
 }
 
 .aug-dialog-footer {
@@ -92,7 +92,7 @@
   justify-content: flex-end;
   align-items: center;
   gap: var(--augur-spacing-sm);
-  margin-top: 16px; /* FD-01 space.md (Proposed): body-to-footer gap */
+  margin-top: 16px; /* space.md: body-to-footer gap */
 }
 
 .aug-dialog-title,
@@ -119,12 +119,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px; /* FD-02 control.height.sm (Proposed) */
+  width: 32px; /* control.height.sm */
   height: 32px;
   padding: 0;
   margin: 0;
   border: 1px solid transparent;
-  border-radius: var(--augur-rounded-control); /* FD-03, encoded: 0px */
+  border-radius: var(--augur-rounded-control); /* encoded: 0px */
   cursor: pointer;
   background-color: transparent;
   color: var(--foreground);
@@ -152,7 +152,7 @@
   border: 0;
 }
 
-/* FD-05: immediate open/close feedback, without decorative transforms. */
+/* Immediate open/close feedback, without decorative transforms. */
 .aug-dialog-overlay, .aug-dialog-content { animation: none; }
 @media (max-width: 599px) {
   .aug-dialog-content { padding: var(--augur-spacing-lg); }

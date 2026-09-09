@@ -1,4 +1,4 @@
-# Consumer installation (issue #18)
+# Consumer installation
 
 Proves and documents source installation of the Augur registry in an
 independent consumer. Companion to [`registry-contract.md`](registry-contract.md)
@@ -54,12 +54,9 @@ The script:
 can ever block on an interactive credential prompt; stdin is closed for the
 same reason.
 
-Recorded results (this branch):
-
-| Mode | Command | Result |
-| --- | --- | --- |
-| Working tree | `bun run scripts/consumer-smoke.ts` | PASS — all checks |
-| Versioned artifact | `bun run scripts/consumer-smoke.ts --ref 0a2c84d9…` | PASS — all checks |
+The smoke runs in two modes — working-tree artifacts and a pinned versioned
+artifact (`--ref <full-40-char-sha>`) — and asserts the same consumer
+guarantees in each.
 
 ## 3. Versioned artifact installs and the update/overwrite model
 
@@ -85,17 +82,18 @@ Update/overwrite expectations (what consumers should know):
   installed `button.tsx`, re-runs `add --overwrite`, and fails if the drift
   survives.
 
-## 4. GitHub-native installs (post-merge; public repo or HTTPS/gh auth required)
+## 4. GitHub-native installs (public repo or HTTPS/gh auth required)
 
 The pinned CLI resolves `owner/repo/<item>#<ref>` GitHub addresses through
-`git ls-remote` / raw fetch over **HTTPS**. Against this private repo that path
-requires HTTPS/gh credentials in the consumer environment; in an SSH-only
-setup git falls back to the OS keychain and pops an interactive credential
-prompt, so the local-artifact harness above is the reproducible proof path and
-GitHub-native installs are documented here rather than executed in CI.
+`git ls-remote` / raw fetch over **HTTPS**. Public repositories can be fetched
+anonymously; when the repository is private, the consumer environment must
+provide HTTPS/gh credentials. In an SSH-only setup git falls back to the OS
+keychain and pops an interactive credential prompt, so the local-artifact
+harness above is the reproducible proof path and GitHub-native installs are
+documented here rather than executed in CI.
 
-Once the repository is public (or the consumer exports HTTPS/gh auth), the
-same smoke applies with full-SHA pins:
+The same smoke applies to a public repository (or a consumer with HTTPS/gh
+auth) with full-SHA pins:
 
 ```sh
 bunx shadcn@4.20.1 add "jubalm/augur-design-system/augur-theme#<full-sha>"
@@ -108,24 +106,22 @@ Notes:
 - A ref may be published for consumer pinning only after the contract §12 gate
   (schema validate + build + local install + consumer build) passes on that
   exact tree — see `registry-generation.md` and contract §12.
-- Release tags name the human-friendly pins once the tag scheme lands (#17
-  policy); full-SHA pins remain the reproducible default.
+- Release tags name the human-friendly pins when a release tag scheme is
+  defined; full-SHA pins remain the reproducible default.
 - Built-JSON channel (`https://<docs-host>/r/<item>.json`, namespace
-  `@augur/…`) arrives with the docs deployment work (#19) and becomes the
-  auth-free URL path.
+  `@augur/…`) becomes available with the docs deployment and is the auth-free
+  URL path.
 
-## 5. CI integration note
+## 5. CI integration
 
-This issue deliberately does **not** add the smoke to `.github/workflows/ci.yml`;
-the parallel deployment work (#19) owns that workflow. The #19 follow-through
-can add a job that runs both smoke modes (`scripts/consumer-smoke.ts` and
-`--ref ${{ github.sha }}`) against the committed artifacts — the script is
-already non-interactive (`GIT_TERMINAL_PROMPT=0`, stdin closed, actionable
-failure output) and exits non-zero on any failure, so it is CI-ready as-is.
+The consumer smoke is not part of the default `.github/workflows/ci.yml`; it
+runs as a fixture. The script is already non-interactive
+(`GIT_TERMINAL_PROMPT=0`, stdin closed, actionable failure output) and exits
+non-zero on any failure, so it is CI-ready as-is.
 
-## 6. Out of scope
+## 6. Boundaries
 
-No integration into an actual external product, no npm package publication,
-and no docs-app fixture work (owned by #19). The harness rewrites
-`registryDependencies` at serve time only — committed artifacts are never
-modified.
+The smoke proves the distribution contract against committed artifacts. It
+does not integrate into an external product, publish an npm package, or
+alter committed artifacts (the harness rewrites `registryDependencies` at
+serve time only).

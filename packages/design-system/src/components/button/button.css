@@ -5,10 +5,10 @@
  * (which references generated tokens). No raw color values, no new
  * custom properties.
  *
- * Geometry: FD-01 spacing and FD-03 radius consume the encoded tokens
- * (--augur-spacing-*, --augur-rounded-control — issues #45/#51); the
- * FD-02 control heights remain the adopted structural constants. The
- * decision record for this slice lives in ../../docs/components.md.
+ * Geometry: spacing and radius consume the generated tokens
+ * (--augur-spacing-*, --augur-rounded-control — issues #45/#51); control
+ * heights remain adopted structural constants. The component contract
+ * for this slice lives in ../../docs/components.md.
  */
 
 .aug-button {
@@ -17,12 +17,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--augur-spacing-sm); /* FD-01 space.sm (encoded): label-to-icon gap */
-  height: 36px; /* FD-02 control.height.md (adopted) */
-  padding: 0 var(--augur-spacing-lg); /* FD-01: md control padding (encoded) */
+  gap: var(--augur-spacing-sm); /* space.sm: label-to-icon gap */
+  height: 36px; /* control.height.md */
+  padding: 0 var(--augur-spacing-lg); /* md control padding */
   margin: 0;
   border: 1px solid transparent; /* keeps the box equal across variants */
-  border-radius: var(--augur-rounded-control); /* FD-03 radius.control (encoded: 0px) */
+  border-radius: var(--augur-rounded-control); /* radius.control: 0px */
   vertical-align: middle;
   white-space: nowrap;
   cursor: pointer;
@@ -31,7 +31,7 @@
   color: var(--primary-foreground);
 }
 
-/* Sizes: FD-01/FD-02 adopted values as structure (sm 32/12, lg 40/24). */
+/* Sizes: adopted values as structure (sm 32/12, lg 40/24). */
 .aug-button--sm {
   height: 32px;
   padding: 0 var(--augur-spacing-md);
@@ -46,7 +46,7 @@
  * Filled variants. default = action-primary pairing (Deep + White
  * light, Green + Navy dark — the view's one green signal); secondary
  * sits on the quiet surface; destructive uses the strongest neutral
- * pairing (theme decision D1: the brand defines no danger hue, so the
+ * pairing (the brand defines no danger hue, so the
  * label carries the meaning).
  */
 .aug-button--secondary {
@@ -74,13 +74,13 @@
 
 /* Link: quiet text action. Deliberately NOT action-colored — a view
    has one green signal (primary action, focus), and text links are not
-   it (decision D3 in docs/components.md). */
+   it (the surface-step mapping in docs/components.md). */
 .aug-button--link {
   background-color: transparent;
   color: var(--foreground);
 }
 
-/* FD-06: existing neutral surface steps; no alpha tint or accent on destructive hover. */
+/* Existing neutral surface steps; no alpha tint or accent on destructive hover. */
 .aug-button--default:hover:not(:disabled),
 .aug-button--destructive:hover:not(:disabled),
 .aug-button--secondary:hover:not(:disabled),
@@ -105,7 +105,7 @@
 }
 
 /*
- * Disabled (FD-06 Proposed, decision D5): non-interactive via the
+ * Disabled: non-interactive via the
  * native attribute, reduced-contrast label that remains present and
  * readable in the DOM, never color-alone. WCAG 1.4.3 exempts disabled
  * controls from contrast minimums.
@@ -116,7 +116,7 @@
 }
 
 /*
- * Loading (decision D6): the label stays in the DOM (width preserved)
+ * Loading: the label stays in the DOM (width preserved)
  * but is hidden from eyes and assistive technology; the spinner
  * overlays, centered; the accessible name becomes the visually hidden
  * "Loading" status rendered by the component.
@@ -136,7 +136,7 @@
 
 .aug-button-spinner-icon {
   display: block;
-  /* FD-05: static pending indicator. A future functional animation requires review. */
+  /* Static pending indicator. A future functional animation requires review. */
   animation: none;
 }
 
@@ -153,7 +153,7 @@
   border: 0;
 }
 
-/* FD-02 adopted touch target minimum; desktop size variants remain intact. */
+/* Adopted touch target minimum; desktop size variants remain intact. */
 @media (pointer: coarse) {
   .aug-button { min-height: 44px; min-width: 44px; }
 }

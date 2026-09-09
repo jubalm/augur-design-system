@@ -2,8 +2,7 @@
  * Documentation content schema (issue #8).
  *
  * The single content location is `src/content/<kind>/` — see
- * `src/content/README.md` for the full convention, including the
- * reconciliation of the two tree examples in ARCHITECTURE.md.
+ * `src/content/README.md` for the full convention.
  *
  * Four documented kinds, each one collection with stable routes:
  *
@@ -28,7 +27,7 @@ import { glob } from "astro/loaders";
 
 /** Metadata shared by every documentation entry, regardless of kind. */
 const baseSchema = z.object({
-  /** Page title; the renderer and the future Markdown endpoint (#9) synthesize the H1 from it. Bodies must not repeat it. */
+  /** Page title; the renderer and the Markdown endpoint synthesize the H1 from it. Bodies must not repeat it. */
   title: z.string().trim().min(1, "title is required and must not be blank"),
   /** One-sentence summary used as the HTML meta description and the rendered page lede. */
   description: z.string().trim().min(1, "description is required and must not be blank"),
@@ -38,20 +37,8 @@ const baseSchema = z.object({
   draft: z.boolean().default(false),
 });
 
-/**
- * Route slug for a foundations file. One deliberate exception keeps two
- * contracts stable at once: `foundation-decisions.md` keeps its filename
- * (DESIGN.md references that exact path as the decision record's home)
- * while its public route stays /foundations/decisions, as established in
- * #7. Every other file: the name minus extension is the slug.
- */
-function foundationSlug(entry: string): string {
-  if (entry === "foundation-decisions.md") return "decisions";
-  return entry.replace(/\.(md|mdx)$/, "");
-}
-
 const foundations = defineCollection({
-  loader: glob({ pattern: "*.{md,mdx}", base: "./src/content/foundations", generateId: ({ entry }) => foundationSlug(entry) }),
+  loader: glob({ pattern: "*.{md,mdx}", base: "./src/content/foundations" }),
   schema: baseSchema,
 });
 

@@ -3,11 +3,12 @@
 Plain Astro with React rendering and MDX/Markdown content — deliberately
 no Starlight or other docs framework layer (see
 [ARCHITECTURE.md](../../ARCHITECTURE.md), "Documentation Website").
-Established by issue #7; the shared content pipeline — schema, routes,
-page renderer, and live-example conventions — is issue #8 and is
-specified in [`src/content/README.md`](src/content/README.md). Clean
-Markdown parity, copy/view actions, and `llms.txt` are issue #9; browser
-CI wiring is issue #15.
+The shared content pipeline — schema, routes, page renderer, and
+live-example conventions — is specified in
+[`src/content/README.md`](src/content/README.md). Clean Markdown parity,
+copy/view actions, and `llms.txt` are part of the build; browser and
+content verification run through the fixtures described in
+[`fixtures/README.md`](fixtures/README.md).
 
 The app consumes the real workspace package
 (`@augur/design-system` via `workspace:*`): the stylesheet entry
@@ -18,7 +19,7 @@ constants (`AUGUR_FONTS`, `AUGUR_FONT_FAMILIES`). Docs-only dependencies
 live only in this package; the design-system package does not import
 docs code.
 
-## Content conventions (issue #8)
+## Content conventions
 
 All substantive documentation is authored under `src/content/<kind>/`
 (`foundations`, `components`, `patterns`, `reference`), one collection
@@ -31,15 +32,11 @@ the build. Live examples are real modules under `src/examples/` that
 import the workspace package; their displayed code samples are `?raw`
 imports of the same file, so preview and sample cannot drift.
 
-The full convention — including the reconciliation of the two
-ARCHITECTURE.md tree examples (`src/content` vs `content`) and the
-component-page contract — is documented in
+The full convention and the component-page contract are documented in
 [`src/content/README.md`](src/content/README.md).
 
-Note: until components land (#11–#14), the `components` and `patterns`
-collections are intentionally empty and `astro build` prints one
-informational warning per empty collection. Do not add placeholder
-entries to silence it.
+If a collection is empty, `astro build` prints one informational warning
+per empty collection. Do not add placeholder entries to silence it.
 
 ## Commands
 
@@ -55,7 +52,7 @@ Run from the repository root:
 | `bun apps/docs/fixtures/verify-markdown.mjs` | Verification of the clean-Markdown endpoints, content parity, and `llms.txt` (see `fixtures/README.md`). |
 | `bun apps/docs/fixtures/verify-content-failures.mjs` | Proves invalid required metadata and missing component sections fail the build clearly (see `fixtures/README.md`). |
 
-## Clean Markdown, copy actions, and llms.txt (issue #9)
+## Clean Markdown, copy actions, and llms.txt
 
 Every substantive page exists in two representations from one authored
 source (ARCHITECTURE.md, "Documentation Delivery for Humans and LLMs"):
@@ -76,8 +73,7 @@ source (ARCHITECTURE.md, "Documentation Delivery for Humans and LLMs"):
   can never list pages that do not exist. Links are base-aware
   site-absolute paths; `DESIGN.md`/`ARCHITECTURE.md`/`CHANGELOG.md` link
   their canonical repository locations (the docs site does not serve
-  them). A canonical origin/absolute URLs are a deployment concern
-  (#19/#20).
+  them). A canonical origin/absolute URLs are a deployment concern.
 
 `Copy page` (in `src/components/PageActions.astro`) fetches the page's
 `.md` endpoint and copies exactly those bytes — the clipboard cannot
@@ -91,7 +87,7 @@ for `.md` is an accepted equivalent.
 The base is environment-driven in `astro.config.mjs`; no source changes
 are needed to switch between the two supported deployment shapes:
 
-- **Custom-domain root** (future default per ARCHITECTURE.md):
+- **Custom-domain root** (per ARCHITECTURE.md):
   build with no overrides — `base` defaults to `"/"`.
   ```sh
   bun run --cwd apps/docs build
