@@ -1,7 +1,7 @@
-# Docs fixtures (issues #7, #8, and #9)
+# Docs fixtures
 
-Three verification drivers for the Astro docs app, following the fixture
-pattern established by issue #5 (`packages/design-system/fixtures/`).
+Three verification drivers for the Astro docs app, following the
+package fixture pattern (`packages/design-system/fixtures/`).
 
 ## Browser verification (`verify-docs.mjs`)
 
@@ -27,12 +27,12 @@ and drives it in headless Chromium.
 - Content: MDX-evaluated package data, the code-synchronized live
   examples (`DocExample` blocks), and the scoped `[data-theme]`
   demonstration render as built.
-- Markdown actions (issue #9): on `foundations/fonts` and
+- Markdown actions: on `foundations/fonts` and
   `getting-started`, `Copy page` (keyboard-operated) reports `Copied`
   through its live region and puts EXACTLY the served `.md` bytes on
   the clipboard (compared byte-for-byte), and `View as Markdown` links
   the direct `.md` representation.
-- Starter components in real browsers (issue #15): the Dialog island —
+- Starter components in real browsers: the Dialog island —
   keyboard open, focus containment under Tab/Shift+Tab, Escape and
   overlay dismissal, scroll lock and unlock, focus restoration to the
   trigger, ARIA name/description wiring, the dark scoped-portal panel
@@ -57,8 +57,7 @@ bun apps/docs/fixtures/verify-docs.mjs
 ```
 
 (On machines where the gitignored `apps/docs/fixtures/node_modules`
-link from issue #7 already exists, it still takes precedence and works
-unchanged.)
+link already exists, it still takes precedence and works unchanged.)
 
 For the repository-subpath build, rebuild with the base override and run
 the same driver — it stages `dist` under the base automatically:
@@ -72,16 +71,15 @@ Exit code 0 and a `docs shell verification passed` line mean every
 assertion passed. Screenshots are written to `/tmp/augur-docs-verify/`
 as visual evidence and are not committed.
 
-## Clean-Markdown and llms.txt verification (`verify-markdown.mjs`, issue #9)
+## Clean-Markdown and llms.txt verification (`verify-markdown.mjs`)
 
 Serves the **built** `apps/docs` output under the configured base path
 and asserts the deterministic Markdown surface (no browser needed):
 
 - Endpoint inventory: exactly the predictable `.md` files exist — one
-  per substantive page (foundations decisions/fonts/theming/color/
-  proposals, `getting-started`, reference package-entries/contributing/
-  component-conventions, components button/card) plus `/llms.txt`. The
-  home page is landing chrome and has none.
+  per substantive page (foundations, components, patterns, reference,
+  and `getting-started`) plus `/llms.txt`. The home page is landing
+  chrome and has none.
 - Response handling: `.md` served as `text/markdown`, `llms.txt` as
   `text/plain`.
 - Content parity with the rendered page: H1 == rendered H1, lede ==
@@ -115,7 +113,7 @@ Exit code 0 and a `clean Markdown / llms.txt verification passed` line
 mean every assertion passed, in that base mode. Run it for both base
 modes after touching content, derivation, or llms generation.
 
-## Controlled content-failure verification (issue #8)
+## Controlled content-failure verification
 
 `verify-content-failures.mjs` proves the acceptance requirement that
 invalid required metadata fails the build **clearly**, plus the
@@ -144,5 +142,5 @@ content-layer caches are cleared before AND after each scenario build,
 so the result cannot depend on a previous regular build or a crashed
 prior run, and `dist` is removed at the end (the failing builds may
 have partially overwritten it). This is the
-docs-side analogue of `tokens:verify-failures` (#3) and the registry
-invalid fixtures (#16); wiring it into CI is #15's scope.
+docs-side analogue of `tokens:verify-failures` and the registry
+invalid fixtures. It is not part of the default CI workflow.
