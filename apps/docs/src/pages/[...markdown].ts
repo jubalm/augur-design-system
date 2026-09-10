@@ -33,12 +33,16 @@ type DocEntry = CollectionEntry<DocKind>;
 
 const KINDS: readonly DocKind[] = ["foundations", "components", "patterns", "reference"];
 
-/** Derive one collection entry's clean Markdown from the collection entry. */
+/** Derive one collection entry's clean Markdown representation. */
 function pageMarkdown(entry: DocEntry): string {
+  const component = "component" in entry.data
+    ? { exportName: entry.data.component, status: entry.data.status }
+    : undefined;
   return cleanPageMarkdown({
     source: `${entry.collection}/${entry.id}`,
     title: entry.data.title,
     description: entry.data.description,
+    component,
     body: entry.body ?? "",
   });
 }

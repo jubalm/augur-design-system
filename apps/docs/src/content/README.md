@@ -145,8 +145,10 @@ representations cannot drift.
   exclude them. The home page is landing chrome, not documentation, and
   deliberately has no `.md` form; it also renders no copy actions.
 - **Derivation** (`src/lib/markdown.ts`): synthesizes the H1 from
-  `title` and the lede from `description`, then transforms the body
-  code-fence-aware: MDX imports
+  `title` and the lede from `description`, preserves component-page
+  `component` and `status` metadata in the clean Markdown representation
+  even though the rendered page keeps its opening chrome metadata-quiet,
+  then transforms the body code-fence-aware: MDX imports
   and single-line flow comments are stripped; expressions come from
   `EXPRESSION_VALUES` (computed from the real package);
   `<DocExample example={examples.a.b} />` becomes the example caption
