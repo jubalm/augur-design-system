@@ -59,7 +59,7 @@ test.describe("component slice (Button/Card computed styles, both themes)", () =
     await go(page, ORIGIN + site("/components/card"));
     await page.evaluate(() => document.fonts.ready);
     const cardLight = await page.evaluate(() => {
-      const card = document.querySelector(".example-card-grid > .aug-card:not([data-theme])") as HTMLElement;
+      const card = document.querySelector(".example-card-grid > .aug-card[data-theme='light'], .example-card-grid > .aug-card:not([data-theme])") as HTMLElement;
       const darkCard = document.querySelector(".example-card-grid > .aug-card[data-theme='dark']") as HTMLElement;
       const cs = getComputedStyle(card);
       return {

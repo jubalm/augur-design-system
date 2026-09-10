@@ -79,7 +79,7 @@ export const examples = {
     composition: defineExample({
       id: "card-composition",
       title: "Card composition",
-      description: "The part set groups a record with its actions; the second card pins data-theme=dark.",
+      description: "The part set groups a record with its actions; the first card pins data-theme=light and the second pins data-theme=dark.",
       Component: CardCompositionExample,
       code: cardCompositionCode,
     }),
@@ -140,7 +140,7 @@ export const examples = {
     composition: defineExample({
       id: "page-header-composition",
       title: "PageHeader composition",
-      description: "Breadcrumb, title, description, and an actions slot with one primary action; the second header pins data-theme=dark.",
+      description: "The same breadcrumb, title, description, and action composition is shown in explicitly labeled light and dark theme scopes.",
       Component: PageHeaderCompositionExample,
       code: pageHeaderCompositionCode,
     }),

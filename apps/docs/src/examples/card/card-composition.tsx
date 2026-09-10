@@ -1,17 +1,16 @@
 /**
  * Live example: Card composition.
  *
- * The part set renders a grouped panel; the second card pins
- * data-theme="dark" so the same composition is visible under both
- * themes. The footer holds one primary action per card — the one green
- * signal in each panel.
+ * The part set renders a grouped panel; each card pins a theme so the same
+ * composition is visible under both light and dark surfaces. The footer
+ * holds one primary action per card — the one green signal in each panel.
  */
 import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@augur/design-system";
 
 export function CardCompositionExample() {
   return (
     <div className="example-card-grid">
-      <Card>
+      <Card data-theme="light">
         <CardHeader>
           <CardTitle>Query review</CardTitle>
           <CardDescription>Status, choices, and the current response.</CardDescription>

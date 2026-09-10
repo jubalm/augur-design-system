@@ -33,7 +33,7 @@ type DocEntry = CollectionEntry<DocKind>;
 
 const KINDS: readonly DocKind[] = ["foundations", "components", "patterns", "reference"];
 
-/** Derive one collection entry's clean Markdown (component pages add the status line). */
+/** Derive one collection entry's clean Markdown representation. */
 function pageMarkdown(entry: DocEntry): string {
   const component = "component" in entry.data
     ? { exportName: entry.data.component, status: entry.data.status }

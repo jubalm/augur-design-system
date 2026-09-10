@@ -7,7 +7,7 @@ const BARE_HOST = `${BARE_ORIGIN}/packages/design-system/fixtures/bare-hosts.htm
 
 const componentMetrics = () => {
   const g = (el: Element | null | undefined, prop: string) => (el ? (getComputedStyle(el) as unknown as Record<string, string>)[prop] : null);
-  const card = document.querySelector(".aug-card:not([data-theme])");
+  const card = document.querySelector('.aug-card[data-theme="light"], .aug-card:not([data-theme])');
   const title = card?.querySelector(".aug-card-title");
   const desc = card?.querySelector(".aug-card-description");
   const contentP = card?.querySelector(".aug-card-content > p");

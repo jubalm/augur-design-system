@@ -203,6 +203,12 @@ for (const rel of expectedMd) {
     JSON.stringify(mdH2(text).map(normalizeHeading)) === JSON.stringify(outline.h2),
     JSON.stringify(mdH2(text)),
   );
+  if (rel.startsWith("components/")) {
+    ok(
+      `${rel} retains component export and maturity metadata`,
+      /^Component export: `[^`]+` from `@augur\/design-system` — status: (planned|draft|stable|deprecated)\.$/m.test(text),
+    );
+  }
 
   const { outside, closed } = splitFences(text);
   ok(`${rel} code fences are balanced`, closed);
