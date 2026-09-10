@@ -27,7 +27,7 @@ composition), 25 (expressive message), rendered at
 
 light 1440/768/390 + dark 1440/390 full pages.
 
-Computed assertions live in `verify-docs.mjs`, section "Brand opening
+Computed assertions live in `the browser suite`, section "Brand opening
 (#47)": title copy/role, 32×2 signal with theme swap, neutral action,
 locked lede, 1:2 ratio, 520px minimum, three tracks, opening-scale
 lockup, 16 resolving route links, overflow at 1440/390 — both base
@@ -37,5 +37,5 @@ paths.
 
 ```sh
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 ```

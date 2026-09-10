@@ -23,6 +23,6 @@ src/tokens/tokens.css                      (generated --augur-color-*, --augur-s
 
 - `bun test` (package): public-entry export surface, variant class contracts, and stylesheet consumption.
 - `bun run test` (repository root): rendered interaction, keyboard/focus, disabled/loading/invalid/read-only contracts, HTML semantics, axe findings in both themes, and the stylesheet delivery contract through `./styles.css`.
-- `apps/docs/fixtures/verify-docs.mjs`: rendered computed-style and browser behavior checks against a built docs app.
+- `apps/docs/fixtures/browser/` (`bun run test:browser`): rendered computed-style and browser behavior checks against a built docs app.
 
 Component APIs stay close to shadcn conventions; Augur owns the resulting APIs, styles, and documentation.

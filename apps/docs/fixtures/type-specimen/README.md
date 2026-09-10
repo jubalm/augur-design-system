@@ -27,7 +27,7 @@ hierarchy, tracked labels), rendered at
 
 light 1440, dark 1440, light 390 full pages.
 
-Computed assertions in `verify-docs.mjs`, section "Type specimen
+Computed assertions in `the browser suite`, section "Type specimen
 (#48)": ten aligned rows, inverse field colors in both themes, display
 sample computed 600/40px, three notes, 2:1 grid at 1440, stack order
 and overflow at 390 — both base paths.
@@ -36,5 +36,5 @@ and overflow at 390 — both base paths.
 
 ```sh
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 ```

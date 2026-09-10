@@ -61,7 +61,7 @@ PageHeader title 28px, margin 0; breadcrumb padding 0, no offsets, links
 governed by `page-header.css`. Rendered after captures:
 `evidence/after-*.png` (same matrix as before).
 
-Automated guards added to `apps/docs/fixtures/verify-docs.mjs`
+Automated guards added to the browser suite
 (section "Specimen rendering repair (#44)", run for both base paths):
 palette chips assert computed `display: block`, 40px height, nonzero
 painted area, painted primitive token color, and hairline edge in light
@@ -77,11 +77,10 @@ specimens.
 ```sh
 bun install --frozen-lockfile
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs          # base "/"
+bun run test:browser          # base "/"
 DOCS_BASE_PATH=/augur-design-system bun run --cwd apps/docs build
-DOCS_BASE_PATH=/augur-design-system bun apps/docs/fixtures/verify-docs.mjs
+DOCS_BASE_PATH=/augur-design-system bun run test:browser
 ```
 
-Interactive: `bun apps/docs/fixtures/verify-docs.mjs --serve` is not
-provided by this driver; use any static server rooted at
-`apps/docs/dist`.
+Interactive serving is not provided by this runner; use any static
+server rooted at `apps/docs/dist`.

@@ -1,7 +1,7 @@
 # Docs navigation and reading shell frames — historical #55 phase-0 checkpoint
 
 > **Historical — superseded.** The #55 navigation and reading shell shipped;
-> `apps/docs/fixtures/verify-docs.mjs` owns the shipping shell contract. This
+> the browser suite owns the shipping shell contract. This
 > fixture is retained as phase-0 design evidence and is **not maintained
 > against the current app**: it extracts live page content and its assertions
 > predate the shipped shell, so it no longer passes standalone. Do not treat
@@ -18,7 +18,7 @@ acceptance of these frames.
 
 **Status: historical evidence.** Phase 1 shipped in `BaseLayout.astro` /
 `DocPage.astro` / `docs.css`, section overviews, previous/next, `llms.txt`
-and Markdown parity; `verify-docs` owns that contract.
+and Markdown parity; the browser suite owns that contract.
 
 ## What the frames show
 

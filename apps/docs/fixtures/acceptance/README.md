@@ -42,7 +42,7 @@ on every combination.
 | `../visual-alignment/` | #42 | the approved contract + rendered PDF sources (unchanged, hashes intact) |
 
 Computed assertions for every criterion live in
-`apps/docs/fixtures/verify-docs.mjs` (including the applied-review
+the browser suite (including the applied-review
 checks and the #44 repair/parity sections). The current review evidence
 is in `REVIEW.md`; its browser checks passed at both base paths.
 
@@ -66,7 +66,7 @@ frozen install · `designmd lint DESIGN.md` (0 errors) · `oxlint` ·
 `tokens:verify-failures` (4/4 controlled probes) · `registry:check`
 (no drift) · font fixture driver (10 roles) · `vitest` (70/70) · docs
 builds at both base paths · `verify-markdown` both paths ·
-`verify-docs` includes the applied review page · acceptance matrix 126/126.
+the browser suite includes the applied review page · acceptance matrix 126/126.
 
 ## 5. Recorded limitations and deviations (no silent exceptions)
 

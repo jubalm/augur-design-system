@@ -153,10 +153,10 @@ jobs:
         run: bun run --cwd apps/docs build
       - name: Clean-Markdown and llms.txt verification (verify-markdown)
         run: bun apps/docs/fixtures/verify-markdown.mjs
-      - name: Browser verification (verify-docs)
-        run: bun apps/docs/fixtures/verify-docs.mjs
+      - name: Browser verification (Playwright)
+        run: bun run test:browser
       # Runs last on purpose: it stages invalid content, so it must not
-      # affect the two assertions above. It clears both Astro content
+      # affect the checks above. It clears both Astro content
       # caches before and after each scenario and removes dist at the
       # end (see the script header), so the outcome cannot depend on the
       # preceding steps' cache state.
