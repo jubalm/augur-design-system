@@ -828,6 +828,111 @@ console.log("\n== Starter components in real browsers (issue #15) ==");
     await p.close();
   }
 
+  // PageHeader must respond to its containing block, not only to the
+  // viewport. The docs show two action-bearing specimens — the composition
+  // and the long-content example — each in a light and a dark header, so
+  // the full acceptance matrix is four headers. Before the container query
+  // the title and description columns collapsed to one-character lines.
+  const PAGE_HEADER_MATRIX = [
+    "page-header-composition/light",
+    "page-header-composition/dark",
+    "page-header-long-content/light",
+    "page-header-long-content/dark",
+  ].sort();
+  for (const viewport of [
+    { width: 1440, height: 1000 },
+    { width: 768, height: 1024 },
+    { width: 390, height: 844 },
+  ]) {
+    const p = await browser.newPage({ viewport });
+    await p.goto(origin + site("/patterns/page-header"), { waitUntil: "networkidle" });
+    const audit = await p.evaluate(() => {
+      const sample = [
+        ...document.querySelectorAll(".example-card-grid > .aug-page-header"),
+      ].filter((header) => header.querySelector(".aug-page-header-actions"));
+      return {
+        pageOverflow: document.documentElement.scrollWidth > window.innerWidth + 1,
+        metrics: sample.map((header) => {
+          const figure = header.closest("figure.doc-example");
+          const specimen = (figure?.getAttribute("aria-labelledby") ?? "").replace(
+            /^example-|-caption$/g,
+            "",
+          );
+          const title = header.querySelector(".aug-page-header-title");
+          const description = header.querySelector(".aug-page-header-description");
+          const actions = header.querySelector(".aug-page-header-actions");
+          const rect = (element) => element?.getBoundingClientRect();
+          const titleRect = rect(title);
+          const descriptionRect = rect(description);
+          const actionsRect = rect(actions);
+          const headerRect = rect(header);
+          const right = (r) => r?.right ?? 0;
+          return {
+            specimen,
+            theme: header.getAttribute("data-theme") ?? "light",
+            titleWidth: Math.round(titleRect?.width ?? 0),
+            descriptionWidth: Math.round(descriptionRect?.width ?? 0),
+            descriptionBottom: Math.round(descriptionRect?.bottom ?? 0),
+            actionsTop: Math.round(actionsRect?.top ?? 0),
+            actionGap: Math.round((actionsRect?.top ?? 0) - (descriptionRect?.bottom ?? 0)),
+            overflow:
+              header.scrollWidth > header.clientWidth + 1 ||
+              right(titleRect) > right(headerRect) + 1 ||
+              right(descriptionRect) > right(headerRect) + 1,
+          };
+        }),
+      };
+    });
+
+    const keys = audit.metrics.map(({ specimen, theme }) => `${specimen}/${theme}`).sort();
+    ok(
+      `PageHeader full acceptance matrix at ${viewport.width}px`,
+      keys.length === 4 && PAGE_HEADER_MATRIX.every((key, index) => key === keys[index]),
+      JSON.stringify(keys),
+    );
+
+    const unreadable = audit.metrics.filter(
+      ({ titleWidth, descriptionWidth, descriptionBottom, actionsTop }) =>
+        titleWidth < 120 || descriptionWidth < 120 || actionsTop < descriptionBottom,
+    );
+    ok(
+      `PageHeader stays readable at ${viewport.width}px`,
+      unreadable.length === 0,
+      JSON.stringify(unreadable),
+    );
+
+    const overflowing = audit.metrics.filter(({ overflow }) => overflow);
+    ok(
+      `PageHeader has no horizontal overflow at ${viewport.width}px`,
+      audit.pageOverflow === false && overflowing.length === 0,
+      JSON.stringify({ pageOverflow: audit.pageOverflow, overflowing }),
+    );
+
+    // Light and dark specimens carry identical content in identical
+    // containers, so their geometry must match.
+    const divergences = [];
+    for (const specimen of ["page-header-composition", "page-header-long-content"]) {
+      const light = audit.metrics.find((m) => m.specimen === specimen && m.theme === "light");
+      const dark = audit.metrics.find((m) => m.specimen === specimen && m.theme === "dark");
+      if (!light || !dark) {
+        divergences.push(`${specimen}: theme pair missing`);
+        continue;
+      }
+      for (const key of ["titleWidth", "descriptionWidth", "actionGap"]) {
+        if (Math.abs(light[key] - dark[key]) > 1) {
+          divergences.push(`${specimen}.${key}: light ${light[key]} vs dark ${dark[key]}`);
+        }
+      }
+    }
+    ok(
+      `PageHeader theme geometry matches at ${viewport.width}px`,
+      divergences.length === 0,
+      JSON.stringify(divergences),
+    );
+
+    await p.close();
+  }
+
   // --- Button keyboard activation: focus-visible and Enter/Space firing.
   const btnPage = await browser.newPage();
   await btnPage.goto(origin + site("/components/button"), { waitUntil: "networkidle" });
@@ -927,6 +1032,30 @@ console.log("\n== Specimen rendering repair (#44) ===");
   await barePage.evaluate(() => document.fonts.ready);
   const bareMetrics = await barePage.evaluate(componentMetrics);
   await barePage.screenshot({ path: "/tmp/augur-docs-verify/bare-hosts.png", fullPage: true });
+  const bareNarrowPageHeader = await barePage.evaluate(() => {
+    const header = document.querySelector("#page-header-host .aug-page-header");
+    if (!header) return null;
+    header.style.width = "290px";
+    const title = header.querySelector(".aug-page-header-title")?.getBoundingClientRect();
+    const description = header.querySelector(".aug-page-header-description")?.getBoundingClientRect();
+    const actions = header.querySelector(".aug-page-header-actions")?.getBoundingClientRect();
+    return {
+      containerType: getComputedStyle(header).containerType,
+      titleWidth: title?.width ?? 0,
+      descriptionWidth: description?.width ?? 0,
+      descriptionBottom: description?.bottom ?? 0,
+      actionsTop: actions?.top ?? 0,
+    };
+  });
+  ok(
+    "standalone PageHeader responds to a narrow containing block",
+    bareNarrowPageHeader != null &&
+      bareNarrowPageHeader.containerType === "inline-size" &&
+      bareNarrowPageHeader.titleWidth >= 120 &&
+      bareNarrowPageHeader.descriptionWidth >= 120 &&
+      bareNarrowPageHeader.actionsTop >= bareNarrowPageHeader.descriptionBottom,
+    JSON.stringify(bareNarrowPageHeader),
+  );
   await barePage.close();
   bareServer.close();
 
