@@ -154,10 +154,9 @@ jobs:
       - name: Clean-Markdown and llms.txt verification (verify-markdown)
         run: bun apps/docs/fixtures/verify-markdown.mjs
       - name: Browser verification (Playwright)
-        env:
-          # The suite is I/O-bound (page loads), so 2 workers still helps on
-          # the 2-core runner where Playwright's default would pick 1.
-          PW_WORKERS: "2"
+        # Playwright defaults to 1 worker on the 2-core runner. Measured:
+        # 1 worker runs the suite in ~20s; forcing 2 workers contending on
+        # the same 2 cores took ~31s, so the default is kept.
         run: bun run test:browser
       # Runs last on purpose: it stages invalid content, so it must not
       # affect the checks above. It clears both Astro content

@@ -20,9 +20,6 @@ import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "./apps/docs/fixtures/browser",
   fullyParallel: true,
-  // Default to Playwright's own heuristics; CI sets PW_WORKERS explicitly
-  // because the 2-core runner default (1) under-uses an I/O-bound suite.
-  workers: process.env.PW_WORKERS ? Number(process.env.PW_WORKERS) : undefined,
   reporter: [["list"]],
   use: {
     baseURL: process.env.PW_ORIGIN ?? "http://127.0.0.1:4399",
