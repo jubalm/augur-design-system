@@ -36,7 +36,7 @@ unchanged and asserted: hierarchy and accessibility preserved
 record pair light 1440, dark 1440, light 390 (choices side by side, no
 overflow).
 
-Computed assertions in `verify-docs.mjs`, section "Reference record
+Computed assertions in `the browser suite`, section "Reference record
 (#52)": pair themes/geometry/backgrounds, 32×2 signals with correct
 theme colors, question DOM order and heading-1 scale, choice equality,
 aria-pressed marking, response copy, no-artwork rule, mobile layout —
@@ -46,5 +46,5 @@ both base paths.
 
 ```sh
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 ```
