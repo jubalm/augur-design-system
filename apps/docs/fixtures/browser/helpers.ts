@@ -10,11 +10,11 @@
  *     bunx playwright test                 # full suite
  *     bunx playwright test --grep dialog   # one area
  *
- * Env: DOCS_BASE_PATH stages the built output under a repository subpath
+ * Env: DOCS_BASE_PATH serves the built output under a repository subpath
  * (same contract as the previous driver); DOCS_VERIFY_SITE (#62) enables the
  * assistant entries in the copy-page assertions; PW_SCREENSHOTS=0 disables
  * evidence screenshots; PW_ORIGIN_PORT / PW_BARE_PORT override the server
- * ports (see test-config.ts).
+ * ports (see playwright.config.ts).
  */
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
