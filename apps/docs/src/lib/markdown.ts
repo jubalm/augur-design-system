@@ -250,21 +250,13 @@ export interface PageMarkdownInput {
   description: string;
   /** Authored MDX/Markdown body (no H1, starts at H2). */
   body: string;
-  /** Component-page status line, mirroring the rendered status line. */
-  component?: { exportName: string; status: string };
   /** Source name for error messages. */
   source: string;
 }
 
-/** Assemble the full clean-Markdown page: H1, lede, optional status line, body. */
+/** Assemble the full clean-Markdown page: H1, lede, and body. */
 export function cleanPageMarkdown(page: PageMarkdownInput): string {
   const lines: string[] = [`# ${page.title}`, "", page.description, ""];
-  if (page.component) {
-    lines.push(
-      `Component export: \`${page.component.exportName}\` from \`@augur/design-system\` — status: ${page.component.status}.`,
-      "",
-    );
-  }
   lines.push(deriveCleanMarkdown(page.body, { source: page.source }).trim(), "");
   return lines.join("\n");
 }

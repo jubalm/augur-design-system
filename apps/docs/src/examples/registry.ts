@@ -79,7 +79,7 @@ export const examples = {
     composition: defineExample({
       id: "card-composition",
       title: "Card composition",
-      description: "The part set groups a record with its actions; the second card pins data-theme=dark.",
+      description: "The part set groups a record with its actions; the first card pins data-theme=light and the second pins data-theme=dark.",
       Component: CardCompositionExample,
       code: cardCompositionCode,
     }),

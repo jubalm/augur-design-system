@@ -118,7 +118,7 @@ real imported source, failing the build otherwise.
   entries and delegates to the renderer. Routes are stable; slugs are
   part of the public URL contract.
 - `src/components/DocPage.astro` — the single page renderer: layout,
-  synthesized H1, description lede, component status line, section
+  synthesized H1, description lede, section
   enforcement, body prose.
 - Shell pages (`/`, `/getting-started`) remain app pages by convention;
   as substantive pages they are candidates to migrate into a collection
@@ -145,8 +145,8 @@ representations cannot drift.
   exclude them. The home page is landing chrome, not documentation, and
   deliberately has no `.md` form; it also renders no copy actions.
 - **Derivation** (`src/lib/markdown.ts`): synthesizes the H1 from
-  `title` and the lede from `description` (component pages add the
-  status line), then transforms the body code-fence-aware: MDX imports
+  `title` and the lede from `description`, then transforms the body
+  code-fence-aware: MDX imports
   and single-line flow comments are stripped; expressions come from
   `EXPRESSION_VALUES` (computed from the real package);
   `<DocExample example={examples.a.b} />` becomes the example caption
