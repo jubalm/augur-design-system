@@ -9,7 +9,7 @@
  * clean `.md` representation), renders the description as the page
  * lede, and enforces the component-page section contract at build time.
  *
- * The H1/lede/status markup is the single place where page chrome is
+ * The H1/lede markup is the single place where page chrome is
  * decided, so every documented page renders identically and future
  * pages (including component pages) are shared-source by default.
  *
@@ -58,15 +58,6 @@ if (entry.collection === "components") {
       <PageActions mdHref={mdHref} />
     </div>
     <p class="doc-page-lede augur-type-body">{description}</p>
-    {
-      entry.collection === "components" && (
-        <p class="doc-component-status augur-type-metadata">
-          Component export <code>{entry.data.component}</code> from{" "}
-          <code>@augur/design-system</code>
-          <span class={`doc-status-badge doc-status-${entry.data.status}`}>{entry.data.status}</span>
-        </p>
-      )
-    }
     {
       toc.length > 0 && (
         <details class="onthispage-collapse">

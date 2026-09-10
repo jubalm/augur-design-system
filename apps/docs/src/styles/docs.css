@@ -507,8 +507,13 @@ body {
 /* 40rem ≈ 65ch in the prose face (635.78px at 16px). */
 @container (min-width: 40rem) {
   .doc-main .prose table {
+    /* At the wide-table breakpoint the document column is the available
+       reading surface, so restore native table layout. Keeping block layout
+       here makes rows shrink to their content while the table box stays wide. */
+    display: table;
     width: 100cqw;
     margin-inline: calc((65ch - 100cqw) / 2);
+    overflow-x: visible;
   }
 }
 
@@ -1219,39 +1224,10 @@ body {
 /* custom property delivered by @augur/design-system/styles.css.       */
 /* ---------------------------------------------------------------- */
 
-/* Page renderer (DocPage.astro): lede and component status line. */
+/* Page renderer (DocPage.astro): lede. */
 .doc-page-lede {
   color: var(--muted-foreground);
   margin: 0 0 1.5rem;
-}
-
-.doc-component-status {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.375rem 0.5rem;
-  margin: -0.5rem 0 1.5rem;
-  padding: 0.625rem 0.875rem;
-  background-color: var(--muted);
-  border: 1px solid var(--border);
-  color: var(--muted-foreground);
-}
-
-.doc-status-badge {
-  display: inline-block;
-  padding: 0.125rem 0.5rem;
-  border: 1px solid var(--border);
-  color: var(--foreground);
-}
-
-.doc-status-planned,
-.doc-status-draft {
-  border-style: dashed;
-}
-
-.doc-status-stable {
-  border-color: var(--primary);
-  color: var(--primary);
 }
 
 /* Copy page / View as Markdown actions (issue #9). Neutral hover only:
@@ -1366,36 +1342,59 @@ body {
   text-decoration: none;
 }
 
-/* Example block (DocExample.tsx): live preview + synchronized source. */
+/* Example block (DocExample.tsx): shared editorial specimen + synchronized source. */
 .doc-example {
   margin: 1.5rem 0;
-  border: 1px solid var(--border);
+  border: 0;
 }
 
 .doc-example-preview {
-  padding: 1.25rem;
-  background-color: var(--card);
-  color: var(--card-foreground);
+  padding: 1.25rem 0 0;
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+.doc-example-header {
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--border-quiet);
+}
+
+.doc-example-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.doc-example-kicker::before {
+  content: "";
+  flex: 0 0 2rem;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+.doc-example-header-title {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--foreground);
+  font-family: var(--augur-font-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .doc-example-caption {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.25rem 0.75rem;
-  padding: 0.5rem 0.875rem;
-  border-top: 1px solid var(--border);
+  display: block;
+  padding: 0.75rem 0 1rem;
   color: var(--muted-foreground);
-}
-
-.doc-example-title {
-  color: var(--foreground);
 }
 
 .doc-example-code {
   margin: 0;
   padding: 0.875rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-quiet);
   background-color: var(--muted);
   color: var(--foreground);
   line-height: 1.55;
@@ -1409,6 +1408,59 @@ body {
   font-family: inherit;
   white-space: pre-wrap;
   overflow-wrap: break-word;
+}
+
+/* Shiki emits both theme palettes as token variables. Keep the docs source
+   readable in the host theme while the source itself remains one exact raw
+   example module. */
+.doc-example-code code span {
+  color: var(--shiki-light);
+}
+
+[data-theme="dark"] .doc-example-code code span {
+  color: var(--shiki-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .doc-example-code code span {
+    color: var(--shiki-dark);
+  }
+}
+
+.doc-example-source {
+  border-top: 1px solid var(--border-quiet);
+  border-bottom: 1px solid var(--border-quiet);
+}
+
+.doc-example-source-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  color: var(--foreground);
+  cursor: pointer;
+  list-style: none;
+}
+
+.doc-example-source-summary::-webkit-details-marker {
+  display: none;
+}
+
+.doc-example-source-summary::after {
+  content: "+";
+  color: var(--muted-foreground);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.doc-example-source[open] .doc-example-source-summary::after {
+  content: "\2212";
+}
+
+.doc-example-source-summary:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 /* Example module: font-stacks. */
@@ -1516,6 +1568,29 @@ body {
   margin: 0;
 }
 
+/* Example modules: page-header-composition and page-header-long-content.
+   Full-width theme panels keep each header legible as a page-level region;
+   stacking avoids making the comparison read like a compact card grid. */
+.example-page-header-grid {
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: 1fr;
+}
+
+.example-page-header-panel {
+  display: grid;
+  gap: 0.875rem;
+  padding: 0.875rem;
+  border: 1px solid var(--border);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.example-page-header-theme-label {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
 /* Pattern examples (#14): the PageHeader breadcrumb pairing needs no
    docs-side help — since the #44 scoping repair above, `.prose a` no
    longer reaches inside example previews, and the package stylesheet
@@ -1577,11 +1652,15 @@ body {
 .example-palette {
   display: grid;
   gap: 0.875rem;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .example-palette-group {
+  box-sizing: border-box;
+  min-width: 0;
   padding: 0.875rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-quiet);
   background-color: var(--background);
   color: var(--foreground);
 }
@@ -1600,11 +1679,13 @@ body {
   margin: 0.75rem 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  min-width: 0;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
 .example-palette-swatch {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
@@ -1619,7 +1700,7 @@ body {
   display: block;
   height: 2.5rem;
   margin-bottom: 0.25rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-quiet);
 }
 
 .example-palette-swatch code {
@@ -1634,10 +1715,22 @@ body {
   font-weight: 400;
 }
 
+.example-palette-pairs {
+  table-layout: fixed;
+  min-width: 0;
+}
+
+/* The dense-page table release expands document tables to the prose column;
+   this table is already inside a bounded live specimen. */
+.doc-main .prose .example-palette-pairs {
+  width: 100%;
+  margin-inline: 0;
+}
+
 .example-palette-sample {
   display: inline-block;
   padding: 0.25rem 0.625rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-quiet);
 }
 
 /* Review: preserve legible samples instead of squeezing them behind specs. */
@@ -1661,4 +1754,46 @@ body {
 
 /* Keep provenance columns readable; narrow screens scroll this named region. */
 .font-provenance-scroll { max-width: 100%; overflow-x: auto; }
-.font-provenance-scroll .font-demo-provenance { min-width: 40rem; }
+
+/* This table already owns a scroll wrapper, so it must not inherit the
+   document-wide negative-margin release used by ordinary prose tables. */
+.doc-main .prose .font-provenance-scroll .font-demo-provenance {
+  display: table;
+  width: max-content;
+  min-width: 40rem;
+  margin: 1.25rem 0;
+}
+
+@container (min-width: 40rem) {
+  .doc-main .prose .font-provenance-scroll .font-demo-provenance {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+  }
+
+  .font-demo-provenance th:nth-child(1),
+  .font-demo-provenance td:nth-child(1) {
+    width: 22%;
+  }
+
+  .font-demo-provenance th:nth-child(2),
+  .font-demo-provenance td:nth-child(2) {
+    width: 34%;
+  }
+
+  .font-demo-provenance th:nth-child(3),
+  .font-demo-provenance td:nth-child(3) {
+    width: 14%;
+  }
+
+  .font-demo-provenance th:nth-child(4),
+  .font-demo-provenance td:nth-child(4) {
+    width: 14%;
+  }
+
+  .font-demo-provenance th:nth-child(5),
+  .font-demo-provenance td:nth-child(5) {
+    width: 16%;
+  }
+}
