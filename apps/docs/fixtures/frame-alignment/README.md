@@ -45,7 +45,7 @@ viewports; the retained PDF renders for comparison live in
 | `header-lockup-light/dark-1440.png` | #43 identity spec | Wordmark + descriptor lockup; descriptor secondary in both themes |
 
 Computed assertions for all of the above live in
-`apps/docs/fixtures/verify-docs.mjs`, section "Shared frame alignment
+the browser suite, section "Shared frame alignment
 (#46)" (frame width/gutters/margins, 65ch measure, role-computed title
 and headings, lockup metrics, quiet-vs-control border separation in
 dark, overflow at 1440/768/390) — run on both base paths.
@@ -55,7 +55,7 @@ dark, overflow at 1440/768/390) — run on both base paths.
 ```sh
 bun install --frozen-lockfile
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 ```
 
 Interactive inspection: serve `apps/docs/dist` with any static server.

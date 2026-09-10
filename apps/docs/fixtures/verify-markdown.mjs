@@ -125,7 +125,7 @@ function htmlOutline(html) {
   // Page-action anchors (#62 split control): the menu's View item plus
   // the noscript fallback, matched by class prefix. Default (no-site)
   // builds add no AI anchors, so every match must be the page's own .md
-  // href. --site builds are verified by verify-docs + DOCS_VERIFY_SITE.
+  // href. --site builds are verified by the browser suite + DOCS_VERIFY_SITE.
   const mdLinks = [...main.matchAll(/<a[^>]*class="page-action[^"]*"[^>]*href="([^"]*)"/g)].map((m) => m[1]);
   return { h1, h2, metaDescription, mdLinks };
 }

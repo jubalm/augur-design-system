@@ -31,6 +31,6 @@ panel light/dark 1440; long-content dialog at 390.
 
 ```sh
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 bun run --cwd packages/design-system registry:check
 ```

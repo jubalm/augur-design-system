@@ -75,7 +75,7 @@ Reproduce the root matrix after a root build:
 ```sh
 bun run --cwd apps/docs build
 bun apps/docs/fixtures/acceptance/capture-matrix.mjs /tmp/augur-review-matrix
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 bun apps/docs/fixtures/verify-markdown.mjs
 ```
 

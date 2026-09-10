@@ -3,10 +3,12 @@
 Three verification drivers for the Astro docs app, following the
 package fixture pattern (`packages/design-system/fixtures/`).
 
-## Browser verification (`verify-docs.mjs`)
+## Browser verification (Playwright suite)
 
 Stages the **built** `apps/docs` output under the configured base path
-and drives it in headless Chromium.
+and drives it in headless Chromium with `@playwright/test`. The specs
+live in `apps/docs/fixtures/browser/` and the runner is configured by
+`playwright.config.ts` at the repository root.
 
 ### What it proves
 
@@ -53,23 +55,32 @@ install provides it:
 bun install --frozen-lockfile
 bunx playwright install chromium --with-deps   # browsers; --with-deps needs sudo once
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 ```
 
-(On machines where the gitignored `apps/docs/fixtures/node_modules`
-link already exists, it still takes precedence and works unchanged.)
+The runner starts both static servers itself (`apps/docs/fixtures/
+serve.mjs` for the docs build and `serve-bare.mjs` for the bare package
+host) and stops them when the run ends.
+
+Scope a run to one area while iterating — the suite is fully parallel
+and filters by test title:
+
+```sh
+bun run test:browser -- --grep "dialog"
+bun run test:browser -- --workers 4
+```
 
 For the repository-subpath build, rebuild with the base override and run
-the same driver — it stages `dist` under the base automatically:
+the same suite — the server stages `dist` under the base automatically:
 
 ```sh
 DOCS_BASE_PATH=/augur-design-system bun run --cwd apps/docs build
-DOCS_BASE_PATH=/augur-design-system bun apps/docs/fixtures/verify-docs.mjs
+DOCS_BASE_PATH=/augur-design-system bun run test:browser
 ```
 
-Exit code 0 and a `docs shell verification passed` line mean every
-assertion passed. Screenshots are written to `/tmp/augur-docs-verify/`
-as visual evidence and are not committed.
+Exit code 0 means every assertion passed. Screenshots are written to
+`/tmp/augur-docs-verify/` as visual evidence and are not committed;
+set `PW_SCREENSHOTS=0` to skip them.
 
 ## Clean-Markdown and llms.txt verification (`verify-markdown.mjs`)
 
@@ -144,4 +155,4 @@ prior run, and `dist` is removed at the end (the failing builds may
 have partially overwritten it). This is the
 docs-side analogue of `tokens:verify-failures` and the registry
 invalid fixtures. It runs as the final step of the `docs-verification` CI
-job, after the build, `verify-markdown`, and `verify-docs`.
+job, after the build, `verify-markdown`, and the browser suite.

@@ -30,7 +30,7 @@ shared alignment), 20/23 (equal light/dark query records), rendered at
 color light/dark 1440 + light 390; theming paired light/dark 1440 +
 light 390.
 
-Computed assertions in `verify-docs.mjs`: pair themes/bgs differ under
+Computed assertions in `the browser suite`: pair themes/bgs differ under
 BOTH host themes, geometry identical, content parity (title aside), 12
 swatches, palette group order, plus the prior chip-field guarantees.
 
@@ -38,5 +38,5 @@ swatches, palette group order, plus the prior chip-field guarantees.
 
 ```sh
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 ```

@@ -14,11 +14,13 @@
     "lint:code": "oxlint .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check:workspace": "bun scripts/workspace-smoke.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:browser": "playwright test"
   },
   "devDependencies": {
     "@augur/design-system": "workspace:*",
     "@google/design.md": "0.4.0",
+    "@playwright/test": "1.61.1",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.0",

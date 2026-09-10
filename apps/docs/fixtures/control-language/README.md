@@ -28,6 +28,6 @@ button light/dark 1440; input light 1440 + 390; form-field light 1440
 
 ```sh
 bun run --cwd apps/docs build
-bun apps/docs/fixtures/verify-docs.mjs
+bun run test:browser
 bun run --cwd packages/design-system registry:check
 ```

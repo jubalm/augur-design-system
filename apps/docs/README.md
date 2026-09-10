@@ -48,7 +48,7 @@ Run from the repository root:
 | `bun run --cwd apps/docs build` | Static production build into `apps/docs/dist`. |
 | `bun run --cwd apps/docs check` | `astro check` diagnostics (0 errors required). |
 | `bun run --cwd apps/docs typecheck` | `tsc --noEmit` over the app's TS/TSX. |
-| `bun apps/docs/fixtures/verify-docs.mjs` | Browser verification of the built site, including the Copy page / View as Markdown actions (see `fixtures/README.md`). |
+| `bun run test:browser` | Browser verification of the built site (Playwright suite), including the Copy page / View as Markdown actions (see `fixtures/README.md`). |
 | `bun apps/docs/fixtures/verify-markdown.mjs` | Verification of the clean-Markdown endpoints, content parity, and `llms.txt` (see `fixtures/README.md`). |
 | `bun apps/docs/fixtures/verify-content-failures.mjs` | Proves invalid required metadata and missing component sections fail the build clearly (see `fixtures/README.md`). |
 

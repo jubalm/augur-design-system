@@ -3,8 +3,8 @@
  *
  * Runs against the BUILT output (`apps/docs/dist`) — no server, no
  * browser — and complements `apps/docs/fixtures/verify-markdown.mjs`
- * (clean Markdown/llms.txt behavior, issue #9/#15) and `verify-docs.mjs`
- * (browser behavior). Coverage here is deployment-shaped:
+ * (clean Markdown/llms.txt behavior, issue #9/#15) and the browser suite
+ * (`apps/docs/fixtures/browser/`, browser behavior). Coverage here is deployment-shaped:
  *
  *   1. Layout: dist exists; `index.html` sits at the deployment root
  *      (`dist/index.html` for base "/", `dist/<base>/index.html` for a
