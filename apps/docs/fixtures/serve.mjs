@@ -1,18 +1,19 @@
 /**
  * Static server for the built docs app (issue #73).
  *
- * Replaces the staging/server block of the previous hand-rolled driver:
  * `@playwright/test` owns process lifecycle through the `webServer` entry in
- * playwright.config.ts, so this only needs to serve files.
+ * playwright.config.ts, so this only needs to serve files. The port is passed
+ * in by the config (PW_ORIGIN_PORT) so the config, the specs, and this server
+ * agree.
  *
- * `DOCS_BASE_PATH` stages `apps/docs/dist` under the deployment base path
- * exactly as the deployment would (and as the previous driver did), so the
- * suite can be pointed at a repository-subpath build.
+ * `DOCS_BASE_PATH` is served by stripping the base prefix from the request
+ * path and resolving the remainder against `apps/docs/dist`. Nothing is
+ * copied, so there is no staged tree to clean up; a request outside the
+ * configured base is a 404.
  */
 import { createServer } from "node:http";
-import { cp, mkdir, mkdtemp, readFile, stat } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize, dirname } from "node:path";
-import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -33,24 +34,21 @@ const MIME = {
   ".woff2": "font/woff2",
 };
 
-let serveRoot = distDir;
-if (base !== "/") {
-  serveRoot = await mkdtemp(join(tmpdir(), "augur-docs-stage-"));
-  await mkdir(join(serveRoot, sitePrefix.slice(1)), { recursive: true });
-  await cp(distDir, join(serveRoot, sitePrefix.slice(1)), { recursive: true });
-}
-
 createServer(async (req, res) => {
   try {
     let path = normalize(decodeURIComponent(new URL(req.url, "http://localhost").pathname));
+    if (sitePrefix) {
+      if (path !== sitePrefix && !path.startsWith(`${sitePrefix}/`)) throw new Error("outside base");
+      path = path.slice(sitePrefix.length) || "/";
+    }
     if (path.endsWith("/")) path += "index.html";
-    let file = join(serveRoot, path);
-    if (!file.startsWith(serveRoot)) throw new Error("traversal");
+    let file = join(distDir, path);
+    if (!file.startsWith(distDir)) throw new Error("traversal");
     try {
       const s = await stat(file);
-      if (!s.isFile()) file = join(serveRoot, path, "index.html"); // extensionless directory URL
+      if (!s.isFile()) file = join(distDir, path, "index.html"); // extensionless directory URL
     } catch {
-      file = join(serveRoot, path, "index.html");
+      file = join(distDir, path, "index.html");
     }
     const body = await readFile(file);
     res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });

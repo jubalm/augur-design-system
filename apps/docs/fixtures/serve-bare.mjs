@@ -5,6 +5,7 @@
  * `packages/design-system/fixtures/bare-hosts.html` — standalone markup plus
  * the package's real source CSS and fonts, with zero docs CSS — can load.
  * Used by the specimen-parity (#44) and standalone-consumer (#53) checks.
+ * The port is passed in by playwright.config.ts (PW_BARE_PORT).
  */
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
@@ -12,7 +13,7 @@ import { extname, join, normalize, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const port = 4400;
+const port = Number(process.env.PW_BARE_PORT ?? 4400);
 
 const MIME = {
   ".html": "text/html; charset=utf-8",

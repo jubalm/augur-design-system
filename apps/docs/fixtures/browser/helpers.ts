@@ -13,11 +13,25 @@
  * Env: DOCS_BASE_PATH stages the built output under a repository subpath
  * (same contract as the previous driver); DOCS_VERIFY_SITE (#62) enables the
  * assistant entries in the copy-page assertions; PW_SCREENSHOTS=0 disables
- * evidence screenshots; PW_ORIGIN / PW_BARE_ORIGIN override ports.
+ * evidence screenshots; PW_ORIGIN_PORT / PW_BARE_PORT override the server
+ * ports (see test-config.ts).
  */
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { type Page, type Locator, expect } from "@playwright/test";
+
+// Playwright resolves ports in playwright.config.ts (env override, else a
+// repository-path-derived default) and passes them to the workers through the
+// environment, so there is a single source of truth. Require them rather than
+// falling back to a fixed port that might not be the server actually running.
+function requiredPort(name: string) {
+  const raw = process.env[name]?.trim();
+  const value = raw ? Number(raw) : Number.NaN;
+  if (!Number.isInteger(value) || value < 1 || value > 65535) {
+    throw new Error(`${name} is not set to a valid port; run the suite via \`bun run test:browser\``);
+  }
+  return value;
+}
 
 // Playwright transpiles specs to CJS, so `import.meta` is unavailable. The
 // suite runs from the repository root (see playwright.config.ts).
@@ -28,9 +42,10 @@ const rawBase = process.env.DOCS_BASE_PATH?.trim() || "/";
 export const base = "/" + rawBase.split("/").filter(Boolean).join("/");
 const sitePrefix = base === "/" ? "" : base;
 
-export const ORIGIN = process.env.PW_ORIGIN ?? "http://127.0.0.1:4399";
-export const BARE_ORIGIN = process.env.PW_BARE_ORIGIN ?? "http://127.0.0.1:4400";
 export const site = (p: string) => `${sitePrefix}${p}`;
+
+export const ORIGIN = `http://127.0.0.1:${requiredPort("PW_ORIGIN_PORT")}`;
+export const BARE_ORIGIN = `http://127.0.0.1:${requiredPort("PW_BARE_PORT")}`;
 
 export const SHOTS = process.env.PW_SCREENSHOTS !== "0";
 export const SHOT_DIR = "/tmp/augur-docs-verify";
