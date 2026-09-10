@@ -1516,6 +1516,28 @@ body {
   margin: 0;
 }
 
+/* Example module: page-header-composition. Explicit theme panels keep the
+   light/dark comparison legible even when the surrounding docs page is dark. */
+.example-page-header-grid {
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.example-page-header-panel {
+  display: grid;
+  gap: 0.875rem;
+  padding: 0.875rem;
+  border: 1px solid var(--border);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.example-page-header-theme-label {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
 /* Pattern examples (#14): the PageHeader breadcrumb pairing needs no
    docs-side help — since the #44 scoping repair above, `.prose a` no
    longer reaches inside example previews, and the package stylesheet

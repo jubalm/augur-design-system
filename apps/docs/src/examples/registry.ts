@@ -140,7 +140,7 @@ export const examples = {
     composition: defineExample({
       id: "page-header-composition",
       title: "PageHeader composition",
-      description: "Breadcrumb, title, description, and an actions slot with one primary action; the second header pins data-theme=dark.",
+      description: "The same breadcrumb, title, description, and action composition is shown in explicitly labeled light and dark theme scopes.",
       Component: PageHeaderCompositionExample,
       code: pageHeaderCompositionCode,
     }),
