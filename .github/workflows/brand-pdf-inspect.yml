@@ -19,73 +19,124 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install PDF inspection dependency
-        run: python -m pip install --disable-pip-version-check pymupdf==1.26.4
-      - name: Inspect vector artwork
+      - name: Install PDF inspection dependencies
+        run: python -m pip install --disable-pip-version-check pymupdf==1.26.4 pillow==11.3.0
+      - name: Extract embedded logo images and metadata
         run: |
           python - <<'PY'
+          import hashlib
           import json
+          import shutil
           from collections import Counter
           from pathlib import Path
+
           import fitz
+          from PIL import Image
 
           source = Path('resources/brand/augur-brand-foundation.pdf')
+          extract_dir = Path('resources/brand/_pdf-extract')
+          if extract_dir.exists():
+              shutil.rmtree(extract_dir)
+          extract_dir.mkdir(parents=True)
+
           doc = fitz.open(source)
           result = {
               'source': str(source),
+              'source_sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
               'page_count': doc.page_count,
+              'note': 'PyMuPDF reports logo examples as image XObjects rather than vector drawing paths. Files below are lossless PNG extractions of those XObjects with soft masks restored where present.',
               'pages': {},
           }
 
-          for page_number in (7, 8, 9, 10, 11, 12, 13, 14, 15, 16):
+          for page_number in (7, 8, 9, 10, 13, 14, 16):
               page = doc[page_number - 1]
-              drawings = []
-              for i, drawing in enumerate(page.get_drawings(extended=False)):
-                  rect = drawing.get('rect')
-                  op_counts = Counter(item[0] for item in drawing.get('items', []))
-                  drawings.append({
-                      'index': i,
-                      'rect': [round(v, 3) for v in (rect.x0, rect.y0, rect.x1, rect.y1)] if rect else None,
-                      'fill': drawing.get('fill'),
-                      'color': drawing.get('color'),
-                      'width': drawing.get('width'),
-                      'closePath': drawing.get('closePath'),
-                      'even_odd': drawing.get('even_odd'),
-                      'fill_opacity': drawing.get('fill_opacity'),
-                      'stroke_opacity': drawing.get('stroke_opacity'),
-                      'item_count': len(drawing.get('items', [])),
-                      'ops': dict(op_counts),
-                  })
+              full_images = {img[0]: img for img in page.get_images(full=True)}
+              entries = []
 
-              text_blocks = []
-              for block in page.get_text('blocks'):
-                  x0, y0, x1, y1, text, block_no, block_type = block[:7]
-                  compact = ' '.join(text.split())
-                  if compact:
-                      text_blocks.append({
-                          'bbox': [round(x0, 3), round(y0, 3), round(x1, 3), round(y1, 3)],
-                          'text': compact[:240],
-                          'type': block_type,
-                      })
+              for ordinal, info in enumerate(page.get_image_info(hashes=True, xrefs=True), start=1):
+                  xref = info.get('xref', 0)
+                  if not xref:
+                      continue
+                  full = full_images.get(xref)
+                  smask = full[1] if full else 0
+                  pix = fitz.Pixmap(doc, xref)
+                  if smask:
+                      mask = fitz.Pixmap(doc, smask)
+                      pix = fitz.Pixmap(pix, mask)
+                  if pix.colorspace and pix.colorspace.n > 3:
+                      pix = fitz.Pixmap(fitz.csRGB, pix)
+
+                  filename = f'page-{page_number:02d}-image-{ordinal:02d}-xref-{xref}.png'
+                  path = extract_dir / filename
+                  pix.save(path)
+
+                  with Image.open(path).convert('RGBA') as im:
+                      alpha = im.getchannel('A')
+                      alpha_bbox = alpha.getbbox()
+                      if alpha_bbox:
+                          trim = im.crop(alpha_bbox)
+                          trim_path = extract_dir / filename.replace('.png', '-trim.png')
+                          trim.save(trim_path, optimize=False)
+                      else:
+                          trim_path = None
+
+                      visible = Counter()
+                      expected = Counter()
+                      for r, g, b, a in im.getdata():
+                          if a == 0:
+                              continue
+                          if a == 255:
+                              visible[(r, g, b)] += 1
+                          if (r, g, b) in {(42, 231, 168), (14, 14, 33), (255, 255, 255), (245, 245, 248)}:
+                              expected[(r, g, b, a)] += 1
+
+                      top_colors = [
+                          {'rgb': list(rgb), 'count': count}
+                          for rgb, count in visible.most_common(8)
+                      ]
+
+                  bbox = info.get('bbox')
+                  transform = info.get('transform')
+                  entry = {
+                      'ordinal': ordinal,
+                      'xref': xref,
+                      'smask': smask,
+                      'width': info.get('width'),
+                      'height': info.get('height'),
+                      'bpc': info.get('bpc'),
+                      'colorspace': info.get('colorspace'),
+                      'bbox_on_page': [round(v, 3) for v in bbox] if bbox else None,
+                      'transform': [round(v, 6) for v in transform] if transform else None,
+                      'filename': filename,
+                      'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                      'alpha_bbox_px': list(alpha_bbox) if alpha_bbox else None,
+                      'trim_filename': trim_path.name if trim_path else None,
+                      'trim_sha256': hashlib.sha256(trim_path.read_bytes()).hexdigest() if trim_path else None,
+                      'top_opaque_colors': top_colors,
+                      'expected_brand_color_samples': [
+                          {'rgba': list(rgba), 'count': count}
+                          for rgba, count in expected.most_common()
+                      ],
+                  }
+                  entries.append(entry)
 
               result['pages'][str(page_number)] = {
                   'size': [round(page.rect.width, 3), round(page.rect.height, 3)],
-                  'drawing_count': len(drawings),
-                  'drawings': drawings,
-                  'text_blocks': text_blocks,
-                  'images': [
-                      {'xref': img[0], 'width': img[2], 'height': img[3], 'bpc': img[4], 'colorspace': img[5]}
-                      for img in page.get_images(full=True)
-                  ],
+                  'image_count': len(entries),
+                  'images': entries,
               }
 
-          out = Path('resources/brand/_extract-report.json')
-          out.write_text(json.dumps(result, indent=2), encoding='utf-8')
+          report = extract_dir / 'report.json'
+          report.write_text(json.dumps(result, indent=2), encoding='utf-8')
           PY
-      - name: Commit inspection report
+      - name: Commit extraction evidence
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add resources/brand/_extract-report.json
-          git commit -m "chore: inspect brand PDF vector artwork"
+          git add resources/brand/_pdf-extract
+          if git diff --cached --quiet; then
+            echo "No extraction changes"
+            exit 0
+          fi
+          git commit -m "chore: extract embedded brand PDF artwork"
           git push origin HEAD:issue-43-extract-brand-assets
