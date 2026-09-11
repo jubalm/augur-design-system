@@ -1,50 +1,66 @@
 ---
 title: Brand identity
-description: The current Augur text identity, the rules for using it, and the provenance boundary around missing official artwork.
+description: The Augur logo family, variant selection, minimum-size rules, and the current recovered web asset set.
 order: 1
 ---
 
-Augur currently uses a live-text identity in system typography because verified production logo masters have not been supplied to this repository. This is an intentional fallback, not an invitation to recreate the missing artwork.
+Augur's identity is fixed supplied artwork, not live text styled to resemble a logo. The repository now carries the complete raster logo family and REP token recovered losslessly from the canonical brand foundation PDF while the original Illustrator/SVG masters remain unavailable.
 
-## Current identity
+## Logo family
 
-The maintained lockup is two text elements:
+Use the horizontal lockup by default. Use the vertical lockup only when width is genuinely constrained. Use the glyph alone only where the surrounding context already establishes the name Augur.
 
-| Element | Treatment | Role |
-| --- | --- | --- |
-| `Augur` | Sora 400, sentence case | Primary wordmark voice |
-| `Design system` | Schibsted Grotesk 400, uppercase, tracked, secondary color | Quiet descriptor |
+| Composition | Color | Black | White | Reversed |
+| --- | --- | --- | --- | --- |
+| Horizontal | [PNG](/brand/horizontal/color.png) | [PNG](/brand/horizontal/black.png) | [PNG](/brand/horizontal/white.png) | [PNG](/brand/horizontal/reversed.png) |
+| Vertical | [PNG](/brand/vertical/color.png) | [PNG](/brand/vertical/black.png) | [PNG](/brand/vertical/white.png) | [PNG](/brand/vertical/reversed.png) |
+| Glyph | [PNG](/brand/glyph/color.png) | [PNG](/brand/glyph/black.png) | [PNG](/brand/glyph/white.png) | [PNG](/brand/glyph/reversed.png) |
 
-The wordmark uses the active theme's foreground color. The descriptor uses the active theme's secondary text role. The lockup does not spend the green accent signal.
+**Black means Augur Navy `#0E0E21`, not `#000000`.** Color is the normal choice on Paper or White. Reversed is the normal choice on Navy, Raised, or another approved dark brand surface. Black and White are single-tint production/supporting variants rather than substitutes for the two-tint defaults.
 
-In large editorial openings, the wordmark may use the editorial-title role. In compact shell chrome it uses the smaller UI role while preserving the same family, regular weight, and casing.
+## REP token
 
-## Usage rules
+The [canonical REP token PNG](/brand/token/rep.png) is separate from the Augur glyph. Its circular navy field is part of the asset. Do not crop the field away, recolor the icon, or use the REP token as a generic favicon, navigation icon, or decorative app mark.
 
-- Keep the identity as live text while official masters remain unresolved.
-- Keep the wordmark regular weight and sentence case.
-- Keep the descriptor visually quieter than the wordmark.
-- Let light and dark themes resolve through semantic text roles; do not create fixed-color identity variants.
-- Give the lockup clear space appropriate to the surrounding composition rather than placing it in a decorative container.
-- Omit the descriptor if the available space cannot support it legibly; do not shrink, condense, or de-track it into a new treatment.
+For compact Augur identity such as a favicon, use the standalone Augur glyph where context already establishes the brand.
 
-## Do not reconstruct missing artwork
+## Clearspace and minimum size
 
-Do not trace, redraw, crop, recolor, approximate, or extract a production mark from the brand PDF. Do not create a substitute SVG, font glyph, favicon mark, or logo component that implies an official master exists.
+Use **1a** as the logo clearspace unit, based on the lowercase `a` in the production wordmark. Keep at least one a-width to the left and right and one a-height above and below. No edge, trim, rule, photograph, card boundary, or neighboring logo should enter that space.
 
-A neutral interface icon may exist as shell chrome, but it must not drift into a reconstructed brand mark.
+Minimum screen sizes from the foundation:
 
-## Official artwork replacement rule
+| Composition | Minimum |
+| --- | ---: |
+| Horizontal lockup | 150×50px |
+| Vertical lockup | 94×93px |
+| Glyph | 50×45px |
 
-When verified official masters are supplied, update the asset provenance record first. The supplied artwork then replaces the text fallback according to the brand foundation's usage rules.
+For the glyph, the controlling pyramid must remain at least 24px. Below these thresholds, give the artwork more room; do not condense, simplify, or redraw it.
 
-Do not create an intermediate approximation between the current text identity and verified masters.
+## Surface selection
+
+- Paper `#F5F5F8` or White: use **Color** by default.
+- Navy `#0E0E21` or Raised `#242438`: use **Reversed** by default.
+- Uncontrolled photography or pattern: first establish a solid approved Augur brand field rather than dropping the mark directly onto a busy surface.
+- Never add a containing badge, keyline, shadow, glow, effect, tagline, rotation, distortion, or arbitrary recoloring.
+
+Choose one composition for a surface and keep it. A header, favicon, and slide master can legitimately use different compositions; the same header should not alternate between horizontal and vertical lockups.
+
+## Current delivery status
+
+The brand foundation PDF embeds the logo examples as high-resolution PNG image objects with transparency, not as vector drawing paths. The files linked above are the embedded objects extracted losslessly with their original alpha masks and canvas dimensions preserved. They were not traced, cropped, recolored, resized, or recomposed.
+
+This makes the recovered family suitable for the documentation identity and normal-size raster web placements. Scale these files down only; do not upscale them beyond their intrinsic resolution.
+
+The foundation states that SVG variants exist upstream, but those vector masters are not embedded in the PDF. Do not auto-trace the recovered PNGs and present the result as an official SVG. A production vertical/reversed SVG already used by the reboot website independently corroborates the current logo geometry, but missing SVG compositions remain an upstream-format gap.
 
 ## Provenance
 
-The repository currently has the pinned brand foundation PDF as upstream reference material and an asset provenance record describing which production masters were not received:
+The exact PDF hash, page/object references, dimensions, and per-file hashes are recorded in the repository:
 
-- [Pinned brand foundation PDF](https://github.com/jubalm/augur-design-system/blob/88a6ccf46b201b921344bfa1411ed41b1ec17ba0/resources/brand/augur-brand-foundation.pdf)
 - [Asset provenance](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md)
+- [Extraction manifest](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/assets/manifest.json)
+- [Pinned brand foundation PDF](https://github.com/jubalm/augur-design-system/blob/88a6ccf46b201b921344bfa1411ed41b1ec17ba0/resources/brand/augur-brand-foundation.pdf)
 
-The PDF is a reference source, not a production-asset extraction source. Licensing, redistribution, and release decisions remain separate from this identity treatment.
+Asset recovery establishes technical provenance, not a new redistribution license. Release and redistribution terms remain tracked separately in issue #20.
