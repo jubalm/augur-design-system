@@ -27,11 +27,9 @@ const readFrame = (page: Page) =>
       measure65: `${measure65}px`,
       titleFont: `${title.fontFamily.split(",")[0]} ${title.fontWeight} ${title.fontSize}/${title.lineHeight} ${title.letterSpacing}`,
       h2: h2 ? `${getComputedStyle(h2).fontSize}/${getComputedStyle(h2).lineHeight} w${getComputedStyle(h2).fontWeight}` : null,
-      wordmark: (() => {
-        const el = document.querySelector(".brand-lockup-wordmark");
-        if (!el) return null;
-        const s = getComputedStyle(el);
-        return `${s.fontFamily.split(",")[0]} ${s.fontWeight} ${s.fontSize}/${s.lineHeight}`;
+      logoWidth: (() => {
+        const el = document.querySelector(".brand-logo-frame") as HTMLElement | null;
+        return el ? Math.round(el.getBoundingClientRect().width) : null;
       })(),
       descriptor: (() => {
         const el = document.querySelector(".brand-lockup-descriptor");
@@ -56,7 +54,7 @@ test.describe("shared frame alignment (#46)", () => {
     assertOk("reading measure is exactly 65ch", Math.abs(parseFloat(light.proseMax as string) - parseFloat(light.measure65)) < 0.5, `${light.proseMax} vs ${light.measure65}`);
     assertOk("page title renders the editorial-title role (Sora 400 40/48)", light.titleFont === "Sora 400 40px/48px -0.4px", light.titleFont);
     assertOk("section headings render the editorial-section metrics (28/34, regular)", light.h2 === "28px/34px w400", String(light.h2));
-    assertOk("header wordmark is the ui role (Sora 400 14/20)", light.wordmark === "Sora 400 14px/20px", String(light.wordmark));
+    assertOk("header lockup renders the official horizontal logo at 150px", light.logoWidth === 150, String(light.logoWidth));
     assertOk("descriptor is uppercase tracked secondary text (+0.12em)", light.descriptor === "uppercase 1.44px rgb(74, 75, 97)", String(light.descriptor));
     assertOk("light header hairline matches the (shared) quiet separator", light.headerBorder === light.controlEdge, `${light.headerBorder} vs ${light.controlEdge}`);
     assertOk("no horizontal overflow at 1440", light.overflowX === false);
@@ -117,7 +115,10 @@ const readOpening = (page: Page) =>
       colRatio: cols.length === 2 ? cols[1] / cols[0] : null,
       openingHeight: Math.round((document.querySelector(".opening") as HTMLElement).getBoundingClientRect().height),
       tracks: document.querySelectorAll(".opening-footer > div").length,
-      wordmarkSize: cs(".opening-wordmark", "fontSize"),
+      logoWidth: (() => {
+        const el = document.querySelector(".opening-lockup .brand-logo-frame") as HTMLElement | null;
+        return el ? Math.round(el.getBoundingClientRect().width) : null;
+      })(),
       display: cs(".opening", "display"),
       overflowX: document.documentElement.scrollWidth > window.innerWidth,
     };
@@ -141,7 +142,7 @@ test.describe("brand opening (#47)", () => {
     assertOk("rail and message hold the 1:2 opening columns", openLight.colRatio !== null && Math.abs(openLight.colRatio - 2) < 0.05, String(openLight.colRatio));
     assertOk("opening meets the 520px desktop minimum height", openLight.openingHeight >= 520, String(openLight.openingHeight));
     assertOk("metadata row has three equal tracks", openLight.tracks === 3, String(openLight.tracks));
-    assertOk("identity lockup renders at opening scale", openLight.wordmarkSize === "40px", openLight.wordmarkSize);
+    assertOk("identity lockup renders the official horizontal logo at opening scale", openLight.logoWidth === 224, String(openLight.logoWidth));
     assertOk("no horizontal overflow at 1440", openLight.overflowX === false);
     const routeHrefs = await page.evaluate(() =>
       [...document.querySelectorAll(".route-group a")].map((a) => new URL(a.getAttribute("href") as string, location.href).pathname),
