@@ -1,0 +1,95 @@
+---
+import { withBase } from "../lib/base";
+
+interface Props {
+  descriptor?: string;
+  width?: number;
+  loading?: "eager" | "lazy";
+}
+
+const { descriptor, width = 150, loading = "eager" } = Astro.props as Props;
+---
+<span class="brand-lockup-art" style={`--brand-lockup-width: ${width}px`}>
+  <span class="brand-logo-frame" aria-hidden="true">
+    <img
+      class="brand-logo brand-logo-color"
+      src={withBase("/brand/horizontal/color.png")}
+      alt=""
+      width="1440"
+      height="481"
+      loading={loading}
+      decoding="async"
+    />
+    <img
+      class="brand-logo brand-logo-reversed"
+      src={withBase("/brand/horizontal/reversed.png")}
+      alt=""
+      width="1440"
+      height="481"
+      loading={loading}
+      decoding="async"
+    />
+  </span>
+  {descriptor ? <span class="augur-type-editorial-label brand-lockup-descriptor">{descriptor}</span> : null}
+</span>
+
+<style>
+  .brand-lockup-art {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .brand-logo-frame {
+    display: inline-grid;
+    width: min(var(--brand-lockup-width), 52vw);
+    aspect-ratio: 1440 / 481;
+    align-items: center;
+    flex: none;
+  }
+
+  .brand-logo {
+    grid-area: 1 / 1;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .brand-logo-reversed {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .brand-logo-color {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .brand-logo-reversed {
+    display: block;
+  }
+
+  :global(html[data-theme="light"]) .brand-logo-color {
+    display: block;
+  }
+
+  :global(html[data-theme="light"]) .brand-logo-reversed {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme])) .brand-logo-color {
+      display: none;
+    }
+
+    :global(html:not([data-theme])) .brand-logo-reversed {
+      display: block;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .brand-lockup-art {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+</style>
