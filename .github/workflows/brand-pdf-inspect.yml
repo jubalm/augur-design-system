@@ -1,0 +1,91 @@
+name: Brand PDF inspection
+
+on:
+  push:
+    branches: [issue-43-extract-brand-assets]
+    paths:
+      - .github/workflows/brand-pdf-inspect.yml
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: issue-43-extract-brand-assets
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PDF inspection dependency
+        run: python -m pip install --disable-pip-version-check pymupdf==1.26.4
+      - name: Inspect vector artwork
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+          import fitz
+
+          source = Path('resources/brand/augur-brand-foundation.pdf')
+          doc = fitz.open(source)
+          result = {
+              'source': str(source),
+              'page_count': doc.page_count,
+              'pages': {},
+          }
+
+          for page_number in (7, 8, 9, 10, 11, 12, 13, 14, 15, 16):
+              page = doc[page_number - 1]
+              drawings = []
+              for i, drawing in enumerate(page.get_drawings(extended=False)):
+                  rect = drawing.get('rect')
+                  op_counts = Counter(item[0] for item in drawing.get('items', []))
+                  drawings.append({
+                      'index': i,
+                      'rect': [round(v, 3) for v in (rect.x0, rect.y0, rect.x1, rect.y1)] if rect else None,
+                      'fill': drawing.get('fill'),
+                      'color': drawing.get('color'),
+                      'width': drawing.get('width'),
+                      'closePath': drawing.get('closePath'),
+                      'even_odd': drawing.get('even_odd'),
+                      'fill_opacity': drawing.get('fill_opacity'),
+                      'stroke_opacity': drawing.get('stroke_opacity'),
+                      'item_count': len(drawing.get('items', [])),
+                      'ops': dict(op_counts),
+                  })
+
+              text_blocks = []
+              for block in page.get_text('blocks'):
+                  x0, y0, x1, y1, text, block_no, block_type = block[:7]
+                  compact = ' '.join(text.split())
+                  if compact:
+                      text_blocks.append({
+                          'bbox': [round(x0, 3), round(y0, 3), round(x1, 3), round(y1, 3)],
+                          'text': compact[:240],
+                          'type': block_type,
+                      })
+
+              result['pages'][str(page_number)] = {
+                  'size': [round(page.rect.width, 3), round(page.rect.height, 3)],
+                  'drawing_count': len(drawings),
+                  'drawings': drawings,
+                  'text_blocks': text_blocks,
+                  'images': [
+                      {'xref': img[0], 'width': img[2], 'height': img[3], 'bpc': img[4], 'colorspace': img[5]}
+                      for img in page.get_images(full=True)
+                  ],
+              }
+
+          out = Path('resources/brand/_extract-report.json')
+          out.write_text(json.dumps(result, indent=2), encoding='utf-8')
+          PY
+      - name: Commit inspection report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add resources/brand/_extract-report.json
+          git commit -m "chore: inspect brand PDF vector artwork"
+          git push origin HEAD:issue-43-extract-brand-assets
