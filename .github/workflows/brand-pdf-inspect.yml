@@ -1,4 +1,4 @@
-name: Brand PDF inspection
+name: Finalize recovered brand assets
 
 on:
   push:
@@ -10,133 +10,95 @@ permissions:
   contents: write
 
 jobs:
-  inspect:
+  finalize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           ref: issue-43-extract-brand-assets
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install PDF inspection dependencies
-        run: python -m pip install --disable-pip-version-check pymupdf==1.26.4 pillow==11.3.0
-      - name: Extract embedded logo images and metadata
+      - name: Promote lossless PDF image objects
+        shell: bash
         run: |
+          set -euo pipefail
+
+          src=resources/brand/_pdf-extract
+          canonical=resources/brand/assets
+          public=apps/docs/public/brand
+
+          rm -rf "$canonical" "$public"
+          mkdir -p \
+            "$canonical/horizontal" "$canonical/vertical" "$canonical/glyph" "$canonical/token" \
+            "$public/horizontal" "$public/vertical" "$public/glyph" "$public/token"
+
+          cp "$src/page-08-image-01-xref-36.png" "$canonical/horizontal/color.png"
+          cp "$src/page-08-image-02-xref-45.png" "$canonical/horizontal/black.png"
+          cp "$src/page-08-image-03-xref-47.png" "$canonical/horizontal/white.png"
+          cp "$src/page-08-image-04-xref-8.png"  "$canonical/horizontal/reversed.png"
+
+          cp "$src/page-09-image-01-xref-38.png" "$canonical/vertical/color.png"
+          cp "$src/page-09-image-02-xref-52.png" "$canonical/vertical/black.png"
+          cp "$src/page-09-image-03-xref-54.png" "$canonical/vertical/white.png"
+          cp "$src/page-09-image-04-xref-56.png" "$canonical/vertical/reversed.png"
+
+          cp "$src/page-10-image-01-xref-40.png" "$canonical/glyph/color.png"
+          cp "$src/page-10-image-02-xref-61.png" "$canonical/glyph/black.png"
+          cp "$src/page-10-image-03-xref-63.png" "$canonical/glyph/white.png"
+          cp "$src/page-10-image-04-xref-65.png" "$canonical/glyph/reversed.png"
+
+          cp "$src/page-16-image-01-xref-89.png" "$canonical/token/rep.png"
+
+          cp -R "$canonical/horizontal/." "$public/horizontal/"
+          cp -R "$canonical/vertical/." "$public/vertical/"
+          cp -R "$canonical/glyph/." "$public/glyph/"
+          cp -R "$canonical/token/." "$public/token/"
+
+          cat > "$canonical/manifest.json" <<'JSON'
+          {
+            "source": "resources/brand/augur-brand-foundation.pdf",
+            "sourceSha256": "65acce8b247ddda10834d0c068e84bc315f7afc118f5570d1d90386de8ed9c0c",
+            "method": "Lossless extraction of embedded PDF image XObjects with their soft masks restored; no tracing, vectorization, recoloring, trimming, or recomposition.",
+            "assets": [
+              {"path":"horizontal/color.png","page":8,"xref":36,"width":1440,"height":481,"sha256":"9b09815c040043c83092cbeb1eaa30f310f1d468f4db42f5fb8960cb46b197ad"},
+              {"path":"horizontal/black.png","page":8,"xref":45,"width":1440,"height":481,"sha256":"3c120d685a16efbd4884a3dc08f909ca2a98559af4e977fcbf64e946e170338a"},
+              {"path":"horizontal/white.png","page":8,"xref":47,"width":1440,"height":481,"sha256":"cd8b1ca8f1977a7c7947149f06094a2661ada9d15aa94f1699160ad55c1b0f1f"},
+              {"path":"horizontal/reversed.png","page":8,"xref":8,"width":1440,"height":481,"sha256":"0bee48589af58e056e73212c9651fc8ea442fcdb7e862c0e67e6afbcbb31a674"},
+              {"path":"vertical/color.png","page":9,"xref":38,"width":896,"height":889,"sha256":"0047264fd502c2d8f9bbab195b19bc4afc99d94d0efc66869b8332b56b82687e"},
+              {"path":"vertical/black.png","page":9,"xref":52,"width":896,"height":889,"sha256":"8dc33d960f886dd3ffde065de79b8cdef4c4f310f791ff543b42e54e2cefb187"},
+              {"path":"vertical/white.png","page":9,"xref":54,"width":896,"height":889,"sha256":"eada52681c826628ded83f57c9fcabcb0a6f8344684536a1f23f612957621786"},
+              {"path":"vertical/reversed.png","page":9,"xref":56,"width":896,"height":889,"sha256":"ce61b2d0b1987097ee27b5f1e03e13241959b1026624e1f6dd5f1cdaca1dc697"},
+              {"path":"glyph/color.png","page":10,"xref":40,"width":432,"height":481,"sha256":"204a59a1f2545c500c1753a22087ca769edfe820caa47195bad344d16f754319"},
+              {"path":"glyph/black.png","page":10,"xref":61,"width":432,"height":481,"sha256":"3cd03a1941ac22efbff46010963dd756016f6dc5d608688b15b05b991d5d1d66"},
+              {"path":"glyph/white.png","page":10,"xref":63,"width":432,"height":481,"sha256":"56c23b299b73d3154f624deded03ac8f90e630640da504157004924035edd0e2"},
+              {"path":"glyph/reversed.png","page":10,"xref":65,"width":432,"height":481,"sha256":"bba54fc44015f58f7c24b862f5fd2e0e2ccd3501532863faadc1fed82183ca9c"},
+              {"path":"token/rep.png","page":16,"xref":89,"width":384,"height":385,"sha256":"3540c9727d616a52f367fdfd4c168c67390014e52ca5530b5b982d0bf818c665"}
+            ]
+          }
+          JSON
+
           python - <<'PY'
-          import hashlib
-          import json
-          import shutil
-          from collections import Counter
+          import hashlib, json
           from pathlib import Path
 
-          import fitz
-          from PIL import Image
-
-          source = Path('resources/brand/augur-brand-foundation.pdf')
-          extract_dir = Path('resources/brand/_pdf-extract')
-          if extract_dir.exists():
-              shutil.rmtree(extract_dir)
-          extract_dir.mkdir(parents=True)
-
-          doc = fitz.open(source)
-          result = {
-              'source': str(source),
-              'source_sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
-              'page_count': doc.page_count,
-              'note': 'PyMuPDF reports logo examples as image XObjects rather than vector drawing paths. Files below are lossless PNG extractions of those XObjects with soft masks restored where present.',
-              'pages': {},
-          }
-
-          for page_number in (7, 8, 9, 10, 13, 14, 16):
-              page = doc[page_number - 1]
-              full_images = {img[0]: img for img in page.get_images(full=True)}
-              entries = []
-
-              for ordinal, info in enumerate(page.get_image_info(hashes=True, xrefs=True), start=1):
-                  xref = info.get('xref', 0)
-                  if not xref:
-                      continue
-                  full = full_images.get(xref)
-                  smask = full[1] if full else 0
-                  pix = fitz.Pixmap(doc, xref)
-                  if smask:
-                      mask = fitz.Pixmap(doc, smask)
-                      pix = fitz.Pixmap(pix, mask)
-                  if pix.colorspace and pix.colorspace.n > 3:
-                      pix = fitz.Pixmap(fitz.csRGB, pix)
-
-                  filename = f'page-{page_number:02d}-image-{ordinal:02d}-xref-{xref}.png'
-                  path = extract_dir / filename
-                  pix.save(path)
-
-                  with Image.open(path).convert('RGBA') as im:
-                      alpha = im.getchannel('A')
-                      alpha_bbox = alpha.getbbox()
-                      if alpha_bbox:
-                          trim = im.crop(alpha_bbox)
-                          trim_path = extract_dir / filename.replace('.png', '-trim.png')
-                          trim.save(trim_path, optimize=False)
-                      else:
-                          trim_path = None
-
-                      visible = Counter()
-                      expected = Counter()
-                      for r, g, b, a in im.getdata():
-                          if a == 0:
-                              continue
-                          if a == 255:
-                              visible[(r, g, b)] += 1
-                          if (r, g, b) in {(42, 231, 168), (14, 14, 33), (255, 255, 255), (245, 245, 248)}:
-                              expected[(r, g, b, a)] += 1
-
-                      top_colors = [
-                          {'rgb': list(rgb), 'count': count}
-                          for rgb, count in visible.most_common(8)
-                      ]
-
-                  bbox = info.get('bbox')
-                  transform = info.get('transform')
-                  entry = {
-                      'ordinal': ordinal,
-                      'xref': xref,
-                      'smask': smask,
-                      'width': info.get('width'),
-                      'height': info.get('height'),
-                      'bpc': info.get('bpc'),
-                      'colorspace': info.get('colorspace'),
-                      'bbox_on_page': [round(v, 3) for v in bbox] if bbox else None,
-                      'transform': [round(v, 6) for v in transform] if transform else None,
-                      'filename': filename,
-                      'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
-                      'alpha_bbox_px': list(alpha_bbox) if alpha_bbox else None,
-                      'trim_filename': trim_path.name if trim_path else None,
-                      'trim_sha256': hashlib.sha256(trim_path.read_bytes()).hexdigest() if trim_path else None,
-                      'top_opaque_colors': top_colors,
-                      'expected_brand_color_samples': [
-                          {'rgba': list(rgba), 'count': count}
-                          for rgba, count in expected.most_common()
-                      ],
-                  }
-                  entries.append(entry)
-
-              result['pages'][str(page_number)] = {
-                  'size': [round(page.rect.width, 3), round(page.rect.height, 3)],
-                  'image_count': len(entries),
-                  'images': entries,
-              }
-
-          report = extract_dir / 'report.json'
-          report.write_text(json.dumps(result, indent=2), encoding='utf-8')
+          canonical = Path('resources/brand/assets')
+          public = Path('apps/docs/public/brand')
+          manifest = json.loads((canonical / 'manifest.json').read_text())
+          for asset in manifest['assets']:
+              rel = Path(asset['path'])
+              a = canonical / rel
+              b = public / rel
+              digest_a = hashlib.sha256(a.read_bytes()).hexdigest()
+              digest_b = hashlib.sha256(b.read_bytes()).hexdigest()
+              assert digest_a == asset['sha256'], (rel, digest_a, asset['sha256'])
+              assert digest_b == digest_a, (rel, digest_a, digest_b)
+          print(f"Verified {len(manifest['assets'])} canonical assets and byte-identical docs copies")
           PY
-      - name: Commit extraction evidence
+
+          git rm -r resources/brand/_pdf-extract resources/brand/_extract-report.json
+          git rm .github/workflows/brand-pdf-inspect.yml
+      - name: Commit recovered asset family
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add resources/brand/_pdf-extract
-          if git diff --cached --quiet; then
-            echo "No extraction changes"
-            exit 0
-          fi
-          git commit -m "chore: extract embedded brand PDF artwork"
+          git add resources/brand/assets apps/docs/public/brand
+          git commit -m "feat: recover Augur brand assets from foundation PDF"
           git push origin HEAD:issue-43-extract-brand-assets
