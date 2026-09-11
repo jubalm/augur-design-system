@@ -14,7 +14,8 @@
     "lint:code": "oxlint .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check:workspace": "bun scripts/workspace-smoke.ts",
-    "test": "vitest run",
+    "check:brand-assets": "bun scripts/verify-brand-assets.ts",
+    "test": "bun run check:brand-assets && vitest run",
     "test:browser": "playwright test"
   },
   "devDependencies": {

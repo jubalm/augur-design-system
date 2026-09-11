@@ -1,4 +1,5 @@
 ---
+import BrandLockup from "../components/BrandLockup.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/base";
 
@@ -45,9 +46,8 @@ const routes = [
 >
   <section class="opening" aria-labelledby="opening-title">
     <div class="opening-rail">
-      <p class="brand-lockup opening-lockup">
-        <span class="augur-type-editorial-title opening-wordmark">Augur</span>
-        <span class="augur-type-editorial-label brand-lockup-descriptor">Design system</span>
+      <p class="opening-lockup" aria-label="Augur Design system">
+        <BrandLockup descriptor="Design system" width={224} />
       </p>
       <p class="opening-source augur-type-metadata">
         Early development: the foundations are real and consumable today.
