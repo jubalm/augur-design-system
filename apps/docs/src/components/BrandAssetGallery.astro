@@ -1,0 +1,120 @@
+---
+import { withBase } from "../lib/base";
+
+const specimens = [
+  {
+    label: "Horizontal · Color",
+    path: "/brand/horizontal/color.png",
+    className: "brand-specimen brand-specimen-light brand-specimen-wide",
+    width: 1440,
+    height: 481,
+  },
+  {
+    label: "Horizontal · Reversed",
+    path: "/brand/horizontal/reversed.png",
+    className: "brand-specimen brand-specimen-dark brand-specimen-wide",
+    width: 1440,
+    height: 481,
+  },
+  {
+    label: "Glyph · Color",
+    path: "/brand/glyph/color.png",
+    className: "brand-specimen brand-specimen-light",
+    width: 432,
+    height: 481,
+  },
+  {
+    label: "REP token",
+    path: "/brand/token/rep.png",
+    className: "brand-specimen brand-specimen-light",
+    width: 384,
+    height: 385,
+  },
+];
+---
+<div class="brand-gallery" aria-label="Recovered Augur brand artwork">
+  {specimens.map((specimen) => (
+    <figure class={specimen.className}>
+      <div class="brand-specimen-stage">
+        <img
+          src={withBase(specimen.path)}
+          alt={specimen.label}
+          width={specimen.width}
+          height={specimen.height}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <figcaption class="augur-type-metadata">{specimen.label}</figcaption>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .brand-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-block: 2rem 2.5rem;
+  }
+
+  .brand-specimen {
+    margin: 0;
+    border: 1px solid var(--border-quiet);
+  }
+
+  .brand-specimen-wide {
+    grid-column: 1 / -1;
+  }
+
+  .brand-specimen-stage {
+    min-height: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .brand-specimen-light .brand-specimen-stage {
+    background: #f5f5f8;
+  }
+
+  .brand-specimen-dark .brand-specimen-stage {
+    background: #0e0e21;
+  }
+
+  .brand-specimen-stage img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(100%, 36rem);
+    max-height: 14rem;
+  }
+
+  .brand-specimen:not(.brand-specimen-wide) .brand-specimen-stage img {
+    max-width: 10rem;
+    max-height: 10rem;
+  }
+
+  .brand-specimen figcaption {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border-quiet);
+    color: var(--muted-foreground);
+  }
+
+  @media (max-width: 640px) {
+    .brand-gallery {
+      grid-template-columns: 1fr;
+    }
+
+    .brand-specimen-wide {
+      grid-column: auto;
+    }
+
+    .brand-specimen-stage {
+      min-height: 9rem;
+      padding: 1.25rem;
+    }
+  }
+</style>

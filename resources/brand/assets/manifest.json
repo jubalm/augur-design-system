@@ -1,0 +1,20 @@
+{
+  "source": "resources/brand/augur-brand-foundation.pdf",
+  "sourceSha256": "65acce8b247ddda10834d0c068e84bc315f7afc118f5570d1d90386de8ed9c0c",
+  "method": "Lossless extraction of embedded PDF image XObjects with their soft masks restored; no tracing, vectorization, recoloring, trimming, or recomposition.",
+  "assets": [
+    {"path":"horizontal/color.png","page":8,"xref":36,"width":1440,"height":481,"sha256":"9b09815c040043c83092cbeb1eaa30f310f1d468f4db42f5fb8960cb46b197ad"},
+    {"path":"horizontal/black.png","page":8,"xref":45,"width":1440,"height":481,"sha256":"3c120d685a16efbd4884a3dc08f909ca2a98559af4e977fcbf64e946e170338a"},
+    {"path":"horizontal/white.png","page":8,"xref":47,"width":1440,"height":481,"sha256":"cd8b1ca8f1977a7c7947149f06094a2661ada9d15aa94f1699160ad55c1b0f1f"},
+    {"path":"horizontal/reversed.png","page":8,"xref":8,"width":1440,"height":481,"sha256":"0bee48589af58e056e73212c9651fc8ea442fcdb7e862c0e67e6afbcbb31a674"},
+    {"path":"vertical/color.png","page":9,"xref":38,"width":896,"height":889,"sha256":"0047264fd502c2d8f9bbab195b19bc4afc99d94d0efc66869b8332b56b82687e"},
+    {"path":"vertical/black.png","page":9,"xref":52,"width":896,"height":889,"sha256":"8dc33d960f886dd3ffde065de79b8cdef4c4f310f791ff543b42e54e2cefb187"},
+    {"path":"vertical/white.png","page":9,"xref":54,"width":896,"height":889,"sha256":"eada52681c826628ded83f57c9fcabcb0a6f8344684536a1f23f612957621786"},
+    {"path":"vertical/reversed.png","page":9,"xref":56,"width":896,"height":889,"sha256":"ce61b2d0b1987097ee27b5f1e03e13241959b1026624e1f6dd5f1cdaca1dc697"},
+    {"path":"glyph/color.png","page":10,"xref":40,"width":432,"height":481,"sha256":"204a59a1f2545c500c1753a22087ca769edfe820caa47195bad344d16f754319"},
+    {"path":"glyph/black.png","page":10,"xref":61,"width":432,"height":481,"sha256":"3cd03a1941ac22efbff46010963dd756016f6dc5d608688b15b05b991d5d1d66"},
+    {"path":"glyph/white.png","page":10,"xref":63,"width":432,"height":481,"sha256":"56c23b299b73d3154f624deded03ac8f90e630640da504157004924035edd0e2"},
+    {"path":"glyph/reversed.png","page":10,"xref":65,"width":432,"height":481,"sha256":"bba54fc44015f58f7c24b862f5fd2e0e2ccd3501532863faadc1fed82183ca9c"},
+    {"path":"token/rep.png","page":16,"xref":89,"width":384,"height":385,"sha256":"3540c9727d616a52f367fdfd4c168c67390014e52ca5530b5b982d0bf818c665"}
+  ]
+}

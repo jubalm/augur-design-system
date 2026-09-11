@@ -21,6 +21,7 @@
  */
 import "@augur/design-system/styles.css";
 import "../styles/docs.css";
+import BrandLockup from "../components/BrandLockup.astro";
 import ThemeToggle from "../components/ThemeToggle";
 import { GitHubIcon } from "../components/icons";
 import NavGroups from "../components/NavGroups.astro";
@@ -68,7 +69,7 @@ const showRail = shell && !!toc && toc.length > 0;
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
     {description ? <meta name="description" content={description} /> : null}
-    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <link rel="icon" href={withBase("/brand/glyph/color.png")} type="image/png" />
     <script is:inline>
       // Apply the persisted theme before first paint (see ThemeToggle.tsx
       // for the contract). No attribute = system preference governs.
@@ -90,11 +91,8 @@ const showRail = shell && !!toc && toc.length > 0;
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="masthead">
       <div class="masthead-inner">
-        <a class="brand" href={withBase("/")}>
-          <span class="brand-lockup">
-            <span class="augur-type-ui brand-lockup-wordmark">Augur</span>
-            <span class="augur-type-editorial-label brand-lockup-descriptor">Design system</span>
-          </span>
+        <a class="brand" href={withBase("/")} aria-label="Augur Design system">
+          <BrandLockup descriptor="Design system" width={150} />
         </a>
         <details class="browse-docs">
           <summary class="browse-summary">Browse documentation</summary>
