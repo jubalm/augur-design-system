@@ -18,9 +18,9 @@ const PAGES: Array<[string, string, number?]> = [
   ["/components/card", "Card"],
   ["/components/dialog", "Dialog"],
   ["/components/input", "Input"],
-  ["/patterns/empty-state", "EmptyState"],
-  ["/patterns/form-field", "FormField"],
-  ["/patterns/page-header", "PageHeader"],
+  ["/patterns/empty-state", "Empty state"],
+  ["/patterns/form-field", "Form field"],
+  ["/patterns/page-header", "Page header"],
   ["/proposal-review", "Proposal review"],
 ];
 
@@ -35,7 +35,7 @@ test.describe("page audits (base /)", () => {
     const gettingStarted = await readDist("getting-started/index.html");
     assertOk(
       "getting-started renders current consumer guidance",
-      gettingStarted.includes("source-first design system") && gettingStarted.includes("shadcn@latest"),
+      gettingStarted.includes("Choose the consumption path") && gettingStarted.includes("shadcn@latest"),
     );
     const theming = await readDist("foundations/theming/index.html");
     assertOk(

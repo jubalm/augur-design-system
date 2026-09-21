@@ -1,12 +1,3 @@
-/**
- * Live example: PageHeader with long content.
- *
- * A long title and a long description wrap inside the title column —
- * `minmax(0, 1fr)` keeps them from pushing the actions out — while the
- * actions hold the right edge and wrap as a group. The second header
- * pins data-theme="dark". The code sample next to the preview is this
- * file, imported with `?raw`.
- */
 import {
   Button,
   PageHeader,
