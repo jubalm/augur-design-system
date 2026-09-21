@@ -24,6 +24,8 @@ function PositionsHeader(props: { theme: "light" | "dark" }) {
         </ol>
       </PageHeaderBreadcrumb>
       <PageHeaderContent>
+        {/* Nested composition: headingLevel={2} keeps this header below
+            the page's own heading; at the top of a page, keep the default h1. */}
         <PageHeaderTitle headingLevel={2}>Positions</PageHeaderTitle>
         <PageHeaderDescription>
           Every open and closed position for the selected account.
