@@ -119,7 +119,7 @@ for (const route of ROUTES) {
       const detail = route === '/foundations/fonts' ? '.type-specimen-grid' : route === '/patterns/reference-record' ? '.example-record-field' : route === '/proposal-review' ? '.proposal-review-page' : null;
       if (detail) await page.locator(detail).screenshot({path:join(outDir,`${name}-detail.png`)});
       const usedFontsLoaded = evidence.typography.fonts.every((font, index) => {
-        const [weight, , ...familyParts] = font.split(" ");
+        const [, , ...familyParts] = font.split(" ");
         const family = familyParts.join(" ");
         // document.fonts.check verifies the computed role is ready. The
         // loaded-face check is family-based because CSS may synthesize or
