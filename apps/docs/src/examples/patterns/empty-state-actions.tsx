@@ -1,12 +1,3 @@
-/**
- * Live example: EmptyState with actions.
- *
- * The full part set — a decorative glyph in the icon slot, a heading
- * title, a description, and an actions row composed from the real
- * Buttons: one primary action (the view's one green signal) and one
- * quiet outline action. The second state pins data-theme="dark". The
- * code sample next to the preview is this file, imported with `?raw`.
- */
 import {
   Button,
   EmptyState,

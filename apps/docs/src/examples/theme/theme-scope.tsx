@@ -1,15 +1,3 @@
-/**
- * Live example: the theme contract applies at any container level.
- *
- * Plain elements styled only with the semantic role custom properties
- * delivered by `@augur/design-system/styles.css` — no local color
- * values, so the paint always follows the resolved theme. The inner
- * panel pins `data-theme="dark"` directly, demonstrating the scoped
- * subtree behavior from the package's theme contract (see the Theming
- * foundation page for the full selection model). The code sample next
- * to the preview is this file, imported with `?raw`.
- */
-
 const ROLES: readonly { token: string; label: string }[] = [
   { token: "--background", label: "canvas" },
   { token: "--foreground", label: "copy" },

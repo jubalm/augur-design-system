@@ -137,7 +137,7 @@ test.describe("brand opening (#47)", () => {
     );
     assertOk("opening signal is exactly 32x2", openLight.signal === "32x2", openLight.signal);
     assertOk("light signal paints Deep through --primary", openLight.signalColor === "rgb(9, 94, 66)", openLight.signalColor);
-    assertOk("text action stays neutral foreground (not accent)", openLight.actionColor === "rgb(14, 14, 33)" && openLight.actionText.startsWith("Explore the foundations"), `${openLight.actionColor} "${openLight.actionText}"`);
+    assertOk("text action stays neutral foreground (not accent)", openLight.actionColor === "rgb(14, 14, 33)" && openLight.actionText.startsWith("Get started"), `${openLight.actionColor} "${openLight.actionText}"`);
     assertOk("lede is the locked shared-interface-language copy", openLight.lede.startsWith("A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces."), openLight.lede.slice(0, 60));
     assertOk("rail and message hold the 1:2 opening columns", openLight.colRatio !== null && Math.abs(openLight.colRatio - 2) < 0.05, String(openLight.colRatio));
     assertOk("opening meets the 520px desktop minimum height", openLight.openingHeight >= 520, String(openLight.openingHeight));

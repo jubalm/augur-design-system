@@ -1,21 +1,3 @@
-/**
- * Live example: the Augur palette, painted from generated tokens.
- *
- * Every chip below paints a `--augur-color-*` custom property delivered
- * by `@augur/design-system/styles.css` — the generated output of the
- * pinned `@google/design.md` toolchain (issue #3). Nothing here restates
- * a hex value; when `DESIGN.md` changes and tokens regenerate, this
- * palette re-renders with the new values. Grouping follows the
- * companion-vs-role naming rules of the foundation color system (§4):
- * brand companions are named, runtime surfaces are described by job.
- *
- * The pairing table renders the contrast pairings `DESIGN.md` records,
- * with foreground and background also referenced from the generated
- * variables; the ratios shown are the recorded values, independently
- * recomputed and enforced by the package test suite
- * (packages/design-system/docs/semantic-themes.md).
- */
-
 type Swatch = { token: string; name: string; job: string };
 
 const GROUPS: readonly { title: string; note: string; swatches: readonly Swatch[] }[] = [

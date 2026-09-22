@@ -12,16 +12,13 @@ import { DocExample } from "../../components/DocExample";
 import { examples } from "../../examples/registry";
 import { ThemingDemo } from "../../components/ThemingDemo";
 
-The design system ships one semantic role layer with two equal
-everyday expressions: light (default) and dark. Themes swap color roles
-only — content order, spacing, alignment, and geometry are identical by
-construction, because both themes set the same custom properties through
-the same selectors.
+Choose light or dark for the page, or pin either theme on any
+subtree. The choice swaps color roles only — content order, spacing,
+alignment, and geometry stay identical.
 
 ## Selection model
 
-The full contract is implemented in the package's theme layer and is
-the single source of truth. In short:
+Choose a theme with the following contract:
 
 | Situation | Result |
 | --- | --- |
@@ -64,6 +61,6 @@ Both themes ship WCAG AA-or-better canvas and copy pairings, and the
 focus ring color is verified against every surface it paints on.
 Keyboard focus is painted as a 2px offset ring via the package's shared
 `:focus-visible` rule — tab through this page to see it in both themes.
-The maintained mapping record, decisions, and contrast evidence live in
-the package's
-[semantic themes documentation](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/semantic-themes.md).
+## Implementation reference
+
+The full role mapping, decisions, and contrast evidence live in the package's [semantic themes documentation](https://github.com/jubalm/augur-design-system/blob/main/packages/design-system/docs/semantic-themes.md). The package theme layer is the source of truth for the selectors and generated values.

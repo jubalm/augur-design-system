@@ -13,15 +13,16 @@ composition), 25 (expressive message), rendered at
 - Locked copy: "Make what matters clear." (editorial-title role, 40/48,
   32/40 mobile), the 32×2 signal (Deep on light, Green on dark — the
   page's one green instance), the locked shared-interface-language
-  lede, and the neutral text action "Explore the foundations".
+  lede, and the neutral text action "Get started".
 - Identity: the #43 text lockup at opening scale (wordmark at
   editorial-title size, tracked descriptor in the secondary role).
 - Metadata footer: three equal tracks (Purpose / Character / System)
   behind a quiet editorial hairline.
 - Route index: rule-led rows in three columns (PDF page 5 alignment
-  language), 16 links — all asserted to resolve. Status honesty lives
-  in the rail's quiet source note and the shell footer; no dominant
-  status warning, and no copy implies a release.
+  language), 18 links — all asserted to resolve. Status honesty lives
+  in the rail's quiet source note, the quiet DESIGN.md authority note
+  below the route index, and the shell footer; no dominant status
+  warning, and no copy implies a release.
 
 ## Captures
 

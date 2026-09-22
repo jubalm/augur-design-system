@@ -1,15 +1,3 @@
-/**
- * Live example: FormField composition.
- *
- * The pattern wires label, control, helper text, and error message;
- * the composition only declares `label`/`description`/`error`/
- * `required` and the control's own props. The second column pins
- * data-theme="dark" so the same wiring is visible under both themes.
- * The invalid field shows explicit error text — the message, not
- * color alone, carries the state (the brand defines no danger hue).
- * The code sample next to the preview is this file, imported with
- * `?raw`.
- */
 import { FormField, FormFieldControl } from "@augur/design-system";
 
 export function FormFieldCompositionExample() {

@@ -1,12 +1,3 @@
-/**
- * Live example: PageHeader without actions, with a back affordance.
- *
- * No actions slot: the title area stands alone. The back affordance is
- * a quiet ghost Button placed as the first child of `PageHeader` — a
- * single back control needs no nav landmark, so no breadcrumb wrapper
- * is used. The second header pins data-theme="dark". The code sample
- * next to the preview is this file, imported with `?raw`.
- */
 import {
   Button,
   PageHeader,

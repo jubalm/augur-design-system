@@ -1,15 +1,3 @@
-/**
- * Live example: PageHeader composition.
- *
- * The full part set — breadcrumb slot, title, description, and an
- * actions slot whose first Button is the primary (the view's one green
- * signal) with a quiet outline action behind it. The same composition is
- * rendered inside explicitly labeled light and dark theme scopes so the
- * comparison stays visible even when the docs page is dark. Demo titles
- * use `headingLevel={2}` so the docs page's own h1 stays the top of the
- * outline; a real page header would keep the h1 default. The code sample
- * next to the preview is this file, imported with `?raw`.
- */
 import {
   Button,
   PageHeader,
@@ -36,6 +24,8 @@ function PositionsHeader(props: { theme: "light" | "dark" }) {
         </ol>
       </PageHeaderBreadcrumb>
       <PageHeaderContent>
+        {/* Nested composition: headingLevel={2} keeps this header below
+            the page's own heading; at the top of a page, keep the default h1. */}
         <PageHeaderTitle headingLevel={2}>Positions</PageHeaderTitle>
         <PageHeaderDescription>
           Every open and closed position for the selected account.
