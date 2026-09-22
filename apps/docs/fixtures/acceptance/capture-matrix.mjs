@@ -98,8 +98,19 @@ for (const route of ROUTES) {
       const evidence = await page.evaluate(() => ({
         faces: [...document.fonts].filter(f => f.status === "loaded").map(f => `${f.family} ${f.weight}`),
         actualTheme: document.documentElement.dataset.theme,
-        sora400: document.fonts.check("16px Sora"),
-        schibsted: document.fonts.check("16px 'Schibsted Grotesk'"),
+        typography: (() => {
+          const nodes = [...document.querySelectorAll("body, h1, h2, h3, h4, p, button, label, code")]
+            .filter((node) => (node instanceof HTMLElement ? node.offsetParent !== null : true));
+          const fonts = [...new Set(nodes.map((node) => {
+            const style = getComputedStyle(node);
+            const family = style.fontFamily.split(",")[0].trim().replace(/^['"]|['"]$/g, "");
+            return `${style.fontWeight} ${style.fontSize} ${family}`;
+          }))].filter((font) => /Sora|Schibsted Grotesk/.test(font));
+          return { fonts, checks: fonts.map((font) => {
+            const [weight, size, ...familyParts] = font.split(" ");
+            return document.fonts.check(`${weight} ${size} ${familyParts.join(" ")}`);
+          }) };
+        })(),
         titleVoice: (() => { const h = document.querySelector("h1"); return h ? `${getComputedStyle(h).fontFamily.split(",")[0]} ${getComputedStyle(h).fontWeight}` : null; })(),
         overflowX: document.documentElement.scrollWidth > window.innerWidth,
       }));
@@ -107,7 +118,16 @@ for (const route of ROUTES) {
       await page.screenshot({ path: join(outDir, `${name}.png`), fullPage: true });
       const detail = route === '/foundations/fonts' ? '.type-specimen-grid' : route === '/patterns/reference-record' ? '.example-record-field' : route === '/proposal-review' ? '.proposal-review-page' : null;
       if (detail) await page.locator(detail).screenshot({path:join(outDir,`${name}-detail.png`)});
-      const ok = consoleIssues.length === 0 && failed.length === 0 && !evidence.overflowX && evidence.sora400 && evidence.schibsted && evidence.actualTheme === theme && evidence.faces.some(f => f.includes("Sora")) && evidence.faces.some(f => f.includes("Schibsted"));
+      const usedFontsLoaded = evidence.typography.fonts.every((font, index) => {
+        const [weight, , ...familyParts] = font.split(" ");
+        const family = familyParts.join(" ");
+        // document.fonts.check verifies the computed role is ready. The
+        // loaded-face check is family-based because CSS may synthesize or
+        // use the nearest shipped weight (Schibsted ships 400, while a
+        // computed 600 role can still be valid without a 600 file).
+        return evidence.typography.checks[index] && evidence.faces.some((face) => face.startsWith(`${family} `));
+      });
+      const ok = consoleIssues.length === 0 && failed.length === 0 && !evidence.overflowX && usedFontsLoaded && evidence.actualTheme === theme && evidence.faces.some(f => f.includes("Sora")) && evidence.faces.some(f => f.includes("Schibsted"));
       if (!ok) failures += 1;
       summary.combinations.push({ route, theme, viewport: vpName, capture: `${name}.png`, consoleIssues, failedResponses: failed, ...evidence, pass: ok });
       if (route === "/components/dialog") {
