@@ -26,20 +26,24 @@ function ArchiveGlyph() {
 export function EmptyStateNoActionExample() {
   return (
     <div className="example-card-grid">
-      <EmptyState>
-        <EmptyStateIcon>
-          <ArchiveGlyph />
-        </EmptyStateIcon>
-        <EmptyStateTitle>Nothing archived</EmptyStateTitle>
-        <EmptyStateDescription>Archived queries will appear here.</EmptyStateDescription>
-      </EmptyState>
-      <EmptyState data-theme="dark">
-        <EmptyStateIcon>
-          <ArchiveGlyph />
-        </EmptyStateIcon>
-        <EmptyStateTitle>Nothing archived</EmptyStateTitle>
-        <EmptyStateDescription>Archived queries will appear here.</EmptyStateDescription>
-      </EmptyState>
+      <div className="example-theme-panel">
+        <EmptyState>
+          <EmptyStateIcon>
+            <ArchiveGlyph />
+          </EmptyStateIcon>
+          <EmptyStateTitle>Nothing archived</EmptyStateTitle>
+          <EmptyStateDescription>Archived queries will appear here.</EmptyStateDescription>
+        </EmptyState>
+      </div>
+      <div className="example-theme-panel" data-theme="dark">
+        <EmptyState>
+          <EmptyStateIcon>
+            <ArchiveGlyph />
+          </EmptyStateIcon>
+          <EmptyStateTitle>Nothing archived</EmptyStateTitle>
+          <EmptyStateDescription>Archived queries will appear here.</EmptyStateDescription>
+        </EmptyState>
+      </div>
     </div>
   );
 }

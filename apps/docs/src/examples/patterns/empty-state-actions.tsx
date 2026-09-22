@@ -27,28 +27,32 @@ function SearchGlyph() {
 export function EmptyStateActionsExample() {
   return (
     <div className="example-card-grid">
-      <EmptyState>
-        <EmptyStateIcon>
-          <SearchGlyph />
-        </EmptyStateIcon>
-        <EmptyStateTitle>No saved queries yet</EmptyStateTitle>
-        <EmptyStateDescription>Save a query to rerun it later.</EmptyStateDescription>
-        <EmptyStateActions>
-          <Button>New query</Button>
-          <Button variant="outline">View docs</Button>
-        </EmptyStateActions>
-      </EmptyState>
-      <EmptyState data-theme="dark">
-        <EmptyStateIcon>
-          <SearchGlyph />
-        </EmptyStateIcon>
-        <EmptyStateTitle>No saved queries yet</EmptyStateTitle>
-        <EmptyStateDescription>Save a query to rerun it later.</EmptyStateDescription>
-        <EmptyStateActions>
-          <Button>New query</Button>
-          <Button variant="outline">View docs</Button>
-        </EmptyStateActions>
-      </EmptyState>
+      <div className="example-theme-panel">
+        <EmptyState>
+          <EmptyStateIcon>
+            <SearchGlyph />
+          </EmptyStateIcon>
+          <EmptyStateTitle>No saved queries yet</EmptyStateTitle>
+          <EmptyStateDescription>Save a query to rerun it later.</EmptyStateDescription>
+          <EmptyStateActions>
+            <Button>New query</Button>
+            <Button variant="outline">View docs</Button>
+          </EmptyStateActions>
+        </EmptyState>
+      </div>
+      <div className="example-theme-panel" data-theme="dark">
+        <EmptyState>
+          <EmptyStateIcon>
+            <SearchGlyph />
+          </EmptyStateIcon>
+          <EmptyStateTitle>No saved queries yet</EmptyStateTitle>
+          <EmptyStateDescription>Save a query to rerun it later.</EmptyStateDescription>
+          <EmptyStateActions>
+            <Button>New query</Button>
+            <Button variant="outline">View docs</Button>
+          </EmptyStateActions>
+        </EmptyState>
+      </div>
     </div>
   );
 }
