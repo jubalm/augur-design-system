@@ -1,11 +1,3 @@
-/**
- * Live example: EmptyState without actions.
- *
- * A quiet region that only names the empty state: glyph, title, and
- * description. No actions slot is rendered when there is no way out to
- * offer. The second state pins data-theme="dark". The code sample next
- * to the preview is this file, imported with `?raw`.
- */
 import {
   EmptyState,
   EmptyStateDescription,

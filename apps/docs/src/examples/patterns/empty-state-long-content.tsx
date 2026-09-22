@@ -1,11 +1,3 @@
-/**
- * Live example: EmptyState with long content.
- *
- * A long description wraps inside the width-capped description slot
- * while the region stays centered — long copy reads instead of
- * stretching. The second state pins data-theme="dark". The code sample
- * next to the preview is this file, imported with `?raw`.
- */
 import {
   Button,
   EmptyState,

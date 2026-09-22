@@ -1,15 +1,3 @@
-/**
- * Live example: Input states.
- *
- * A bare `Input` with consumer-owned labeling — Input is independent
- * of FormField, and this is the manual wiring a one-off consumer
- * writes: `htmlFor`/`id` for the accessible name, `aria-describedby`
- * for the error, and visible error text (the message, not color alone,
- * carries the state). The second row pins data-theme="dark" to show
- * the same states under the dark theme. Real exports from
- * @augur/design-system; the code sample next to the preview is this
- * file, imported with `?raw`.
- */
 import { Input } from "@augur/design-system";
 
 function StatesRow({ idPrefix }: { idPrefix: string }) {

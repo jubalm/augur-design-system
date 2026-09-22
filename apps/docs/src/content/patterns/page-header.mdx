@@ -1,13 +1,11 @@
 ---
-title: PageHeader
+title: Page header
 description: Page-level wayfinding, title, supporting copy, and actions arranged as one reusable hierarchy.
 components: [button]
 order: 1
 ---
 import { DocExample } from "../../components/DocExample";
 import { examples } from "../../examples/registry";
-
-`PageHeader` establishes the top-level hierarchy of a page: optional wayfinding, the page title, supporting description, and page-level actions. It owns structure; consumers own the words, links, and commands.
 
 ## When to use
 
@@ -81,4 +79,4 @@ Repository tests cover heading semantics, breadcrumb naming, action composition,
 
 ## Design rationale
 
-The page hierarchy remains visible through typography, spacing, and alignment rather than a container or decorative hero treatment. PageHeader supplies one stable place for page-level responsibility without introducing product-specific workflow.
+The pattern owns structure; consumers own the words, links, and commands. The page hierarchy remains visible through typography, spacing, and alignment rather than a container or decorative hero treatment. PageHeader supplies one stable place for page-level responsibility without introducing product-specific workflow.

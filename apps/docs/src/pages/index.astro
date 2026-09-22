@@ -5,9 +5,8 @@ import { withBase } from "../lib/base";
 
 const routes = [
   {
-    label: "Foundations",
+    label: "Understand the system",
     links: [
-      { href: "/getting-started", text: "Getting started" },
       { href: "/foundations/identity", text: "Brand identity" },
       { href: "/foundations/fonts", text: "Fonts and typography" },
       { href: "/foundations/color", text: "Color system" },
@@ -17,20 +16,21 @@ const routes = [
     ],
   },
   {
-    label: "Components",
+    label: "Build with it",
     links: [
+      { href: "/getting-started", text: "Get started" },
       { href: "/components/button", text: "Button" },
       { href: "/components/card", text: "Card" },
       { href: "/components/dialog", text: "Dialog" },
       { href: "/components/input", text: "Input" },
+      { href: "/patterns/page-header", text: "Page header" },
+      { href: "/patterns/form-field", text: "Form field" },
+      { href: "/patterns/empty-state", text: "Empty state" },
     ],
   },
   {
-    label: "Patterns and reference",
+    label: "Extend it",
     links: [
-      { href: "/patterns/page-header", text: "PageHeader" },
-      { href: "/patterns/form-field", text: "FormField" },
-      { href: "/patterns/empty-state", text: "EmptyState" },
       { href: "/patterns/reference-record", text: "Reference record" },
       { href: "/reference/package-entries", text: "Package entries" },
       { href: "/reference/component-conventions", text: "Component authoring" },
@@ -51,9 +51,6 @@ const routes = [
       </p>
       <p class="opening-source augur-type-metadata">
         Early development: the foundations are real and consumable today.
-        Adopted values are recorded in{ " " }
-        <a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a>{ " " }
-        and the maintained foundation guidance.
       </p>
     </div>
     <div class="opening-message">
@@ -64,7 +61,7 @@ const routes = [
         and guidance for clear, consistent interfaces.
       </p>
       <a class="opening-action" href={withBase("/getting-started")}>
-        Explore the foundations <span aria-hidden="true">→</span>
+        Get started <span aria-hidden="true">→</span>
       </a>
     </div>
     <div class="opening-footer">
@@ -97,4 +94,9 @@ const routes = [
       </div>
     ))}
   </section>
+  <p class="opening-source augur-type-metadata">
+    Adopted values are recorded in{ " " }
+    <a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a>{ " " }
+    and the maintained foundation guidance.
+  </p>
 </BaseLayout>
