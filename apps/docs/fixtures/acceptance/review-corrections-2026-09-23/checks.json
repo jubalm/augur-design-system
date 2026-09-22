@@ -1,0 +1,42 @@
+{
+  "lint": {
+    "command": "bun run lint",
+    "exit": 0
+  },
+  "code-lint": {
+    "command": "bun run lint:code",
+    "exit": 0
+  },
+  "typecheck": {
+    "command": "bun run typecheck",
+    "exit": 0
+  },
+  "unit": {
+    "command": "bun run test",
+    "exit": 0
+  },
+  "workspace": {
+    "command": "bun run check:workspace",
+    "exit": 0
+  },
+  "tokens": {
+    "command": "bun run --cwd packages/design-system tokens:check",
+    "exit": 0
+  },
+  "token-failures": {
+    "command": "bun run --cwd packages/design-system tokens:verify-failures",
+    "exit": 0
+  },
+  "registry": {
+    "command": "bun run --cwd packages/design-system registry:check",
+    "exit": 0
+  },
+  "markdown": {
+    "command": "bun apps/docs/fixtures/verify-markdown.mjs",
+    "exit": 0
+  },
+  "browser": {
+    "command": "bun run test:browser",
+    "exit": 0
+  }
+}
