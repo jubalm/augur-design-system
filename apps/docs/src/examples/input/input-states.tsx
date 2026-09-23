@@ -34,7 +34,7 @@ function StatesRow({ idPrefix }: { idPrefix: string }) {
 export function InputStatesExample() {
   return (
     <div className="example-input-grid">
-      <div className="example-input-row">
+      <div className="example-input-row" data-theme="light">
         <StatesRow idPrefix="light" />
       </div>
       <div className="example-input-row" data-theme="dark">

@@ -9,7 +9,7 @@ import {
 export function PageHeaderNoActionsExample() {
   return (
     <div className="example-card-grid">
-      <PageHeader>
+      <PageHeader data-theme="light">
         <Button variant="ghost" size="sm">
           ← Back to accounts
         </Button>

@@ -133,7 +133,8 @@ test.describe("starter components (#15)", () => {
   test("input: focus, typing, ARIA wiring, both themes", async ({ page }) => {
     await go(page, "/components/input");
     await page.evaluate(() => document.fonts.ready);
-    const firstInput = page.locator("input, textarea").first();
+    const firstInput = page.locator(".example-input-row[data-theme='light'] input, .example-input-row[data-theme='light'] textarea").first();
+    const darkInput = page.locator(".example-input-row[data-theme='dark'] input, .example-input-row[data-theme='dark'] textarea").first();
     const inputLight = await firstInput.evaluate((el) => ({
       border: getComputedStyle(el).borderTopColor,
       background: getComputedStyle(el).backgroundColor,
@@ -154,12 +155,12 @@ test.describe("starter components (#15)", () => {
     await page.evaluate(() => {
       document.documentElement.dataset.theme = "dark";
     });
-    const inputDark = await firstInput.evaluate((el) => ({
+    const inputDark = await darkInput.evaluate((el) => ({
       border: getComputedStyle(el).borderTopColor,
       background: getComputedStyle(el).backgroundColor,
     }));
     assertOk(
-      "input paints differently in pinned dark (same node)",
+      "input paints differently across pinned light and dark",
       inputLight.background !== inputDark.background || inputLight.border !== inputDark.border,
       `bg ${inputLight.background} -> ${inputDark.background}; border ${inputLight.border} -> ${inputDark.border}`,
     );
