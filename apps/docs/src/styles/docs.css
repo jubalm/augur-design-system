@@ -138,20 +138,18 @@ body {
 }
 
 .masthead-repo {
+  display: inline-flex;
+  align-items: center;
   color: inherit;
   text-decoration: none;
 }
 
 .masthead-repo-icon {
-  display: inline-block;
-  vertical-align: -2px;
-  margin-right: 0.3125rem;
+  display: block;
 }
 
 .masthead-repo:hover {
   color: var(--foreground);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 
 /* Browse documentation disclosure (below 960px the grouped navigation

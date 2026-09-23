@@ -28,7 +28,7 @@ function TrayGlyph() {
 export function EmptyStateLongContentExample() {
   return (
     <div className="example-card-grid">
-      <div className="example-theme-panel">
+      <div className="example-theme-panel" data-theme="light">
         <EmptyState>
           <EmptyStateIcon>
             <TrayGlyph />

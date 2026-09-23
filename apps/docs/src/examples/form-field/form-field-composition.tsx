@@ -3,7 +3,7 @@ import { FormField, FormFieldControl } from "@augur/design-system";
 export function FormFieldCompositionExample() {
   return (
     <div className="example-form-field-grid">
-      <div className="example-form-field-column">
+      <div className="example-form-field-column" data-theme="light">
         <FormField label="Query name" description="Shown in the records list." required>
           <FormFieldControl placeholder="Q3 records review" />
         </FormField>

@@ -63,7 +63,7 @@ export const examples = {
     variants: defineExample({
       id: "button-variants",
       title: "Button variants, light and dark",
-      description: "The variant set renders from real package imports; the second row pins data-theme=dark.",
+      description: "The variant set renders from real package imports; the first row pins data-theme=light and the second pins data-theme=dark.",
       Component: ButtonVariantsExample,
       code: buttonVariantsCode,
     }),
@@ -97,7 +97,7 @@ export const examples = {
     composition: defineExample({
       id: "form-field-composition",
       title: "FormField composition, light and dark",
-      description: "Label, control, helper text, and an explicit error message wired by the pattern, with required and read-only fields; the second column pins data-theme=dark.",
+      description: "Label, control, helper text, and an explicit error message wired by the pattern, with required and read-only fields; the columns pin data-theme=light and data-theme=dark.",
       Component: FormFieldCompositionExample,
       code: formFieldCompositionCode,
     }),
@@ -106,7 +106,7 @@ export const examples = {
     states: defineExample({
       id: "input-states",
       title: "Input states, light and dark",
-      description: "Default, read-only, disabled, and invalid with consumer-owned labeling and visible error text; the second row pins data-theme=dark.",
+      description: "Default, read-only, disabled, and invalid with consumer-owned labeling and visible error text; the rows pin data-theme=light and data-theme=dark.",
       Component: InputStatesExample,
       code: inputStatesCode,
     }),
@@ -168,7 +168,7 @@ export const examples = {
     emptyStateActions: defineExample({
       id: "empty-state-actions",
       title: "EmptyState with actions",
-      description: "Glyph, title, description, and one primary action with a quiet secondary; the second state pins data-theme=dark.",
+      description: "Glyph, title, description, and one primary action with a quiet secondary; the states pin data-theme=light and data-theme=dark.",
       Component: EmptyStateActionsExample,
       code: emptyStateActionsCode,
     }),

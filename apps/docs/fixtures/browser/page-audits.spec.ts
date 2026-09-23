@@ -31,6 +31,54 @@ test.describe("page audits (base /)", () => {
     });
   }
 
+  test("masthead keeps compact brand and icon-only repository access", async ({ page }) => {
+    await go(page, ORIGIN + site("/"));
+    const evidence = await page.evaluate(() => {
+      const brand = document.querySelector(".masthead .brand-lockup-art") as HTMLElement | null;
+      const repository = document.querySelector(".masthead-repo") as HTMLAnchorElement | null;
+      const icon = repository?.querySelector("svg") as SVGElement | null;
+      return {
+        brandWidth: brand?.style.getPropertyValue("--brand-lockup-width") ?? null,
+        repositoryName: repository?.getAttribute("aria-label") ?? null,
+        repositoryText: repository?.textContent?.trim() ?? null,
+        iconFill: icon?.getAttribute("fill") ?? null,
+      };
+    });
+    assertOk("masthead brand is compact", evidence.brandWidth === "128px", JSON.stringify(evidence));
+    assertOk("repository link has an accessible name", evidence.repositoryName === "Repository", JSON.stringify(evidence));
+    assertOk("repository link is icon-only", evidence.repositoryText === "", JSON.stringify(evidence));
+    assertOk("repository icon uses a solid fill", evidence.iconFill === "currentColor", JSON.stringify(evidence));
+  });
+
+  test("paired examples keep explicit light and dark specimens", async ({ page }) => {
+    const examples = [
+      { path: "/patterns/form-field", selector: ".example-form-field-column", distinctSurface: true },
+      { path: "/patterns/empty-state", selector: ".example-theme-panel", distinctSurface: true },
+      { path: "/components/input", selector: ".example-input-row", distinctSurface: true },
+      { path: "/patterns/page-header", selector: ".example-card-grid > .aug-page-header", distinctSurface: false },
+    ] as const;
+
+    for (const example of examples) {
+      await go(page, ORIGIN + site(example.path));
+      await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+      const evidence = await page.locator(example.selector).evaluateAll((elements) =>
+        elements.map((element) => {
+          const style = getComputedStyle(element);
+          return {
+            theme: element.getAttribute("data-theme"),
+            background: style.backgroundColor,
+            foreground: style.color,
+          };
+        }),
+      );
+      const themes = evidence.map((item) => item.theme).join("/");
+      assertOk(`${example.path} pins light and dark specimens`, themes.includes("light") && themes.includes("dark"), themes);
+      if (example.distinctSurface) {
+        assertOk(`${example.path} keeps paired surface roles distinct`, new Set(evidence.map((item) => item.background)).size >= 2, JSON.stringify(evidence));
+      }
+    }
+  });
+
   test("built HTML carries current consumer guidance and pinned theme records", async () => {
     const gettingStarted = await readDist("getting-started/index.html");
     assertOk(
