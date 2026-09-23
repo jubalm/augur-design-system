@@ -54,7 +54,7 @@ test.describe("shared frame alignment (#46)", () => {
     assertOk("reading measure is exactly 65ch", Math.abs(parseFloat(light.proseMax as string) - parseFloat(light.measure65)) < 0.5, `${light.proseMax} vs ${light.measure65}`);
     assertOk("page title renders the editorial-title role (Sora 400 40/48)", light.titleFont === "Sora 400 40px/48px -0.4px", light.titleFont);
     assertOk("section headings render the editorial-section metrics (28/34, regular)", light.h2 === "28px/34px w400", String(light.h2));
-    assertOk("header lockup renders the official horizontal logo at 150px", light.logoWidth === 150, String(light.logoWidth));
+    assertOk("header lockup renders the compact official horizontal logo at 128px", light.logoWidth === 128, String(light.logoWidth));
     assertOk("descriptor is uppercase tracked secondary text (+0.12em)", light.descriptor === "uppercase 1.44px rgb(74, 75, 97)", String(light.descriptor));
     assertOk("light header hairline matches the (shared) quiet separator", light.headerBorder === light.controlEdge, `${light.headerBorder} vs ${light.controlEdge}`);
     assertOk("no horizontal overflow at 1440", light.overflowX === false);

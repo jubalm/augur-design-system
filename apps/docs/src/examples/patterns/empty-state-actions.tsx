@@ -27,7 +27,7 @@ function SearchGlyph() {
 export function EmptyStateActionsExample() {
   return (
     <div className="example-card-grid">
-      <div className="example-theme-panel">
+      <div className="example-theme-panel" data-theme="light">
         <EmptyState>
           <EmptyStateIcon>
             <SearchGlyph />

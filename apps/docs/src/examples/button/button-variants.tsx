@@ -3,7 +3,7 @@ import { Button } from "@augur/design-system";
 export function ButtonVariantsExample() {
   return (
     <div className="example-button-grid">
-      <div className="example-button-row">
+      <div className="example-button-row" data-theme="light">
         <Button variant="default">Primary action</Button>
         <Button variant="secondary">Secondary</Button>
         <Button variant="destructive">Delete record</Button>

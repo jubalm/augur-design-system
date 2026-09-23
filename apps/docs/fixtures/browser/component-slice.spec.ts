@@ -27,32 +27,33 @@ test.describe("component slice (Button/Card computed styles, both themes)", () =
       };
     });
 
-  test("button geometry, roles, states, and pinned dark", async ({ page }) => {
+  test("button geometry, roles, states, and pinned theme pair", async ({ page }) => {
     await go(page, ORIGIN + site("/components/button"));
     await page.evaluate(() => document.fonts.ready);
-    const buttonLight = await readButtonEvidence(page);
-    assertOk("default button height 36px (FD-02 structure)", buttonLight.height === "36px", buttonLight.height);
-    assertOk("default button radius 0px (FD-03 encoded, issue #45/#51)", buttonLight.radius === "0px", buttonLight.radius);
-    assertOk("control typography role applies (Sora)", buttonLight.font.includes("Sora"), buttonLight.font);
-    assertOk("--primary resolves to a generated token (not var())", /^#[0-9a-f]{6}$/i.test(buttonLight.primaryToken), buttonLight.primaryToken);
-    assertOk("default button paints --primary (light)", buttonLight.background !== "rgba(0, 0, 0, 0)", buttonLight.background);
+    const buttonLightHost = await readButtonEvidence(page);
+    assertOk("default button height 36px (FD-02 structure)", buttonLightHost.height === "36px", buttonLightHost.height);
+    assertOk("default button radius 0px (FD-03 encoded, issue #45/#51)", buttonLightHost.radius === "0px", buttonLightHost.radius);
+    assertOk("control typography role applies (Sora)", buttonLightHost.font.includes("Sora"), buttonLightHost.font);
+    assertOk("--primary resolves to a generated token (not var())", /^#[0-9a-f]{6}$/i.test(buttonLightHost.primaryToken), buttonLightHost.primaryToken);
+    assertOk("default button paints --primary (light)", buttonLightHost.background !== "rgba(0, 0, 0, 0)", buttonLightHost.background);
     assertOk(
-      "dark-scoped row paints a different action color (Deep -> Green with the theme)",
-      buttonLight.background !== buttonLight.darkBackground,
-      `${buttonLight.background} vs ${buttonLight.darkBackground}`,
+      "pinned dark row paints a different action color",
+      buttonLightHost.background !== buttonLightHost.darkBackground,
+      `${buttonLightHost.background} vs ${buttonLightHost.darkBackground}`,
     );
-    assertOk("disabled button cursor not-allowed", buttonLight.disabledCursor === "not-allowed", String(buttonLight.disabledCursor));
-    assertOk("disabled button opacity 0.5", buttonLight.disabledOpacity === "0.5", String(buttonLight.disabledOpacity));
-    assertOk("loading button sets aria-busy", buttonLight.loadingBusy === "true", String(buttonLight.loadingBusy));
-    assertOk("loading button renders the spinner", buttonLight.loadingSpinner === true);
-    assertOk("loading button hides its label while keeping width", buttonLight.loadingLabelVisibility === "hidden", String(buttonLight.loadingLabelVisibility));
+    assertOk("disabled button cursor not-allowed", buttonLightHost.disabledCursor === "not-allowed", String(buttonLightHost.disabledCursor));
+    assertOk("disabled button opacity 0.5", buttonLightHost.disabledOpacity === "0.5", String(buttonLightHost.disabledOpacity));
+    assertOk("loading button sets aria-busy", buttonLightHost.loadingBusy === "true", String(buttonLightHost.loadingBusy));
+    assertOk("loading button renders the spinner", buttonLightHost.loadingSpinner === true);
+    assertOk("loading button hides its label while keeping width", buttonLightHost.loadingLabelVisibility === "hidden", String(buttonLightHost.loadingLabelVisibility));
     await shot(page, "button-page-light", true);
 
     await page.evaluate(() => {
       document.documentElement.dataset.theme = "dark";
     });
-    const buttonDark = await readButtonEvidence(page);
-    assertOk("pinned dark changes the same button's action color", buttonDark.background !== buttonLight.background, `${buttonLight.background} -> ${buttonDark.background}`);
+    const buttonDarkHost = await readButtonEvidence(page);
+    assertOk("pinned light row stays light on a dark page", buttonDarkHost.background === buttonLightHost.background, `${buttonLightHost.background} -> ${buttonDarkHost.background}`);
+    assertOk("pinned dark row stays dark on a dark page", buttonDarkHost.darkBackground === buttonLightHost.darkBackground, `${buttonLightHost.darkBackground} -> ${buttonDarkHost.darkBackground}`);
   });
 
   test("card radius, surfaces, border, and title semantics", async ({ page }) => {

@@ -13,11 +13,13 @@ import { Button, Dialog, DialogTrigger } from "@augur/design-system";
 export function DialogCompositionExample() {
   return (
     <div className="example-card-grid">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button>Review query</Button>
-        </DialogTrigger>
-      </Dialog>
+      <div data-theme="light" style={{ padding: "16px", borderRadius: "var(--augur-rounded-surface)" }}>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Review query</Button>
+          </DialogTrigger>
+        </Dialog>
+      </div>
       <div data-theme="dark" style={{ padding: "16px", borderRadius: "var(--augur-rounded-surface)" }}>
         <Dialog>
           <DialogTrigger asChild>

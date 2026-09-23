@@ -92,7 +92,7 @@ const showRail = shell && !!toc && toc.length > 0;
     <header class="masthead">
       <div class="masthead-inner">
         <a class="brand" href={withBase("/")} aria-label="Augur Design system">
-          <BrandLockup descriptor="Design system" width={150} />
+          <BrandLockup descriptor="Design system" width={128} />
         </a>
         <details class="browse-docs">
           <summary class="browse-summary">Browse documentation</summary>
@@ -111,7 +111,9 @@ const showRail = shell && !!toc && toc.length > 0;
           <a
             class="masthead-repo augur-type-control"
             href="https://github.com/jubalm/augur-design-system"
-          ><GitHubIcon className="masthead-repo-icon" size={14} />Repository</a>
+            aria-label="Repository"
+            title="Repository"
+          ><GitHubIcon className="masthead-repo-icon" size={18} /></a>
         </div>
       </div>
     </header>
