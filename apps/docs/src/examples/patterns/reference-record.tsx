@@ -5,18 +5,25 @@ import "./reference-record.css";
 /**
  * One static record panel. The optional pinned theme is used by the paired
  * specimen; an applied page leaves it unset and inherits its host theme.
+ * When the host page's primary action carries the view's green signal, the
+ * record's state rule steps down to `signal="quiet"`.
  */
-export function ReferenceRecordPanel(props: { theme?: "light" | "dark" }) {
+export function ReferenceRecordPanel(props: {
+  theme?: "light" | "dark";
+  signal?: "primary" | "quiet";
+  headingLevel?: 2 | 3;
+}) {
+  const Heading = props.headingLevel === 2 ? "h2" : "h3";
   return (
     <div className="example-record-panel" data-theme={props.theme}>
       <div className="example-record-state">
-        <span className="example-record-signal" aria-hidden="true" />
+        <span className="example-record-signal" data-signal={props.signal ?? "primary"} aria-hidden="true" />
         <span className="augur-type-editorial-label">Open query</span>
         <span className="augur-type-metadata example-record-id">LQ-042</span>
       </div>
-      <h3 className="augur-type-heading-2 example-record-question">
+      <Heading className="augur-type-heading-2 example-record-question">
         Did the proposal pass before 30 June?
-      </h3>
+      </Heading>
       <div className="example-record-choices" aria-label="Illustrative choices; submission unavailable">
         <Button variant="outline" aria-disabled="true">Yes</Button>
         <Button variant="outline" aria-disabled="true">No</Button>

@@ -1,11 +1,25 @@
 ---
-import BrandLockup from "../components/BrandLockup.astro";
+/**
+ * Home: product first. The message and the view's one green signal (the
+ * Get started action) lead; a real query record, composed from package
+ * exports, shows what the system is for; three entry points follow, each
+ * with a live preview drawn from the package and its pages listed quietly.
+ *
+ * Identity lives in the masthead only, and project status in the footer
+ * only, so neither repeats on this page.
+ */
+import { Button, Input, buttonVariants } from "@augur/design-system";
+import { ReferenceRecordPanel } from "../examples/patterns/reference-record";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/base";
 
-const routes = [
+const doors = [
   {
     label: "Understand the system",
+    title: "Foundations",
+    href: "/foundations",
+    description: "Identity, type, color, layout, interaction, and theming: the adopted rules everything else is built from.",
+    preview: "foundations",
     links: [
       { href: "/foundations/identity", text: "Brand identity" },
       { href: "/foundations/fonts", text: "Fonts and typography" },
@@ -17,6 +31,10 @@ const routes = [
   },
   {
     label: "Build with it",
+    title: "Components and patterns",
+    href: "/components",
+    description: "Accessible React components and the compositions they form, documented from the real package exports.",
+    preview: "components",
     links: [
       { href: "/getting-started", text: "Get started" },
       { href: "/components/button", text: "Button" },
@@ -30,6 +48,10 @@ const routes = [
   },
   {
     label: "Extend it",
+    title: "Reference",
+    href: "/reference",
+    description: "Package entries, authoring conventions, and how to contribute changes back to the system.",
+    preview: "reference",
     links: [
       { href: "/patterns/reference-record", text: "Reference record" },
       { href: "/reference/package-entries", text: "Package entries" },
@@ -37,6 +59,15 @@ const routes = [
       { href: "/reference/contributing", text: "Contributing" },
     ],
   },
+] as const;
+
+// Swatches paint generated token variables; no color value is restated here.
+const swatches = [
+  { name: "Navy", token: "--augur-color-primary" },
+  { name: "Green", token: "--augur-color-accent" },
+  { name: "Deep", token: "--augur-color-accent-deep" },
+  { name: "Paper", token: "--augur-color-neutral" },
+  { name: "Graphite", token: "--augur-color-secondary" },
 ];
 ---
 <BaseLayout
@@ -44,59 +75,87 @@ const routes = [
   description="A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces."
   shell={false}
 >
-  <section class="opening" aria-labelledby="opening-title">
-    <div class="opening-rail">
-      <p class="opening-lockup" aria-label="Augur Design system">
-        <BrandLockup descriptor="Design system" width={224} />
-      </p>
-      <p class="opening-source augur-type-metadata">
-        Early development: the foundations are real and consumable today.
-      </p>
-    </div>
-    <div class="opening-message">
-      <h1 id="opening-title" class="augur-type-editorial-title">Make what<br />matters clear.</h1>
-      <span class="opening-signal" aria-hidden="true"></span>
-      <p class="opening-lede augur-type-body">
+  <section class="home-hero" aria-labelledby="home-title">
+    <div class="home-hero-message">
+      <h1 id="home-title" class="augur-type-editorial-title">Make what<br />matters clear.</h1>
+      <p class="home-lede augur-type-body">
         A shared interface language for Augur: foundations, components,
         and guidance for clear, consistent interfaces.
       </p>
-      <a class="opening-action" href={withBase("/getting-started")}>
-        Get started <span aria-hidden="true">→</span>
-      </a>
+      <div class="home-actions">
+        <a class={`home-primary-action ${buttonVariants({ size: "lg" })}`} href={withBase("/getting-started")}>Get started</a>
+        <a class="home-secondary-action augur-type-control" href={withBase("/proposal-review")}>See it applied</a>
+      </div>
     </div>
-    <div class="opening-footer">
-      <div>
-        <span class="augur-type-editorial-label">Purpose</span>
-        <p class="augur-type-body">Ask. Vote. Reach a result.</p>
-      </div>
-      <div>
-        <span class="augur-type-editorial-label">Character</span>
-        <p class="augur-type-body">Clear-eyed, credible, neutral, human.</p>
-      </div>
-      <div>
-        <span class="augur-type-editorial-label">System</span>
-        <p class="augur-type-body">One language. Two everyday themes.</p>
-      </div>
+    <figure class="home-hero-specimen">
+      <ReferenceRecordPanel signal="quiet" headingLevel={2} />
+      <figcaption class="augur-type-metadata">
+        A query record: the question first, then status, equal choices, and the
+        response. Composed from package components; submission is unavailable.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="home-principles" aria-label="Principles">
+    <div>
+      <span class="augur-type-editorial-label">Purpose</span>
+      <p class="augur-type-body">Ask. Vote. Reach a result.</p>
+    </div>
+    <div>
+      <span class="augur-type-editorial-label">Character</span>
+      <p class="augur-type-body">Clear-eyed, credible, neutral, human.</p>
+    </div>
+    <div>
+      <span class="augur-type-editorial-label">System</span>
+      <p class="augur-type-body">One language. Two everyday themes.</p>
     </div>
   </section>
 
-  <section class="route-index" aria-label="Routes into the system">
-    {routes.map((group) => (
-      <div class="route-group">
-        <span class="augur-type-editorial-label">{group.label}</span>
-        <ul>
-          {group.links.map((link) => (
+  <section class="home-doors" aria-label="Routes into the system">
+    {doors.map((door) => (
+      <article class="home-door">
+        <span class="augur-type-editorial-label home-door-label">{door.label}</span>
+        <h2 class="augur-type-heading-2 home-door-title">
+          <a href={withBase(door.href)}>{door.title}</a>
+        </h2>
+        <p class="augur-type-body home-door-description">{door.description}</p>
+        <div class="home-door-preview" aria-hidden="true" inert>
+          {door.preview === "foundations" && (
+            <div class="home-preview-foundations">
+              <ul class="home-preview-swatches">
+                {swatches.map((swatch) => (
+                  <li style={`background-color: var(${swatch.token})`} title={swatch.name} />
+                ))}
+              </ul>
+              <div class="home-preview-type">
+                <span class="augur-type-heading-2">Make it clear.</span>
+                <span class="augur-type-body">Record the decision.</span>
+              </div>
+            </div>
+          )}
+          {door.preview === "components" && (
+            <div class="home-preview-components">
+              <Input defaultValue="Q3 records review" aria-label="Query name" tabIndex={-1} />
+              <div class="home-preview-buttons">
+                <Button variant="outline" tabIndex={-1}>Save draft</Button>
+                <Button variant="secondary" tabIndex={-1}>Cancel</Button>
+              </div>
+            </div>
+          )}
+          {door.preview === "reference" && (
+            <pre class="home-preview-code"><code>{`import { Button } from
+  "@augur/design-system";
+import "@augur/design-system/styles.css";`}</code></pre>
+          )}
+        </div>
+        <ul class="home-door-links">
+          {door.links.map((link) => (
             <li>
               <a class="augur-type-body" href={withBase(link.href)}>{link.text}</a>
             </li>
           ))}
         </ul>
-      </div>
+      </article>
     ))}
   </section>
-  <p class="opening-source augur-type-metadata">
-    Adopted values are recorded in{ " " }
-    <a href="https://github.com/jubalm/augur-design-system/blob/main/DESIGN.md">DESIGN.md</a>{ " " }
-    and the maintained foundation guidance.
-  </p>
 </BaseLayout>

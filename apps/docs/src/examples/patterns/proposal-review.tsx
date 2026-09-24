@@ -2,6 +2,8 @@
  * Applied static example for #52. It deliberately composes existing exports:
  * PageHeader supplies the page hierarchy, ReferenceRecordPanel supplies the
  * record, and Button supplies the one action. There is no product workflow.
+ * The action is the view's one green signal, so the record's state rule is
+ * quiet here.
  */
 import {
   Button,
@@ -30,7 +32,7 @@ export function ProposalReviewPage() {
         </PageHeaderContent>
       </PageHeader>
 
-      <ReferenceRecordPanel />
+      <ReferenceRecordPanel signal="quiet" headingLevel={2} />
 
       <section id="proposal-details" className="proposal-review-details" tabIndex={-1}>
         <h2 className="augur-type-heading-2">{PROPOSAL_REVIEW.detailsTitle}</h2>
