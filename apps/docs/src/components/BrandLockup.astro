@@ -7,6 +7,11 @@ interface Props {
   loading?: "eager" | "lazy";
 }
 
+// Official horizontal lockup plus an optional tracked descriptor. The
+// descriptor never enters the 1a clearspace: the gap is at least one
+// a-width, measured from the tightly cropped 1440×481 master (its "a" is
+// 165px wide), and never less than the 24px spacing step. `width` must
+// stay at or above the 150px horizontal-lockup minimum.
 const { descriptor, width = 150, loading = "eager" } = Astro.props as Props;
 ---
 <span class="brand-lockup-art" style={`--brand-lockup-width: ${width}px`}>
@@ -35,9 +40,10 @@ const { descriptor, width = 150, loading = "eager" } = Astro.props as Props;
 
 <style>
   .brand-lockup-art {
+    --brand-clearspace-x: calc(min(var(--brand-lockup-width), 52vw) * 165 / 1440);
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: max(var(--augur-spacing-xl), var(--brand-clearspace-x));
   }
 
   .brand-logo-frame {
@@ -82,14 +88,6 @@ const { descriptor, width = 150, loading = "eager" } = Astro.props as Props;
 
     :global(html:not([data-theme])) .brand-logo-reversed {
       display: block;
-    }
-  }
-
-  @media (max-width: 599px) {
-    .brand-lockup-art {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.25rem;
     }
   }
 </style>

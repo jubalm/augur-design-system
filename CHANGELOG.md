@@ -24,9 +24,12 @@ Consumer-facing changes to the Augur Design System are recorded here. The projec
 - Consolidated the documentation page actions into a single Copy page split control.
 - Made document tables readable at every viewport.
 - Replaced the flat docs header with a scalable navigation and reading shell derived from one collection-backed model.
+- Reworked the docs presentation to follow its own guidance: a product-first home page (message, one primary action, and a live query record), entry points with live previews, a two-lane reading shell that shares one left edge, tonal example stages, quiet example rules, and section spacing on the layout steps.
 
 ### Fixed
 
+- The docs masthead lockup returns to the 150px horizontal-lockup minimum, and the descriptor, masthead edge, and neighboring controls stay outside the 1a clearspace.
+- Docs views now carry one green signal: proposal review and the home page quiet the record's rule when the primary action is green, and project status appears once, in the footer.
 - Restored installed-registry typography and spacing and explicit light scopes.
 - Repaired responsive typography and reference-record fidelity.
 - Applied the adopted touch targets, control-edge contrast, square geometry, and immediate neutral state feedback.

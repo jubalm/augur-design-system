@@ -35,6 +35,24 @@ test.describe("applied proposal review (#52)", () => {
             actionLabel: action?.querySelector("button")?.textContent?.trim(),
             details: document.querySelector("#proposal-details")?.textContent?.replace(/\s+/g, " ").trim(),
             overflow: document.documentElement.scrollWidth > window.innerWidth,
+            signal: getComputedStyle(record?.querySelector(".example-record-signal") as Element).backgroundColor,
+            actionBackground: getComputedStyle(action?.querySelector("button") as Element).backgroundColor,
+            edges: (() => {
+              const r = (el: Element | null | undefined) => el?.getBoundingClientRect();
+              const header = r(page?.querySelector(".aug-page-header"));
+              const actionRect = r(action?.querySelector("button"));
+              const details = r(document.querySelector("#proposal-details"));
+              const recordRect = r(record);
+              const outline = record ? parseFloat(getComputedStyle(record).outlineWidth) : 0;
+              return {
+                headerLeft: Math.round(header?.left ?? 0),
+                fieldLeft: Math.round((recordRect?.left ?? 0) - outline),
+                fieldRight: Math.round((recordRect?.right ?? 0) + outline),
+                detailsLeft: Math.round(details?.left ?? 0),
+                detailsRight: Math.round(details?.right ?? 0),
+                actionRight: Math.round(actionRect?.right ?? 0),
+              };
+            })(),
           };
         });
         assertOk(`applied review has one static task ${theme}/${viewport.width}`, applied.h1 === "Proposal review" && applied.question === "Did the proposal pass before 30 June?", JSON.stringify(applied));
@@ -47,6 +65,20 @@ test.describe("applied proposal review (#52)", () => {
         );
         assertOk(`applied review has an honest in-page primary action ${theme}/${viewport.width}`, applied.action === "#proposal-details" && applied.actionLabel === "Review details" && !!applied.details?.includes("no voting logic"), JSON.stringify(applied));
         assertOk(`applied review has no horizontal overflow ${theme}/${viewport.width}`, applied.overflow === false);
+        assertOk(
+          `applied review keeps one green: the action carries it and the record rule is quiet ${theme}/${viewport.width}`,
+          applied.signal !== applied.actionBackground,
+          `${applied.signal} vs ${applied.actionBackground}`,
+        );
+        const e = applied.edges;
+        assertOk(
+          `applied review shares one left edge and one right edge ${theme}/${viewport.width}`,
+          Math.abs(e.fieldLeft - e.headerLeft) <= 1 &&
+            Math.abs(e.detailsLeft - e.headerLeft) <= 1 &&
+            Math.abs(e.detailsRight - e.fieldRight) <= 1 &&
+            (viewport.width < 600 || Math.abs(e.actionRight - e.fieldRight) <= 1),
+          JSON.stringify(e),
+        );
         await page.getByRole("button", { name: "Review details", exact: true }).click();
         await page.waitForFunction(() => location.hash === "#proposal-details");
         assertOk(

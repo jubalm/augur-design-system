@@ -75,14 +75,18 @@ body {
 /* Masthead (issue #55): one deliberate row; identity, browse, theme   */
 /* ---------------------------------------------------------------- */
 
+/* The masthead is the lockup's field: its padding and gaps keep the 1a
+   clearspace (one a-height ≈ 21px above and below, one a-width ≈ 17px at
+   the sides, at the 150px minimum lockup) clear of the bottom rule and of
+   neighboring controls, so both use the 24px step. */
 .masthead-inner {
   max-width: 1400px;
   margin-inline: auto;
   padding-inline: 1.5rem;
-  padding-block: 0.875rem;
+  padding-block: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem 1.5rem;
+  gap: 1.5rem;
 }
 
 @media (min-width: 960px) {
@@ -93,36 +97,22 @@ body {
 
 .brand {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   color: inherit;
   text-decoration: none;
-}
-
-/* The approved text identity lockup (#43): Sora 400 wordmark plus the
-   quieter tracked descriptor, 12px apart (space.md). No drawn mark —
-   production masters remain an unresolved dependency. */
-.brand-lockup {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.75rem;
 }
 
 .brand-lockup-descriptor {
   color: var(--muted-foreground);
 }
 
-/* Compact masthead (<600px): the lockup stacks so identity, context,
-   browse trigger, and theme stay on one deliberate row. Repository
+/* Compact masthead (<600px): the descriptor would either crowd the
+   clearspace or push the menu off the row, so the official lockup stands
+   alone (the link keeps its "Augur Design system" name). Repository
    access moves to the footer, which every page renders. */
 @media (max-width: 599px) {
-  .masthead-inner {
-    gap: 0.75rem 1rem;
-  }
-
-  .brand-lockup {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
+  .masthead .brand-lockup-descriptor {
+    display: none;
   }
 
   .masthead-repo {
@@ -400,11 +390,9 @@ body {
 /* Previous / next document navigation; the same maintained reading
    order as the sidebar. Quiet rule, text links, no icons. */
 .pager {
-  margin-top: 3rem;
-  margin-inline: auto;
+  margin-top: 4rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-quiet);
-  max-width: 65ch;
   display: flex;
   justify-content: space-between;
   gap: 1.5rem;
@@ -472,17 +460,31 @@ body {
   }
 }
 
-/* Dense-page release (issue #55 requirement 7): tables span the full
-   document column — the wider content region — leaving the 65ch prose
-   measure symmetrically, and scroll internally when individual cells
-   need more room. The release only engages once the document column
-   actually has the room: below ~65ch (the 960–1100px sidebar band,
-   small windows) the negative-margin release would squeeze the table
-   narrower than the measure and pull it toward the sidebar track, so
-   it stays at the prose column and scrolls instead. */
+/* Two lanes, one left edge. Prose holds the 65ch reading measure;
+   the page head, tables, live examples, specimens, and source blocks
+   use the wide lane — the full document column — extending to the right
+   from the same left edge. `100cqw` is the document column (.doc-main is
+   an inline-size container), so the wide lane never depends on the
+   prose measure and nothing is released leftward past the headings.
+   This supersedes the centered prose with symmetric table release. */
+.doc-main .prose > :is(
+    .doc-page-head,
+    table,
+    pre,
+    .doc-example,
+    .font-demo,
+    .theme-demo,
+    .brand-gallery,
+    .font-provenance-scroll
+  ) {
+  width: 100cqw;
+  max-width: none;
+  margin-inline: 0;
+}
+
+/* Tables scroll inside the wide lane when a cell needs more room. */
 .doc-main .prose table {
   display: block;
-  width: 100%;
   overflow-x: auto;
   /* Scroll affordance: overlay scrollbars are invisible until hover, which
      reads as clipped content. A styled thin scrollbar is always on. */
@@ -502,24 +504,14 @@ body {
   background-color: var(--muted-foreground);
 }
 
-/* 40rem ≈ 65ch in the prose face (635.78px at 16px). */
+/* 40rem ≈ 65ch in the prose face (635.78px at 16px): once the document
+   column is at least the measure, restore native table layout so rows
+   use the whole lane instead of shrinking to their content. */
 @container (min-width: 40rem) {
   .doc-main .prose table {
-    /* At the wide-table breakpoint the document column is the available
-       reading surface, so restore native table layout. Keeping block layout
-       here makes rows shrink to their content while the table box stays wide. */
     display: table;
-    width: 100cqw;
-    margin-inline: calc((65ch - 100cqw) / 2);
     overflow-x: visible;
   }
-}
-
-/* Live specimens flow at the document column width in the shell (the
-   46rem escape predates the rails and would collide with them). */
-.doc-main .prose .doc-example {
-  width: auto;
-  margin-inline: 0;
 }
 
 /* Section overview pages (#55): the reading-order list mirrors the
@@ -627,33 +619,10 @@ body {
 }
 
 .prose {
-  /* Reading measure: paragraphs cap at 65ch. Centered in
-     the document column — the dense-page table release computes symmetric
-     negative margins from the measure, which only lands on the column when
-     the measure itself is centered (otherwise released tables slide left
-     over the sidebar track). */
+  /* Reading measure: prose caps at 65ch and starts on the document
+     column's left edge; wide-lane content extends right from the same
+     edge (see "Two lanes, one left edge" above). */
   max-width: 65ch;
-}
-
-.doc-main .prose {
-  margin-inline: auto;
-}
-
-/* Specimens keep the explicit specimen width (46rem), centered over the
-   narrower reading measure (issue #46: reading vs specimen widths).
-   Below ~820px the viewport is the constraint and specimens flow
-   full-width again. */
-.prose .doc-example {
-  width: 46rem;
-  max-width: none;
-  margin-inline: calc((65ch - 46rem) / 2);
-}
-
-@media (max-width: 819px) {
-  .prose .doc-example {
-    width: auto;
-    margin-inline: 0;
-  }
 }
 
 .page-title {
@@ -706,7 +675,7 @@ body {
   font-weight: 600;
   color: var(--foreground);
   line-height: 1.25;
-  margin: 2.25em 0 0.6em;
+  margin: 2rem 0 0.5rem;
 }
 
 .prose h1:not(.doc-example-preview h1):not(.page-title) {
@@ -718,12 +687,15 @@ body {
    typography.heading-2: the markdown renderer cannot attach role
    classes, so the chrome restates adopted role metrics and must stay
    synced with the fonts fixture when DESIGN.md changes. */
+/* Section rhythm uses the layout steps: 48px before a major section,
+   32px before a subsection, and the 12px/8px component steps between a
+   heading and its content. */
 .prose h2:not(.doc-example-preview h2) {
   font-size: 28px;
   font-weight: 400;
   line-height: 34px;
   letter-spacing: -0.005em;
-  margin: 2.25em 0 0.6em;
+  margin: 3rem 0 0.75rem;
 }
 
 .prose h3:not(.doc-example-preview h3):not(.type-specimen-notes h3) {
@@ -736,9 +708,11 @@ body {
   font-size: 1rem;
 }
 
+/* Long-form prose uses the adopted body role (16/24) rather than a
+   docs-only line height. */
 .prose p:not(.doc-example-preview p):not(.type-specimen-notes p),
 .prose li:not(.doc-example-preview li):not(.page-action-menu li) {
-  line-height: 1.65;
+  line-height: 24px;
 }
 
 /* The page-actions menu (issue #62) is button chrome, not prose list
@@ -851,44 +825,29 @@ body {
 }
 
 /* ---------------------------------------------------------------- */
-/* Home page — brand opening (issue #47, contract frame A)            */
+/* Home page: product first                                           */
 /*                                                                    */
-/* One green signal (the 32×2 rule); the text action stays neutral.    */
-/* Copy is locked by the visual direction contract.                    */
+/* One green signal (the Get started action). The hero record steps   */
+/* its state rule down to quiet; entry-point previews are neutral.     */
 /* ---------------------------------------------------------------- */
 
-.opening {
+.home-hero {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-template-rows: 1fr auto;
-  gap: 1.5rem 1.5rem;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 4rem;
+  align-items: center;
+  padding-block: 3rem 4rem;
 }
 
-@media (min-width: 960px) {
-  .opening {
-    gap: 2rem;
-    padding-top: 3rem; /* opening top inset 48px */
-    min-height: 520px;
+@media (max-width: 959px) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+    padding-block: 2rem 3rem;
   }
 }
 
-@media (min-width: 600px) and (max-width: 959px) {
-  .opening {
-    /* Rail and message keep 1:2 with a 24px gap; natural height. */
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 599px) {
-  .opening {
-    /* Rail, message, then footer stack in DOM order. */
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-}
-
-.opening-rail {
+.home-hero-message {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -896,117 +855,201 @@ body {
   min-width: 0;
 }
 
-.opening-lockup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+.home-hero-message h1 {
   margin: 0;
-  color: var(--foreground);
 }
 
-.opening-source {
+.home-lede {
   margin: 0;
-  max-width: 30ch;
+  max-width: 40ch;
   color: var(--muted-foreground);
 }
 
-.opening-source a {
-  color: inherit;
-  text-underline-offset: 0.2em;
-}
-
-.opening-message {
+.home-actions {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  /* Opening message gaps are 32px in both modes (contract). */
-  gap: 2rem;
-  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 0.5rem;
 }
 
-.opening-signal {
-  /* The baseline orienting signal: 32px wide, 2px high, no radius;
-     Deep on light, Green on dark through --primary. */
-  display: block;
-  width: 32px;
-  height: 2px;
-  flex-shrink: 0;
-  background-color: var(--primary);
+/* The package Button classes on a link: navigation keeps link semantics
+   while the primary action uses the system's own control. */
+.home-primary-action {
+  text-decoration: none;
 }
 
-.opening-lede {
-  margin: 0;
-}
-
-.opening-action {
-  font-family: var(--augur-font-primary);
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
+.home-secondary-action {
+  display: inline-flex;
+  align-items: center;
   color: var(--foreground);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
-.opening-action:hover {
+.home-secondary-action:hover {
   text-decoration-thickness: 2px;
 }
 
-.opening-footer {
-  grid-column: 1 / -1;
+.home-hero-specimen {
+  margin: 0;
+  min-width: 0;
+}
+
+/* The record keeps its own muted field (outline) and inset; the caption
+   aligns with the field's left edge below it. */
+.home-hero-specimen .example-record-panel {
+  margin-top: 0;
+}
+
+.home-hero-specimen figcaption {
+  margin-top: 0.75rem;
+  max-width: 60ch;
+  color: var(--muted-foreground);
+}
+
+.home-principles {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-quiet);
 }
 
-.opening-footer p {
+.home-principles p {
   margin: 0.25rem 0 0;
   color: var(--muted-foreground);
 }
 
-@media (max-width: 599px) {
-  .opening-footer {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Route index: PDF-like alignment and rule language — open rule-led
-   rows in three purposeful columns (PDF page 5), not boxes. */
-.route-index {
-  margin-top: 3rem;
+/* Each door spans five shared rows (label, title, description, preview,
+   links) through subgrid, so previews and link lists start on one line
+   across the columns whatever the description length. */
+.home-doors {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 2rem;
+  margin-top: 4rem;
 }
 
 @media (max-width: 959px) {
-  .route-index {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .home-doors {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-door + .home-door {
     margin-top: 3rem;
   }
 }
 
-.route-group ul {
+@media (max-width: 599px) {
+  .home-principles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.home-door {
+  display: grid;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
+  align-content: start;
+  min-width: 0;
+}
+
+.home-door-title {
+  margin: 0.5rem 0 0;
+}
+
+.home-door-title a {
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.home-door-title a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.home-door-description {
+  margin: 0.5rem 0 0;
+  color: var(--muted-foreground);
+}
+
+/* Preview field: the quiet tonal region every live example uses. */
+.home-door-preview {
+  margin-top: 1.5rem;
+  height: 9rem;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  background-color: var(--muted);
+  color: var(--foreground);
+  overflow: hidden;
+}
+
+.home-preview-foundations {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+}
+
+.home-preview-swatches {
   list-style: none;
-  margin: 0.75rem 0 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  height: 2rem;
+}
+
+.home-preview-swatches li {
+  border: 1px solid var(--border-quiet);
+}
+
+.home-preview-type {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+}
+
+.home-preview-components {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.home-preview-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.home-preview-code {
+  margin: 0;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.home-door-links {
+  list-style: none;
+  margin: 1.5rem 0 0;
   padding: 0;
 }
 
-.route-group li {
+.home-door-links li {
   border-top: 1px solid var(--border-quiet);
 }
 
-.route-group a {
+.home-door-links a {
   display: block;
   padding: 0.75rem 0;
   color: var(--foreground);
   text-decoration: none;
 }
 
-.route-group a:hover {
+.home-door-links a:hover {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -1347,10 +1390,20 @@ body {
   border: 0;
 }
 
+/* The stage is a quiet tonal field (Muted on light, Surface 1 on dark), so
+   specimens read as lifted onto a region instead of floating on the
+   canvas behind outlines. Depth stays tonal: no shadow, no radius. */
 .doc-example-preview {
-  padding: 1.25rem 0 0;
-  background-color: transparent;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background-color: var(--muted);
   color: var(--foreground);
+}
+
+@media (max-width: 599px) {
+  .doc-example-preview {
+    padding: 1rem;
+  }
 }
 
 .doc-example-header {
@@ -1367,11 +1420,13 @@ body {
   letter-spacing: 0.14em;
 }
 
+/* A quiet rule, not a green one: examples repeat down a page, and green
+   stays reserved for intent rather than marking every section. */
 .doc-example-kicker::before {
   content: "";
   flex: 0 0 2rem;
   height: 2px;
-  background-color: var(--primary);
+  background-color: currentColor;
 }
 
 .doc-example-header-title {
@@ -1719,8 +1774,7 @@ body {
   min-width: 0;
 }
 
-/* The dense-page table release expands document tables to the prose column;
-   this table is already inside a bounded live specimen. */
+/* Nested inside a bounded live specimen, not a wide-lane document table. */
 .doc-main .prose .example-palette-pairs {
   width: 100%;
   margin-inline: 0;
@@ -1744,7 +1798,7 @@ body {
 }
 /* Touch controls retain the desktop visual language with usable targets. */
 @media (pointer: coarse) {
-  .theme-toggle-option, .browse-summary, .onthispage-summary, .page-action, .page-action-menu-item, .opening-action {
+  .theme-toggle-option, .browse-summary, .onthispage-summary, .page-action, .page-action-menu-item, .home-secondary-action {
     box-sizing: border-box;
     min-height: 44px;
     min-width: 44px;
@@ -1754,8 +1808,7 @@ body {
 /* Keep provenance columns readable; narrow screens scroll this named region. */
 .font-provenance-scroll { max-width: 100%; overflow-x: auto; }
 
-/* This table already owns a scroll wrapper, so it must not inherit the
-   document-wide negative-margin release used by ordinary prose tables. */
+/* This table already owns a scroll wrapper inside the wide lane. */
 .doc-main .prose .font-provenance-scroll .font-demo-provenance {
   display: table;
   width: max-content;

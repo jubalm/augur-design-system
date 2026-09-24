@@ -222,7 +222,9 @@ test.describe("starter components (#15)", () => {
             titleWidth: Math.round(titleRect?.width ?? 0),
             descriptionWidth: Math.round(descriptionRect?.width ?? 0),
             descriptionBottom: Math.round(descriptionRect?.bottom ?? 0),
+            descriptionRight: Math.round(descriptionRect?.right ?? 0),
             actionsTop: Math.round(actionsRect?.top ?? 0),
+            actionsLeft: Math.round(actionsRect?.left ?? 0),
             actionGap: Math.round((actionsRect?.top ?? 0) - (descriptionRect?.bottom ?? 0)),
             overflow:
               (header as HTMLElement).scrollWidth > (header as HTMLElement).clientWidth + 1 ||
@@ -248,9 +250,12 @@ test.describe("starter components (#15)", () => {
         keys.length === 4 && PAGE_HEADER_MATRIX.every((key, index) => key === keys[index]),
         JSON.stringify(keys),
       );
+      // Actions either stack under the text (containers <=640px) or take
+      // the component's own column beside it (wider containers); either is
+      // readable as long as they never overlap the title/description.
       const unreadable = audit.metrics.filter(
-        ({ titleWidth, descriptionWidth, descriptionBottom, actionsTop }) =>
-          titleWidth < 120 || descriptionWidth < 120 || actionsTop < descriptionBottom,
+        ({ titleWidth, descriptionWidth, descriptionBottom, descriptionRight, actionsTop, actionsLeft }) =>
+          titleWidth < 120 || descriptionWidth < 120 || (actionsTop < descriptionBottom && actionsLeft < descriptionRight),
       );
       assertOk(`PageHeader stays readable at ${viewport.width}px`, unreadable.length === 0, JSON.stringify(unreadable));
       const overflowing = audit.metrics.filter(({ overflow }) => overflow);

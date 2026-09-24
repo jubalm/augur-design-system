@@ -11,7 +11,7 @@ Augur uses spacing and geometry to make hierarchy explicit. The system favors cl
 A frame belongs to the composition it serves; do not treat one page maximum as a universal product token.
 
 - Long-form prose should stay near a 65-character reading measure.
-- The documentation reading shell uses a 1400px maximum frame so dense tables and specimens can use a wider document column while prose remains centered at 65ch.
+- The documentation reading shell uses a 1400px maximum frame with two lanes that share one left edge: prose holds the 65ch measure, and the page head, tables, live examples, specimens, and source blocks use the wide lane (the full document column), extending to the right from that same edge. Nothing is released leftward past the headings.
 - At 960px and above, the docs shell uses 64px internal gutters; below that threshold it uses 24px.
 - Dense specimens and tables may use the available document column when their content requires more width than prose.
 - Product and pattern compositions should use the layout contract documented for that composition rather than copying the docs-shell maximum.
@@ -21,6 +21,8 @@ The 1400px docs-shell maximum is a scoped readability decision. It supersedes th
 ## Spacing decisions
 
 The maintained local spacing scale is 4, 8, 12, 16, 24, and 32px. Larger 48, 64, and 80px steps are composition roles for major page regions rather than extra component padding.
+
+In the documentation shell, a major section opens 48px below the previous content and a subsection 32px below it; headings sit 12px (sections) or 8px (subsections) above their content.
 
 Use spacing to communicate grouping:
 

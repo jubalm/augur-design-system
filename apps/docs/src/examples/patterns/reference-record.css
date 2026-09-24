@@ -32,6 +32,7 @@
   flex-shrink: 0;
   background-color: var(--primary);
 }
+.example-record-signal[data-signal="quiet"] { background-color: var(--muted-foreground); }
 .example-record-id { margin-left: auto; }
 .example-record-question { margin: 0; }
 .example-record-choices {

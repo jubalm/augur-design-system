@@ -1,5 +1,5 @@
-// Shared frame alignment (#46), brand opening (#47), and the type
-// specimen (#48).
+// Shared frame alignment (#46), the two-lane shell, masthead clearspace,
+// the product-first home page, and the type specimen (#48).
 import { test, type Page } from "@playwright/test";
 import { assertOk, go, ORIGIN, shot, site } from "./helpers";
 
@@ -31,6 +31,40 @@ const readFrame = (page: Page) =>
         const el = document.querySelector(".brand-logo-frame") as HTMLElement | null;
         return el ? Math.round(el.getBoundingClientRect().width) : null;
       })(),
+      // 1a clearspace from the tightly cropped 1440×481 master: the "a" is
+      // 165px wide and 199px high there.
+      clearspace: (() => {
+        const logo = document.querySelector(".masthead .brand-logo-frame") as HTMLElement | null;
+        const descriptor = document.querySelector(".masthead .brand-lockup-descriptor") as HTMLElement | null;
+        const masthead = document.querySelector(".masthead") as HTMLElement | null;
+        if (!logo || !masthead) return null;
+        const l = logo.getBoundingClientRect();
+        const m = masthead.getBoundingClientRect();
+        const d = descriptor && descriptor.offsetParent !== null ? descriptor.getBoundingClientRect() : null;
+        return {
+          aWidth: (l.width * 165) / 1440,
+          aHeight: (l.height * 199) / 481,
+          descriptorGap: d ? d.left - l.right : null,
+          above: l.top - m.top,
+          below: m.bottom - l.bottom,
+          left: l.left,
+        };
+      })(),
+      lanes: (() => {
+        const main = document.querySelector(".doc-main") as HTMLElement;
+        const h2 = document.querySelector(".prose > h2") as HTMLElement | null;
+        const p = document.querySelector(".prose > p") as HTMLElement | null;
+        const table = document.querySelector(".prose > table") as HTMLElement | null;
+        const example = document.querySelector(".prose > .doc-example") as HTMLElement | null;
+        const r = (el: HTMLElement | null) => (el ? el.getBoundingClientRect() : null);
+        return {
+          main: main.getBoundingClientRect(),
+          h2: r(h2),
+          p: r(p),
+          table: r(table),
+          example: r(example),
+        };
+      })(),
       descriptor: (() => {
         const el = document.querySelector(".brand-lockup-descriptor");
         if (!el) return null;
@@ -54,7 +88,34 @@ test.describe("shared frame alignment (#46)", () => {
     assertOk("reading measure is exactly 65ch", Math.abs(parseFloat(light.proseMax as string) - parseFloat(light.measure65)) < 0.5, `${light.proseMax} vs ${light.measure65}`);
     assertOk("page title renders the editorial-title role (Sora 400 40/48)", light.titleFont === "Sora 400 40px/48px -0.4px", light.titleFont);
     assertOk("section headings render the editorial-section metrics (28/34, regular)", light.h2 === "28px/34px w400", String(light.h2));
-    assertOk("header lockup renders the compact official horizontal logo at 128px", light.logoWidth === 128, String(light.logoWidth));
+    assertOk("header lockup holds the 150px horizontal-lockup minimum", light.logoWidth === 150, String(light.logoWidth));
+    const cs1a = light.clearspace;
+    assertOk(
+      "descriptor, masthead edges, and gutter stay outside the 1a clearspace",
+      !!cs1a &&
+        cs1a.descriptorGap !== null &&
+        cs1a.descriptorGap >= cs1a.aWidth &&
+        cs1a.above >= cs1a.aHeight &&
+        cs1a.below >= cs1a.aHeight &&
+        cs1a.left >= cs1a.aWidth,
+      JSON.stringify(cs1a),
+    );
+    const lanes = light.lanes;
+    assertOk(
+      "prose, headings, tables, and examples share one left edge",
+      !!lanes.h2 && !!lanes.p && !!lanes.table && !!lanes.example &&
+        [lanes.p.left, lanes.table.left, lanes.example.left].every((x) => Math.abs(x - lanes.h2!.left) < 1) &&
+        Math.abs(lanes.h2.left - lanes.main.left) < 1,
+      JSON.stringify(lanes),
+    );
+    assertOk(
+      "tables and examples fill the wide lane; prose keeps the 65ch measure",
+      !!lanes.table && !!lanes.example && !!lanes.p &&
+        Math.abs(lanes.table.width - lanes.main.width) < 1 &&
+        Math.abs(lanes.example.width - lanes.main.width) < 1 &&
+        lanes.p.width <= parseFloat(light.measure65) + 0.5,
+      JSON.stringify(lanes),
+    );
     assertOk("descriptor is uppercase tracked secondary text (+0.12em)", light.descriptor === "uppercase 1.44px rgb(74, 75, 97)", String(light.descriptor));
     assertOk("light header hairline matches the (shared) quiet separator", light.headerBorder === light.controlEdge, `${light.headerBorder} vs ${light.controlEdge}`);
     assertOk("no horizontal overflow at 1440", light.overflowX === false);
@@ -85,92 +146,132 @@ test.describe("shared frame alignment (#46)", () => {
       assertOk(`no horizontal overflow at ${viewport.width}`, narrow.overflowX === false);
       if (viewport.width === 390) {
         assertOk("page title steps down to the adopted 32/40 mobile size", narrow.titleFont === "Sora 400 32px/40px -0.32px", narrow.titleFont);
+        assertOk("compact masthead keeps the 150px lockup", narrow.logoWidth === 150, String(narrow.logoWidth));
+        const cs1a = narrow.clearspace;
+        assertOk(
+          "compact masthead keeps the 1a clearspace (descriptor hidden)",
+          !!cs1a && cs1a.descriptorGap === null && cs1a.above >= cs1a.aHeight && cs1a.below >= cs1a.aHeight && cs1a.left >= cs1a.aWidth,
+          JSON.stringify(cs1a),
+        );
       }
       await shot(page, `frame-${viewport.width}-light`, true);
     });
   }
 });
 
-// --- 11. Brand opening (issue #47, contract frame A). ---------------------
-const readOpening = (page: Page) =>
+// --- 11. Home: product first. -------------------------------------------
+const readHome = (page: Page) =>
   page.evaluate(() => {
-    const cs = (sel: string, prop: string) => {
-      const el = document.querySelector(sel);
-      return el ? (getComputedStyle(el) as unknown as Record<string, string>)[prop] : null;
-    };
-    const sig = document.querySelector(".opening-signal") as HTMLElement;
-    const r = sig.getBoundingClientRect();
-    const cols = (cs(".opening", "gridTemplateColumns") as string).split(" ").map(parseFloat);
+    const primary = getComputedStyle(document.documentElement).getPropertyValue("--primary").trim();
+    const probe = document.createElement("span");
+    probe.style.color = primary;
+    document.body.appendChild(probe);
+    const primaryRgb = getComputedStyle(probe).color;
+    probe.remove();
+    const main = document.querySelector("main") as HTMLElement;
+    // Every painted green in the main region: backgrounds, text, and borders.
+    // Entry-point previews are inert specimens (the palette strip shows Deep
+    // and Green as samples, as the Color page does), not signals.
+    const greens = [...main.querySelectorAll("*")].filter((el) => {
+      if (el.closest(".home-door-preview")) return false;
+      const s = getComputedStyle(el);
+      if ((el as HTMLElement).offsetParent === null && s.position !== "fixed") return false;
+      return [s.backgroundColor, s.borderTopColor, s.color].some((c) => c === primaryRgb) &&
+        !(s.color === primaryRgb && el.closest(".home-primary-action"));
+    });
+    const title = document.querySelector(".home-hero h1") as HTMLElement;
+    const ts = getComputedStyle(title);
+    const action = document.querySelector(".home-primary-action") as HTMLAnchorElement;
+    const previews = [...document.querySelectorAll(".home-door-preview")].map((el) => Math.round(el.getBoundingClientRect().top));
     return {
-      titleText: (document.querySelector(".opening-message h1") as HTMLElement).textContent ?? "",
-      titleFont: (() => {
-        const s = getComputedStyle(document.querySelector(".opening-message h1") as HTMLElement);
-        return `${s.fontWeight} ${s.fontSize}/${s.lineHeight}`;
+      titleText: title.textContent ?? "",
+      titleFont: `${ts.fontWeight} ${ts.fontSize}/${ts.lineHeight}`,
+      lede: (document.querySelector(".home-lede") as HTMLElement).textContent?.replace(/\s+/g, " ").trim() ?? "",
+      action: {
+        tag: action.tagName,
+        href: new URL(action.href).pathname,
+        classes: action.className,
+        background: getComputedStyle(action).backgroundColor,
+      },
+      primaryRgb,
+      greens: greens.map((el) => `${el.tagName}.${(el as HTMLElement).className}`),
+      recordSignal: getComputedStyle(document.querySelector(".home-hero .example-record-signal") as HTMLElement).backgroundColor,
+      mutedForeground: (() => {
+        const s = document.createElement("span");
+        s.style.color = "var(--muted-foreground)";
+        document.body.appendChild(s);
+        const c = getComputedStyle(s).color;
+        s.remove();
+        return c;
       })(),
-      signal: `${Math.round(r.width)}x${Math.round(r.height)}`,
-      signalColor: cs(".opening-signal", "backgroundColor"),
-      actionColor: cs(".opening-action", "color"),
-      actionText: (document.querySelector(".opening-action") as HTMLElement).textContent?.trim() ?? "",
-      lede: (document.querySelector(".opening-lede") as HTMLElement).textContent?.replace(/\s+/g, " ").trim() ?? "",
-      colRatio: cols.length === 2 ? cols[1] / cols[0] : null,
-      openingHeight: Math.round((document.querySelector(".opening") as HTMLElement).getBoundingClientRect().height),
-      tracks: document.querySelectorAll(".opening-footer > div").length,
-      logoWidth: (() => {
-        const el = document.querySelector(".opening-lockup .brand-logo-frame") as HTMLElement | null;
-        return el ? Math.round(el.getBoundingClientRect().width) : null;
-      })(),
-      display: cs(".opening", "display"),
+      lockups: [...document.querySelectorAll(".brand-logo-frame")].filter((el) => (el as HTMLElement).offsetParent !== null).length,
+      statusMentions: (document.body.innerText.match(/Early development/g) ?? []).length,
+      previewTops: previews,
+      heroColumns: getComputedStyle(document.querySelector(".home-hero") as HTMLElement).gridTemplateColumns.split(" ").length,
+      doorColumns: getComputedStyle(document.querySelector(".home-doors") as HTMLElement).gridTemplateColumns.split(" ").length,
       overflowX: document.documentElement.scrollWidth > window.innerWidth,
     };
   });
 
-test.describe("brand opening (#47)", () => {
-  test("desktop opening contract, route links, and dark signal", async ({ page }) => {
+test.describe("home page (product first)", () => {
+  test("desktop hero, one green signal, entry points, and route links", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await go(page, ORIGIN + site("/"));
     await page.evaluate(() => document.fonts.ready);
-    const openLight = await readOpening(page);
+    const light = await readHome(page);
     assertOk(
-      "opening title is the locked message in the editorial-title role",
-      openLight.titleText.trim() === "Make whatmatters clear." && openLight.titleFont === "400 40px/48px",
-      `${openLight.titleFont} "${openLight.titleText.replace(/\s+/g, " ").trim()}"`,
+      "hero title is the locked message in the editorial-title role",
+      light.titleText.trim() === "Make whatmatters clear." && light.titleFont === "400 40px/48px",
+      `${light.titleFont} "${light.titleText.replace(/\s+/g, " ").trim()}"`,
     );
-    assertOk("opening signal is exactly 32x2", openLight.signal === "32x2", openLight.signal);
-    assertOk("light signal paints Deep through --primary", openLight.signalColor === "rgb(9, 94, 66)", openLight.signalColor);
-    assertOk("text action stays neutral foreground (not accent)", openLight.actionColor === "rgb(14, 14, 33)" && openLight.actionText.startsWith("Get started"), `${openLight.actionColor} "${openLight.actionText}"`);
-    assertOk("lede is the locked shared-interface-language copy", openLight.lede.startsWith("A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces."), openLight.lede.slice(0, 60));
-    assertOk("rail and message hold the 1:2 opening columns", openLight.colRatio !== null && Math.abs(openLight.colRatio - 2) < 0.05, String(openLight.colRatio));
-    assertOk("opening meets the 520px desktop minimum height", openLight.openingHeight >= 520, String(openLight.openingHeight));
-    assertOk("metadata row has three equal tracks", openLight.tracks === 3, String(openLight.tracks));
-    assertOk("identity lockup renders the official horizontal logo at opening scale", openLight.logoWidth === 224, String(openLight.logoWidth));
-    assertOk("no horizontal overflow at 1440", openLight.overflowX === false);
+    assertOk("lede is the locked shared-interface-language copy", light.lede.startsWith("A shared interface language for Augur: foundations, components, and guidance for clear, consistent interfaces."), light.lede.slice(0, 60));
+    assertOk(
+      "primary action is a link carrying the package's default Button classes",
+      light.action.tag === "A" && light.action.href === "/getting-started" && /\baug-button--default\b/.test(light.action.classes),
+      JSON.stringify(light.action),
+    );
+    assertOk("light primary action paints Deep", light.action.background === "rgb(9, 94, 66)", light.action.background);
+    assertOk("the primary action is the view's only green", light.greens.length === 1 && light.greens[0].includes("home-primary-action"), light.greens.join(", "));
+    assertOk("hero record rule is quiet", light.recordSignal === light.mutedForeground, `${light.recordSignal} vs ${light.mutedForeground}`);
+    assertOk("identity appears once (masthead only)", light.lockups === 1, String(light.lockups));
+    assertOk("project status appears once (footer only)", light.statusMentions === 1, String(light.statusMentions));
+    assertOk("hero holds message and record side by side", light.heroColumns === 2, String(light.heroColumns));
+    assertOk("three entry points share one row", light.doorColumns === 3, String(light.doorColumns));
+    assertOk("entry-point previews start on one line", new Set(light.previewTops).size === 1 && light.previewTops.length === 3, light.previewTops.join(","));
+    assertOk("no horizontal overflow at 1440", light.overflowX === false);
+
     const routeHrefs = await page.evaluate(() =>
-      [...document.querySelectorAll(".route-group a")].map((a) => new URL(a.getAttribute("href") as string, location.href).pathname),
+      [...document.querySelectorAll(".home-door-links a, .home-door-title a, .home-secondary-action, .home-primary-action")].map(
+        (a) => new URL(a.getAttribute("href") as string, location.href).pathname,
+      ),
     );
     const broken: string[] = [];
     for (const h of routeHrefs) {
       const res = await fetch(ORIGIN + (h.endsWith("/") ? `${h}index.html` : h));
       if (res.status !== 200) broken.push(h);
     }
-    assertOk("all 18 route links resolve to built pages", routeHrefs.length === 18 && broken.length === 0, broken.join(", ") || "ok");
-    await shot(page, "home-opening-light-1440", true);
+    assertOk("all 23 home links resolve to built pages", routeHrefs.length === 23 && broken.length === 0, broken.join(", ") || String(routeHrefs.length));
+    await shot(page, "home-light-1440", true);
+
     await page.evaluate(() => {
       document.documentElement.dataset.theme = "dark";
     });
-    const openDark = await readOpening(page);
-    assertOk("dark signal swaps to Green on the same node", openDark.signalColor === "rgb(42, 231, 168)", openDark.signalColor);
-    assertOk("dark action stays neutral foreground", openDark.actionColor === "rgb(245, 245, 248)", openDark.actionColor);
-    await shot(page, "home-opening-dark-1440", true);
+    const dark = await readHome(page);
+    assertOk("dark primary action swaps to Green on the same node", dark.action.background === "rgb(42, 231, 168)", dark.action.background);
+    assertOk("dark view keeps one green", dark.greens.length === 1, dark.greens.join(", "));
+    assertOk("dark hero record rule stays quiet", dark.recordSignal === dark.mutedForeground, `${dark.recordSignal} vs ${dark.mutedForeground}`);
+    await shot(page, "home-dark-1440", true);
   });
 
-  test("mobile stacks the opening at 390px", async ({ page }) => {
+  test("mobile stacks the home page at 390px", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await go(page, ORIGIN + site("/"));
-    const openMobile = await readOpening(page);
-    assertOk("mobile stacks the opening (rail above message)", openMobile.display === "flex", String(openMobile.display));
-    assertOk("mobile title steps to the adopted 32/40", openMobile.titleFont === "400 32px/40px", String(openMobile.titleFont));
-    assertOk("no horizontal overflow at 390", openMobile.overflowX === false);
-    await shot(page, "home-opening-light-390", true);
+    const mobile = await readHome(page);
+    assertOk("mobile stacks the hero (message above record)", mobile.heroColumns === 1, String(mobile.heroColumns));
+    assertOk("mobile stacks the entry points", mobile.doorColumns === 1, String(mobile.doorColumns));
+    assertOk("mobile title steps to the adopted 32/40", mobile.titleFont === "400 32px/40px", String(mobile.titleFont));
+    assertOk("no horizontal overflow at 390", mobile.overflowX === false);
+    await shot(page, "home-light-390", true);
   });
 });
 
