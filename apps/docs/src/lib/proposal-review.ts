@@ -16,7 +16,7 @@ ${PROPOSAL_REVIEW.description}
 
 **Open query — LQ-042**
 
-Did the proposal pass before 30 June?
+## Did the proposal pass before 30 June?
 
 Choices: Yes and No. They are equally presented, unavailable, and neither is selected.
 

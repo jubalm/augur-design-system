@@ -1,19 +1,17 @@
-/* Applied #52 evidence: one task, one clear in-page action, no product state. */
+/* Applied #52 evidence: one task, one clear in-page action, no product state.
+   One column shares both edges: the header action, the record's muted field
+   (its outline), and the details region all end on the same lines. */
 .proposal-review-page {
   display: grid;
   gap: var(--augur-spacing-2xl);
-  max-width: 72rem;
-  margin-inline: auto;
+  max-width: calc(42rem + 2 * var(--augur-spacing-xl));
 }
 
 .proposal-review-page > .example-record-panel {
-  max-width: 42rem;
   margin-inline: var(--augur-spacing-xl);
 }
 
 .proposal-review-details {
-  max-width: 42rem;
-  margin-inline: var(--augur-spacing-xl);
   padding: var(--augur-spacing-xl);
   color: var(--foreground);
   background-color: var(--muted);
@@ -29,7 +27,6 @@
 
 @media (max-width: 599px) {
   .proposal-review-page { gap: var(--augur-spacing-xl); }
-  .proposal-review-page > .example-record-panel,
-  .proposal-review-details { margin-inline: var(--augur-spacing-lg); }
+  .proposal-review-page > .example-record-panel { margin-inline: var(--augur-spacing-lg); }
   .proposal-review-details { padding: var(--augur-spacing-lg); }
 }

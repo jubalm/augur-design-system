@@ -31,7 +31,7 @@ test.describe("page audits (base /)", () => {
     });
   }
 
-  test("masthead keeps compact brand and icon-only repository access", async ({ page }) => {
+  test("masthead keeps the minimum-size brand and icon-only repository access", async ({ page }) => {
     await go(page, ORIGIN + site("/"));
     const evidence = await page.evaluate(() => {
       const brand = document.querySelector(".masthead .brand-lockup-art") as HTMLElement | null;
@@ -44,7 +44,7 @@ test.describe("page audits (base /)", () => {
         iconFill: icon?.getAttribute("fill") ?? null,
       };
     });
-    assertOk("masthead brand is compact", evidence.brandWidth === "128px", JSON.stringify(evidence));
+    assertOk("masthead brand holds the 150px horizontal-lockup minimum", evidence.brandWidth === "150px", JSON.stringify(evidence));
     assertOk("repository link has an accessible name", evidence.repositoryName === "Repository", JSON.stringify(evidence));
     assertOk("repository link is icon-only", evidence.repositoryText === "", JSON.stringify(evidence));
     assertOk("repository icon uses a solid fill", evidence.iconFill === "currentColor", JSON.stringify(evidence));
