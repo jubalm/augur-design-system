@@ -108,6 +108,27 @@ examples by construction** — the same source, two representations.
 Standalone fenced code blocks in prose are for stable usage snippets
 (e.g. an import line), not for anything that mirrors a live example.
 
+**Samples are consumer code.** A reader copies the displayed source, so
+an example module contains only package imports, composition, props, and
+comments useful to a consumer: no docs-site class names, no theme
+wrappers, and no duplicated light/dark specimens. Staging belongs to the
+registry entry, which the frame (`DocExample`) applies around the module:
+
+- `themes: "both"` renders the module in labeled light and dark scopes,
+  each pinned with `data-theme`, so the theme contract stays visible
+  without entering the sample. Both scopes render the displayed file.
+- `pair: "rows"` stacks those scopes full width (page-level regions such
+  as PageHeader); the default places them side by side.
+- `layout: "inline"` wraps top-level elements in a row (controls); the
+  default stacks them.
+
+Return a fragment when an example shows several items, and use `useId`
+rather than hard-coded ids, since the frame may render a module twice.
+The theme-scope example keeps its `data-theme` subtree because scoping is
+its lesson. `fixtures/verify-markdown.mjs` enforces these rules and lists
+the recorded exceptions (the palette specimen and the reference-record and
+proposal-review compositions, whose layout lives in co-located docs CSS).
+
 Example modules must only import exports that exist. `defineExample`
 (`src/lib/examples.ts`) validates ids, captions, and that `code` is
 real imported source, failing the build otherwise.
