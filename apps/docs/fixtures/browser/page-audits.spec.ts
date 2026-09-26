@@ -81,6 +81,21 @@ test.describe("page audits (base /)", () => {
     }
   });
 
+  // The example frame can render one module twice (light and dark scopes),
+  // so samples rely on useId; any hard-coded id would repeat. Checked per
+  // document, which also covers ids shared between separate examples.
+  test("rendered pages carry no duplicate ids", async ({ page }) => {
+    for (const path of [...PAGES.map(([route]) => route), "/patterns/reference-record"]) {
+      await go(page, ORIGIN + site(path));
+      const duplicates = await page.evaluate(() => {
+        const counts = new Map<string, number>();
+        for (const element of document.querySelectorAll("[id]")) counts.set(element.id, (counts.get(element.id) ?? 0) + 1);
+        return [...counts].filter(([, count]) => count > 1).map(([id, count]) => `${id}×${count}`);
+      });
+      assertOk(`${path} has no duplicate ids`, duplicates.length === 0, duplicates.join(", ") || "unique");
+    }
+  });
+
   test("built HTML carries current consumer guidance and pinned theme records", async () => {
     const gettingStarted = await readDist("getting-started/index.html");
     assertOk(

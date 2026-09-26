@@ -278,6 +278,36 @@ test.describe("starter components (#15)", () => {
     });
   }
 
+  for (const width of [1440, 390]) {
+    test(`page-header back affordance keeps its width at the start edge at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await go(page, "/patterns/page-header");
+      const backs = await page.evaluate(() =>
+        [...document.querySelectorAll(".aug-page-header > .aug-button")].map((button) => {
+          const header = (button.parentElement as HTMLElement).getBoundingClientRect();
+          const rect = button.getBoundingClientRect();
+          const title = (button.parentElement as HTMLElement).querySelector(".aug-page-header-title")?.getBoundingClientRect();
+          const content = (button.parentElement as HTMLElement).querySelector(".aug-page-header-content")?.getBoundingClientRect();
+          return {
+            headerWidth: Math.round(header.width),
+            width: Math.round(rect.width),
+            leftOffset: Math.round(rect.left - header.left),
+            titleOffset: Math.round((title?.left ?? 0) - header.left),
+            contentWidth: Math.round(content?.width ?? 0),
+          };
+        }),
+      );
+      assertOk(`back affordances render in both theme scopes at ${width}px`, backs.length === 2, JSON.stringify(backs));
+      assertOk(
+        `back affordance keeps its intrinsic width, not the header's, at ${width}px`,
+        backs.every((b) => b.width < b.headerWidth),
+        JSON.stringify(backs),
+      );
+      assertOk(`back affordance shares the title's start edge at ${width}px`, backs.every((b) => b.leftOffset === b.titleOffset), JSON.stringify(backs));
+      assertOk(`content row still spans the header at ${width}px`, backs.every((b) => b.contentWidth === b.headerWidth), JSON.stringify(backs));
+    });
+  }
+
   test("button: focus-visible and Enter/Space activation", async ({ page }) => {
     await go(page, "/components/button");
     const btn = page.locator(".aug-button:not([disabled])").first();
