@@ -52,6 +52,14 @@ export default defineConfig({
   // from source, not through this processor.
   markdown: {
     processor: satteri({ mdastPlugins: [baseLinkMdastPlugin(base === "/" ? "" : base)] }),
+    // Sätteri reads Astro's shikiConfig for Markdown and MDX fences. Match
+    // DocExample's dual palette and emit only --shiki-light/--shiki-dark
+    // variables so docs.css picks the host theme instead of Shiki's inline
+    // default-dark colors.
+    shikiConfig: {
+      themes: { light: "github-light", dark: "github-dark" },
+      defaultColor: false,
+    },
   },
   integrations: [react(), mdx()],
 });
