@@ -8,9 +8,9 @@ import {
   PageHeaderTitle,
 } from "@augur/design-system";
 
-function PositionsHeader(props: { theme: "light" | "dark" }) {
+export function PageHeaderCompositionExample() {
   return (
-    <PageHeader data-theme={props.theme}>
+    <PageHeader>
       <PageHeaderBreadcrumb aria-label="Breadcrumb">
         <ol>
           <li>
@@ -39,17 +39,3 @@ function PositionsHeader(props: { theme: "light" | "dark" }) {
   );
 }
 
-export function PageHeaderCompositionExample() {
-  return (
-    <div className="example-page-header-grid">
-      <div className="example-page-header-panel" data-theme="light">
-        <p className="augur-type-ui example-page-header-theme-label">Light theme</p>
-        <PositionsHeader theme="light" />
-      </div>
-      <div className="example-page-header-panel" data-theme="dark">
-        <p className="augur-type-ui example-page-header-theme-label">Dark theme</p>
-        <PositionsHeader theme="dark" />
-      </div>
-    </div>
-  );
-}

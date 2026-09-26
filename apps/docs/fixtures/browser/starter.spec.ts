@@ -133,8 +133,8 @@ test.describe("starter components (#15)", () => {
   test("input: focus, typing, ARIA wiring, both themes", async ({ page }) => {
     await go(page, "/components/input");
     await page.evaluate(() => document.fonts.ready);
-    const firstInput = page.locator(".example-input-row[data-theme='light'] input, .example-input-row[data-theme='light'] textarea").first();
-    const darkInput = page.locator(".example-input-row[data-theme='dark'] input, .example-input-row[data-theme='dark'] textarea").first();
+    const firstInput = page.locator(".doc-example-theme[data-theme='light'] input").first();
+    const darkInput = page.locator(".doc-example-theme[data-theme='dark'] input").first();
     const inputLight = await firstInput.evaluate((el) => ({
       border: getComputedStyle(el).borderTopColor,
       background: getComputedStyle(el).backgroundColor,
@@ -170,7 +170,7 @@ test.describe("starter components (#15)", () => {
   test("form-field: label/control wiring", async ({ page }) => {
     await go(page, "/patterns/form-field");
     const formWiring = await page.evaluate(() => {
-      const field = document.querySelector(".example-form-field-grid");
+      const field = document.querySelector(".doc-example-theme");
       const control = field?.querySelector("input, textarea, select") as HTMLElement | null;
       const label = field?.querySelector("label") as HTMLLabelElement | null;
       return {
@@ -185,7 +185,7 @@ test.describe("starter components (#15)", () => {
   test("pattern pages render examples", async ({ page }) => {
     for (const route of ["/patterns/page-header", "/patterns/empty-state"]) {
       await go(page, route);
-      const count = await page.locator(".example-card-grid").count();
+      const count = await page.locator(".doc-example-theme").count();
       assertOk(`${route} examples render as built`, count >= 1, `${count} example block(s)`);
     }
   });
@@ -218,7 +218,7 @@ test.describe("starter components (#15)", () => {
           const right = (r: DOMRect | undefined) => r?.right ?? 0;
           return {
             specimen,
-            theme: header.getAttribute("data-theme") ?? "light",
+            theme: header.closest(".doc-example-theme")?.getAttribute("data-theme") ?? "light",
             titleWidth: Math.round(titleRect?.width ?? 0),
             descriptionWidth: Math.round(descriptionRect?.width ?? 0),
             descriptionBottom: Math.round(descriptionRect?.bottom ?? 0),
