@@ -22,6 +22,10 @@
 .aug-page-header {
   display: flex;
   flex-direction: column;
+  /* Rows keep their intrinsic width from the start edge, so a back
+     affordance or other first-row child reads as a quiet control, not a
+     full-width bar; the breadcrumb and content rows stretch (below). */
+  align-items: flex-start;
   gap: 12px; /* space.md */
   margin: 0;
   min-width: 0;
@@ -39,6 +43,7 @@
  * in the foreground role. Crumbs are secondary: no green signal here.
  */
 .aug-page-header-breadcrumb {
+  align-self: stretch;
   margin: 0;
 }
 
@@ -72,6 +77,7 @@
  * description rows so they align with the top of the area.
  */
 .aug-page-header-content {
+  align-self: stretch;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   column-gap: 24px; /* space.lg */
