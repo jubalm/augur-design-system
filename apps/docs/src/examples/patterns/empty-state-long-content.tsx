@@ -27,39 +27,19 @@ function TrayGlyph() {
 
 export function EmptyStateLongContentExample() {
   return (
-    <div className="example-card-grid">
-      <div className="example-theme-panel" data-theme="light">
-        <EmptyState>
-          <EmptyStateIcon>
-            <TrayGlyph />
-          </EmptyStateIcon>
-          <EmptyStateTitle headingLevel={3}>Your inbox is clear</EmptyStateTitle>
-          <EmptyStateDescription>
-            Alerts appear here when an instrument in one of your watchlists crosses a
-            threshold you have set, when a reconciliation break is assigned to you, or when
-            a scheduled report finishes running and is ready to review.
-          </EmptyStateDescription>
-          <EmptyStateActions>
-            <Button>Set an alert</Button>
-          </EmptyStateActions>
-        </EmptyState>
-      </div>
-      <div className="example-theme-panel" data-theme="dark">
-        <EmptyState>
-          <EmptyStateIcon>
-            <TrayGlyph />
-          </EmptyStateIcon>
-          <EmptyStateTitle headingLevel={3}>Your inbox is clear</EmptyStateTitle>
-          <EmptyStateDescription>
-            Alerts appear here when an instrument in one of your watchlists crosses a
-            threshold you have set, when a reconciliation break is assigned to you, or when
-            a scheduled report finishes running and is ready to review.
-          </EmptyStateDescription>
-          <EmptyStateActions>
-            <Button>Set an alert</Button>
-          </EmptyStateActions>
-        </EmptyState>
-      </div>
-    </div>
+    <EmptyState>
+      <EmptyStateIcon>
+        <TrayGlyph />
+      </EmptyStateIcon>
+      <EmptyStateTitle headingLevel={3}>Your inbox is clear</EmptyStateTitle>
+      <EmptyStateDescription>
+        Alerts appear here when an instrument in one of your watchlists crosses a
+        threshold you have set, when a reconciliation break is assigned to you, or when
+        a scheduled report finishes running and is ready to review.
+      </EmptyStateDescription>
+      <EmptyStateActions>
+        <Button>Set an alert</Button>
+      </EmptyStateActions>
+    </EmptyState>
   );
 }

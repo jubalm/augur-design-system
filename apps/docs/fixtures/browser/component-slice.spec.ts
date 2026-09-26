@@ -6,7 +6,7 @@ test.describe("component slice (Button/Card computed styles, both themes)", () =
   const readButtonEvidence = (page: Page) =>
     page.evaluate(() => {
       const row = (theme: string) =>
-        document.querySelector(theme === "dark" ? ".example-button-row[data-theme='dark']" : ".example-button-row:not([data-theme='dark'])") as HTMLElement;
+        document.querySelector(`.doc-example-theme[data-theme='${theme}']`) as HTMLElement;
       const primary = row("light").querySelector(".aug-button--default") as HTMLElement;
       const darkPrimary = row("dark").querySelector(".aug-button--default") as HTMLElement;
       const disabled = document.querySelector(".aug-button:disabled:not([aria-busy])") as HTMLElement | null;
@@ -60,8 +60,8 @@ test.describe("component slice (Button/Card computed styles, both themes)", () =
     await go(page, ORIGIN + site("/components/card"));
     await page.evaluate(() => document.fonts.ready);
     const cardLight = await page.evaluate(() => {
-      const card = document.querySelector(".example-card-grid > .aug-card[data-theme='light'], .example-card-grid > .aug-card:not([data-theme])") as HTMLElement;
-      const darkCard = document.querySelector(".example-card-grid > .aug-card[data-theme='dark']") as HTMLElement;
+      const card = document.querySelector(".doc-example-theme[data-theme='light'] .aug-card") as HTMLElement;
+      const darkCard = document.querySelector(".doc-example-theme[data-theme='dark'] .aug-card") as HTMLElement;
       const cs = getComputedStyle(card);
       return {
         radius: cs.borderRadius,

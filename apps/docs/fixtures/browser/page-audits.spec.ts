@@ -52,10 +52,12 @@ test.describe("page audits (base /)", () => {
 
   test("paired examples keep explicit light and dark specimens", async ({ page }) => {
     const examples = [
-      { path: "/patterns/form-field", selector: ".example-form-field-column", distinctSurface: true },
-      { path: "/patterns/empty-state", selector: ".example-theme-panel", distinctSurface: true },
-      { path: "/components/input", selector: ".example-input-row", distinctSurface: true },
-      { path: "/patterns/page-header", selector: ".example-card-grid > .aug-page-header", distinctSurface: false },
+      { path: "/patterns/form-field", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/patterns/empty-state", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/components/input", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/patterns/page-header", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/components/button", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/components/card", selector: ".doc-example-theme", distinctSurface: true },
     ] as const;
 
     for (const example of examples) {
@@ -76,6 +78,21 @@ test.describe("page audits (base /)", () => {
       if (example.distinctSurface) {
         assertOk(`${example.path} keeps paired surface roles distinct`, new Set(evidence.map((item) => item.background)).size >= 2, JSON.stringify(evidence));
       }
+    }
+  });
+
+  // The example frame can render one module twice (light and dark scopes),
+  // so samples rely on useId; any hard-coded id would repeat. Checked per
+  // document, which also covers ids shared between separate examples.
+  test("rendered pages carry no duplicate ids", async ({ page }) => {
+    for (const path of [...PAGES.map(([route]) => route), "/patterns/reference-record"]) {
+      await go(page, ORIGIN + site(path));
+      const duplicates = await page.evaluate(() => {
+        const counts = new Map<string, number>();
+        for (const element of document.querySelectorAll("[id]")) counts.set(element.id, (counts.get(element.id) ?? 0) + 1);
+        return [...counts].filter(([, count]) => count > 1).map(([id, count]) => `${id}×${count}`);
+      });
+      assertOk(`${path} has no duplicate ids`, duplicates.length === 0, duplicates.join(", ") || "unique");
     }
   });
 

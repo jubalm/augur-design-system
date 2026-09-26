@@ -25,10 +25,12 @@ Consumer-facing changes to the Augur Design System are recorded here. The projec
 - Made document tables readable at every viewport.
 - Replaced the flat docs header with a scalable navigation and reading shell derived from one collection-backed model.
 - Reworked the docs presentation to follow its own guidance: a product-first home page (message, one primary action, and a live query record), entry points with live previews, a two-lane reading shell that shares one left edge, tonal example stages, quiet example rules, and section spacing on the layout steps.
+- Made the copyable example source consumer code: each sample shows one theme with no docs-site class names or wrappers, and the example frame renders it in labeled light and dark scopes. The Dialog sample now shows the full composition, not only its trigger.
 
 ### Fixed
 
 - Fenced code blocks in docs pages follow the host light/dark theme on the semantic muted surface instead of always rendering in Shiki's default dark theme.
+- `PageHeader` keeps a back affordance or other first-row child at its intrinsic width from the start edge instead of stretching it across the header; the breadcrumb and content rows still span the full width.
 - The docs masthead lockup returns to the 150px horizontal-lockup minimum, and the descriptor, masthead edge, and neighboring controls stay outside the 1a clearspace.
 - Docs views now carry one green signal: proposal review and the home page quiet the record's rule when the primary action is green, and project status appears once, in the footer.
 - Restored installed-registry typography and spacing and explicit light scopes.

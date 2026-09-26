@@ -1523,132 +1523,54 @@ body {
   outline-offset: 2px;
 }
 
-/* Example module: font-stacks. */
-.example-font-stacks {
+/* Example frame staging (registry `themes`, `pair`, `layout`). The frame
+   owns presentation so samples stay single-theme consumer code: with
+   themes: "both" it renders the module in labeled light and dark scopes,
+   each pinned with data-theme and painted with that scope's canvas. */
+.doc-example-themes {
   display: grid;
-  gap: 0.75rem;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
 }
 
-.example-stack-line {
-  margin: 0;
-  font-size: 1.0625rem;
-  line-height: 1.5;
+.doc-example-themes[data-pair="rows"] {
+  grid-template-columns: minmax(0, 1fr);
 }
 
-/* Example module: font-provenance. */
-.example-provenance {
-  margin: 0;
+.doc-example-theme {
   display: grid;
-  gap: 0.75rem;
-}
-
-.example-provenance-item dt {
-  font-weight: 600;
-}
-
-.example-provenance-item dd {
-  margin: 0.125rem 0 0;
-  color: var(--muted-foreground);
-}
-
-/* Example module: theme-scope. */
-.example-theme-scope {
-  display: grid;
-  gap: 0.875rem;
-}
-
-.example-theme-panel {
-  padding: 0.875rem;
+  align-content: start;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1rem;
   border: 1px solid var(--border);
   background-color: var(--background);
   color: var(--foreground);
 }
 
-.example-theme-title {
-  margin: 0 0 0.25rem;
-}
-
-.example-theme-panel > .augur-type-metadata {
+.doc-example-theme-label {
   margin: 0;
   color: var(--muted-foreground);
 }
 
-.example-theme-roles {
-  list-style: none;
-  margin: 0.75rem 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem 1rem;
-}
-
-.example-theme-role {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-}
-
-.example-theme-chip {
-  display: inline-block;
-  width: 0.875rem;
-  height: 0.875rem;
-  border: 1px solid var(--border);
-}
-
-.example-theme-role code {
-  overflow-wrap: break-word;
-}
-
-/* Example module: button-variants / button-states. Rows are neutral
-   canvases; the dark row pins the package theme contract on the row. */
-.example-button-grid {
+.doc-example-stage {
   display: grid;
-  gap: 0.875rem;
+  gap: 1rem;
+  min-width: 0;
 }
 
-.example-button-row {
+.doc-example-stage[data-layout="inline"] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.875rem;
-  border: 1px solid var(--border);
-  background-color: var(--background);
-  color: var(--foreground);
 }
 
-/* Example module: card-composition. */
-.example-card-grid {
-  display: grid;
-  gap: 0.875rem;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-}
-
-.example-card-grid p {
+/* The stage stands in for a consumer app's baseline reset (most resets
+   zero these margins), so samples need not carry margin overrides. Zero
+   specificity: package component styles still win. */
+.doc-example-stage :where(p, dl, dd) {
   margin: 0;
-}
-
-/* Example modules: page-header-composition and page-header-long-content.
-   Full-width theme panels keep each header legible as a page-level region;
-   stacking avoids making the comparison read like a compact card grid. */
-.example-page-header-grid {
-  display: grid;
-  gap: 0.875rem;
-  grid-template-columns: 1fr;
-}
-
-.example-page-header-panel {
-  display: grid;
-  gap: 0.875rem;
-  padding: 0.875rem;
-  border: 1px solid var(--border);
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
-.example-page-header-theme-label {
-  margin: 0;
-  color: var(--muted-foreground);
 }
 
 /* Pattern examples (#14): the PageHeader breadcrumb pairing needs no
@@ -1657,54 +1579,6 @@ body {
    alone governs crumbs (quiet links, foreground current page). The
    former scoped mirror of those rules was an override copy and is
    removed with the leak that justified it. */
-
-/* Example modules: input-states and form-field-composition (issue #12).
-   Scaffolding only — the controls themselves are the real package
-   components; rows/canvas mirror the button-example pattern. */
-.example-input-grid {
-  display: grid;
-  gap: 0.875rem;
-}
-
-.example-input-row {
-  display: grid;
-  gap: 0.75rem;
-  padding: 0.875rem;
-  border: 1px solid var(--border);
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
-.example-input-field {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.example-input-field label {
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.example-input-error {
-  margin: 0;
-  color: var(--destructive);
-}
-
-.example-form-field-grid {
-  display: grid;
-  gap: 0.875rem;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-}
-
-.example-form-field-column {
-  display: grid;
-  align-content: start;
-  gap: 1rem;
-  padding: 0.875rem;
-  border: 1px solid var(--border);
-  background-color: var(--background);
-  color: var(--foreground);
-}
 
 /* Example module: palette-swatches (issue #10). Chrome only: chips and
    pairing samples paint generated --augur-color-* variables passed in

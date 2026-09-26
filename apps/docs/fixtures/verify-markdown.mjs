@@ -238,6 +238,29 @@ console.log("\n== Live-example source parity ==");
     const rel = module.slice(docsRoot.length + 1);
     ok(`${rel} source appears verbatim in the Markdown endpoints`, allFenceContent.includes(source), `${source.length} chars`);
   }
+
+  // Samples are consumer code (#79): the docs frame, not the sample, pins
+  // themes and supplies layout. Specimens and compositions whose layout
+  // lives in co-located docs CSS are recorded exceptions.
+  const docsOwnedPresentation = new Map([
+    ["src/examples/color/palette-swatches.tsx", "foundation specimen with docs-owned presentation"],
+    ["src/examples/patterns/reference-record.tsx", "composition laid out by its co-located CSS"],
+    ["src/examples/patterns/proposal-review.tsx", "composition laid out by its co-located CSS"],
+  ]);
+  const scopingLessons = new Set(["src/examples/theme/theme-scope.tsx"]);
+  for (const module of modules) {
+    const rel = module.slice(docsRoot.length + 1);
+    if (docsOwnedPresentation.has(rel)) {
+      console.log(`  - ${rel}: exception (${docsOwnedPresentation.get(rel)})`);
+      continue;
+    }
+    const source = await readFile(module, "utf8");
+    const docsClasses = source.match(/className=\{?["'`][^"'`]*\b(?:example|doc)-[a-z-]+/g) ?? [];
+    ok(`${rel} sample uses no docs-site class names`, docsClasses.length === 0, docsClasses.join(", "));
+    if (!scopingLessons.has(rel)) {
+      ok(`${rel} sample pins no theme (the docs frame does)`, !/data-theme/.test(source));
+    }
+  }
 }
 
 console.log("\n== Markdown link resolution ==");
