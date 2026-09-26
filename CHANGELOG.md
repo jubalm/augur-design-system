@@ -29,6 +29,7 @@ Consumer-facing changes to the Augur Design System are recorded here. The projec
 
 ### Fixed
 
+- Fenced code blocks in docs pages follow the host light/dark theme on the semantic muted surface instead of always rendering in Shiki's default dark theme.
 - `PageHeader` keeps a back affordance or other first-row child at its intrinsic width from the start edge instead of stretching it across the header; the breadcrumb and content rows still span the full width.
 - The docs masthead lockup returns to the 150px horizontal-lockup minimum, and the descriptor, masthead edge, and neighboring controls stay outside the 1a clearspace.
 - Docs views now carry one green signal: proposal review and the home page quiet the record's rule when the primary action is green, and project status appears once, in the footer.

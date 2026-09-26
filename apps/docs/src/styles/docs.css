@@ -778,9 +778,10 @@ body {
   padding: 0.125em 0.375em;
 }
 
+/* Foreground follows the host theme's Shiki palette; see the
+   `.doc-example-code code span` rules below. */
 .prose pre {
   background-color: var(--muted);
-  color: var(--foreground);
   border: 1px solid var(--border);
   padding: 1rem;
   overflow-x: auto;
@@ -1464,20 +1465,25 @@ body {
   overflow-wrap: break-word;
 }
 
-/* Shiki emits both theme palettes as token variables. Keep the docs source
-   readable in the host theme while the source itself remains one exact raw
-   example module. */
+/* Shiki emits both theme palettes as token variables (defaultColor: false),
+   for live-example source and for fenced Markdown code alike. Keep both
+   readable in the host theme on the semantic --muted surface; Shiki's own
+   --shiki-*-bg values are deliberately ignored. A <pre> without Shiki
+   variables (DocExample's, or an unhighlighted fence) falls back to
+   --foreground. */
+.prose pre,
+.prose pre code span,
 .doc-example-code code span {
-  color: var(--shiki-light);
+  color: var(--shiki-light, var(--foreground));
 }
 
-[data-theme="dark"] .doc-example-code code span {
-  color: var(--shiki-dark);
+[data-theme="dark"] :is(.prose pre, .prose pre code span, .doc-example-code code span) {
+  color: var(--shiki-dark, var(--foreground));
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .doc-example-code code span {
-    color: var(--shiki-dark);
+  :root:not([data-theme="light"]) :is(.prose pre, .prose pre code span, .doc-example-code code span) {
+    color: var(--shiki-dark, var(--foreground));
   }
 }
 
