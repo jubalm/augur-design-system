@@ -20,6 +20,8 @@ Consumer-facing changes to the Augur Design System are recorded here. The projec
 
 ### Changed
 
+- Separated control edges from panel edges: light `--input` is now Mist (still at least 3:1 on Paper and White) and dark `--border` is now Surface 3, so Card and Dialog bounds stay distinct from Input and outline Button edges in both themes. Input and the outline Button gain a stronger `--input-hover` edge on hover.
+- Filled Button variants now hover to a neighboring palette color in their own family (`--primary-hover`, `--primary-hover-foreground`, `--secondary-hover`, `--destructive-hover`) instead of the neutral `--accent`, so a hovered primary no longer reads as disabled. `outline` and `ghost` keep the neutral hover.
 - Encoded the adopted visual foundations in `DESIGN.md`: the six-step component spacing scale, 0px control and surface radius, and the three editorial typography roles.
 - Consolidated the documentation page actions into a single Copy page split control.
 - Made document tables readable at every viewport.

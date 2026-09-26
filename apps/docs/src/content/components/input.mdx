@@ -40,7 +40,8 @@ On coarse pointers, the actionable target expands to at least 44px high and wide
 
 ## States
 
-- **Default:** transparent field with a 1px semantic input edge.
+- **Default:** transparent field with a 1px semantic input edge (`--input`, Mist in both themes).
+- **Hover:** the edge strengthens to `--input-hover` (Graphite in light, Pewter in dark). Hover does not apply to disabled, read-only, or invalid fields.
 - **Focus:** shared 2px `:focus-visible` ring with a 2px offset from `--ring`.
 - **Disabled:** native `disabled`, non-interactive, reduced opacity, `cursor: not-allowed`.
 - **Invalid:** `aria-invalid="true"` plus the semantic destructive edge; visible error copy carries the meaning.

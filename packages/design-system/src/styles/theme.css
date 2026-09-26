@@ -71,35 +71,51 @@
   --primary: var(--augur-color-accent-deep);
   --primary-foreground: var(--augur-color-surface-light-raised);
 
+  /* Primary hover: Green + Navy (signal-dark reversed, ~12:1). The one
+     documented exception to "Green on dark surfaces only": transient,
+     Navy-labelled, and within the primary's own green family, so the
+     view still carries one green signal. */
+  --primary-hover: var(--augur-color-accent);
+  --primary-hover-foreground: var(--augur-color-primary);
+
   /* Secondary control: quiet region pairing (Muted + Navy,
-     muted-region-light). */
+     muted-region-light). Hover steps to the neighbouring Border step. */
   --secondary: var(--augur-color-surface-light-muted);
   --secondary-foreground: var(--augur-color-primary);
+  --secondary-hover: var(--augur-color-border-light);
 
   /* Quiet region with Graphite secondary text (secondary-text family). */
   --muted: var(--augur-color-surface-light-muted);
   --muted-foreground: var(--augur-color-secondary);
 
-  /* Hover/highlight surface: neutral Muted + Navy. Deliberately not the
-     Wash companion: green is a signal of intent (primary action, active
-     state, focus, short orienting rule), not a resting hover tint. */
+  /* Hover/highlight surface for surface controls (outline, ghost, menu
+     items): neutral Muted + Navy. Deliberately not the Wash companion:
+     green is a signal of intent (primary action, active state, focus,
+     short orienting rule), not a resting hover tint. Filled variants
+     step to their own palette neighbours instead (the *-hover roles). */
   --accent: var(--augur-color-surface-light-muted);
   --accent-foreground: var(--augur-color-primary);
 
   /* Schema-external slot: the brand palette defines no danger hue, so
      destructive actions are named by label (inherited state rule) and
      this slot maps to the strongest neutral action pairing (White +
-     Navy) rather than an invented off-brand color. */
+     Navy) rather than an invented off-brand color. Hover steps to
+     Graphite, keeping the White label (~8.9:1). */
   --destructive: var(--augur-color-primary);
   --destructive-foreground: var(--augur-color-surface-light-raised);
+  --destructive-hover: var(--augur-color-secondary);
 
-  /* Hairline rules (divider-light) and input boundaries. */
+  /* Panel hairlines (divider-light). Control edges are Mist, lighter
+     than ink yet >= 3:1 on Paper and White (WCAG 1.4.11), stepping to
+     Graphite on hover. */
   --border: var(--augur-color-border-light);
-  --input: var(--augur-color-secondary);
+  --input: var(--augur-color-surface-dark-mist);
+  --input-hover: var(--augur-color-secondary);
 
   /* Quiet editorial separators: grouping hairlines for shell
-     chrome, rules, and tables — distinct from the --border control
-     edge. In light both share Border; they part ways in dark. */
+     chrome, rules, and tables. It currently resolves to the same step
+     as --border in both themes; it stays a separate role so editorial
+     rules and panel bounds can diverge without touching each other. */
   --border-quiet: var(--augur-color-border-light);
 
   /* Focus ring: Deep in light. */
@@ -125,35 +141,51 @@
   --primary: var(--augur-color-accent-deep);
   --primary-foreground: var(--augur-color-surface-light-raised);
 
+  /* Primary hover: Green + Navy (signal-dark reversed, ~12:1). The one
+     documented exception to "Green on dark surfaces only": transient,
+     Navy-labelled, and within the primary's own green family, so the
+     view still carries one green signal. */
+  --primary-hover: var(--augur-color-accent);
+  --primary-hover-foreground: var(--augur-color-primary);
+
   /* Secondary control: quiet region pairing (Muted + Navy,
-     muted-region-light). */
+     muted-region-light). Hover steps to the neighbouring Border step. */
   --secondary: var(--augur-color-surface-light-muted);
   --secondary-foreground: var(--augur-color-primary);
+  --secondary-hover: var(--augur-color-border-light);
 
   /* Quiet region with Graphite secondary text (secondary-text family). */
   --muted: var(--augur-color-surface-light-muted);
   --muted-foreground: var(--augur-color-secondary);
 
-  /* Hover/highlight surface: neutral Muted + Navy. Deliberately not the
-     Wash companion: green is a signal of intent (primary action, active
-     state, focus, short orienting rule), not a resting hover tint. */
+  /* Hover/highlight surface for surface controls (outline, ghost, menu
+     items): neutral Muted + Navy. Deliberately not the Wash companion:
+     green is a signal of intent (primary action, active state, focus,
+     short orienting rule), not a resting hover tint. Filled variants
+     step to their own palette neighbours instead (the *-hover roles). */
   --accent: var(--augur-color-surface-light-muted);
   --accent-foreground: var(--augur-color-primary);
 
   /* Schema-external slot: the brand palette defines no danger hue, so
      destructive actions are named by label (inherited state rule) and
      this slot maps to the strongest neutral action pairing (White +
-     Navy) rather than an invented off-brand color. */
+     Navy) rather than an invented off-brand color. Hover steps to
+     Graphite, keeping the White label (~8.9:1). */
   --destructive: var(--augur-color-primary);
   --destructive-foreground: var(--augur-color-surface-light-raised);
+  --destructive-hover: var(--augur-color-secondary);
 
-  /* Hairline rules (divider-light) and input boundaries. */
+  /* Panel hairlines (divider-light). Control edges are Mist, lighter
+     than ink yet >= 3:1 on Paper and White (WCAG 1.4.11), stepping to
+     Graphite on hover. */
   --border: var(--augur-color-border-light);
-  --input: var(--augur-color-secondary);
+  --input: var(--augur-color-surface-dark-mist);
+  --input-hover: var(--augur-color-secondary);
 
   /* Quiet editorial separators: grouping hairlines for shell
-     chrome, rules, and tables — distinct from the --border control
-     edge. In light both share Border; they part ways in dark. */
+     chrome, rules, and tables. It currently resolves to the same step
+     as --border in both themes; it stays a separate role so editorial
+     rules and panel bounds can diverge without touching each other. */
   --border-quiet: var(--augur-color-border-light);
 
   /* Focus ring: Deep in light. Verified at least 3:1 against every
@@ -179,32 +211,43 @@
   --popover: var(--augur-color-surface-dark-2);
   --popover-foreground: var(--augur-color-surface-light);
 
-  /* Primary action: Green + Navy (action-primary-dark). */
+  /* Primary action: Green + Navy (action-primary-dark). Hover steps to
+     Wash + Navy (signal-wash), staying in the green family. */
   --primary: var(--augur-color-accent);
   --primary-foreground: var(--augur-color-primary);
+  --primary-hover: var(--augur-color-accent-wash);
+  --primary-hover-foreground: var(--augur-color-primary);
 
-  /* Secondary control: one raised step, panel-dark-2 pairing. */
+  /* Secondary control: one raised step, panel-dark-2 pairing. Hover
+     steps up to Surface 3 (panel-dark-3). */
   --secondary: var(--augur-color-surface-dark-2);
   --secondary-foreground: var(--augur-color-surface-light);
+  --secondary-hover: var(--augur-color-surface-dark-3);
 
   /* Quiet region one step above the canvas, with Pewter secondary text
      (secondary-text-dark family). */
   --muted: var(--augur-color-surface-dark-1);
   --muted-foreground: var(--augur-color-secondary-dark);
 
-  /* Hover/highlight surface: neutral raised step + Paper (same restraint
-     as the light theme: green is not a resting hover tint). */
+  /* Hover/highlight surface for surface controls: neutral raised step +
+     Paper (same restraint as the light theme: green is not a resting
+     hover tint). */
   --accent: var(--augur-color-surface-dark-2);
   --accent-foreground: var(--augur-color-surface-light);
 
   /* Schema-external slot: strongest neutral action pairing in dark
-     (Navy + Pewter), same rationale as the light theme. */
+     (Navy + Pewter), same rationale as the light theme. Hover steps to
+     Paper, keeping the Navy label. */
   --destructive: var(--augur-color-secondary-dark);
   --destructive-foreground: var(--augur-color-primary);
+  --destructive-hover: var(--augur-color-surface-light);
 
-  /* divider-dark pairing: Mist for edges and rules only, never copy. */
-  --border: var(--augur-color-surface-dark-mist);
+  /* Panel bounds sit at the Surface 3 step so they stay distinct from
+     control edges; Mist (divider-dark) is reserved for control edges,
+     stepping to Pewter on hover. Mist never carries copy. */
+  --border: var(--augur-color-surface-dark-3);
   --input: var(--augur-color-surface-dark-mist);
+  --input-hover: var(--augur-color-secondary-dark);
 
   /* Quiet editorial separators in dark: a Surface 3 step, not Mist —
      grouping hairlines must not glow like control edges. */
@@ -232,9 +275,12 @@
 
     --primary: var(--augur-color-accent);
     --primary-foreground: var(--augur-color-primary);
+    --primary-hover: var(--augur-color-accent-wash);
+    --primary-hover-foreground: var(--augur-color-primary);
 
     --secondary: var(--augur-color-surface-dark-2);
     --secondary-foreground: var(--augur-color-surface-light);
+    --secondary-hover: var(--augur-color-surface-dark-3);
 
     --muted: var(--augur-color-surface-dark-1);
     --muted-foreground: var(--augur-color-secondary-dark);
@@ -244,9 +290,11 @@
 
     --destructive: var(--augur-color-secondary-dark);
     --destructive-foreground: var(--augur-color-primary);
+    --destructive-hover: var(--augur-color-surface-light);
 
-    --border: var(--augur-color-surface-dark-mist);
+    --border: var(--augur-color-surface-dark-3);
     --input: var(--augur-color-surface-dark-mist);
+    --input-hover: var(--augur-color-secondary-dark);
     --border-quiet: var(--augur-color-surface-dark-3);
 
     --ring: var(--augur-color-accent);

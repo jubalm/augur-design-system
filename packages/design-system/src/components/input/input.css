@@ -28,6 +28,13 @@
   vertical-align: middle;
 }
 
+/* Hover: the edge steps from Mist to the stronger control hover edge.
+   Not for disabled or read-only fields, and never over the invalid
+   edge. */
+.aug-input:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
+  border-color: var(--input-hover);
+}
+
 .aug-input::placeholder {
   color: var(--muted-foreground);
   opacity: 1; /* the UA default dimming would stack with the role color;

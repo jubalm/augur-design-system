@@ -33,7 +33,7 @@ import { examples } from "../../examples/registry";
 | `ghost` | transparent | Lowest-emphasis button action |
 | `link` | text only | Inline command-like action |
 
-Non-link variants step onto the semantic neutral highlight surface on hover and use a strong neutral inversion while pressed. The `link` variant gains an underline. Hover does not introduce a second green treatment.
+On hover, filled variants step to a neighboring palette color in their own family: `default` moves from Deep to Green in light and from Green to Wash in dark, both with a Navy label; `secondary` and `destructive` step one tone along their own surface ramp. `outline` and `ghost` step onto the semantic neutral highlight surface, and the `outline` edge strengthens to `--input-hover`. Every non-link variant uses a strong neutral inversion while pressed. The `link` variant gains an underline. Hover does not introduce a second green treatment.
 
 <DocExample example={examples.button.variants} />
 
@@ -49,7 +49,7 @@ These are the maintained structural control sizes. On coarse pointers, the actio
 
 ## States
 
-- **Hover:** neutral semantic highlight for standard variants; underline for `link`.
+- **Hover:** a neighboring palette step for filled variants (`--primary-hover`, `--secondary-hover`, `--destructive-hover`); the neutral highlight surface for `outline` and `ghost`, plus the `--input-hover` edge on `outline`; underline for `link`.
 - **Pressed:** strong neutral inversion for standard variants.
 - **Focus:** shared 2px `:focus-visible` ring with a 2px offset from `--ring`.
 - **Disabled:** native `disabled`, non-interactive, label remains present, `cursor: not-allowed`, reduced opacity.

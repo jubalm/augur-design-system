@@ -5,7 +5,7 @@
     "source": {
       "file": "DESIGN.md",
       "location": "repository root",
-      "sha256": "a9bbf0cca91596ce77e0760c859f33e4af5e7eae695488a4338b37609531ed4b"
+      "sha256": "bd57ef107556918a470d68f9e53bc31022fb27c5d28f65c01254fbe6d3f177cc"
     },
     "tool": {
       "name": "@google/design.md",

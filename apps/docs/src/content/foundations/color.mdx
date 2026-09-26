@@ -26,7 +26,7 @@ Brand companion names describe colors; semantic role names describe jobs.
 | Wash | Green companion | Light green fill; not readable green text |
 | Graphite | Supporting neutral | Secondary text on light surfaces |
 | Pewter | Supporting neutral | Secondary text on dark surfaces |
-| Mist | Navy companion | Dark edges, rules, and quiet marks; not readable copy |
+| Mist | Navy companion | Control edges in both themes; dark rules and quiet marks; not readable copy |
 | Muted | Light surface role | Quiet light regions |
 | Surface 1 / 2 / 3 | Dark surface roles | Stepped tonal layers for panels, controls, and selected regions |
 
@@ -47,7 +47,9 @@ Components and pages consume the shadcn-compatible semantic role layer: `--backg
 Two relationships are especially important:
 
 - `--primary` resolves to Deep on light surfaces and Green on dark surfaces so primary intent remains readable in both themes.
-- `--accent` is a neutral hover/highlight surface, not the brand-green accent color. Generic hover should not multiply green signals.
+- `--accent` is a neutral hover/highlight surface for outline, ghost, and menu controls, not the brand-green accent color. Generic hover should not multiply green signals.
+- Filled buttons hover to a neighboring palette color in their own family through `--primary-hover`, `--secondary-hover`, and `--destructive-hover`, so an engaged primary never reads as disabled.
+- `--input` (control edge) and `--border` (panel bound) are separate jobs: Mist and Border in light, Mist and Surface 3 in dark. Control edges step to `--input-hover` on hover.
 
 The brand palette defines no dedicated danger hue. Destructive meaning must be explicit in the label and surrounding copy; color may reinforce it but cannot carry it alone.
 
@@ -62,7 +64,7 @@ Green should have a reason to be present.
 - Keyboard focus and a short orientation signal are justified additional uses.
 - Do not add a green rule, success dot, or accent fill to every section.
 - When a page's primary action carries the green, a record's short orientation rule on the same view steps down to a quiet rule (Graphite on light, Pewter on dark).
-- On light surfaces, use Deep for readable green intent; raw Augur Green is reserved for dark-surface signal use.
+- On light surfaces, use Deep for readable green intent; raw Augur Green is reserved for dark-surface signal use. The one exception is the light primary-action hover: a transient Green fill under a Navy label that stays in the primary's own green family, so it adds no second signal.
 
 ## Contrast pairings
 
@@ -76,7 +78,11 @@ The package verifies the maintained pairings from generated values. Reference pa
 | Paper on Navy | 17.49:1 | Primary copy on the dark canvas |
 | Pewter on Navy | 7.53:1 | Secondary text on the dark canvas |
 | Pewter on Surface 3 | 6.00:1 | Secondary text on a raised dark step |
-| Green on Navy | 11.87:1 | Green signal on dark surfaces |
+| Green on Navy | 11.87:1 | Green signal on dark surfaces; Navy label on the light primary hover |
+| Navy on Wash | 17.15:1 | Label on the dark primary hover |
+| White on Graphite | 8.50:1 | Label on the light destructive hover |
+| Mist on Paper | 4.31:1 | Light control edge (non-text, 3:1 minimum) |
+| Mist on Navy | 4.06:1 | Dark control edge (non-text, 3:1 minimum) |
 
 New text pairings should meet WCAG AA or better. Meaningful non-text control boundaries and focus indicators must remain perceivable against adjacent surfaces. Hairline editorial separators should not be used as the sole carrier of meaning.
 

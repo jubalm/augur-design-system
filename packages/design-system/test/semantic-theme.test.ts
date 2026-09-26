@@ -156,12 +156,18 @@ const packageJson = JSON.parse(read("package.json")) as {
 
 const themeBlocks = parseBlocks(themeCss);
 
-/** Generated color values, keyed by full --augur-color-* name. */
-const generatedColors: Record<string, string> = {
-  ...findBlock(parseBlocks(tokensCss), ":root").declarations,
-};
+/** Generated color values, keyed by full --augur-color-* name. The
+ * generated :root also carries spacing and radius primitives; only the
+ * color family is kept here. */
+const generatedColors: Record<string, string> = Object.fromEntries(
+  Object.entries(findBlock(parseBlocks(tokensCss), ":root").declarations).filter(([name]) =>
+    name.startsWith("--augur-color-"),
+  ),
+);
 
-/** The shadcn-compatible semantic role set every theme scope must define. */
+/** The semantic role set every theme scope must define: the
+ * shadcn-compatible roles plus the Augur extensions (the quiet editorial
+ * rule, the control hover edge, and the filled-button hover steps). */
 const SEMANTIC_ROLES = [
   "--background",
   "--foreground",
@@ -171,16 +177,22 @@ const SEMANTIC_ROLES = [
   "--popover-foreground",
   "--primary",
   "--primary-foreground",
+  "--primary-hover",
+  "--primary-hover-foreground",
   "--secondary",
   "--secondary-foreground",
+  "--secondary-hover",
   "--muted",
   "--muted-foreground",
   "--accent",
   "--accent-foreground",
   "--destructive",
   "--destructive-foreground",
+  "--destructive-hover",
   "--border",
+  "--border-quiet",
   "--input",
+  "--input-hover",
   "--ring",
 ] as const;
 
@@ -200,6 +212,9 @@ const TEXT_PAIRS: Record<
     { fg: "--muted-foreground", bg: "--muted" },
     { fg: "--accent-foreground", bg: "--accent", documented: "Navy on Muted 16.17 (muted-region-light)" },
     { fg: "--destructive-foreground", bg: "--destructive" },
+    { fg: "--primary-hover-foreground", bg: "--primary-hover", documented: "Green on Navy 11.87 (DESIGN.md reference pairing)" },
+    { fg: "--secondary-foreground", bg: "--secondary-hover" },
+    { fg: "--destructive-foreground", bg: "--destructive-hover" },
   ],
   dark: [
     { fg: "--foreground", bg: "--background", documented: "Paper on Navy 17.49 (page-canvas-dark)" },
@@ -210,6 +225,9 @@ const TEXT_PAIRS: Record<
     { fg: "--muted-foreground", bg: "--muted" },
     { fg: "--accent-foreground", bg: "--accent", documented: "Paper on Surface 2 15.19 (panel-dark)" },
     { fg: "--destructive-foreground", bg: "--destructive", documented: "Pewter on Navy 7.53 (reversed pair)" },
+    { fg: "--primary-hover-foreground", bg: "--primary-hover" },
+    { fg: "--secondary-foreground", bg: "--secondary-hover" },
+    { fg: "--destructive-foreground", bg: "--destructive-hover", documented: "Navy on Paper 17.49 (page-canvas-light)" },
   ],
 };
 
@@ -222,6 +240,13 @@ const RING_SURFACES = [
   "--accent",
   "--muted",
 ] as const;
+
+/** Control edges (rest and hover) and the surfaces an input or outline
+ * button can sit on, including the read-only fill. Control edges identify
+ * the component, so they carry the WCAG 1.4.11 non-text 3:1 minimum;
+ * panel hairlines (--border) do not (decision D5). */
+const CONTROL_EDGES = ["--input", "--input-hover"] as const;
+const CONTROL_SURFACES = ["--background", "--card", "--popover", "--muted"] as const;
 
 interface ThemeScope {
   label: string;
@@ -429,6 +454,36 @@ describe("contrast validation (WCAG 2.x, recomputed from generated values)", () 
         const ratio = contrast(ring, resolveRole(scope, surface));
         expect(ratio).toBeGreaterThanOrEqual(3);
       }
+    }
+  });
+});
+
+describe("control edges (WCAG 1.4.11 non-text contrast)", () => {
+  const themes = [light, darkExplicit] as const;
+
+  test("input edges hold at least 3:1 on every surface a control sits on", () => {
+    for (const scope of themes) {
+      for (const edge of CONTROL_EDGES) {
+        for (const surface of CONTROL_SURFACES) {
+          const ratio = contrast(resolveRole(scope, edge), resolveRole(scope, surface));
+          expect(ratio).toBeGreaterThanOrEqual(3);
+        }
+      }
+    }
+  });
+
+  test("the hover edge is stronger than the rest edge on the canvas", () => {
+    for (const scope of themes) {
+      const bg = resolveRole(scope, "--background");
+      expect(contrast(resolveRole(scope, "--input-hover"), bg)).toBeGreaterThan(
+        contrast(resolveRole(scope, "--input"), bg),
+      );
+    }
+  });
+
+  test("panel edges and control edges resolve to different steps in both themes", () => {
+    for (const scope of themes) {
+      expect(resolveRole(scope, "--border")).not.toBe(resolveRole(scope, "--input"));
     }
   });
 });

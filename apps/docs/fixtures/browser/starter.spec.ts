@@ -138,6 +138,7 @@ test.describe("starter components (#15)", () => {
     const inputLight = await firstInput.evaluate((el) => ({
       border: getComputedStyle(el).borderTopColor,
       background: getComputedStyle(el).backgroundColor,
+      color: getComputedStyle(el).color,
       labelled: !!(el as HTMLInputElement).labels?.length,
       describedby: el.getAttribute("aria-describedby"),
     }));
@@ -158,11 +159,14 @@ test.describe("starter components (#15)", () => {
     const inputDark = await darkInput.evaluate((el) => ({
       border: getComputedStyle(el).borderTopColor,
       background: getComputedStyle(el).backgroundColor,
+      color: getComputedStyle(el).color,
     }));
+    // The control edge is Mist in both themes by design (#89), and the
+    // field is transparent, so the scope is proven by the value color.
     assertOk(
       "input paints differently across pinned light and dark",
-      inputLight.background !== inputDark.background || inputLight.border !== inputDark.border,
-      `bg ${inputLight.background} -> ${inputDark.background}; border ${inputLight.border} -> ${inputDark.border}`,
+      inputLight.color !== inputDark.color,
+      `color ${inputLight.color} -> ${inputDark.color}; border ${inputLight.border} -> ${inputDark.border}`,
     );
     await shot(page, "input-page-dark", true);
   });

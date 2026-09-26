@@ -80,14 +80,34 @@
   color: var(--foreground);
 }
 
-/* Existing neutral surface steps; no alpha tint or accent on destructive hover. */
-.aug-button--default:hover:not(:disabled),
-.aug-button--destructive:hover:not(:disabled),
-.aug-button--secondary:hover:not(:disabled),
+/* Surface variants hover onto the neutral highlight surface; the
+   outline's edge also steps up to the control hover edge. */
 .aug-button--outline:hover:not(:disabled),
 .aug-button--ghost:hover:not(:disabled) {
   background-color: var(--accent);
   color: var(--accent-foreground);
+}
+
+.aug-button--outline:hover:not(:disabled) {
+  border-color: var(--input-hover);
+}
+
+/* Filled variants step to a neighbouring palette color and keep their
+   own family, so a hovered primary never reads as disabled. Existing
+   palette steps only; no alpha tints. */
+.aug-button--default:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+  color: var(--primary-hover-foreground);
+}
+
+.aug-button--secondary:hover:not(:disabled) {
+  background-color: var(--secondary-hover);
+  color: var(--secondary-foreground);
+}
+
+.aug-button--destructive:hover:not(:disabled) {
+  background-color: var(--destructive-hover);
+  color: var(--destructive-foreground);
 }
 .aug-button--default:active:not(:disabled),
 .aug-button--destructive:active:not(:disabled),

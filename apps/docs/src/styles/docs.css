@@ -487,9 +487,11 @@ body {
   display: block;
   overflow-x: auto;
   /* Scroll affordance: overlay scrollbars are invisible until hover, which
-     reads as clipped content. A styled thin scrollbar is always on. */
+     reads as clipped content. A styled thin scrollbar is always on. The
+     thumb is a control affordance, so it takes the control edge (--input),
+     not the panel hairline, which is too faint on the dark canvas. */
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: var(--input) transparent;
 }
 
 .doc-main .prose table::-webkit-scrollbar {
@@ -497,7 +499,7 @@ body {
 }
 
 .doc-main .prose table::-webkit-scrollbar-thumb {
-  background-color: var(--border);
+  background-color: var(--input);
 }
 
 .doc-main .prose table::-webkit-scrollbar-thumb:hover {

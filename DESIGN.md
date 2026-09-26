@@ -152,19 +152,19 @@ DESIGN.md is canonical for adopted values representable by the pinned schema, in
 The palette is built around Augur Navy, Augur Green, and a restrained set of paper, graphite, and pewter companions. Navy anchors dark UI and is the primary brand color; it is not pure black. Green is a signal of intent, not a decorative wash: reserve it for the primary action, active state, focus, or a short orienting rule.
 
 - **Augur Navy / `primary` (#0E0E21):** Brand anchor and dark canvas. Use for primary text on light surfaces and for the dark theme foundation.
-- **Augur Green / `accent` (#2AE7A8):** Brand accent. Use on dark surfaces for primary intent, focus, active state, or a concise signal.
+- **Augur Green / `accent` (#2AE7A8):** Brand accent. Use on dark surfaces for primary intent, focus, active state, or a concise signal. The one light-surface exception is the transient hover of the light primary action, which fills with Green under a Navy label.
 - **Augur Paper / `neutral` and `surface-light` (#F5F5F8):** Default light canvas.
 - **Augur Graphite / `secondary` (#4A4B61):** Secondary text and supporting information on light surfaces.
 - **Augur Pewter / `secondary-dark` (#A1A1B8):** Secondary text on dark surfaces.
 - **Deep (#095E42):** The accessible green action and signal companion for light surfaces.
 - **Wash (#C9FFE5):** Light green fill companion; it does not replace Deep for readable green text or actions.
-- **Mist (#71728A):** Dark-theme companion for edges, rules, and quiet marks only, never for readable copy. It is not the light quiet-region color, which is Muted.
+- **Mist (#71728A):** Companion for edges, rules, and quiet marks only, never for readable copy. It marks dark-theme rules and the edges of controls such as inputs and outline buttons in both themes, where it holds at least 3:1 against Paper, White, and Navy. It is not the light quiet-region color, which is Muted.
 
-Light surfaces use Paper as the canvas, White for raised panels, Muted (#ECECF2) for quiet regions, and Border (#E0E0E7) for hairlines. Dark surfaces use Navy as the canvas, then Surface 1 (#161629), Surface 2 (#1D1D30), and Surface 3 / Raised (#242438) as stepped layers. Graphite and Pewter support the system; they do not replace primary copy.
+Light surfaces use Paper as the canvas, White for raised panels, Muted (#ECECF2) for quiet regions, and Border (#E0E0E7) for hairlines. Dark surfaces use Navy as the canvas, then Surface 1 (#161629), Surface 2 (#1D1D30), and Surface 3 / Raised (#242438) as stepped layers; Surface 3 also draws dark panel hairlines. Panel hairlines and control edges stay distinct in both themes. Graphite and Pewter support the system; they do not replace primary copy.
 
 The light and dark themes are equal everyday expressions of one system. Keep content, order, spacing, alignment, and geometry the same in both themes. Use the words open, closed, pending, and final to name state; color only reinforces those words.
 
-Keep text and controls at WCAG AA or better. Reference pairings: Navy on Paper 17.49:1, Graphite on Paper 7.81:1, Deep on Paper 7.17:1, Paper on Navy 17.49:1, Pewter on Navy 7.53:1, Pewter on Surface 3 6.00:1, and Green on Navy 11.87:1. Recheck every new color-on-background pairing before shipping.
+Keep text and controls at WCAG AA or better. Reference pairings: Navy on Paper 17.49:1, Graphite on Paper 7.81:1, Deep on Paper 7.17:1, Paper on Navy 17.49:1, Pewter on Navy 7.53:1, Pewter on Surface 3 6.00:1, and Green on Navy 11.87:1. Hover steps keep that standard: Navy on Wash 17.15:1, White on Graphite 8.50:1, Navy on Border 14.49:1, and Paper on Surface 3 13.94:1. Control edges meet the 3:1 non-text minimum: Mist on Paper 4.31:1 and Mist on Navy 4.06:1. Recheck every new color-on-background pairing before shipping.
 
 ## Typography
 
@@ -206,7 +206,7 @@ Corners are square: the adopted `rounded` values are 0px for both controls and s
 
 Components should make the next action obvious and keep the record easy to scan. Use direct verbs and specific labels. A control should communicate what will happen before it is used. Give every choice the same structure and emphasis; neutrality is a design constraint, not a default.
 
-Primary actions use Deep on light surfaces and Green on dark surfaces, with a readable contrasting label. A view should usually have one green signal. On light backgrounds, do not use raw Augur Green for readable text or marks when it fails contrast; use Deep instead. On dark backgrounds, Green may carry the signal because it holds contrast against Navy.
+Primary actions use Deep on light surfaces and Green on dark surfaces, with a readable contrasting label. On hover, a filled action steps to a neighboring palette color in its own family (Deep to Green, Green to Wash) rather than to a neutral surface, so an engaged action never reads as disabled. A view should usually have one green signal. On light backgrounds, do not use raw Augur Green for readable text or marks when it fails contrast; use Deep instead. On dark backgrounds, Green may carry the signal because it holds contrast against Navy.
 
 Query and decision records should lead with the query or primary message, followed by status, choices, and the participant's current response. Use explicit state labels such as Open, Closed, Pending, and Final. Keep labels, metadata, tables, and technical strings visually secondary through typography and contrast, never by hiding meaning in color alone.
 
