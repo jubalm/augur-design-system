@@ -9,9 +9,19 @@ import { codeToHtml } from "shiki";
  * preview share one source file, so they stay synchronized by
  * construction (see src/content/README.md, "Live examples").
  *
+ * The frame owns presentation: with `themes: "both"` it renders the same
+ * module in labeled light and dark scopes and pins each with
+ * `data-theme`, so the theme contract stays visible while the displayed
+ * sample stays a single-theme consumer sample.
+ *
  * Rendered statically (no hydration): the preview derives from imported
  * package constants and package CSS, exactly like the page around it.
  */
+const THEMES = [
+  { value: "light", label: "Light theme" },
+  { value: "dark", label: "Dark theme" },
+] as const;
+
 export async function DocExample(props: { example: ExampleDefinition }) {
   const { example } = props;
   const captionId = `example-${example.id}-caption`;
@@ -32,6 +42,12 @@ export async function DocExample(props: { example: ExampleDefinition }) {
     </pre>
   );
 
+  const stage = (
+    <div className="doc-example-stage" data-layout={example.layout ?? "stack"}>
+      <example.Component />
+    </div>
+  );
+
   return (
     <figure className="doc-example" aria-labelledby={captionId}>
       <header className="doc-example-header">
@@ -39,7 +55,18 @@ export async function DocExample(props: { example: ExampleDefinition }) {
         <span className="doc-example-header-title">{example.title}</span>
       </header>
       <div className="doc-example-preview">
-        <example.Component />
+        {example.themes === "both" ? (
+          <div className="doc-example-themes" data-pair={example.pair ?? "columns"}>
+            {THEMES.map((theme) => (
+              <div key={theme.value} className="doc-example-theme" data-theme={theme.value}>
+                <p className="doc-example-theme-label augur-type-metadata">{theme.label}</p>
+                {stage}
+              </div>
+            ))}
+          </div>
+        ) : (
+          stage
+        )}
       </div>
       <figcaption id={captionId} className="doc-example-caption">
         <span className="visually-hidden">{example.title}</span>

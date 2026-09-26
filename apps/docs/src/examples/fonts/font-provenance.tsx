@@ -1,21 +1,16 @@
 import { AUGUR_FONTS } from "@augur/design-system";
 
 /**
- * Live example: read machine-readable font provenance from the package.
- *
- * The rows are computed from the imported `AUGUR_FONTS` provenance
- * export — exactly what a consumer (docs site, registry, product app)
- * can render to audit family, version, license, and delivered weights
- * without reading node_modules. The code sample next to the preview is
- * this file, imported with `?raw`.
+ * Read font provenance from the package: family, version, license, and
+ * delivered weights, without reading node_modules.
  */
 export function FontProvenanceExample() {
   return (
-    <dl className="example-provenance">
+    <dl style={{ display: "grid", gap: "var(--augur-spacing-md)", margin: 0 }}>
       {AUGUR_FONTS.map((font) => (
-        <div key={font.family} className="example-provenance-item">
+        <div key={font.family}>
           <dt className="augur-type-control">{font.family}</dt>
-          <dd className="augur-type-metadata">
+          <dd className="augur-type-metadata" style={{ margin: 0, color: "var(--muted-foreground)" }}>
             <code>{font.package}</code> · v{font.version} · {font.license} · weights{" "}
             {font.weights.join("/")}
           </dd>

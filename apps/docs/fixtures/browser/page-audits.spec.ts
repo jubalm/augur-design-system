@@ -52,10 +52,12 @@ test.describe("page audits (base /)", () => {
 
   test("paired examples keep explicit light and dark specimens", async ({ page }) => {
     const examples = [
-      { path: "/patterns/form-field", selector: ".example-form-field-column", distinctSurface: true },
-      { path: "/patterns/empty-state", selector: ".example-theme-panel", distinctSurface: true },
-      { path: "/components/input", selector: ".example-input-row", distinctSurface: true },
-      { path: "/patterns/page-header", selector: ".example-card-grid > .aug-page-header", distinctSurface: false },
+      { path: "/patterns/form-field", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/patterns/empty-state", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/components/input", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/patterns/page-header", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/components/button", selector: ".doc-example-theme", distinctSurface: true },
+      { path: "/components/card", selector: ".doc-example-theme", distinctSurface: true },
     ] as const;
 
     for (const example of examples) {

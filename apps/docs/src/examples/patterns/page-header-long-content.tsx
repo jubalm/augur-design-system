@@ -7,9 +7,9 @@ import {
   PageHeaderTitle,
 } from "@augur/design-system";
 
-function LongContentHeader(props: { theme: "light" | "dark" }) {
+export function PageHeaderLongContentExample() {
   return (
-    <PageHeader data-theme={props.theme}>
+    <PageHeader>
       <PageHeaderContent>
         <PageHeaderTitle headingLevel={2}>
           Reconciled fills and open exposure for the derivatives desk, week 34
@@ -28,17 +28,3 @@ function LongContentHeader(props: { theme: "light" | "dark" }) {
   );
 }
 
-export function PageHeaderLongContentExample() {
-  return (
-    <div className="example-page-header-grid">
-      <div className="example-page-header-panel" data-theme="light">
-        <p className="augur-type-ui example-page-header-theme-label">Light theme</p>
-        <LongContentHeader theme="light" />
-      </div>
-      <div className="example-page-header-panel" data-theme="dark">
-        <p className="augur-type-ui example-page-header-theme-label">Dark theme</p>
-        <LongContentHeader theme="dark" />
-      </div>
-    </div>
-  );
-}

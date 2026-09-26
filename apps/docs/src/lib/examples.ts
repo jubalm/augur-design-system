@@ -8,6 +8,11 @@
  * from the same source as the rendered example, so the two cannot drift.
  * See `src/content/README.md` ("Live examples").
  *
+ * Presentation around the sample belongs to the docs frame, not the
+ * sample: `themes`, `pair`, and `layout` tell `DocExample` how to stage
+ * the module (for example, once per theme in labeled light and dark
+ * scopes), so the copied source stays a single-theme consumer sample.
+ *
  * Nothing here fakes exports that do not exist: examples import the real
  * `@augur/design-system` exports through the same path consumers use — no
  * mock components, no duplicated implementations.
@@ -31,6 +36,23 @@ export interface ExampleDefinition {
    * exact file rendered as `Component`. Synchronized by construction.
    */
   readonly code: string;
+  /**
+   * "page" (default) renders the module once, in the page theme. "both"
+   * renders the same module twice, in labeled light and dark scopes the
+   * frame pins with `data-theme`; the sample itself stays single-theme.
+   */
+  readonly themes?: "page" | "both";
+  /**
+   * With `themes: "both"`: "columns" (default) places the scopes side by
+   * side when they fit; "rows" stacks them full width, for page-level
+   * regions such as PageHeader.
+   */
+  readonly pair?: "columns" | "rows";
+  /**
+   * How the stage lays out the module's top-level elements: "stack"
+   * (default) stacks them; "inline" wraps them in a row, for controls.
+   */
+  readonly layout?: "stack" | "inline";
 }
 
 /**
@@ -38,7 +60,7 @@ export interface ExampleDefinition {
  * time (i.e. at build) with an actionable message when malformed.
  */
 export function defineExample(example: ExampleDefinition): ExampleDefinition {
-  const { id, title, description, Component, code } = example;
+  const { id, title, description, Component, code, themes, pair } = example;
   if (!EXAMPLE_ID.test(id)) {
     throw new Error(`defineExample: id must be kebab-case, got ${JSON.stringify(id)}`);
   }
@@ -54,6 +76,9 @@ export function defineExample(example: ExampleDefinition): ExampleDefinition {
         `Import it with ?raw from the same file as Component, e.g. ` +
         `import ${id}Code from "./path/${id}.tsx?raw"`,
     );
+  }
+  if (pair !== undefined && themes !== "both") {
+    throw new Error(`defineExample(${id}): pair only applies with themes: "both"`);
   }
   return Object.freeze({ ...example, title: title.trim(), description: description.trim() });
 }

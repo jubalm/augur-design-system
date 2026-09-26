@@ -12,6 +12,11 @@
  * Add a new example by writing the module under `src/examples/<area>/`,
  * then registering it here with both imports. Keep ids kebab-case and
  * unique; see `src/content/README.md`.
+ *
+ * Staging lives here, not in the module: `themes: "both"` renders the
+ * module in labeled light and dark scopes, `pair` arranges those scopes,
+ * and `layout` arranges the module's top-level elements. The module stays
+ * a single-theme consumer sample.
  */
 import { defineExample } from "../lib/examples";
 import { PaletteSwatchesExample } from "./color/palette-swatches";
@@ -63,9 +68,12 @@ export const examples = {
     variants: defineExample({
       id: "button-variants",
       title: "Button variants, light and dark",
-      description: "The variant set renders from real package imports; the first row pins data-theme=light and the second pins data-theme=dark.",
+      description: "The variant set from real package imports, rendered once in each theme scope.",
       Component: ButtonVariantsExample,
       code: buttonVariantsCode,
+      themes: "both",
+      pair: "rows",
+      layout: "inline",
     }),
     states: defineExample({
       id: "button-states",
@@ -73,42 +81,48 @@ export const examples = {
       description: "Structural sizes and the width-preserving loading contract, rendered from real component props.",
       Component: ButtonStatesExample,
       code: buttonStatesCode,
+      layout: "inline",
     }),
   },
   card: {
     composition: defineExample({
       id: "card-composition",
       title: "Card composition",
-      description: "The part set groups a record with its actions; the first card pins data-theme=light and the second pins data-theme=dark.",
+      description: "The part set groups a record with its actions; the same card renders in each theme scope.",
       Component: CardCompositionExample,
       code: cardCompositionCode,
+      themes: "both",
     }),
   },
   dialog: {
     composition: defineExample({
       id: "dialog-composition",
       title: "Dialog composition",
-      description: "The composition's trigger in both themes; the panel, scrim, and focus behavior run in the interactive example on the page.",
+      description: "The full composition renders closed, so the preview shows its trigger in each theme scope; the panel, scrim, and focus behavior run in the interactive example on the page.",
       Component: DialogCompositionExample,
       code: dialogCompositionCode,
+      themes: "both",
+      layout: "inline",
     }),
   },
   formField: {
     composition: defineExample({
       id: "form-field-composition",
       title: "FormField composition, light and dark",
-      description: "Label, control, helper text, and an explicit error message wired by the pattern, with required and read-only fields; the columns pin data-theme=light and data-theme=dark.",
+      description: "Label, control, helper text, and an explicit error message wired by the pattern, with required and read-only fields, in each theme scope.",
       Component: FormFieldCompositionExample,
       code: formFieldCompositionCode,
+      themes: "both",
     }),
   },
   input: {
     states: defineExample({
       id: "input-states",
       title: "Input states, light and dark",
-      description: "Default, read-only, disabled, and invalid with consumer-owned labeling and visible error text; the rows pin data-theme=light and data-theme=dark.",
+      description: "Default, read-only, disabled, and invalid, with consumer-owned labeling and visible error text, in each theme scope.",
       Component: InputStatesExample,
       code: inputStatesCode,
+      themes: "both",
     }),
   },
   fonts: {
@@ -140,9 +154,11 @@ export const examples = {
     composition: defineExample({
       id: "page-header-composition",
       title: "PageHeader composition",
-      description: "The same breadcrumb, title, description, and action composition is shown in explicitly labeled light and dark theme scopes.",
+      description: "Breadcrumb, title, description, and actions, shown in labeled light and dark theme scopes.",
       Component: PageHeaderCompositionExample,
       code: pageHeaderCompositionCode,
+      themes: "both",
+      pair: "rows",
     }),
     longContent: defineExample({
       id: "page-header-long-content",
@@ -150,6 +166,8 @@ export const examples = {
       description: "Long titles and descriptions wrap inside the title column while actions hold the right edge, in both themes.",
       Component: PageHeaderLongContentExample,
       code: pageHeaderLongContentCode,
+      themes: "both",
+      pair: "rows",
     }),
     noActions: defineExample({
       id: "page-header-no-actions",
@@ -157,6 +175,8 @@ export const examples = {
       description: "A title area that stands alone; the back affordance is a quiet ghost Button, not a nav landmark.",
       Component: PageHeaderNoActionsExample,
       code: pageHeaderNoActionsCode,
+      themes: "both",
+      pair: "rows",
     }),
     referenceRecord: defineExample({
       id: "reference-record",
@@ -168,9 +188,10 @@ export const examples = {
     emptyStateActions: defineExample({
       id: "empty-state-actions",
       title: "EmptyState with actions",
-      description: "Glyph, title, description, and one primary action with a quiet secondary; the states pin data-theme=light and data-theme=dark.",
+      description: "Glyph, title, description, and one primary action with a quiet secondary, in each theme scope.",
       Component: EmptyStateActionsExample,
       code: emptyStateActionsCode,
+      themes: "both",
     }),
     emptyStateLongContent: defineExample({
       id: "empty-state-long-content",
@@ -178,6 +199,7 @@ export const examples = {
       description: "A long description wraps inside the width-capped slot while the region stays centered, in both themes.",
       Component: EmptyStateLongContentExample,
       code: emptyStateLongContentCode,
+      themes: "both",
     }),
     emptyStateNoAction: defineExample({
       id: "empty-state-no-action",
@@ -185,6 +207,7 @@ export const examples = {
       description: "A quiet region that only names the empty state; no actions slot renders when there is no way out to offer.",
       Component: EmptyStateNoActionExample,
       code: emptyStateNoActionCode,
+      themes: "both",
     }),
   },
 } as const;

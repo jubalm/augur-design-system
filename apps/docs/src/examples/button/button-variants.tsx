@@ -2,23 +2,13 @@ import { Button } from "@augur/design-system";
 
 export function ButtonVariantsExample() {
   return (
-    <div className="example-button-grid">
-      <div className="example-button-row" data-theme="light">
-        <Button variant="default">Primary action</Button>
-        <Button variant="secondary">Secondary</Button>
-        <Button variant="destructive">Delete record</Button>
-        <Button variant="outline">Outline</Button>
-        <Button variant="ghost">Ghost</Button>
-        <Button variant="link">Link action</Button>
-      </div>
-      <div className="example-button-row" data-theme="dark">
-        <Button variant="default">Primary action</Button>
-        <Button variant="secondary">Secondary</Button>
-        <Button variant="destructive">Delete record</Button>
-        <Button variant="outline">Outline</Button>
-        <Button variant="ghost">Ghost</Button>
-        <Button variant="link">Link action</Button>
-      </div>
-    </div>
+    <>
+      <Button variant="default">Primary action</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="destructive">Delete record</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="link">Link action</Button>
+    </>
   );
 }

@@ -20,7 +20,7 @@ test("EmptyState dark specimens paint their scoped semantic surface", async ({ p
   await go(page, "/patterns/empty-state");
   await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
 
-  const evidence = await page.locator(".example-theme-panel").evaluateAll((panels) =>
+  const evidence = await page.locator(".doc-example-theme").evaluateAll((panels) =>
     panels.map((panel) => {
       const element = panel as HTMLElement;
       const emptyState = element.querySelector(".aug-empty-state") as HTMLElement;
@@ -39,7 +39,7 @@ test("EmptyState dark specimens paint their scoped semantic surface", async ({ p
   );
 
   const darkEvidence = evidence.filter((item) => item.theme === "dark");
-  assertOk("all three EmptyState dark specimens use a painted dark wrapper", darkEvidence.length === 3, JSON.stringify(evidence));
+  assertOk("all three EmptyState dark specimens sit in a painted dark scope", darkEvidence.length === 3, JSON.stringify(evidence));
   assertOk("dark wrapper background is distinct from the light docs canvas", darkEvidence.every((item) => item.background !== "rgb(245, 245, 248)"), JSON.stringify(evidence));
   assertOk("transparent EmptyState preserves wrapper background", evidence.every((item) => item.emptyBackground === "rgba(0, 0, 0, 0)"), JSON.stringify(evidence));
   assertOk("dark wrapper supplies a foreground role", darkEvidence.every((item) => item.foreground !== "rgb(14, 14, 33)"), JSON.stringify(evidence));
