@@ -24,9 +24,25 @@ Use the horizontal lockup by default. Use the vertical lockup only when width is
 
 ## REP token
 
-The [canonical REP token PNG](/brand/token/rep.png) is separate from the Augur glyph. Its circular navy field is part of the asset. Do not crop the field away, recolor the icon, or use the REP token as a generic favicon, navigation icon, or decorative app mark.
+The [canonical REP token PNG](/brand/token/rep.png) is separate from the Augur glyph. Its circular navy field is part of the asset. Do not crop the field away, recolor the icon, or use the REP token as a navigation icon or decorative app mark.
 
-For compact Augur identity such as a favicon, use the standalone Augur glyph where context already establishes the brand.
+## Favicon and app icon
+
+The one approved exception is the browser favicon and touch icon. The token icon published at augur.net is the approved icon for Augur web properties. It carries its own navy field, so the glyph's 50px minimum does not force a redraw at tab size. Use these files unchanged:
+
+| File | Size | Use |
+| --- | --- | --- |
+| [favicon.svg](/brand/icon/favicon.svg) | 96×96 viewBox | Modern browsers |
+| [favicon-32.png](/brand/icon/favicon-32.png) | 32×32 | PNG fallback |
+| [apple-touch-icon.png](/brand/icon/apple-touch-icon.png) | 180×180 | iOS home screen |
+
+```html
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+```
+
+The icon reads the same in light and dark browser chrome because the navy field travels with it; do not swap variants by theme. Keep the icon to these slots; it does not replace the logo in page headers.
 
 ## Clearspace and minimum size
 
@@ -65,6 +81,7 @@ The exact PDF hash, page/object references, dimensions, and per-file hashes are 
 
 - [Asset provenance](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/PROVENANCE.md)
 - [Extraction manifest](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/assets/manifest.json)
+- [Icon manifest](https://github.com/jubalm/augur-design-system/blob/main/resources/brand/assets/icon/manifest.json)
 - [Pinned brand foundation PDF](https://github.com/jubalm/augur-design-system/blob/88a6ccf46b201b921344bfa1411ed41b1ec17ba0/resources/brand/augur-brand-foundation.pdf)
 
 The recovered Augur logo, glyph, and REP token assets are approved for public display and download through the Augur Design System documentation.
