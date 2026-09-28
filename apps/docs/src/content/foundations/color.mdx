@@ -49,7 +49,7 @@ Components and pages consume the shadcn-compatible semantic role layer: `--backg
 Two relationships are especially important:
 
 - `--primary` resolves to Deep on light surfaces and Green on dark surfaces so primary intent remains readable in both themes.
-- `--accent` is a neutral hover/highlight surface for outline, ghost, and menu controls, not the brand-green accent color. Generic hover should not multiply green signals.
+- `--accent` is a neutral hover/highlight surface for outline, ghost, and menu controls, not the brand-green accent color. Generic hover should not multiply green signals. In dark it is Surface 3, one step above the canvas, cards, and popovers, so hover stays visible inside dialogs and menus.
 - Filled buttons hover to a neighboring palette color in their own family through `--primary-hover`, `--secondary-hover`, and `--destructive-hover`, so an engaged primary never reads as disabled.
 - `--input` (control edge) and `--border` (panel bound) are separate jobs: Mist and Border in light, Mist and Surface 3 in dark. Control edges step to `--input-hover` on hover.
 
@@ -79,6 +79,7 @@ The package verifies the maintained pairings from generated values. Reference pa
 | Deep on Paper | 7.17:1 | Readable green intent on light surfaces |
 | Paper on Navy | 17.49:1 | Primary copy on the dark canvas |
 | Pewter on Navy | 7.53:1 | Secondary text on the dark canvas |
+| Paper on Surface 3 | 13.94:1 | Label on the dark hover/highlight surface |
 | Pewter on Surface 3 | 6.00:1 | Secondary text on a raised dark step |
 | Green on Navy | 11.87:1 | Green signal on dark surfaces; Navy label on the light primary hover |
 | Navy on Wash | 17.15:1 | Label on the dark primary hover |

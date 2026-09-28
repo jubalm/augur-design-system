@@ -223,7 +223,7 @@ const TEXT_PAIRS: Record<
     { fg: "--primary-foreground", bg: "--primary", documented: "Navy on Green 11.87 (action-primary-dark)" },
     { fg: "--secondary-foreground", bg: "--secondary", documented: "Paper on Surface 2 15.19 (panel-dark)" },
     { fg: "--muted-foreground", bg: "--muted" },
-    { fg: "--accent-foreground", bg: "--accent", documented: "Paper on Surface 2 15.19 (panel-dark)" },
+    { fg: "--accent-foreground", bg: "--accent", documented: "Paper on Surface 3 13.94 (panel-dark-3)" },
     { fg: "--destructive-foreground", bg: "--destructive", documented: "Pewter on Navy 7.53 (reversed pair)" },
     { fg: "--primary-hover-foreground", bg: "--primary-hover" },
     { fg: "--secondary-foreground", bg: "--secondary-hover" },
@@ -484,6 +484,17 @@ describe("control edges (WCAG 1.4.11 non-text contrast)", () => {
   test("panel edges and control edges resolve to different steps in both themes", () => {
     for (const scope of themes) {
       expect(resolveRole(scope, "--border")).not.toBe(resolveRole(scope, "--input"));
+    }
+  });
+});
+
+describe("hover surface (issue #96)", () => {
+  test("--accent differs from every surface a hovering control rests on", () => {
+    for (const scope of [light, darkExplicit, darkSystem]) {
+      const accent = resolveRole(scope, "--accent");
+      for (const surface of ["--background", "--card", "--popover"]) {
+        expect(accent, `${scope.label}: --accent vs ${surface}`).not.toBe(resolveRole(scope, surface));
+      }
     }
   });
 });

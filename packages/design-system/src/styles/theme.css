@@ -231,8 +231,10 @@
 
   /* Hover/highlight surface for surface controls: neutral raised step +
      Paper (same restraint as the light theme: green is not a resting
-     hover tint). */
-  --accent: var(--augur-color-surface-dark-2);
+     hover tint). Surface 3 sits one step above every dark surface a
+     control can rest on (canvas, card, popover), so the hover stays
+     visible inside floating layers too (panel-dark-3 pairing). */
+  --accent: var(--augur-color-surface-dark-3);
   --accent-foreground: var(--augur-color-surface-light);
 
   /* Schema-external slot: strongest neutral action pairing in dark
@@ -285,7 +287,7 @@
     --muted: var(--augur-color-surface-dark-1);
     --muted-foreground: var(--augur-color-secondary-dark);
 
-    --accent: var(--augur-color-surface-dark-2);
+    --accent: var(--augur-color-surface-dark-3);
     --accent-foreground: var(--augur-color-surface-light);
 
     --destructive: var(--augur-color-secondary-dark);
