@@ -69,7 +69,7 @@ function getServerTheme(): Theme {
   return "light";
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ showName = false }: { showName?: boolean }) {
   const theme = useSyncExternalStore(subscribe, readTheme, getServerTheme);
   const next: Theme = theme === "dark" ? "light" : "dark";
   const label = `Theme: ${LABELS[theme]}. Switch to ${LABELS[next]}`;
@@ -96,6 +96,13 @@ export function ThemeToggle() {
       onClick={toggle}
     >
       <Icon size={18} />
+      {showName && (
+        // The docs mobile sheet (issue #2) spells the theme out beside the
+        // icon; the accessible name already states it, so this is visual only.
+        <span className="theme-toggle-name" aria-hidden="true">
+          {LABELS[theme]}
+        </span>
+      )}
     </button>
   );
 }

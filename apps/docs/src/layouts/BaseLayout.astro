@@ -96,15 +96,24 @@ const showRail = shell && !!toc && toc.length > 0;
         <a class="brand" href={withBase("/")} aria-label="Augur Design system">
           <BrandLockup descriptor="Design system" width={150} />
         </a>
+        {/* Below 960px this disclosure is the full-height mobile sheet
+            (issue #2): the augur.net menu treatment — Menu/Close swap,
+            scroll lock, Escape/outside dismissal — over the same shared
+            navigation model the sidebar renders. */}
         <details class="browse-docs">
-          <summary class="browse-summary">Menu</summary>
+          <summary class="browse-summary">
+            <span class="browse-when-closed">Menu</span>
+            <span class="browse-when-open">Close</span>
+            <svg class="browse-icon browse-when-closed" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><line x1="3" y1="8" x2="21" y2="8" /><line x1="3" y1="16" x2="21" y2="16" /></svg>
+            <svg class="browse-icon browse-when-open" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+          </summary>
           <div class="browse-panel">
             <nav aria-label="Documentation">
               <NavGroups nav={nav} currentPath={currentPath} />
             </nav>
             <div class="browse-theme">
               <span class="browse-theme-label augur-type-editorial-label">Theme</span>
-              <ThemeToggle client:load />
+              <ThemeToggle client:load showName />
             </div>
           </div>
         </details>
@@ -209,5 +218,33 @@ const showRail = shell && !!toc && toc.length > 0;
         </nav>
       </div>
     </footer>
+    <script>
+      // Mobile sheet dismissal (issue #2, the augur.net menu treatment):
+      // Escape closes and returns focus to the summary; focus leaving the
+      // disclosure and pointer-down outside close it; crossing to the
+      // sidebar shell (>=960px) closes a still-open sheet. The scroll lock
+      // itself is CSS (`:root:has(.browse-docs[open])` in docs.css).
+      const menu = document.querySelector<HTMLDetailsElement>(".browse-docs");
+      if (menu) {
+        const summary = menu.querySelector("summary");
+        menu.addEventListener("keydown", (event) => {
+          if (event.key !== "Escape" || !menu.open) return;
+          event.preventDefault();
+          event.stopPropagation();
+          menu.open = false;
+          summary?.focus();
+        });
+        menu.addEventListener("focusout", (event) => {
+          const next = event.relatedTarget;
+          if (menu.open && next instanceof Node && !menu.contains(next)) menu.open = false;
+        });
+        document.addEventListener("pointerdown", (event) => {
+          if (!menu.contains(event.target as Node)) menu.open = false;
+        });
+        window.matchMedia("(min-width: 960px)").addEventListener("change", () => {
+          menu.open = false;
+        });
+      }
+    </script>
   </body>
 </html>
