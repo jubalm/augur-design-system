@@ -171,7 +171,8 @@ Augur contract:
    introduce dependencies outside the consumer framework stack without a
    documented decision.
 2. **`registryDependencies` always use full GitHub item addresses**
-   (`jubalm/augur-design-system/augur-theme`, optionally `#<ref>`), never
+   (`jubalm/augur-design-system/augur-theme`, stamped `#vX.Y.Z` at a
+   release tag — see §14 and `RELEASING.md`), never
    bare names. Upstream documents that same-repository dependencies in
    GitHub registries use full addresses; a bare name resolves against the
    default shadcn registry — a silent wrong-source hazard. Full addresses
@@ -456,26 +457,31 @@ separate decision per `ARCHITECTURE.md`). Upstream GitHub registries accept
 resolves branch/tag refs to a commit SHA via git, and uses full SHAs
 directly without git.
 
-Consumer-facing pinning policy:
+Consumer-facing pinning policy (release procedure: [`RELEASING.md`](../../../RELEASING.md)):
 
-1. **Reproducible installs pin the full 40-character commit SHA:**
+1. **Consumers depend on an immutable release tag:**
 
    ```sh
-   bunx shadcn@4.20.1 add "jubalm/augur-design-system/augur-theme#<full-sha>"
+   bunx shadcn@4.20.1 add "jubalm/augur-design-system/augur-theme#v0.1.0"
    ```
 
-2. **Release tags name the human-friendly pins.** A tag must pass the §12
-   gate before it is documented as installable (aligned with repository
-   versioning in `ARCHITECTURE.md`).
+   A tag is created only by the release workflow, after the §12 gate
+   (the `registry` CI job) passes on that exact commit. Items at a tag
+   stamp their `registryDependencies` with the same tag, so transitive
+   installs resolve to the same release.
+2. **The commit SHA is for audit, not the dependency identifier.**
+   Consumers may record the commit a tag resolves to and fail if it
+   changes; a full SHA pin (`#<40-char-sha>`) still works but is not the
+   documented contract.
 3. **`main` is the development channel.** Unpinned installs
    (`jubalm/augur-design-system/augur-theme`) resolve to the default branch
    and are never documented as stable.
 4. **Built-JSON channel:** `https://<docs-host>/r/<item>.json` served from
    GitHub Pages, refreshed by the release flow; namespace config in §10.
    Tag-scoped raw URLs
-   (`https://raw.githubusercontent.com/jubalm/augur-design-system/<ref>/…`)
-   remain available for tools that want URL-shaped access to committed
-   artifacts.
+   (`https://raw.githubusercontent.com/jubalm/augur-design-system/v0.1.0/public/r/<item>.json`)
+   are the release-addressed built items for tools that want URL-shaped
+   access to committed artifacts.
 5. All documented consumer commands pin the CLI (`bunx shadcn@4.20.1`), not
    `@latest`.
 
@@ -502,4 +508,4 @@ Consumer-facing pinning policy:
 | D6 | No `--radius`/`--chart-*`/`--sidebar-*` delivery | semantic-themes.md D6 |
 | D7 | Component items unprefixed kebab-case; `augur-` prefix reserved for foundational items | Upstream naming conventions; namespace/address provenance |
 | D8 | Fixture validation via ajv `8.20.0`, linked node_modules, verbatim vendored schemas registered by URL key | ajv v8 id-key mismatch + `$ref`-by-URL; repo fixture precedent (font fixture) |
-| D9 | Consumers pin full commit SHAs (strongest), tags when defined; `main` never stable | Upstream ref resolution semantics |
+| D9 | Consumers depend on immutable release tags (`vX.Y.Z`); a resolved SHA is recorded only for audit; `main` never stable | Upstream ref resolution semantics; issue #4 |

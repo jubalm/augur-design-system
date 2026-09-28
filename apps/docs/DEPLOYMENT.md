@@ -88,7 +88,7 @@ fully-qualified URLs; the file itself needs no change.
 Two consumer channels (packages/design-system/docs/registry-contract.md §14):
 
 - **GitHub source registry** (active today):
-  `bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#<full-sha>"`.
+  `bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#vX.Y.Z"` (release tags, `RELEASING.md`).
   Pinned installs are unaffected by any deployment decision.
 - **Built-JSON channel** (deployed by this workflow): `https://<docs-host>/r/<item>.json`,
   e.g. `https://jubalm.github.io/augur-design-system/r/button.json`, or
@@ -105,8 +105,9 @@ The deploy workflow regenerates `public/r/` with
 
 Resolving `<docs-host>` when an origin is chosen: substitute
 `jubalm.github.io/augur-design-system` (current) or the custom domain. Committed
-`public/r/` stays unpinned (default-branch channel); pinning happens only in
-the deployment/release build, which is why `registry:check` in CI keeps passing.
+`public/r/` carries either no stamp or the current release tag (`#vX.Y.Z`,
+`RELEASING.md`); the deploy build's SHA stamp is never committed, which is why
+`registry:check` in CI keeps passing.
 
 ### Custom domain (future, maintainer decision)
 

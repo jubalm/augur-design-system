@@ -6,7 +6,8 @@
  * Vite + React + Tailwind consumer created by the pinned shadcn CLI:
  *
  *   bun run scripts/consumer-smoke.ts
- *   bun run scripts/consumer-smoke.ts --ref <full-40-char-sha>   (versioned artifact)
+ *   bun run scripts/consumer-smoke.ts --ref v<X.Y.Z>             (release tag)
+ *   bun run scripts/consumer-smoke.ts --ref <full-40-char-sha>   (exact commit)
  *   bun run scripts/consumer-smoke.ts --keep                      (keep consumer dir)
  *
  * GitHub-native installs (`jubalm/augur-design-system/<item>#<sha>`) are NOT
@@ -69,8 +70,8 @@ const ITEMS = [
 
 const gitRef = flag("--ref");
 const keep = hasFlag("--keep");
-if (gitRef && !/^[0-9a-f]{40}$/.test(gitRef)) {
-  console.error("FAIL: --ref must be a full 40-character commit SHA (contract §14 pinning policy)");
+if (gitRef && !/^(v\d+\.\d+\.\d+|[0-9a-f]{40})$/.test(gitRef)) {
+  console.error("FAIL: --ref must be a release tag (vX.Y.Z) or a full 40-character commit SHA (contract §14 pinning policy)");
   process.exit(2);
 }
 let consumerDir: string;
@@ -154,7 +155,7 @@ const server = http.createServer((req, res) => {
   // Test-harness-only transform; committed artifacts are never modified.
   const json = JSON.parse(body);
   const rewrite = (deps?: string[]) =>
-    deps?.map((d) => d.replace(/^jubalm\/augur-design-system\//, `${baseUrl}/r/`));
+    deps?.map((d) => d.replace(/^jubalm\/augur-design-system\/([^#]+)(#.*)?$/, `${baseUrl}/r/$1`));
   json.registryDependencies = rewrite(json.registryDependencies);
   res.writeHead(200, { "content-type": "application/json" }).end(JSON.stringify(json));
 });

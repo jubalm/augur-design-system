@@ -43,9 +43,18 @@
  *   bun src/tools/generate-registry.ts            # write artifacts
  *   bun src/tools/generate-registry.ts --check    # verify drift (exit 1 on diff)
  *
- * Optional: AUGUR_REGISTRY_SHA=<full 40-char sha> stamps `#<sha>` onto
- * every `registryDependencies` address (contract §14). By default no ref
- * is embedded (resolves to the default branch); release flow pins.
+ * Ref stamping (contract §14, RELEASING.md): AUGUR_REGISTRY_REF=v<version>
+ * stamps `#v<version>` onto every `registryDependencies` address, so the
+ * artifacts committed at a release tag resolve their transitive items to
+ * that same tag. It must name the release in packages/design-system
+ * package.json. Without it, generation writes unstamped addresses (the
+ * development channel between releases). `--check` reuses whatever stamp
+ * the committed artifacts carry, and fails unless that stamp is absent or
+ * names the package version.
+ *
+ * Deploy-time stamping: AUGUR_REGISTRY_SHA=<full 40-char sha> stamps
+ * `#<sha>` instead. The docs deploy workflow uses it for the built-JSON
+ * channel it publishes; that output is never committed.
  */
 
 import { join } from "node:path";
@@ -207,11 +216,35 @@ function buildThemeItem(): Record<string, unknown> {
 // -------------------------------------------------------- component items
 
 const REPO = "jubalm/augur-design-system";
-const sha = process.env.AUGUR_REGISTRY_SHA?.trim() || "";
-if (sha && !/^[0-9a-f]{40}$/.test(sha)) {
-  throw new Error("AUGUR_REGISTRY_SHA must be a full 40-char SHA");
+
+/** The ref to stamp onto registryDependencies, or "" for the unstamped development channel. */
+function resolveRef(): string {
+  const sha = process.env.AUGUR_REGISTRY_SHA?.trim() ?? "";
+  if (sha) {
+    if (!/^[0-9a-f]{40}$/.test(sha)) throw new Error("AUGUR_REGISTRY_SHA must be a full 40-char SHA");
+    return sha;
+  }
+  const releaseTag = `v${JSON.parse(read("package.json")).version}`;
+  let ref = process.env.AUGUR_REGISTRY_REF?.trim() ?? "";
+  if (!ref && process.argv.includes("--check")) {
+    // Verify committed artifacts against the stamp they already carry.
+    const committed = join(repoRoot, "public/r/button.json");
+    const deps: string[] = existsSync(committed)
+      ? (JSON.parse(readFileSync(committed, "utf8")).registryDependencies ?? [])
+      : [];
+    ref = deps[0]?.split("#")[1] ?? "";
+  }
+  if (ref && ref !== releaseTag) {
+    throw new Error(
+      `registry ref "${ref}" does not name the package release ${releaseTag}; ` +
+        "only the release being cut may be stamped (RELEASING.md)",
+    );
+  }
+  return ref;
 }
-const dep = (name: string) => (sha ? `${REPO}/${name}#${sha}` : `${REPO}/${name}`);
+
+const ref = resolveRef();
+const dep = (name: string) => (ref ? `${REPO}/${name}#${ref}` : `${REPO}/${name}`);
 const THEME_DEP = dep("augur-theme");
 const UTILS_DEP = dep("utils");
 

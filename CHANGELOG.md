@@ -1,10 +1,18 @@
 # Changelog
 
-Consumer-facing changes to the Augur Design System are recorded here. The project is unreleased, so entries are grouped under **Unreleased**. Implementation detail and per-change evidence live in pull requests and commits.
+Consumer-facing changes to the Augur Design System are recorded here, one section per release. Changes merged since the latest release collect under **Unreleased** until the next release is cut. Implementation detail and per-change evidence live in pull requests and commits.
+
+Releases are immutable Git tags (`vX.Y.Z`) that describe the whole consumer-facing surface: theme and tokens, components, patterns, registry artifacts, and approved brand assets. Individual registry items are not versioned separately. Before 1.0, a patch release carries compatible fixes and refinements, and a minor release carries meaningful consumer-facing additions or breaking contract changes. `1.0.0` will mark the component API, registry distribution path, tokens and foundations, and release process as stable. The procedure is in [RELEASING.md](RELEASING.md).
 
 ## Unreleased
 
+## [0.1.0] - 2026-09-28
+
+The first versioned release. Consumers adopt it by tag: `jubalm/augur-design-system/<item>#v0.1.0`, or the built item at `https://raw.githubusercontent.com/jubalm/augur-design-system/v0.1.0/public/r/<item>.json`.
+
 ### Added
+
+- **Versioned releases.** A documented release procedure, a release verification script (`bun run check:release`), and a manual release workflow that creates the immutable tag and GitHub Release. Registry items at a release tag address their `registryDependencies` to that same tag (`#v0.1.0`), so transitive installs cannot drift to `main`. CI now fails when the committed registry artifacts differ from their sources, when the registry fails shadcn schema validation, or when the independent-consumer install smoke fails.
 
 - **Workspace and package.** `@augur/design-system` with a public entry point and an aggregated `styles.css` export, in a lightweight Bun workspace with a committed, frozen-installable lockfile.
 - **Design tokens.** Base tokens generated from `DESIGN.md` (CSS variables, DTCG JSON, and a Tailwind variable preview), with determinism checks and controlled generation failure paths.

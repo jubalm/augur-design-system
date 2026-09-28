@@ -17,7 +17,7 @@ A shared interface language for Augur: maintained design guidance, generated tok
 
 One lightweight Bun workspace contains `packages/design-system` (`@augur/design-system`) and `apps/docs` (plain Astro with React and Markdown/MDX). Components follow shadcn conventions where appropriate. Values representable by the pinned `@google/design.md` schema come from `DESIGN.md`; generated tokens feed a thin semantic light/dark mapping layer.
 
-The external distribution path is a GitHub-hosted shadcn-compatible source registry. The docs provide rendered pages, clean Markdown equivalents, and `llms.txt`, deployed as a static site. Architectural detail and decisions live in [ARCHITECTURE.md](ARCHITECTURE.md).
+The external distribution path is a GitHub-hosted shadcn-compatible source registry, published as immutable release tags (`vX.Y.Z`): install with `bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#vX.Y.Z"`. Changes are recorded in [CHANGELOG.md](CHANGELOG.md), and the release procedure is in [RELEASING.md](RELEASING.md). The docs provide rendered pages, clean Markdown equivalents, and `llms.txt`, deployed as a static site. Architectural detail and decisions live in [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Development
 
@@ -34,6 +34,9 @@ Requires [Bun](https://bun.com) **1.4.0**, pinned through `packageManager`. The 
 | `bun run test` | Runs the Vitest + Testing Library + axe suite against the real workspace package. |
 | `bun run --cwd packages/design-system tokens:check` | Regenerates the base tokens in memory and fails on drift. |
 | `bun run --cwd packages/design-system tokens:verify-failures` | Proves the controlled token-generation failure paths exit nonzero and write no artifacts. |
+| `bun run --cwd packages/design-system registry:check` | Regenerates the registry artifacts in memory and fails on drift. |
+| `bun scripts/consumer-smoke.ts` | Installs every registry item into a fresh consumer and verifies build, render, and overwrite. |
+| `bun run check:release X.Y.Z` | Verifies release metadata before tagging (see [RELEASING.md](RELEASING.md)). |
 
 There is deliberately no `build` command yet: a bundled package stays deferred until actual package output is required. Browser and docs checks run through `apps/docs/fixtures` after `bun run --cwd apps/docs build`; see [apps/docs/README.md](apps/docs/README.md).
 

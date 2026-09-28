@@ -6,8 +6,8 @@
   "author": "jubalm",
   "description": "Augur input (registry source distribution; contract docs/registry-contract.md).",
   "registryDependencies": [
-    "jubalm/augur-design-system/augur-theme",
-    "jubalm/augur-design-system/utils"
+    "jubalm/augur-design-system/augur-theme#v0.1.0",
+    "jubalm/augur-design-system/utils#v0.1.0"
   ],
   "files": [
     {
