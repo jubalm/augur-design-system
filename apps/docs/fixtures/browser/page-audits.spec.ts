@@ -112,7 +112,8 @@ test.describe("page audits (base /)", () => {
 
 // --- 2. Theme contract behavior via keyboard. ----------------------------
 test.describe("theme contract (keyboard-driven, home page)", () => {
-  test("system default, dark/light pinning, persistence, and system reset", async ({ page }) => {
+  test("implicit system default, explicit light/dark override, and persistence", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
     await go(page, ORIGIN + site("/"));
     await waitForIsland(page);
     await page.evaluate(() => document.fonts.ready);
@@ -122,46 +123,60 @@ test.describe("theme contract (keyboard-driven, home page)", () => {
         stored: localStorage.getItem("augur-theme"),
         backgroundVar: getComputedStyle(document.documentElement).getPropertyValue("--background").trim(),
         colorScheme: getComputedStyle(document.documentElement).getPropertyValue("color-scheme").trim(),
-        pressed: [...document.querySelectorAll(".theme-toggle button")]
-          .map((b) => `${b.getAttribute("aria-label") ?? b.textContent}:${b.getAttribute("aria-pressed")}`)
-          .join(" "),
+        choice: document.querySelector(".masthead-actions .theme-toggle")?.getAttribute("data-theme-choice") ?? null,
+        label: document.querySelector(".masthead-actions .theme-toggle")?.getAttribute("aria-label") ?? "",
       }));
+    const shows = (theme: string) =>
+      page.waitForFunction((t) => document.querySelector(".masthead-actions .theme-toggle")?.getAttribute("data-theme-choice") === t, theme);
 
+    await shows("light");
     const initial = await snapshot();
     assertOk("default follows system: no data-theme attribute", initial.attr === null, String(initial.attr));
     assertOk("default: nothing persisted", initial.stored === null, String(initial.stored));
-    assertOk("default theme toggle shows System active", /System:true/.test(initial.pressed), initial.pressed);
+    assertOk("toggle names the current and next theme", initial.label === "Theme: Light. Switch to Dark", initial.label);
+
+    await page.emulateMedia({ colorScheme: "dark" });
+    await shows("dark");
+    const systemDark = await snapshot();
+    assertOk("system change re-themes without an attribute", systemDark.attr === null && systemDark.colorScheme === "dark", `${systemDark.attr} ${systemDark.colorScheme}`);
+    assertOk("system change swaps the --background role", systemDark.backgroundVar !== initial.backgroundVar, `${initial.backgroundVar} -> ${systemDark.backgroundVar}`);
+    assertOk("system change persists nothing", systemDark.stored === null, String(systemDark.stored));
+    assertOk("toggle tracks the system theme", systemDark.label === "Theme: Dark. Switch to Light", systemDark.label);
 
     await page.keyboard.press("Tab");
     const firstFocus = await page.evaluate(() => document.activeElement?.className ?? "");
     assertOk("first Tab focuses the skip link", String(firstFocus).includes("skip-link"), String(firstFocus));
 
-    const darkButton = page.locator(".masthead-actions").getByRole("button", { name: "Dark" });
-    await darkButton.focus();
-    assertOk("toggle button keyboard-focusable", await darkButton.evaluate((el) => document.activeElement === el));
+    const toggle = page.locator(".masthead-actions .theme-toggle");
+    assertOk("masthead has a single theme button", (await toggle.count()) === 1);
+    await toggle.focus();
+    assertOk("toggle button keyboard-focusable", await toggle.evaluate((el) => document.activeElement === el));
+    await page.keyboard.press("Enter");
+    const afterLight = await snapshot();
+    assertOk("press pins the opposite of the system theme", afterLight.attr === "light" && afterLight.choice === "light", `${afterLight.attr} ${afterLight.choice}`);
+    assertOk("light override persisted", afterLight.stored === "light", String(afterLight.stored));
+    assertOk("light override sets color-scheme: light", afterLight.colorScheme === "light", afterLight.colorScheme);
+    await shot(page, "home-light");
+
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.emulateMedia({ colorScheme: "dark" });
+    const overridden = await snapshot();
+    assertOk("explicit override ignores system changes", overridden.attr === "light" && overridden.choice === "light", `${overridden.attr} ${overridden.choice}`);
+
     await page.keyboard.press("Enter");
     const afterDark = await snapshot();
-    assertOk("keyboard Enter pins dark on <html>", afterDark.attr === "dark", String(afterDark.attr));
-    assertOk("dark choice persisted", afterDark.stored === "dark", String(afterDark.stored));
-    assertOk("dark swaps the --background role", afterDark.backgroundVar !== initial.backgroundVar, `${initial.backgroundVar} -> ${afterDark.backgroundVar}`);
+    assertOk("second press pins dark on <html>", afterDark.attr === "dark", String(afterDark.attr));
+    assertOk("dark override persisted", afterDark.stored === "dark", String(afterDark.stored));
     assertOk("dark sets color-scheme: dark", afterDark.colorScheme === "dark", afterDark.colorScheme);
-    assertOk("aria-pressed moves to Dark", /Dark:true/.test(afterDark.pressed) && !/System:true/.test(afterDark.pressed), afterDark.pressed);
+    assertOk("toggle offers Light next", afterDark.label === "Theme: Dark. Switch to Light", afterDark.label);
     await shot(page, "home-dark");
 
+    await page.emulateMedia({ colorScheme: "light" });
     await page.reload({ waitUntil: "load" });
     await page.evaluate(() => document.fonts.ready);
     const afterReload = await page.evaluate(() => document.documentElement.dataset.theme ?? null);
-    assertOk("dark persists across reload (pre-paint script)", afterReload === "dark", String(afterReload));
-
-    await page.locator(".masthead-actions").getByRole("button", { name: "Light" }).click();
-    const afterLight = await snapshot();
-    assertOk("light pins [data-theme=light]", afterLight.attr === "light", String(afterLight.attr));
-
-    await page.locator(".masthead-actions").getByRole("button", { name: "System" }).click();
-    const afterSystem = await snapshot();
-    assertOk("system removes the attribute (contract default)", afterSystem.attr === null, String(afterSystem.attr));
-    assertOk("system clears persistence", afterSystem.stored === null, String(afterSystem.stored));
-    await shot(page, "home-light");
+    assertOk("dark override persists across reload under a light system (pre-paint script)", afterReload === "dark", String(afterReload));
+    await shows("dark");
   });
 });
 

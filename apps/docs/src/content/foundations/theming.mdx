@@ -27,9 +27,10 @@ Choose a theme with the following contract:
 | `[data-theme="light"]` on `<html>` or any container | Light, pinned |
 | `[data-theme="dark"]` on `<html>` or any container | Dark, for that subtree |
 
-This site's header toggle follows that contract exactly: **System**
-removes the attribute so the system preference governs; **Light** and
-**Dark** pin the choice on `<html>` and persist it across page loads.
+This site's header toggle follows that contract exactly. Until you use
+it, no attribute is set, so the system preference governs and the page
+follows it live. Pressing the sun/moon button pins the other theme on
+`<html>` and persists it across page loads.
 
 ## Roles, not raw values
 

@@ -1,104 +1,102 @@
 import { useSyncExternalStore } from "react";
-import { MonitorIcon, MoonIcon, SunIcon } from "./icons";
+import { MoonIcon, SunIcon } from "./icons";
 
 /**
- * Theme selection control for the docs shell.
+ * Light/dark toggle for the docs shell: one sun/moon button. The icon
+ * shows the theme in effect; the accessible name states it and the
+ * theme a press switches to.
+ *
+ * System preference is implicit, not a choice in the UI:
+ *
+ *   - with nothing persisted, no `data-theme` attribute is set, so the
+ *     package's `prefers-color-scheme` fallback scope governs and the page
+ *     follows live system changes; the button tracks the same media query;
+ *   - a press pins the opposite of the theme in effect as an explicit
+ *     `[data-theme="light"|"dark"]` on `<html>` and persists it.
  *
  * Honors the `@augur/design-system` theme contract exactly
- * (`packages/design-system/src/styles/theme.css`):
+ * (`packages/design-system/src/styles/theme.css`); this control only ever
+ * writes to `<html>`.
  *
- *   - no `data-theme` attribute -> system preference governs via the
- *     package's `prefers-color-scheme` fallback scope (default state);
- *   - `[data-theme="light"]` pins light, even under a dark system;
- *   - `[data-theme="dark"]` selects dark for the whole document;
- *   - the attribute works on any container subtree (demonstrated on the
- *     Theming page), and this control only ever writes to `<html>`.
- *
- * The choice persists in localStorage under "augur-theme". A tiny inline
+ * The override persists in localStorage under "augur-theme". A tiny inline
  * script in `BaseLayout.astro` re-applies it before first paint. The
- * persisted value is read through `useSyncExternalStore`, so the server
+ * effective theme is read through `useSyncExternalStore`, so the server
  * render and first client render agree (no hydration mismatch) and the
- * pressed state syncs from the external store after hydration without an
- * effect-driven render pass.
+ * button syncs from storage and the media query after hydration without
+ * an effect-driven render pass.
  */
 
-type ThemeChoice = "system" | "light" | "dark";
+type Theme = "light" | "dark";
 
 const STORAGE_KEY = "augur-theme";
 const CHANGE_EVENT = "augur-theme-change";
+const DARK_QUERY = "(prefers-color-scheme: dark)";
 
-const CHOICES: readonly { value: ThemeChoice; label: string; Icon: (props: { size?: number }) => JSX.Element }[] = [
-  { value: "system", label: "System", Icon: MonitorIcon },
-  { value: "light", label: "Light", Icon: SunIcon },
-  { value: "dark", label: "Dark", Icon: MoonIcon },
-] as const;
+const LABELS: Record<Theme, string> = { light: "Light", dark: "Dark" };
 
 function subscribe(onStoreChange: () => void): () => void {
+  const media = window.matchMedia(DARK_QUERY);
+  // Cross-tab synchronization: another tab writing the override applies it here.
+  const onStorage = (event: StorageEvent) => {
+    if (event.key !== null && event.key !== STORAGE_KEY) return;
+    const stored = event.key === null ? null : event.newValue;
+    if (stored === "light" || stored === "dark") {
+      document.documentElement.dataset.theme = stored;
+    } else {
+      delete document.documentElement.dataset.theme;
+    }
+    onStoreChange();
+  };
   window.addEventListener(CHANGE_EVENT, onStoreChange);
-  // Cross-tab synchronization: another tab writing localStorage re-syncs here.
-  window.addEventListener("storage", onStoreChange);
+  window.addEventListener("storage", onStorage);
+  // Implicit mode: a system theme change re-syncs the button.
+  media.addEventListener("change", onStoreChange);
   return () => {
     window.removeEventListener(CHANGE_EVENT, onStoreChange);
-    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener("storage", onStorage);
+    media.removeEventListener("change", onStoreChange);
   };
 }
 
-function readChoice(): ThemeChoice {
-  try {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    return stored === "light" || stored === "dark" ? stored : "system";
-  } catch {
-    return "system";
-  }
+/** The applied override on `<html>` (set pre-paint from storage), else the system theme. */
+function readTheme(): Theme {
+  const applied = document.documentElement.dataset.theme;
+  if (applied === "light" || applied === "dark") return applied;
+  return window.matchMedia(DARK_QUERY).matches ? "dark" : "light";
 }
 
-function getServerChoice(): ThemeChoice {
-  return "system";
-}
-
-function applyChoice(choice: ThemeChoice): void {
-  if (choice === "system") {
-    delete document.documentElement.dataset.theme;
-  } else {
-    document.documentElement.dataset.theme = choice;
-  }
+function getServerTheme(): Theme {
+  return "light";
 }
 
 export function ThemeToggle() {
-  const choice = useSyncExternalStore(subscribe, readChoice, getServerChoice);
+  const theme = useSyncExternalStore(subscribe, readTheme, getServerTheme);
+  const next: Theme = theme === "dark" ? "light" : "dark";
+  const label = `Theme: ${LABELS[theme]}. Switch to ${LABELS[next]}`;
+  const Icon = theme === "dark" ? MoonIcon : SunIcon;
 
-  const select = (next: ThemeChoice) => {
-    applyChoice(next);
+  const toggle = () => {
+    document.documentElement.dataset.theme = next;
     try {
-      if (next === "system") {
-        window.localStorage.removeItem(STORAGE_KEY);
-      } else {
-        window.localStorage.setItem(STORAGE_KEY, next);
-      }
+      window.localStorage.setItem(STORAGE_KEY, next);
     } catch {
-      // Storage unavailable (e.g. restrictive settings): the choice still
+      // Storage unavailable (e.g. restrictive settings): the override still
       // applies for this page view; persistence is best-effort.
     }
     window.dispatchEvent(new Event(CHANGE_EVENT));
   };
 
   return (
-    <fieldset className="theme-toggle">
-      <legend className="visually-hidden">Color theme</legend>
-      {CHOICES.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          className="theme-toggle-option"
-          aria-pressed={choice === option.value}
-          aria-label={option.label}
-          title={option.label}
-          onClick={() => select(option.value)}
-        >
-          <option.Icon size={16} />
-        </button>
-      ))}
-    </fieldset>
+    <button
+      type="button"
+      className="theme-toggle"
+      data-theme-choice={theme}
+      aria-label={label}
+      title={label}
+      onClick={toggle}
+    >
+      <Icon size={18} />
+    </button>
   );
 }
 

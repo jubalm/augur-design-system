@@ -7,9 +7,9 @@
  * colors and font voices; `../styles/docs.css` adds shell chrome only.
  *
  * Theme contract: the inline script below re-applies a persisted choice
- * before first paint. It sets `data-theme` on `<html>` only for explicit
- * light/dark; "system" removes the attribute so the package's
- * `prefers-color-scheme` fallback scope governs. No other theme logic
+ * before first paint. It sets `data-theme` on `<html>` only for an explicit
+ * light/dark override; with nothing persisted the attribute is absent so
+ * the package's `prefers-color-scheme` fallback scope governs. No other theme logic
  * exists at the app level (see `src/components/ThemeToggle.tsx`).
  *
  * Navigation shell (#55): one derived model (`src/lib/navigation.ts`)

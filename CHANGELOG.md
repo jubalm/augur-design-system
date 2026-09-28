@@ -28,6 +28,7 @@ Consumer-facing changes to the Augur Design System are recorded here. The projec
 - Replaced the flat docs header with a scalable navigation and reading shell derived from one collection-backed model.
 - Reworked the docs presentation to follow its own guidance: a product-first home page (message, one primary action, and a live query record), entry points with live previews, a two-lane reading shell that shares one left edge, tonal example stages, quiet example rules, and section spacing on the layout steps.
 - Made the copyable example source consumer code: each sample shows one theme with no docs-site class names or wrappers, and the example frame renders it in labeled light and dark scopes. The Dialog sample now shows the full composition, not only its trigger.
+- Replaced the docs masthead's three-button theme control with a single sun/moon toggle. With no saved choice the site follows `prefers-color-scheme`, including live system changes; pressing the toggle pins and persists the other theme as an explicit light/dark override. The toggle now matches the GitHub link beside it: an 18px solid glyph in the same color and hit area.
 
 ### Fixed
 

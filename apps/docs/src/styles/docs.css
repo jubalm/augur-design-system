@@ -120,16 +120,22 @@ body {
   }
 }
 
+/* The theme toggle and repository link are matching icon buttons: 18px
+   solid glyphs in equal padded boxes. The negative end margin keeps the
+   last glyph on the content edge. */
 .masthead-actions {
   margin-inline-start: auto;
+  margin-inline-end: -0.375rem;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .masthead-repo {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  padding: 0.375rem;
   color: inherit;
   text-decoration: none;
 }
@@ -549,17 +555,6 @@ body {
 /* Theme toggle (React island)                                        */
 /* ---------------------------------------------------------------- */
 
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.125rem;
-  margin: 0;
-  padding: 0;
-  border: 0; /* reset the UA fieldset border */
-  min-inline-size: auto;
-  min-block-size: auto;
-}
-
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -572,42 +567,22 @@ body {
   border: 0;
 }
 
-.theme-toggle-option {
+/* One sun/moon button; the icon names the theme in effect, so no pressed
+   marker is needed. Color and box match the masthead repository link. */
+.theme-toggle {
   appearance: none;
   border: none;
   background: transparent;
-  color: var(--muted-foreground);
-  font-family: var(--augur-font-primary);
-  font-weight: 600;
-  font-size: 0.8125rem;
-  line-height: 1.25;
+  color: inherit;
   padding: 0.375rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   cursor: pointer;
 }
 
-.theme-toggle-option:hover {
+.theme-toggle:hover {
   color: var(--foreground);
-}
-
-/* Active choice = the shell's short-rule affordance (same 2px marker
-   language as the sidebar's current-document state), theme-invariant. */
-.theme-toggle-option[aria-pressed="true"] {
-  color: var(--foreground);
-}
-
-.theme-toggle-option[aria-pressed="true"]::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 0;
-  width: 16px;
-  height: 2px;
-  background-color: var(--primary);
 }
 
 /* ---------------------------------------------------------------- */
@@ -1680,7 +1655,7 @@ body {
 }
 /* Touch controls retain the desktop visual language with usable targets. */
 @media (pointer: coarse) {
-  .theme-toggle-option, .browse-summary, .onthispage-summary, .page-action, .page-action-menu-item, .home-secondary-action {
+  .theme-toggle, .masthead-repo, .browse-summary, .onthispage-summary, .page-action, .page-action-menu-item, .home-secondary-action {
     box-sizing: border-box;
     min-height: 44px;
     min-width: 44px;

@@ -158,7 +158,7 @@ test.describe("review 44px touch sweep", () => {
         const splitTrigger = page.getByRole("button", { name: "More page actions" });
         if (await splitTrigger.count()) await splitTrigger.click();
         const targets = await page
-          .locator(".aug-button,.aug-input,.aug-dialog-close,.theme-toggle-option,.page-action,.page-action-menu-item,.browse-summary")
+          .locator(".aug-button,.aug-input,.aug-dialog-close,.theme-toggle,.page-action,.page-action-menu-item,.browse-summary")
           .evaluateAll((els) =>
             els
               .filter((e) => e.getBoundingClientRect().width)
