@@ -31,7 +31,8 @@
  *      (`../input/input` → `@/components/ui/input`,
  *       `../page-header/page-header` → `@/components/page-header`).
  *   3. A side-effect `import "./<name>.css"` is prepended to the primary
- *      component file so installed source pulls its own stylesheet.
+ *      component file (and to a `<name>-variants.ts` class helper) so
+ *      installed source pulls its own stylesheet.
  *
  * `path` on every file entry still points at the canonical repository
  * source (§5.1); `content` is the derived consumer payload. Index entries
@@ -259,6 +260,16 @@ function componentContent(srcRel: string, cssName: string | null): string {
   return content;
 }
 
+/** The sibling stylesheet a component file pulls in: `button.tsx` and
+ * `button-variants.ts` both import `./button.css`, so class-only
+ * consumers of `buttonVariants()` get the styles without the component
+ * (issue #97). */
+function stylesheetFor(base: string): string | null {
+  if (base.endsWith(".tsx")) return base.replace(/\.tsx$/, "");
+  if (base.endsWith("-variants.ts")) return base.replace(/-variants\.ts$/, "");
+  return null;
+}
+
 function buildComponentItem(
   name: string,
   type: string,
@@ -270,7 +281,7 @@ function buildComponentItem(
     const base = srcRel.split("/").pop()!;
     const content =
       kind === "tsx"
-        ? componentContent(srcRel, base.endsWith(".tsx") ? base.replace(/\.tsx$/, "") : null)
+        ? componentContent(srcRel, stylesheetFor(base))
         : read(srcRel);
     return {
       path: `packages/design-system/${srcRel}`,
@@ -319,11 +330,17 @@ function buildItems(): Array<Record<string, unknown>> {
         },
       ],
     },
-    buildComponentItem("button", "registry:ui", "@ui", [
-      ["src/components/button/button.tsx", "tsx"],
-      ["src/components/button/button-variants.ts", "tsx"],
-      ["src/components/button/button.css", "css"],
-    ]),
+    buildComponentItem(
+      "button",
+      "registry:ui",
+      "@ui",
+      [
+        ["src/components/button/button.tsx", "tsx"],
+        ["src/components/button/button-variants.ts", "tsx"],
+        ["src/components/button/button.css", "css"],
+      ],
+      { dependencies: ["radix-ui@1.6.7"] },
+    ),
     buildComponentItem("card", "registry:ui", "@ui", [
       ["src/components/card/card.tsx", "tsx"],
       ["src/components/card/card.css", "css"],

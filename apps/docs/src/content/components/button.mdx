@@ -17,7 +17,7 @@ import { examples } from "../../examples/registry";
 
 ## When not to use
 
-- Do not use Button for navigation between pages; use a link.
+- Do not use a `<button>` for navigation between pages; use a link. When the link needs button styling, render it through `asChild` (below).
 - Do not use it as a selected/on-off control; Button does not own choice semantics.
 - Do not multiply `default` actions until several controls compete for the same priority.
 - Do not rely on an icon alone when a short action label can make the command clearer.
@@ -57,6 +57,22 @@ These are the maintained structural control sizes. On coarse pointers, the actio
 
 <DocExample example={examples.button.states} />
 
+## Links with button styling
+
+A call to action that navigates is a link, even when it looks like a button. Pass `asChild` and a single link child: Button merges its classes onto the link and renders nothing else, so the element keeps link semantics, `href`, and native link behavior (Enter follows it; screen readers announce a link).
+
+```tsx
+<Button asChild>
+  <a href="/protocol/">How Augur works</a>
+</Button>
+```
+
+`type`, `disabled`, and `loading` describe button behavior and are not accepted with `asChild`. A link has no disabled state; remove it or explain why the destination is unavailable.
+
+Static and non-React consumers apply the same classes to an `<a>` with `buttonVariants()`. Importing `buttonVariants` also imports the component stylesheet, so the classes resolve without the React component. The stylesheet's margin reset has zero specificity, so layout margins set by the consumer always apply.
+
+<DocExample example={examples.button.links} />
+
 ## Accessibility
 
 - Native `<button>` semantics provide Tab, Enter, and Space behavior without invented ARIA.
@@ -79,11 +95,12 @@ import { Button, buttonVariants } from "@augur/design-system";
 | `loading` | `boolean` | `false` | Stable-width busy state |
 | `disabled` | `boolean` | `false` | Native disabled state |
 | `type` | `"button" \| "submit" \| "reset"` | `"button"` | Native button type |
+| `asChild` | `boolean` | `false` | Merge the button classes onto the single child element (typically a link) instead of rendering a `<button>` |
 | `className` | `string` | — | Extends the component classes |
 | `ref` | `React.Ref` | — | Ref for the underlying button element |
 | …props | native button attributes | — | Passed through to the native element |
 
-`buttonVariants({ variant, size })` returns the component class string for class-only or registry-path consumers.
+`buttonVariants({ variant, size })` returns the component class string for class-only or registry-path consumers. In registry installs, `button-variants.ts` imports `button.css`, so class-only use gets the styles.
 
 ## Design rationale
 

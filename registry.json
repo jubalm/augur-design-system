@@ -286,6 +286,9 @@
           "type": "registry:file",
           "target": "@ui/button.css"
         }
+      ],
+      "dependencies": [
+        "radix-ui@1.6.7"
       ]
     },
     {

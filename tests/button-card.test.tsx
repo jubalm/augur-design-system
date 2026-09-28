@@ -139,6 +139,62 @@ describe("Button HTML semantics", () => {
   });
 });
 
+describe("Button link rendering (asChild, issue #97)", () => {
+  test("asChild renders the child link with button classes and no button", () => {
+    render(
+      <Button asChild size="lg" className="extra">
+        <a href="/protocol/">How Augur works</a>
+      </Button>,
+    );
+    const link = screen.getByRole("link", { name: "How Augur works" });
+    expect(link.tagName).toBe("A");
+    expect(link.getAttribute("href")).toBe("/protocol/");
+    expect(link.className).toBe(`${buttonVariants({ size: "lg" })} extra`);
+    expect(link.hasAttribute("type")).toBe(false);
+    expect(screen.queryByRole("button")).toBeNull();
+  });
+
+  test("a link button is reachable by Tab and follows the link on Enter", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn((event: { preventDefault(): void }) => event.preventDefault());
+    render(
+      <Button asChild variant="outline">
+        <a href="/learn/" onClick={onClick}>
+          Learn
+        </a>
+      </Button>,
+    );
+    await user.tab();
+    expect(screen.getByRole("link", { name: "Learn" })).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  test("button-only props are type errors with asChild", () => {
+    const invalid = [
+      // @ts-expect-error loading does not apply to a link
+      <Button key="loading" asChild loading><a href="#a">A</a></Button>,
+      // @ts-expect-error a link has no disabled state
+      <Button key="disabled" asChild disabled><a href="#b">B</a></Button>,
+    ];
+    expect(invalid).toHaveLength(2);
+  });
+
+  test("a link button matrix is axe-clean", async () => {
+    const { container } = render(
+      <nav aria-label="Actions">
+        {(["default", "secondary", "outline", "ghost", "link"] as const).map((variant) => (
+          <Button key={variant} asChild variant={variant}>
+            <a href={`#${variant}`}>{`Go ${variant}`}</a>
+          </Button>
+        ))}
+      </nav>,
+    );
+    const results = await axe.run(container, { rules: { "color-contrast": { enabled: false } } });
+    expect(results.violations).toEqual([]);
+  });
+});
+
 describe("Card composition semantics", () => {
   test("renders the pure part set with real heading semantics", () => {
     render(

@@ -23,6 +23,8 @@ import { PaletteSwatchesExample } from "./color/palette-swatches";
 import paletteSwatchesCode from "./color/palette-swatches.tsx?raw";
 import { ButtonStatesExample } from "./button/button-states";
 import buttonStatesCode from "./button/button-states.tsx?raw";
+import { ButtonLinksExample } from "./button/button-links";
+import buttonLinksCode from "./button/button-links.tsx?raw";
 import { ButtonVariantsExample } from "./button/button-variants";
 import buttonVariantsCode from "./button/button-variants.tsx?raw";
 import { CardCompositionExample } from "./card/card-composition";
@@ -81,6 +83,16 @@ export const examples = {
       description: "Structural sizes and the width-preserving loading contract, rendered from real component props.",
       Component: ButtonStatesExample,
       code: buttonStatesCode,
+      layout: "inline",
+    }),
+    links: defineExample({
+      id: "button-links",
+      title: "Links with button styling",
+      description: "asChild merges the button classes onto a real link: it navigates, and screen readers announce a link.",
+      Component: ButtonLinksExample,
+      code: buttonLinksCode,
+      themes: "both",
+      pair: "rows",
       layout: "inline",
     }),
   },

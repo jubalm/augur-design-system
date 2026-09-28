@@ -11,6 +11,13 @@
  * for this slice lives in ../../docs/components.md.
  */
 
+/* Margin reset at zero specificity (issue #97): it clears user-agent
+   button margins but never outranks a consumer's layout margin, whatever
+   the stylesheet order. */
+:where(.aug-button) {
+  margin: 0;
+}
+
 .aug-button {
   position: relative;
   box-sizing: border-box;
@@ -20,7 +27,6 @@
   gap: var(--augur-spacing-sm); /* space.sm: label-to-icon gap */
   height: 36px; /* control.height.md */
   padding: 0 var(--augur-spacing-lg); /* md control padding */
-  margin: 0;
   border: 1px solid transparent; /* keeps the box equal across variants */
   border-radius: var(--augur-rounded-control); /* radius.control: 0px */
   vertical-align: middle;

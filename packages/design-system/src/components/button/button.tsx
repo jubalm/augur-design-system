@@ -21,39 +21,69 @@
  *     visually hidden "Loading" status carry the state. The action
  *     color does not change.
  *
+ *   - Link rendering (`asChild`, issue #97): shadcn's Slot pattern.
+ *     `<Button asChild><a href="/protocol/">How it works</a></Button>`
+ *     merges the button classes onto the single child element and
+ *     renders nothing else, so the child keeps its own semantics (a link
+ *     navigates; it is not a button). `type`, `disabled`, and `loading`
+ *     do not apply to a link and are not accepted with `asChild`.
+ *
  * Keyboard focus needs no CSS here: the theme contract's shared
  * `:focus-visible` rule (2px ring, 2px offset, `--ring` color) applies
  * to every element, including this one.
  */
 import type { ComponentProps } from "react";
+import { Slot } from "radix-ui";
 import type { ButtonSize, ButtonVariant } from "./button-variants";
 import { buttonVariants } from "./button-variants";
 import { cx } from "../../internal/cx";
 
 export { buttonVariants } from "./button-variants";
 
-export type ButtonProps = ComponentProps<"button"> & {
+type ButtonStyleProps = {
   /** Visual intent. The default variant is the view's one green signal. */
   variant?: ButtonVariant;
   /** Control size. Default "md". */
   size?: ButtonSize;
-  /** Pending state: non-interactive, width-preserving, aria-busy. */
-  loading?: boolean;
 };
 
-export function Button({
-  variant,
-  size,
-  loading = false,
-  disabled = false,
-  type,
-  className,
-  children,
-  ...props
-}: ButtonProps) {
+/** Native `<button>` rendering. */
+export type ButtonElementProps = ComponentProps<"button"> &
+  ButtonStyleProps & {
+    asChild?: false;
+    /** Pending state: non-interactive, width-preserving, aria-busy. */
+    loading?: boolean;
+  };
+
+/** Slot rendering: the button classes are merged onto the single child
+ * element (typically an `<a>`), which keeps its own semantics. */
+export type ButtonAsChildProps = Omit<ComponentProps<"button">, "type" | "disabled"> &
+  ButtonStyleProps & {
+    asChild: true;
+    loading?: never;
+  };
+
+export type ButtonProps = ButtonElementProps | ButtonAsChildProps;
+
+export function Button(props: ButtonProps) {
+  if (props.asChild) {
+    const { asChild: _asChild, variant, size, className, ...rest } = props;
+    return <Slot.Root {...rest} className={cx(buttonVariants({ variant, size }), className)} />;
+  }
+  const {
+    asChild: _asChild,
+    variant,
+    size,
+    loading = false,
+    disabled = false,
+    type,
+    className,
+    children,
+    ...rest
+  } = props;
   return (
     <button
-      {...props}
+      {...rest}
       type={type ?? "button"}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
