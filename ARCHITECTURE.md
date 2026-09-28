@@ -411,9 +411,10 @@ AI review covers coherence and judgment that would otherwise require brittle cus
 
 ## 15. Versioning
 
-Released design-system artifacts must be explicitly versioned; the concrete
-pre-1.0 policy is defined separately. Documentation deployment is an explicit
-maintainer action, independent of package releases.
+Released design-system artifacts are explicitly versioned as immutable Git tags
+(`vX.Y.Z`); consumers depend on the tag. The pre-1.0 policy and the release
+procedure live in [RELEASING.md](RELEASING.md). Documentation deployment is an
+explicit maintainer action, independent of releases.
 
 ```text
 merge to main
@@ -423,11 +424,12 @@ merge to main
 maintainer action
 └── deploy the documentation site (manual workflow dispatch)
 
-release
-├── version the design system
-├── publish/update GitHub registry artifacts as needed
-├── optionally publish @augur/design-system later if adopted
-└── record the changelog
+release (RELEASING.md)
+├── release PR: finalize the changelog, bump the package version,
+│   stamp registry artifacts with the release tag; CI must pass
+├── Release workflow (manual dispatch on main): re-run CI gates,
+│   create the immutable tag vX.Y.Z and the GitHub Release
+└── optionally publish @augur/design-system later if adopted
 ```
 
 ## 16. Distribution

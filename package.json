@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check:workspace": "bun scripts/workspace-smoke.ts",
     "check:brand-assets": "bun scripts/verify-brand-assets.ts",
+    "check:release": "bun scripts/verify-release.ts",
     "test": "bun run check:brand-assets && vitest run",
     "test:browser": "playwright test"
   },

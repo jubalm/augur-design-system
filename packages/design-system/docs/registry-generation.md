@@ -86,11 +86,17 @@ full GitHub addresses (`jubalm/augur-design-system/<item>`, contract §6.2).
 
 ## Pinning and determinism
 
-- Output is deterministic; `registry:check` fails on drift when run locally or
-during release preparation (it is not part of the default CI workflow).
-- `registryDependencies` are committed **without** a ref (resolve to the
-  default branch). `AUGUR_REGISTRY_SHA=<40-char sha>` stamps `#<sha>` pins at
-  release time (contract §14); consumer installs should pin full SHAs.
+- Output is deterministic; `registry:check` fails on drift, and the `registry`
+  CI job runs it on every pull request and push to `main`.
+- A release PR regenerates with `AUGUR_REGISTRY_REF=vX.Y.Z`, which stamps
+  `#vX.Y.Z` onto every `registryDependencies` address; the ref must equal the
+  version in `package.json` (`RELEASING.md`). Between releases, artifacts may
+  be committed unstamped (resolving to the default branch). `registry:check`
+  reuses the committed stamp and fails unless it is absent or names the
+  package version. Consumers install by release tag (contract §14).
+- `AUGUR_REGISTRY_SHA=<40-char sha>` stamps `#<sha>` instead; only the docs
+  deploy workflow uses it, for the built-JSON channel it publishes, and that
+  output is never committed.
 - `public/r/` is the GitHub-Pages-compatible built channel; the root
   `registry.json` is the GitHub source-registry index consumed directly by
   the CLI for `jubalm/augur-design-system/<item>` installs.

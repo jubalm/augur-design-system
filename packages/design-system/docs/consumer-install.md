@@ -32,7 +32,7 @@ contract §10) — installs every starter registry item and, after `vite build`:
 # from the repo root; requires bun and network access to npm (registry
 # artifacts themselves are committed and served locally — no GitHub access)
 bun run scripts/consumer-smoke.ts                 # working-tree artifacts
-bun run scripts/consumer-smoke.ts --ref <full-40-char-sha>   # versioned artifact
+bun run scripts/consumer-smoke.ts --ref vX.Y.Z   # release tag (or a full 40-char SHA)
 bun run scripts/consumer-smoke.ts --keep          # keep the consumer dir to inspect
 ```
 
@@ -54,23 +54,23 @@ The script:
 can ever block on an interactive credential prompt; stdin is closed for the
 same reason.
 
-The smoke runs in two modes — working-tree artifacts and a pinned versioned
-artifact (`--ref <full-40-char-sha>`) — and asserts the same consumer
-guarantees in each.
+The smoke runs in two modes — working-tree artifacts and a versioned
+artifact (`--ref vX.Y.Z` for a release tag, or `--ref <full-40-char-sha>`) —
+and asserts the same consumer guarantees in each.
 
 ## 3. Versioned artifact installs and the update/overwrite model
 
-The `--ref <full-40-char-sha>` mode proves the **pinning mechanics** against a
-deterministic artifact: the local server extracts `public/r/*.json` from that
-exact commit via `git show`, so re-running the smoke on the same SHA always
+The `--ref` mode proves the **pinning mechanics** against a deterministic
+artifact: the local server extracts `public/r/*.json` from that release tag or
+commit via `git show`, so re-running the smoke on the same immutable tag always
 installs byte-identical source. This mirrors the consumer-facing pinning policy
-in contract §14: reproducible installs pin a full 40-character commit SHA, and
-unpinned `main` installs are the development channel, never documented as
-stable.
+in contract §14: consumers depend on a release tag (`vX.Y.Z`, see
+[`RELEASING.md`](../../../RELEASING.md)), and unpinned `main` installs are the
+development channel, never documented as stable.
 
 Update/overwrite expectations (what consumers should know):
 
-- Components update by **re-running `add` against the pinned ref**; installed
+- Components update by **re-running `add` against the adopted release tag**; installed
   source is a snapshot of that ref, with no automatic tracking.
 - `bunx shadcn@4.20.1 add <item> --overwrite` (short `-o`) overwrites files the
   consumer has modified locally. Without `--overwrite`, identical files are
@@ -93,31 +93,32 @@ harness above is the reproducible proof path and GitHub-native installs are
 documented here rather than executed in CI.
 
 The same smoke applies to a public repository (or a consumer with HTTPS/gh
-auth) with full-SHA pins:
+auth) with release-tag pins:
 
 ```sh
-bunx shadcn@4.20.1 add "jubalm/augur-design-system/augur-theme#<full-sha>"
-bunx shadcn@4.20.1 add "jubalm/augur-design-system/button#<full-sha>"
-# …every item; registryDependencies resolve to the same repo/ref automatically
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/augur-theme#v0.1.0"
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/button#v0.1.0"
+# …every item; registryDependencies carry the same #v0.1.0 stamp
 ```
 
 Notes:
 
-- A ref may be published for consumer pinning only after the contract §12 gate
-  (schema validate + build + local install + consumer build) passes on that
-  exact tree — see `registry-generation.md` and contract §12.
-- Release tags name the human-friendly pins when a release tag scheme is
-  defined; full-SHA pins remain the reproducible default.
+- A release tag is created only after the contract §12 gate (schema validate
+  + build + local install + consumer build, the `registry` CI job) passes on
+  that exact commit — see `RELEASING.md` and contract §12.
+- Release tags (`vX.Y.Z`) are the consumer identifier. A full-SHA pin still
+  resolves, and consumers may record a tag's resolved SHA for audit.
 - Built-JSON channel (`https://<docs-host>/r/<item>.json`, namespace
   `@augur/…`) becomes available with the docs deployment and is the auth-free
   URL path.
 
 ## 5. CI integration
 
-The consumer smoke is not part of the default `.github/workflows/ci.yml`; it
-runs as a fixture. The script is already non-interactive
-(`GIT_TERMINAL_PROMPT=0`, stdin closed, actionable failure output) and exits
-non-zero on any failure, so it is CI-ready as-is.
+The `registry` job in `.github/workflows/ci.yml` runs the consumer smoke
+against the working-tree artifacts on every pull request and push to `main`,
+and the release workflow runs it again on the commit it tags. The script is
+non-interactive (`GIT_TERMINAL_PROMPT=0`, stdin closed, actionable failure
+output) and exits non-zero on any failure.
 
 ## 6. Boundaries
 
