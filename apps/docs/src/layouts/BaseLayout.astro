@@ -69,7 +69,9 @@ const showRail = shell && !!toc && toc.length > 0;
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
     {description ? <meta name="description" content={description} /> : null}
-    <link rel="icon" href={withBase("/brand/glyph/color.png")} type="image/png" />
+    <link rel="icon" href={withBase("/brand/icon/favicon.svg")} type="image/svg+xml" />
+    <link rel="icon" href={withBase("/brand/icon/favicon-32.png")} type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href={withBase("/brand/icon/apple-touch-icon.png")} sizes="180x180" />
     <script is:inline>
       // Apply the persisted theme before first paint (see ThemeToggle.tsx
       // for the contract). No attribute = system preference governs.

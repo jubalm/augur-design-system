@@ -90,6 +90,7 @@ resources/brand/assets/
   vertical/{color,black,white,reversed}.png
   glyph/{color,black,white,reversed}.png
   token/rep.png
+  icon/{favicon.svg,favicon-32.png,apple-touch-icon.png,manifest.json}
   manifest.json
 ```
 
@@ -107,6 +108,29 @@ confirmed that this SVG was exported from the latest design files and that the
 logo artwork shown in the foundation has not changed. It provides an independent
 vector corroboration for the production identity, but it is not used to invent
 horizontal or other missing SVG variants in this repository.
+
+### Approved favicon and app icon
+
+On 28 September 2026 the maintainer approved the token icon published as the
+augur.net favicon as the favicon and app icon for Augur web properties (issue
+#100). This is an explicit exception to the REP token usage rule below, limited
+to favicon and touch-icon slots.
+
+The files were retrieved from `https://augur.net/` on 28 September 2026 and are
+kept byte-identical; nothing was redrawn, traced, recolored, or resized.
+
+| File | Source URL | Dimensions | SHA-256 |
+| --- | --- | ---: | --- |
+| `icon/favicon.svg` | `https://augur.net/favicon.svg` | 96×96 viewBox | `66236f7b4aa2d49d48729ce41322512478704168cddab60b3f2e32c36aa90246` |
+| `icon/favicon-32.png` | `https://augur.net/favicon.png` | 32×32 | `b91f0803e9ff942efeaa40f43932f1c0291e14e9ad0ed653177b8c40d8e0b03d` |
+| `icon/apple-touch-icon.png` | `https://augur.net/apple-touch-icon.png` | 180×180 | `85cdb7d159fc5f0e67f0ecc1ef95f56fac7baaded736583127d61ff8c7ddf7f6` |
+
+The SVG matches the recovered REP token composition (navy field, white base,
+green pyramid). Its field is Augur Navy `#0E0E21`, the palette value, while the
+PDF-extracted `token/rep.png` field renders slightly darker. The record is
+`resources/brand/assets/icon/manifest.json`; `scripts/verify-brand-assets.ts`
+checks hashes, dimensions, and byte-identical docs copies at
+`apps/docs/public/brand/icon/`.
 
 ## 4. Current delivery boundary
 
@@ -133,7 +157,8 @@ Identity usage rules:
   pyramid at least 24px.
 - The REP token is separate semantic protocol identity. Its circular navy field
   is part of the artwork; do not crop it into a generic glyph or use it as
-  decorative app chrome.
+  decorative app chrome. The approved favicon/app icon above is the one
+  exception.
 
 The docs masthead/home adoption remains owned by the existing shell/home work
 rather than this provenance record. Consumers should use the recovered artwork,

@@ -1,0 +1,10 @@
+{
+  "source": "https://augur.net/",
+  "retrieved": "2026-09-28",
+  "decision": "Maintainer-approved exception (issue #100): the token icon published as the augur.net favicon is the approved favicon and app icon for Augur web properties. Files are byte-identical to the published originals; nothing was redrawn, traced, recolored, or resized.",
+  "assets": [
+    {"path":"favicon.svg","sourceUrl":"https://augur.net/favicon.svg","type":"svg","width":96,"height":96,"sha256":"66236f7b4aa2d49d48729ce41322512478704168cddab60b3f2e32c36aa90246"},
+    {"path":"favicon-32.png","sourceUrl":"https://augur.net/favicon.png","type":"png","width":32,"height":32,"sha256":"b91f0803e9ff942efeaa40f43932f1c0291e14e9ad0ed653177b8c40d8e0b03d"},
+    {"path":"apple-touch-icon.png","sourceUrl":"https://augur.net/apple-touch-icon.png","type":"png","width":180,"height":180,"sha256":"85cdb7d159fc5f0e67f0ecc1ef95f56fac7baaded736583127d61ff8c7ddf7f6"}
+  ]
+}
