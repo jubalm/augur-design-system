@@ -148,73 +148,132 @@ body {
   color: var(--foreground);
 }
 
-/* Browse documentation disclosure (below 960px the grouped navigation
-   lives here; the sidebar is the same model at one column). The open
-   panel overlays the full width below the masthead — opening it must
-   never stretch or reflow the masthead itself. */
+/* Browse documentation disclosure (issue #2): below 960px the grouped
+   navigation opens as a full-height sheet below the masthead — the
+   augur.net mobile menu treatment over the same model the sidebar
+   renders at one column. Opening it must never stretch or reflow the
+   masthead itself. */
 .browse-docs {
   display: none;
-}
-
-.browse-summary {
-  cursor: pointer;
-  list-style: none;
-  display: inline-flex;
-  align-items: center;
-  padding-block: 0.5rem;
-  white-space: nowrap;
-  font-family: var(--augur-font-primary);
-  font-weight: 600;
-  font-size: 0.875rem;
-  line-height: 1.25;
-  color: var(--card-foreground);
-}
-
-.browse-summary::-webkit-details-marker {
-  display: none;
-}
-
-.browse-summary:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-.browse-docs[open] .browse-summary {
-  color: var(--foreground);
-}
-
-.browse-panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: var(--card);
-  border-bottom: 1px solid var(--border-quiet);
-  padding: 1rem 1.5rem 1.5rem;
-  z-index: 4;
-}
-
-.browse-theme {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-quiet);
-}
-
-.browse-theme-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-@media (max-width: 599px) {
-  /* Theme access joins the panel; the masthead row stays composed. */
-  .masthead-actions .theme-toggle {
-    display: none;
-  }
 }
 
 @media (max-width: 959px) {
   .browse-docs {
     display: block;
+    /* The row's one control sits on the end edge; theme access joins the
+       sheet and repository access stays in the footer. */
+    margin-inline-start: auto;
+  }
+
+  .browse-summary {
+    cursor: pointer;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* 44px target; the negative end margin keeps the control on the
+       content edge despite the padding that creates the target. */
+    height: 44px;
+    margin-inline-end: -0.5rem;
+    padding-inline: 0.5rem;
+    white-space: nowrap;
+    font-family: var(--augur-font-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    color: var(--card-foreground);
+  }
+
+  .browse-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .browse-docs[open] .browse-when-closed,
+  .browse-docs:not([open]) .browse-when-open {
+    display: none;
+  }
+
+  /* Chrome icons: Feather geometry, as in the masthead; currentColor. */
+  .browse-icon {
+    display: block;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* A full-height sheet below the masthead, so the page never shows
+     through; the sheet scrolls independently when the nav exceeds it. */
+  .browse-panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    height: calc(100vh - 100%);
+    height: calc(100dvh - 100%);
+    overflow-y: auto;
+    padding: 1rem 1.5rem 2rem;
+    border-top: 1px solid var(--border-quiet);
+    background-color: var(--card);
+    z-index: 4;
+  }
+
+  /* The page behind the open sheet cannot scroll. */
+  :root:has(.browse-docs[open]) {
+    overflow: hidden;
+  }
+
+  /* Rule-led rows; the 24px slot the nav links already reserve holds the
+     current-document rule. Group labels stay pinned to the content edge
+     (review: aligning them to the item text read as floating), so they
+     share the rows' left edge with the rule slots. */
+  .browse-panel .nav-lead-in {
+    margin-bottom: 1rem;
+  }
+
+  .browse-panel .nav-group + .nav-group {
+    margin-top: 2rem;
+  }
+
+  .browse-panel .nav-link {
+    min-height: 48px;
+    border-bottom: 1px solid var(--border-quiet);
+  }
+
+  .browse-theme {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* The last row's own rule closes the list; the theme row sits below
+       it without a second rule (review: the doubled rule at the boundary
+       read unpolished). */
+    margin-top: 1.5rem;
+  }
+
+  .browse-theme-label {
+    margin-bottom: 0;
+  }
+
+  .browse-theme .theme-toggle {
+    gap: 0.5rem;
+    margin-inline-end: -0.375rem;
+    color: var(--foreground);
+  }
+
+  .theme-toggle-name {
+    font-family: var(--augur-font-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.25;
+  }
+
+  /* Theme access joins the sheet and repository access stays in the
+     footer, which every page renders; the masthead row keeps the brand
+     and the menu control. */
+  .masthead-actions {
+    display: none;
   }
 }
 
