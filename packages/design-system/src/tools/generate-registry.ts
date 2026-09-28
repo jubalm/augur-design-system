@@ -157,10 +157,14 @@ function buildThemeItem(): Record<string, unknown> {
 
   const css: Record<string, unknown> = {};
   for (const imp of imports) css[imp] = "";
-  css[":root"] = rootVars;
+  // Semantic roles travel in `css`, not `cssVars.light`/`dark`: the CLI
+  // prefixes cssVars keys with `--` again and maps each non-color value
+  // into `@theme inline` as `--role: var(--role)`, which yields invalid
+  // `var(----role)` / self-referencing entries in the consumer (issue #94).
+  css[":root"] = { ...rootVars, ...light };
   css['@import "./styles/augur-typography.css"'] = "";
   css['[data-theme="light"]'] = { "color-scheme": "light", ...light };
-  css[".dark"] = { "color-scheme": "dark" };
+  css[".dark"] = { "color-scheme": "dark", ...dark };
   css['[data-theme="dark"]'] = { "color-scheme": "dark", ...dark };
   css["@media (prefers-color-scheme: dark)"] = {
     ':root:not([data-theme="light"])': { "color-scheme": "dark", ...dark },
@@ -193,7 +197,7 @@ function buildThemeItem(): Record<string, unknown> {
       target: "src/styles/augur-typography.css",
       content: read("src/styles/typography.css"),
     }],
-    cssVars: { theme: themeVars, light, dark },
+    cssVars: { theme: themeVars },
     css,
     docs: THEME_DOCS,
   };

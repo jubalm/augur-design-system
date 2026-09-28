@@ -238,10 +238,14 @@ The `augur-theme` item carries the complete Augur look in one install:
    via the pinned toolchain) → `css[":root"]`. They merge into the
    consumer's existing `:root` block.
 2. **Semantic role values** (`--background` … `--ring`, exactly the #4
-   mapping in `src/styles/theme.css`) → `cssVars.light` and `cssVars.dark`,
-   which overwrite the init-scaffold neutral values in `:root` and `.dark`.
-   This keeps the shadcn `.dark` convention working for consumers who use a
-   `dark` class.
+   mapping in `src/styles/theme.css`) → `css[":root"]` (light) and
+   `css[".dark"]` (dark), which merge into the consumer's `:root` and `.dark`
+   and overwrite the init-scaffold neutral values. This keeps the shadcn
+   `.dark` convention working for consumers who use a `dark` class. They are
+   deliberately **not** `cssVars.light`/`dark`: the CLI re-prefixes those keys
+   with `--` and maps each non-color value into `@theme inline` as
+   `--role: var(--role)`, producing invalid `var(----role)` or self-referencing
+   entries (issue #94). The consumer smoke rejects both.
 3. **Augur's selector model** → `css` payload, appended verbatim:
    `[data-theme="dark"]` block (same role values), and the
    `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }`
@@ -386,8 +390,7 @@ fixtures and consumer smoke rather than in this document.
    after a fresh source install.
 
 The install applies exact-pinned npm dependencies, merges `cssVars.theme` into
-`@theme inline` (`--font-sans` becomes `var(--augur-font-primary)`), writes
-`cssVars.light`/`dark` into `:root`/`.dark`, appends `css` selectors (including
+`@theme inline` (`--font-sans` becomes `var(--augur-font-primary)`), appends `css` selectors (including the `:root`/`.dark` role blocks,
 the nested `@media` fallback, `body`, `:focus-visible`, and reduced-motion
 rules) after hoisting `@import` lines above all rules, and honors the
 `@custom-variant dark` redefinition in the Tailwind build.
@@ -495,7 +498,7 @@ Consumer-facing pinning policy:
 | D2 | Root `registry.json` at repository root | Upstream GitHub registry requirement |
 | D3 | `registryDependencies` use full GitHub item addresses, never bare names | Upstream same-repo dependency rule; bare names would resolve against the default shadcn registry |
 | D4 | `registry:font` rejected; fonts via exact-pinned `@fontsource` dependencies + hoisted `@import` CSS | Schema (`provider: ["google"]`, `next/font/google` coupling) vs PROVENANCE.md self-hosting + framework neutrality |
-| D5 | Theme via `cssVars` (light/dark/theme) + `css` selectors delivering Augur's `data-theme` model, `.dark` co-delivery, system fallback, `@custom-variant` override | §12 procedure; consumer/acceptance smoke; `theme.css` selector model |
+| D5 | Theme via `cssVars.theme` (utility mappings only) + `css` selectors (role values in `:root`/`.dark`/`[data-theme]`) delivering Augur's `data-theme` model, `.dark` co-delivery, system fallback, `@custom-variant` override | §12 procedure; consumer/acceptance smoke; `theme.css` selector model |
 | D6 | No `--radius`/`--chart-*`/`--sidebar-*` delivery | semantic-themes.md D6 |
 | D7 | Component items unprefixed kebab-case; `augur-` prefix reserved for foundational items | Upstream naming conventions; namespace/address provenance |
 | D8 | Fixture validation via ajv `8.20.0`, linked node_modules, verbatim vendored schemas registered by URL key | ajv v8 id-key mismatch + `$ref`-by-URL; repo fixture precedent (font fixture) |

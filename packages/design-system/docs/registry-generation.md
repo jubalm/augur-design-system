@@ -60,10 +60,12 @@ every component item).
      imports `@augur/design-system` (§11) and never relies on bundled npm
      output.
 
-The generated `augur-theme` item is verified equal (css byte-identical,
-cssVars key/value identical) to the pinned registry fixture
-`fixtures/registry/registry-item.fixture.json` — the executable evidence for
-§12's build check.
+Drift in the generated `augur-theme` item is caught by `registry:check`
+(generated output vs the committed `public/r` and `registry.json`) and by the
+consumer install smoke (`scripts/consumer-smoke.ts`). The registry fixture
+`fixtures/registry/registry-item.fixture.json` is a dated 2026-09-04
+`shadcn build` snapshot kept for schema validation only; it is not compared
+with the generated item and is not expected to match it.
 
 ## Item catalog (starter set, contract §4)
 

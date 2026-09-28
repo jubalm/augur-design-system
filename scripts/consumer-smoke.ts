@@ -280,6 +280,14 @@ const fontFaces = (css.match(/@font-face/g) ?? []).length;
 if (fontFaces < 11) fail(`built CSS has ${fontFaces} @font-face rules, expected >= 11 (self-hosted Sora + Schibsted Grotesk)`);
 if (!css.includes("data-theme=dark"))
   fail('built CSS lacks [data-theme="dark"] dark-theme blocks (minifiers drop the attribute quotes: match `data-theme=dark`)', "The augur-theme css selectors were not merged into the consumer stylesheet.");
+// Issue #94: role values routed through cssVars.light/dark made the CLI emit
+// `--role: var(----role)` (or `var(--role)`) into `@theme inline`.
+const invalidRoleRefs = [...new Set(css.match(/--[\w-]+:\s*var\(----[\w-]+\)/g) ?? [])];
+const selfRefs = [...css.matchAll(/(--[\w-]+):\s*var\(\1\)/g)].map((m) => m[0]);
+if (invalidRoleRefs.length > 0 || selfRefs.length > 0)
+  fail(`built CSS has invalid theme self-references: ${[...invalidRoleRefs, ...selfRefs].slice(0, 5).join(", ")}`, "Semantic roles must travel in the item's css payload, not cssVars.light/dark (issue #94).");
+if (!/\.dark[^{}]*\{[^}]*--background:/.test(css))
+  fail("built CSS lacks a .dark scope carrying the semantic roles", "The augur-theme item co-delivers the shadcn .dark convention (contract D5).");
 const augurFontAssets = deepFind(distAssets, /(sora|schibsted)/).length;
 if (augurFontAssets < 12)
   fail(`built dist has ${augurFontAssets} Sora/Schibsted Grotesk font assets, expected >= 12 (self-hosted woff/woff2)`, "Check @fontsource pins installed and index.css @import lines survived.");
